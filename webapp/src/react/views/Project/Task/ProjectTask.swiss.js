@@ -1,5 +1,5 @@
 import { styleSheet } from 'swiss-react';
-import Icon from 'Icon';
+import Icon from 'src/react/icons/Icon';
 
 export default styleSheet('ProjectTask', {
   Wrapper: {

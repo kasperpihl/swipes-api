@@ -2,9 +2,9 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import { setupCachedCallback } from 'react-delegate';
-import Loader from 'components/loaders/Loader';
-import SWView from 'SWView';
-import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
+import Loader from 'src/react/components/loaders/Loader';
+import SWView from 'src/react/app/view-controller/SWView';
+import CardHeader from 'src/react/components/CardHeader/CardHeader';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as ca from 'swipes-core-js/actions';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
@@ -16,7 +16,7 @@ import SW from './Previewer.swiss';
   null,
   {
     request: ca.api.request,
-    browser: mainActions.browser,
+    browser: mainActions.browser
   }
 )
 export default class extends PureComponent {
@@ -65,7 +65,7 @@ export default class extends PureComponent {
   onFileError = () => {
     this.setState({
       fileLoading: false,
-      fileError: true,
+      fileError: true
     });
   };
   onFileLoaded = () => {
@@ -77,7 +77,7 @@ export default class extends PureComponent {
       submitting: false,
       preview: null,
       fileLoading: false,
-      fileError: false,
+      fileError: false
     };
   }
   getComponentForFile(file) {
@@ -124,7 +124,7 @@ export default class extends PureComponent {
           loading: false,
           preview: res.preview,
           fileNotFound,
-          fileLoading,
+          fileLoading
         });
       } else {
         console.warn('Preview error', res);
@@ -168,7 +168,7 @@ export default class extends PureComponent {
     const { title, subtitle } = header || {};
 
     const renderedTitle = propTitle || title;
-    return <HOCHeaderTitle title={renderedTitle} subtitle={subtitle} />;
+    return <CardHeader title={renderedTitle} subtitle={subtitle} />;
   }
   renderFile(file) {
     const Comp = this.getComponentForFile(file);

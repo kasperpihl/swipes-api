@@ -1,16 +1,16 @@
 import { styleSheet, addGlobalStyles } from 'swiss-react';
-import Icon from 'Icon';
+import Icon from 'src/react/icons/Icon';
 addGlobalStyles({
   '@keyframes button-loader': {
     '0%': {
-      WebkitTransform: 'scale(0)',
+      WebkitTransform: 'scale(0)'
     },
     '100%': {
       WebkitTransform: 'scale(1.0)',
-      opacity: 0,
+      opacity: 0
     }
   }
-})
+});
 export default styleSheet('Button', {
   ATag: {
     _el: 'a',
@@ -19,31 +19,31 @@ export default styleSheet('Button', {
     display: 'inline-flex',
     flex: 'none',
     'status=loading|success|error': {
-      pointerEvents: 'none',
+      pointerEvents: 'none'
     },
     userSelect: 'none',
     'rounded=false': {
-      _size: ['auto', '30px'],
+      _size: ['auto', '30px']
     }
   },
   Background: {
     _flex: ['row', 'left', 'center'],
     selected: {
-      background: '$sw2',
+      background: '$sw2'
     },
     '.gl-button:hover &': {
-      background: '$sw3',
+      background: '$sw3'
     },
-    'rounded': {
+    rounded: {
       borderRadius: '18px',
-      boxShadow: '0 0 0 1px $sw3',
-    },
+      boxShadow: '0 0 0 1px $sw3'
+    }
   },
   IconContainer: {
     _size: '36px',
     _flex: 'center',
     'rounded=false': {
-      _size: '30px',
+      _size: '30px'
     }
   },
   IconComp: {
@@ -57,8 +57,8 @@ export default styleSheet('Button', {
     },
     _size: '24px',
     '.gl-button:hover &': {
-      _svgColor: '$blue',
-    },
+      _svgColor: '$blue'
+    }
   },
   Title: {
     _font: ['12px', '18px', 400],
@@ -71,28 +71,28 @@ export default styleSheet('Button', {
       color: '$red'
     },
     hasIcon: {
-      paddingLeft: '0px',
+      paddingLeft: '0px'
     },
     '.gl-button:hover &': {
-      color: '$blue',
+      color: '$blue'
     },
     'size=small': {
-      display: 'none',
+      display: 'none'
     },
     'rounded=false': {
       padding: '0',
-      paddingRight: '12px',
+      paddingRight: '12px'
     },
     'textOutside=true': {
       display: 'initial',
       padding: '0 12px',
 
       '.gl-button:hover &': {
-        color: 'initial',
-      },
+        color: 'initial'
+      }
     },
     'textOutside=false': {
-      display: 'none',
+      display: 'none'
     }
   },
   SideLabel: {
@@ -107,17 +107,17 @@ export default styleSheet('Button', {
       color: '$red'
     },
     '.gl-button:hover &': {
-      color: '$blue',
+      color: '$blue'
     },
     'size=small': {
-      display: 'none',
+      display: 'none'
     }
   },
   LoaderCircle: {
     _size: '30px',
     backgroundColor: '$sw1',
     borderRadius: '100%',
-    animation: 'button-loader 1.0s infinite ease-in-out',
+    animation: 'button-loader 1.0s infinite ease-in-out'
   },
   PopupBox: {
     display: 'none',
@@ -128,17 +128,17 @@ export default styleSheet('Button', {
     show: {
       _flex: ['row', 'center', 'center'],
       position: 'absolute',
-      top: (props) => `calc(-${props.numberOfLines}*18px - 18px)`,
+      top: props => `calc(-${props.numberOfLines}*18px - 18px)`,
       left: '50%',
       transform: 'translateX(-50%)',
 
       rounded: {
-        borderRadius: '6px',
+        borderRadius: '6px'
       }
-    },
+    }
   },
   PopupText: {
     _el: 'p',
-    _font: ['12px', '18px', 400],
+    _font: ['12px', '18px', 400]
   }
 });

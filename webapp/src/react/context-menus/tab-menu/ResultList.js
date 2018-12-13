@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Loader from 'components/loaders/Loader';
+import Loader from 'src/react/components/loaders/Loader';
 import { setupDelegate } from 'react-delegate';
 import { setupCachedCallback } from 'react-delegate';
-import ResultItem from 'components/result-item/ResultItem';
+import ResultItem from 'src/react/components/result-item/ResultItem';
 import SW from './TabMenu.swiss';
-
 
 // now use events as onClick:
 class ResultList extends Component {
@@ -29,7 +28,9 @@ class ResultList extends Component {
     const { results } = this.props;
 
     if (results) {
-      return results.map((r, i) => <ResultItem onClick={this.onActionCached(i)} key={i} {...r} />);
+      return results.map((r, i) => (
+        <ResultItem onClick={this.onActionCached(i)} key={i} {...r} />
+      ));
     }
 
     return undefined;
@@ -60,5 +61,5 @@ const { arrayOf, bool, shape, object } = PropTypes;
 ResultList.propTypes = {
   results: arrayOf(shape(ResultItem.propTypes)),
   delegate: object,
-  loading: bool,
+  loading: bool
 };

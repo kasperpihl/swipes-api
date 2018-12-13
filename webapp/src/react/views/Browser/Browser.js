@@ -1,16 +1,15 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import SWView from 'SWView';
-import Loader from 'components/loaders/Loader';
+import SWView from 'src/react/app/view-controller/SWView';
+import Loader from 'src/react/components/loaders/Loader';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import BrowserNavBar from './BrowserNavBar';
 import BrowserWebview from './BrowserWebview';
 import SW from './Browser.swiss';
 
-
 @navWrapper
 @connect(state => ({
-  me: state.me,
+  me: state.me
 }))
 export default class extends PureComponent {
   static minWidth() {
@@ -29,11 +28,10 @@ export default class extends PureComponent {
       forwardEnabled: false,
       title: '',
       currentUrl: props.url,
-      isLoading: true,
+      isLoading: true
     };
     this.onLoad = this.onLoad.bind(this);
   }
-
 
   componentWillUnmount() {
     this._unmounted = true;
@@ -52,17 +50,17 @@ export default class extends PureComponent {
       }
       // webview.openDevTools();
     });
-    webview.addEventListener('did-navigate', (e) => {
+    webview.addEventListener('did-navigate', e => {
       if (!this._unmounted) {
         this.updateUrl(e.url);
       }
     });
-    webview.addEventListener('did-navigate-in-page', (e) => {
+    webview.addEventListener('did-navigate-in-page', e => {
       if (!this._unmounted && e.isMainFrame) {
         this.updateUrl(e.url);
       }
     });
-    webview.addEventListener('page-title-updated', (e) => {
+    webview.addEventListener('page-title-updated', e => {
       if (!this._unmounted) {
         this.setState({ title: e.title });
       }
@@ -71,7 +69,7 @@ export default class extends PureComponent {
 
   updateUrl(url) {
     const updateObj = {
-      currentUrl: url,
+      currentUrl: url
     };
 
     updateObj.backEnabled = this.webview.canGoBack();
@@ -101,21 +99,19 @@ export default class extends PureComponent {
     }
     return (
       <SW.BrowserLoader>
-        <Loader center text="Loading" textStyle={{ color: '#333D59', marginTop: '9px' }} />
+        <Loader
+          center
+          text="Loading"
+          textStyle={{ color: '#333D59', marginTop: '9px' }}
+        />
       </SW.BrowserLoader>
     );
   }
   render() {
     const { url, me } = this.props;
-    const {
-      forwardEnabled,
-      backEnabled,
-      title,
-      currentUrl,
-    } = this.state;
+    const { forwardEnabled, backEnabled, title, currentUrl } = this.state;
     return (
       <SWView noframe>
-
         <BrowserWebview
           url={url}
           persistId={`browser${me.get('id')}`}

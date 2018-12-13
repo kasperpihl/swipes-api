@@ -1,5 +1,5 @@
 import { styleSheet } from 'swiss-react';
-import Icon from 'Icon';
+import Icon from 'src/react/icons/Icon';
 
 export default styleSheet('EmptyState', {
   Wrapper: {
@@ -7,21 +7,21 @@ export default styleSheet('EmptyState', {
     _flex: ['column', 'center', 'center'],
     pointerEvents: 'none',
     fill: {
-      height: '100%',
+      height: '100%'
     },
 
     'page=takeAction': {
       transform: 'translateY(-38px)',
-      transition: '.15s ease',
+      transition: '.15s ease'
     },
 
     'page=searchResult': {
-      transform: 'translateY(140px)',
+      transform: 'translateY(140px)'
     },
 
     'page=Discussions': {
-      transform: 'translateY(100%)',
-    },
+      transform: 'translateY(100%)'
+    }
   },
 
   ImageWrapper: {
@@ -30,8 +30,8 @@ export default styleSheet('EmptyState', {
     searchResult: {
       _size: ['100%', 'auto'],
       _flex: ['column', 'center', 'center'],
-      marginBotton: '12px',
-    },
+      marginBotton: '12px'
+    }
   },
 
   Image: {
@@ -39,19 +39,19 @@ export default styleSheet('EmptyState', {
     _size: ['150px', 'auto'],
 
     large: {
-      _size: ['300px', 'auto'],
+      _size: ['300px', 'auto']
     },
 
     'page=takeAction': {
       _size: ['54px', '114px'],
-      transform: 'translateX(calc(-50% + 6px))',
+      transform: 'translateX(calc(-50% + 6px))'
     },
 
     searchResult: {
       _size: ['auto', '100%'],
       maxWidth: '360px',
-      opacity: '0.8',
-    },
+      opacity: '0.8'
+    }
   },
 
   Title: {
@@ -60,18 +60,18 @@ export default styleSheet('EmptyState', {
     userSelect: 'none',
 
     large: {
-      _font: ['18px', '24px'],
+      _font: ['18px', '24px']
     },
 
     'page=takeAction': {
-      color: '$sw1',
+      color: '$sw1'
     },
 
     searchResult: {
       _font: ['11px', '18px', 'bold'],
       textTransform: 'uppercase',
-      pointerEvents: 'all',
-    },
+      pointerEvents: 'all'
+    }
   },
 
   Description: {
@@ -82,7 +82,7 @@ export default styleSheet('EmptyState', {
     userSelect: 'none',
 
     large: {
-      _font: ['14px', '20px'],
-    },
-  },
-})
+      _font: ['14px', '20px']
+    }
+  }
+});

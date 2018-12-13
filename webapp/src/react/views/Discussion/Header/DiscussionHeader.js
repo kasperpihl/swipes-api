@@ -2,7 +2,7 @@ import React, { PureComponent, Fragment } from 'react';
 import {
   setupLoading,
   miniIconForId,
-  navForContext,
+  navForContext
 } from 'swipes-core-js/classes/utils';
 import { connect } from 'react-redux';
 import * as menuActions from 'src/redux/menu/menuActions';
@@ -13,20 +13,19 @@ import SW from './DiscussionHeader.swiss';
 import Button from 'src/react/components/button/Button';
 import Attachment from 'src/react/components/attachment/Attachment';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-import InfoButton from 'src/react/components/info-button/InfoButton';
-import HOCHeaderTitle from 'src/react/components/header-title/HOCHeaderTitle';
+import CardHeader from 'src/react/components/CardHeader/CardHeader';
 import AssigneeTooltip from 'src/react/components/assigning/AssigneeTooltip';
 
 @navWrapper
 @connect(
   state => ({
-    myId: state.me.get('id'),
+    myId: state.me.get('id')
   }),
   {
     tooltip: mainActions.tooltip,
     inputMenu: menuActions.input,
     confirm: menuActions.confirm,
-    request: ca.api.request,
+    request: ca.api.request
   }
 )
 export default class DiscussionHeader extends PureComponent {
@@ -43,12 +42,12 @@ export default class DiscussionHeader extends PureComponent {
       component: AssigneeTooltip,
       props: {
         assignees: discussion.get('followers').map(f => f.get('user_id')),
-        size: 24,
+        size: 24
       },
       options: {
         boundingRect: e.target.getBoundingClientRect(),
-        position: 'bottom',
-      },
+        position: 'bottom'
+      }
     });
   };
   onMouseLeave = () => {
@@ -56,20 +55,6 @@ export default class DiscussionHeader extends PureComponent {
     if (!discussion.get('followers').size) return;
     tooltip(null);
   };
-  getInfoTabProps() {
-    const { myId, discussion } = this.props;
-    return {
-      actions:
-        discussion.get('created_by') === myId
-          ? [{ title: 'Delete', icon: 'Delete', danger: true }]
-          : null,
-      about: {
-        title: 'What is a discussion',
-        text:
-          'A discussion is used to get aligned with your team. Create them and tag people.',
-      },
-    };
-  }
   onTitleClick = e => {
     const { inputMenu, discussion, request } = this.props;
 
@@ -78,34 +63,31 @@ export default class DiscussionHeader extends PureComponent {
         boundingRect: e.target.getBoundingClientRect(),
         alignX: 'right',
         text: discussion.get('topic'),
-        buttonLabel: 'Rename',
+        buttonLabel: 'Rename'
       },
       text => {
         if (text !== discussion.get('topic') && text.length) {
           request('discussion.rename', {
             discussion_id: discussion.get('id'),
-            topic: text,
+            topic: text
           });
         }
       }
     );
   };
-  onInfoTabAction(i, options, e) {
-    this.onArchive(options);
-  }
   onArchive(options) {
     const { discussion, confirm, request } = this.props;
     confirm(
       Object.assign({}, options, {
         title: 'Delete discussion',
         message:
-          'This will delete the discussion permanently and cannot be undone.',
+          'This will delete the discussion permanently and cannot be undone.'
       }),
       i => {
         if (i === 1) {
           this.setLoading('dots');
           request('discussion.archive', {
-            discussion_id: discussion.get('id'),
+            discussion_id: discussion.get('id')
           }).then(res => {
             if (res.ok) {
               window.analytics.sendEvent('Discussion archived', {});
@@ -131,7 +113,7 @@ export default class DiscussionHeader extends PureComponent {
       endpoint = 'discussion.unfollow';
     }
     request(endpoint, {
-      discussion_id: discussion.get('id'),
+      discussion_id: discussion.get('id')
     }).then(res => {
       this.clearLoading('following');
     });
@@ -144,14 +126,13 @@ export default class DiscussionHeader extends PureComponent {
 
     return (
       <Fragment>
-        <HOCHeaderTitle title={topic} delegate={this}>
+        <CardHeader title={topic} delegate={this}>
           <Button
             title={followers.includes(myId) ? 'Unfollow' : 'Follow'}
             onClick={this.onFollowClick}
             {...this.getLoading('following')}
           />
-          <InfoButton delegate={this} {...this.getLoading('dots')} />
-        </HOCHeaderTitle>
+        </CardHeader>
 
         <SW.ContextWrapper>
           <SW.FollowerLabel

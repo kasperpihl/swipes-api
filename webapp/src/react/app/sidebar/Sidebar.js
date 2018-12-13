@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import HOCAssigning from 'components/assigning/HOCAssigning';
+import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
 import { setupCachedCallback } from 'react-delegate';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
@@ -47,14 +47,12 @@ export default class Sidebar extends PureComponent {
   }
   getNavItems() {
     return [
-      { id: 'ProjectList', svg: 'Milestones' },
+      { id: 'Organize', svg: 'Milestones' },
       { id: 'Discuss', svg: 'Messages' }
     ].filter(v => !!v);
   }
   getTitleForId(id) {
     switch (id) {
-      case 'ProjectOverview':
-        return 'Organize';
       case 'AccountList':
         return 'Account';
       default:

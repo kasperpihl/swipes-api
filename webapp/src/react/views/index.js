@@ -1,15 +1,15 @@
 // Account
 // import AccountList from './account/account-list/HOCAccountList';
 // import Billing from './account/billing/HOCBilling';
-// import Browser from './browser/Browser';
+// import Browser from './Browser/Browser';
 // import Organization from './account/organization/HOCOrganization';
 // import Profile from './account/profile/HOCProfile';
 // import Discuss from './Discuss/Discuss';
 // import DiscussionComposer from './Discussion/Composer/DiscussionComposer';
 // import DiscussionOverview from './Discussion/Overview/HOCDiscussionOverview';
 import ProjectOverview from './Project/Overview/ProjectOverview';
-import ProjectList from './Project/List/ProjectList';
-import NotFound from './not-found/NotFound';
+import Organize from './Organize/Organize';
+import NotFound from './NotFound/NotFound';
 // import Previewer from './previewer/Previewer';
 // import SideNote from './side-note/HOCSideNote';
 // import Tester from './tester/Tester';
@@ -22,9 +22,9 @@ export {
   // DiscussionComposer,
   // DiscussionOverview,
   NotFound,
+  Organize,
   // Previewer,
   // Profile,
-  ProjectList,
   ProjectOverview
   // Organization,
   // SideNote,

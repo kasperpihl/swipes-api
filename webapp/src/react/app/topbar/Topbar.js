@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { setupCachedCallback } from 'react-delegate';
 
-import Icon from 'Icon';
+import Icon from 'src/react/icons/Icon';
 import Button from 'src/react/components/button/Button';
 import './topbar.scss';
 

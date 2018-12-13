@@ -13,7 +13,7 @@ addVariables({
   blue60: '#66AFFF',
   blue80: '#3394FF',
 
-  red: '#FD6150',
-  green: '#22D664',
+  red: '#F7473E',
+  green: '#05A851',
   yellow: '#FFB038'
 });

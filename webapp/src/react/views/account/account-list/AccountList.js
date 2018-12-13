@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
-import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
-import SWView from 'SWView';
+import CardHeader from 'src/react/components/CardHeader/CardHeader';
+import SWView from 'src/react/app/view-controller/SWView';
 import SW from './AccountList.swiss';
 
 class AccountList extends PureComponent {
@@ -13,7 +13,10 @@ class AccountList extends PureComponent {
   renderHeader() {
     return (
       <SW.Header>
-        <HOCHeaderTitle title={msgGen.users.getFullName('me')} subtitle={msgGen.me.getOrg().get('name')}/>
+        <CardHeader
+          title={msgGen.users.getFullName('me')}
+          subtitle={msgGen.me.getOrg().get('name')}
+        />
       </SW.Header>
     );
   }
@@ -25,7 +28,7 @@ class AccountList extends PureComponent {
       <SW.AccountItem key={i} onClick={this.onClickCached(i)}>
         <SW.CardTitle>
           {s.title}
-          <SW.StyledSVG icon="ArrowRightLong"/>
+          <SW.StyledSVG icon="ArrowRightLong" />
         </SW.CardTitle>
         <SW.Description>{s.subtitle}</SW.Description>
       </SW.AccountItem>
@@ -36,9 +39,7 @@ class AccountList extends PureComponent {
 
     return (
       <SWView noframe header={this.renderHeader()}>
-        <SW.Wrapper>
-          {this.renderSections()}
-        </SW.Wrapper>
+        <SW.Wrapper>{this.renderSections()}</SW.Wrapper>
         <SW.AccountButton
           icon="Logout"
           {...getLoading('logout')}

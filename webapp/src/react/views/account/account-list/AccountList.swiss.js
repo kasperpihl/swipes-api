@@ -1,25 +1,24 @@
 import { styleSheet } from 'swiss-react';
-import Icon from 'Icon';
+import Icon from 'src/react/icons/Icon';
 import Button from 'src/react/components/button/Button';
 
 export default styleSheet('AccountList', {
-
   Wrapper: {
     _size: ['100%', 'auto'],
     _flex: ['row'],
     flexWrap: 'wrap',
-    padding: '15px',
+    padding: '15px'
   },
 
   Header: {
-    padding: '0 30px',
+    padding: '0 30px'
   },
 
   AccountButton: {
     _el: Button,
     right: '30px',
     bottom: '30px',
-    position: 'fixed',
+    position: 'fixed'
   },
 
   AccountItem: {
@@ -40,7 +39,7 @@ export default styleSheet('AccountList', {
       top: '0',
       backgroundColor: '$blue5',
       zIndex: '-1',
-      clipPath: 'polygon(0 100%, 100% 100%, 100% 100%, 0 100%)',
+      clipPath: 'polygon(0 100%, 100% 100%, 100% 100%, 0 100%)'
     },
 
     '&:after': {
@@ -60,27 +59,27 @@ export default styleSheet('AccountList', {
 
       '&:before': {
         clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)',
-        transition: '.25s ease-in',
+        transition: '.25s ease-in'
       },
 
       '&:after': {
-        transition: '.25s ease-out',
-      },
-    },
+        transition: '.25s ease-out'
+      }
+    }
   },
 
   CardTitle: {
     _size: ['100%', '38px'],
     _font: ['15px', '20px', '500'],
     _flex: ['row', 'between', 'center'],
-    borderBottom: '1px solid',
+    borderBottom: '1px solid'
   },
 
   Description: {
     _size: ['100%', 'auto'],
     _font: ['12px', '15px'],
     color: '$sw2',
-    marginTop: '12px',
+    marginTop: '12px'
   },
 
   StyledSVG: {
@@ -92,7 +91,7 @@ export default styleSheet('AccountList', {
 
     '.accountItem:hover &': {
       opacity: '1',
-      transform: 'translateX(0px)',
-    },
-  },
-})
+      transform: 'translateX(0px)'
+    }
+  }
+});

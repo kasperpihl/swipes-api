@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { bindAll } from 'swipes-core-js/classes/utils';
-import Icon from 'Icon';
+import Icon from 'src/react/icons/Icon';
 
 import PDFRender from './PDFRender';
 

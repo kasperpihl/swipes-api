@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
 import { bindAll } from 'swipes-core-js/classes/utils';
-import { setupCachedCallback } from 'react-delegate';
-import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
-import SWView from 'SWView';
+import { setupCachedCallback } from 'react-delegate';
+import CardHeader from 'src/react/components/CardHeader/CardHeader';
+import SWView from 'src/react/app/view-controller/SWView';
 import Button from 'src/react/components/button/Button';
 import SW from './Profile.swiss';
 
@@ -12,14 +12,13 @@ class Profile extends PureComponent {
     super(props);
     this.state = {
       editing: false,
-      bioCounter: 300,
+      bioCounter: 300
     };
 
     setupDelegate(this, 'onBlur', 'onImageChange');
     this.onChangeCached = setupCachedCallback(this.onChange, this);
     this.onEditCached = setupCachedCallback(this.enableEditMode, this);
     this.handleEditState = this.handleEditState.bind(this);
-
 
     bindAll(this, ['enableEditMode', 'onUploadClick']);
   }
@@ -67,7 +66,7 @@ class Profile extends PureComponent {
     } else if (getLoading(key).success) {
       return (
         <SW.SuccessIcon>
-          <SW.SuccessSVG icon="ChecklistCheckmark"/>
+          <SW.SuccessSVG icon="ChecklistCheckmark" />
         </SW.SuccessIcon>
       );
     }
@@ -78,9 +77,12 @@ class Profile extends PureComponent {
     const { editing } = this.state;
 
     return (
-      <HOCHeaderTitle title="Profile">
-        <Button title={editing ? 'Done' : 'Edit'} onClick={this.handleEditState} />
-      </HOCHeaderTitle>
+      <CardHeader title="Profile">
+        <Button
+          title={editing ? 'Done' : 'Edit'}
+          onClick={this.handleEditState}
+        />
+      </CardHeader>
     );
   }
   renderProfileImage() {
@@ -90,19 +92,22 @@ class Profile extends PureComponent {
 
     return (
       <SW.ProfileImage>
-
-        { profilePic ? (
-          <SW.Picture src={profilePic} role="presentation" className='initials'/>
+        {profilePic ? (
+          <SW.Picture
+            src={profilePic}
+            role="presentation"
+            className="initials"
+          />
         ) : (
-          <SW.HeaderInitials className='initials'>{initials}</SW.HeaderInitials>
+          <SW.HeaderInitials className="initials">{initials}</SW.HeaderInitials>
         )}
 
         <SW.HeaderFileInput
-            className='fileInput'
-            onChange={this.onImageChange}
-            type="file"
-            accept="image/x-png,image/jpeg"
-            innerRef={(c) => this.imageUpload = c}
+          className="fileInput"
+          onChange={this.onImageChange}
+          type="file"
+          accept="image/x-png,image/jpeg"
+          innerRef={c => (this.imageUpload = c)}
         />
         <SW.OverlaySVG icon="Plus" />
         <SW.HeaderLoading isLoading={isLoading('uploadImage') ? true : ''}>
@@ -122,14 +127,13 @@ class Profile extends PureComponent {
       disabled = false;
     }
 
-
     return (
       <SW.Header>
         {this.renderProfileImage()}
         <SW.HeaderForm>
           <SW.HeaderRow onClick={this.onEditCached('firstNameInput')}>
             <SW.HeaderInput
-              innerRef={(c) => this.firstNameInput = c}
+              innerRef={c => (this.firstNameInput = c)}
               type="text"
               value={firstName}
               onChange={this.onChangeCached('firstName')}
@@ -143,7 +147,7 @@ class Profile extends PureComponent {
           </SW.HeaderRow>
           <SW.HeaderRow onClick={this.onEditCached('lastNameInput')}>
             <SW.HeaderInput
-              innerRef={(c) => this.lastNameInput = c}
+              innerRef={c => (this.lastNameInput = c)}
               type="text"
               value={lastName}
               onChange={this.onChangeCached('lastName')}
@@ -173,17 +177,17 @@ class Profile extends PureComponent {
         <SW.FormRow onClick={this.onEditCached('roleInput')}>
           <SW.FormTitle>ROLE</SW.FormTitle>
           <SW.FormInput
-            innerRef={(c) => this.roleInput = c}
+            innerRef={c => (this.roleInput = c)}
             type="text"
             value={role}
             onChange={this.onChangeCached('role')}
             onBlur={this.onBlurCached('role')}
-            placeholder={`What is your role at ${msgGen.users.getOrganizationName(me)}?`}
+            placeholder={`What is your role at ${msgGen.users.getOrganizationName(
+              me
+            )}?`}
             disabled={disabled}
           />
-          <SW.FormLoader>
-            {this.renderLoaderForKey('role')}
-          </SW.FormLoader>
+          <SW.FormLoader>{this.renderLoaderForKey('role')}</SW.FormLoader>
         </SW.FormRow>
         <SW.FormRow onClick={this.onEditCached('bioInput')}>
           <SW.FormTitle>BIO</SW.FormTitle>
@@ -196,9 +200,7 @@ class Profile extends PureComponent {
             placeholder="Share with the team a bit about yourself - What are you working on? What do you love doing?"
             disabled={disabled}
           />
-          <SW.FormLoader>
-            {this.renderLoaderForKey('bio')}
-          </SW.FormLoader>
+          <SW.FormLoader>{this.renderLoaderForKey('bio')}</SW.FormLoader>
           <SW.FormCounter disabled={disabled}>{bioCounter}</SW.FormCounter>
         </SW.FormRow>
         <SW.FormRow>

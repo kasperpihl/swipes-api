@@ -5,14 +5,14 @@ import request from 'swipes-core-js/utils/request';
 import { setupLoading, getURLParameter } from 'swipes-core-js/classes/utils';
 import { fromJS, Map } from 'immutable';
 import CompatibleSignup from './CompatibleSignup';
-import CompatibleCard from 'compatible/components/card/CompatibleCard';
+import CompatibleCard from 'src/react/browser-compatible/components/card/CompatibleCard';
 
 @connect(
   state => ({
-    token: state.auth.get('token'),
+    token: state.auth.get('token')
   }),
   {
-    setUrl: navigationActions.url,
+    setUrl: navigationActions.url
   }
 )
 export default class extends PureComponent {
@@ -20,7 +20,7 @@ export default class extends PureComponent {
     super(props);
     this.state = {
       formData: Map(),
-      invitationToken: getURLParameter('invitation_token'),
+      invitationToken: getURLParameter('invitation_token')
     };
 
     setupLoading(this);
@@ -33,7 +33,7 @@ export default class extends PureComponent {
       this.setLoading('signup');
 
       request('organizations.getInfoFromInvitationToken', {
-        invitation_token: invitationToken,
+        invitation_token: invitationToken
       }).then(res => {
         if (res && res.ok && res.me && !this._unmounted) {
           const me = fromJS(res.me);
@@ -44,7 +44,7 @@ export default class extends PureComponent {
             organization: fromJS(res.organization),
             invitedBy: fromJS(res.invited_by),
             me,
-            formData: formData.set('email', email).set('firstName', firstName),
+            formData: formData.set('email', email).set('firstName', firstName)
           });
         }
         this.clearLoading('signup');
@@ -72,14 +72,14 @@ export default class extends PureComponent {
       last_name: formData.get('lastName'),
       email: formData.get('email'),
       password: formData.get('password'),
-      invitation_token: invitationToken || null,
+      invitation_token: invitationToken || null
     }).then(res => {
       if (res.ok) {
         this.clearLoading('signupButton');
         window.analytics.sendEvent('Signed up', {});
         if (me && me.get('invited_by')) {
           window.analytics.sendEvent('Invitation accepted', {
-            distinct_id: me.get('invited_by'),
+            distinct_id: me.get('invited_by')
             // 'Minutes since invite':
           });
         }

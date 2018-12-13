@@ -1,16 +1,12 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
-import NoteEditor from 'components/note-editor/NoteEditor';
-import SWView from 'SWView';
-import HOCDiscussButton from 'components/discuss-button/HOCDiscussButton';
-import InfoButton from 'components/info-button/InfoButton';
-import HOCHeaderTitle from 'components/header-title/HOCHeaderTitle';
+import NoteEditor from 'src/react/components/note-editor/NoteEditor';
+import SWView from 'src/react/app/view-controller/SWView';
+import HOCDiscussButton from 'src/react/components/discuss-button/HOCDiscussButton';
+import CardHeader from 'src/react/components/CardHeader/CardHeader';
 import TimeAgo from 'swipes-core-js/components/TimeAgo';
-import {
-  convertToRaw,
-  EditorState,
-} from 'draft-js';
+import { convertToRaw, EditorState } from 'draft-js';
 import Button from 'src/react/components/button/Button';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import getDiffServerClient from 'src/utils/draft-js/getDiffServerClient';
@@ -20,8 +16,7 @@ import debounce from 'swipes-core-js/utils/debounce';
 import dayStringForDate from 'swipes-core-js/utils/time/dayStringForDate';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as ca from 'swipes-core-js/actions';
-import SW from  './HOCSideNote.swiss';
-
+import SW from './HOCSideNote.swiss';
 
 const emptyState = convertToRaw(EditorState.createEmpty().getCurrentContent());
 const maxWidth = 820;
@@ -43,17 +38,19 @@ const mapStateToProps = (state, props) => {
     note,
     latestRev,
     serverOrg,
-    cachedText,
+    cachedText
   };
-}
+};
 
 @navWrapper
-@connect(mapStateToProps, {
-  saveNote: ca.notes.save,
-  cacheNote: ca.notes.cache,
-  browser: mainActions.browser,
-})
-
+@connect(
+  mapStateToProps,
+  {
+    saveNote: ca.notes.save,
+    cacheNote: ca.notes.cache,
+    browser: mainActions.browser
+  }
+)
 export default class HOCSideNote extends PureComponent {
   static sizes() {
     return [600, 900];
@@ -102,7 +99,7 @@ export default class HOCSideNote extends PureComponent {
 
       this.saveNote(text);
     }
-  }
+  };
   onLinkClick(url) {
     const { browser, target } = this.props;
     browser(target, url);
@@ -110,14 +107,18 @@ export default class HOCSideNote extends PureComponent {
   onBeforeUnload = () => {
     const { editorState } = this.state;
     this.saveToCache(editorState);
-  }
+  };
   onResolveConflict = () => {
     const { editorState } = this.state;
     const { serverOrg, note } = this.props;
     const rawText = convertToRaw(editorState.getCurrentContent());
-    const diffObj = getDiffServerClient((serverOrg.get('text') || emptyState).toJS(), note.get('text').toJS(), rawText);
+    const diffObj = getDiffServerClient(
+      (serverOrg.get('text') || emptyState).toJS(),
+      note.get('text').toJS(),
+      rawText
+    );
     this.setLoading('conflict');
-    this.saveNote(diffObj.editorState, note.get('rev')).then((res) => {
+    this.saveNote(diffObj.editorState, note.get('rev')).then(res => {
       if (res && res.ok) {
         this.clearLoading('conflict');
         this.setState({ overrideRaw: diffObj.editorState });
@@ -125,7 +126,7 @@ export default class HOCSideNote extends PureComponent {
         this.clearLoading('conflict', '!Something went wrong');
       }
     });
-  }
+  };
   setEditorState(editorState, reset) {
     if (reset) {
       this._content = undefined;
@@ -161,28 +162,10 @@ export default class HOCSideNote extends PureComponent {
       this.saveNote(text);
     }
   }
-  getInfoTabProps() {
-    const { note } = this.props;
-    const createdLbl = `${dayStringForDate(note.get('created_at'))} by ${msgGen.users.getFullName(note.get('created_by'))}`;
-
-    return {
-      info: [
-        { title: 'Created', text: createdLbl },
-      ],
-      about: {
-        title: 'What is a note',
-        text: 'A Note is a place to document any information regarding a goal or a discussion. You can write requirements, client lists, blog posts drafts etc.\n\nTo add styles, headlines, checkboxes or bullet points, mark the text with your mouse and the options will appear.',
-      },
-    };
-  }
   saveNote(text, rev) {
-    const {
-      saveNote,
-      id,
-      organizationId,
-    } = this.props;
+    const { saveNote, id, organizationId } = this.props;
 
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       if (this._isSaving) {
         resolve();
       }
@@ -192,7 +175,7 @@ export default class HOCSideNote extends PureComponent {
       this._needSave = false;
       this.saveId = randomString(6);
 
-      saveNote(id, organizationId, text, this.saveId, rev).then((res) => {
+      saveNote(id, organizationId, text, this.saveId, rev).then(res => {
         resolve(res);
         this._isSaving = false;
 
@@ -209,13 +192,12 @@ export default class HOCSideNote extends PureComponent {
 
   renderHeader() {
     const { target, note, latestRev, title } = this.props;
-    const name = msgGen.users.getName(note.get('updated_by'), { yourself: true });
+    const name = msgGen.users.getName(note.get('updated_by'), {
+      yourself: true
+    });
     const subtitle = [
       `Updated by ${name} `,
-      <TimeAgo
-        key="ts"
-        date={note.get('updated_at')}
-      />,
+      <TimeAgo key="ts" date={note.get('updated_at')} />
     ];
     let buttonHtml;
     if (latestRev < (note.get('rev') || 1)) {
@@ -231,22 +213,15 @@ export default class HOCSideNote extends PureComponent {
 
     return (
       <SW.Header>
-        <HOCHeaderTitle
-          title={title}
-          target={target}
-          subtitle={subtitle}
-        >
+        <CardHeader title={title} target={target} subtitle={subtitle}>
           {buttonHtml}
           <HOCDiscussButton
             context={{
               id: note.get('id'),
-              title,
+              title
             }}
           />
-          <InfoButton
-            delegate={this}
-          />
-        </HOCHeaderTitle>
+        </CardHeader>
       </SW.Header>
     );
   }
@@ -260,9 +235,7 @@ export default class HOCSideNote extends PureComponent {
 
     let rawState = overrideRaw;
     if (!editorState) {
-      rawState = cachedText ||
-        note.get('text') ||
-        fromJS(emptyState);
+      rawState = cachedText || note.get('text') || fromJS(emptyState);
       rawState = rawState.toJS();
     }
 

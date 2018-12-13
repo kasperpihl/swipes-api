@@ -26,7 +26,7 @@ export default endpointCreate(
     const full_fetch = !timestamp;
 
     const meRes = await query(`
-      SELECT created_at, updated_at, id, email, profile, activated, settings from users WHERE id = '${user_id}'
+      SELECT created_at, updated_at, user_id, email, profile, activated, settings from users WHERE user_id = '${user_id}'
     `);
 
     // const discussionTs = user.settings.discussion_counter_ts || defTs;

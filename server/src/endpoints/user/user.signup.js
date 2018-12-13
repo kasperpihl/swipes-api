@@ -59,7 +59,7 @@ export default endpointCreate(
 
     // creating a new user from scratch
     await query(
-      `INSERT INTO users (id, email, password, created_at, updated_at, activated) 
+      `INSERT INTO users (user_id, email, password, created_at, updated_at, activated) 
         VALUES ($1, $2, $3, $4, $5, $6)`,
       [userId, email, passwordSha1, new Date(), new Date(), true]
     );

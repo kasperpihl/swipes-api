@@ -1,5 +1,5 @@
 import { styleSheet } from 'swiss-react';
-import Icon from 'Icon';
+import Icon from 'src/react/icons/Icon';
 import Button from 'src/react/components/button/Button';
 
 export default styleSheet('ResultItem', {
@@ -19,12 +19,12 @@ export default styleSheet('ResultItem', {
       left: '-10%',
       top: '0',
       position: 'absolute',
-      transition: '.15s ease-in-out',
+      transition: '.15s ease-in-out'
     },
 
     '.selected > .title': {
       _font: ['15px', '21px'],
-      color: '$sw1',
+      color: '$sw1'
     },
 
     '.disabled > .title': {
@@ -34,14 +34,14 @@ export default styleSheet('ResultItem', {
 
       '&:hover': {
         '&:before': {
-          backgroundColor: 'transparent',
-        },
-      },
+          backgroundColor: 'transparent'
+        }
+      }
     },
 
     '.selected > .subtitle': {
       _font: ['12px', '15px'],
-      color: '$sw1',
+      color: '$sw1'
     },
 
     '.disabled > .subtitle': {
@@ -51,49 +51,49 @@ export default styleSheet('ResultItem', {
 
       '&:hover': {
         '&:before': {
-          backgroundColor: 'transparent',
-        },
-      },
+          backgroundColor: 'transparent'
+        }
+      }
     },
 
     '&:hover': {
       '&:before': {
-        backgroundColor: '$blue20',
+        backgroundColor: '$blue20'
       },
 
       '& > .data > .title': {
-        color: '$blue',
-      },
-    },
+        color: '$blue'
+      }
+    }
   },
 
   Data: {
     _size: ['100%', 'auto'],
     position: 'relative',
-    zIndex: '9',
+    zIndex: '9'
   },
 
   Title: {
     _font: ['15px', '21px'],
-    color: '$sw1',
+    color: '$sw1'
   },
 
   Subtitle: {
     _font: ['12px', '15px'],
-    color: '$sw2',
+    color: '$sw2'
   },
 
   Image: {
     _el: 'img',
     _size: '24px',
-    borderRadius: '50%',
+    borderRadius: '50%'
   },
 
   Icon: {
     _el: Icon,
     _size: '24px',
     _svgColor: '$sw2',
-    border: 'none',
+    border: 'none'
   },
 
   Button: {
@@ -103,8 +103,8 @@ export default styleSheet('ResultItem', {
 
     '&:hover': {
       backgroundColor: '$sw4',
-      transition: '.15s',
-    },
+      transition: '.15s'
+    }
   },
 
   Initials: {
@@ -114,7 +114,7 @@ export default styleSheet('ResultItem', {
     fontWeight: '300',
     color: '$sw5',
     backgroundColor: '$sw1',
-    borderRadius: '50%',
+    borderRadius: '50%'
   },
 
   IconWrapper: {
@@ -125,11 +125,11 @@ export default styleSheet('ResultItem', {
     marginRight: '15px',
 
     '.left': {
-      marginRight: '15px',
+      marginRight: '15px'
     },
 
     '.right': {
       marginLeft: '15px'
-    },
-  },
-})
+    }
+  }
+});
