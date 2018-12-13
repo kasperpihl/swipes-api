@@ -8,9 +8,11 @@ export default class ProjectKeyHandler {
     this.currentServerState = stateManager.getClientState();
     this.deletedIds = [];
     this.myUpdates = {};
-    stateManager.subscribe(debounce(this.convertToServerState, 5000));
+    this.bouncedSync = debounce(this.syncIfNeeded, 5000);
+    stateManager.subscribe(this.bouncedSync);
   }
-  convertToServerState = () => {
+  syncIfNeeded = () => {
+    this.bouncedSync.clear();
     const clientState = this.stateManager.getClientState();
 
     const serverKeys = ['ordering', 'indention', 'completion', 'tasks_by_id'];

@@ -49,6 +49,7 @@ export default class ProjectOverview extends PureComponent {
   }
   componentWillUnmount() {
     this.unsubscribe();
+    this.stateManager.syncHandler.syncIfNeeded();
     window.removeEventListener('keydown', this.handleKeyDown);
   }
   onStateChange = state => this.setState(state);
