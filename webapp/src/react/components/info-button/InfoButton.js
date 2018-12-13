@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
 import { setupDelegate } from 'react-delegate';
 import Button from 'src/react/components/button/Button';
-import InfoTab from 'src/react/context-menus/info-tab/InfoTab';
 
 @connect(null, {
   contextMenu: mainActions.contextMenu,

@@ -6,6 +6,7 @@ export { default as ArrowLeftLine } from './svgs/arrow-left-line.svg';
 export { default as ArrowRightFull } from './svgs/arrow-right-full.svg';
 export { default as ArrowRightLine } from './svgs/arrow-right-line.svg';
 export { default as ArrowRightLong } from './svgs/arrow-right-long.svg';
+export { default as Assign } from './svgs/assign.svg';
 export { default as Attach } from './svgs/attach.svg';
 export { default as Bold } from './svgs/bold.svg';
 export { default as Breadcrumb } from './svgs/breadcrumb.svg';

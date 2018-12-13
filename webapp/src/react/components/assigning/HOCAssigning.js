@@ -54,6 +54,7 @@ export default class HOCAssigning extends PureComponent {
       return;
     }
     const { assignees } = this.state;
+  
 
     let overrideAssignees;
     const options = {
