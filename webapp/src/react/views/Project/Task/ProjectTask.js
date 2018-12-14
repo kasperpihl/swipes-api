@@ -15,12 +15,16 @@ export default class ProjectTask extends PureComponent {
   }
   componentDidMount() {
     // Wait for sibling components to have re-rendered
-    setTimeout(this.checkFocus, 0);
+    this.timer = setTimeout(this.checkFocus, 0);
   }
   componentDidUpdate() {
     // Wait for all components to have re-rendered
-    setTimeout(this.checkFocus, 0);
+    this.timer = setTimeout(this.checkFocus, 0);
   }
+  componentWillUnmount() {
+    clearTimeout(this.timer);
+  }
+
   onFocus = () => {
     const { taskId, stateManager } = this.props;
     stateManager.selectHandler.select(taskId);
