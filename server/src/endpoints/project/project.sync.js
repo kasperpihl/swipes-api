@@ -101,14 +101,14 @@ export default endpointCreate(
         if (!keys) keys = { deleted: true };
         queries.push(
           sqlInsertQuery(
-            'project_items',
+            'project_tasks',
             {
               project_id,
               task_id,
               ...keys
             },
             {
-              upsert: 'project_items_pkey',
+              upsert: 'project_tasks_pkey',
               returning: [
                 'project_id',
                 'task_id',

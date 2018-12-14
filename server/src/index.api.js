@@ -43,7 +43,6 @@ app.use(corsHandler);
 app.use('/v1', bodyParser.json(), errorInvalidJson);
 // Merge req.query and req.body into req.params
 app.use('/v1', (req, res, next) => {
-  console.log(req.path);
   res.locals = Object.assign({}, req.params, req.query, req.body, res.locals);
   return next();
 });
