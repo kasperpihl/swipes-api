@@ -26,13 +26,13 @@ export default styleSheet('AssigneeContextMenu', {
     padding: '0 12px',
 
     '&:hover': {
-      backgroundColor: '$sw2',
+      backgroundColor: 'rgba($blue, 0.25)',
     },
 
     menu: {
       position: 'sticky',
       top: '0',
-      backgroundColor: 'white',
+      backgroundColor: '$sw5',
       zIndex: 2,
 
       '&:hover': {
@@ -41,7 +41,11 @@ export default styleSheet('AssigneeContextMenu', {
     },
 
     selected: {
-      backgroundColor: '$sw3',
+      backgroundColor: 'rgba($blue, 0.25)',
+
+      '&:hover': {
+        backgroundColor: 'rgba($blue, 0.1)'
+      }
     }
   },
 
@@ -55,6 +59,7 @@ export default styleSheet('AssigneeContextMenu', {
     _size: '100%',
     _font: ['12px', '18px', '400'],
     _flex: ['column', 'flex-start', 'center'],
+    userSelect: 'none',
   },
 
   Button: {

@@ -56,14 +56,14 @@ export default class extends PureComponent {
       ...rest
     } = this.props;
 
-    let status = 'default';
+    let status = '';
     if (loading) status = 'loading';
     if (success) status = 'success';
     if (error) status = 'error';
 
     return (
       <SwissProvider
-        hasIcon={status !== 'default' || !!icon}
+        hasIcon={status !== '' || !!icon}
         status={status}
         rounded={rounded}
         size={size}

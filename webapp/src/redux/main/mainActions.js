@@ -50,15 +50,22 @@ export function unsubscribeFromDrop(target, handler) {
 // Context Menu
 // ======================================================
 export const contextMenu = payload => (dp, getState) => {
-  const cMenu = getState().main.get('contextMenu');
-  if (cMenu && typeof cMenu.onClose === 'function') {
-    cMenu.onClose();
-  }
-  if (cMenu && cMenu.props && typeof cMenu.props.onClose === 'function') {
-    cMenu.props.onClose();
+  if (!payload) {
+    return hideContextMenu()(dp, getState);
   }
   dp({ type: types.CONTEXT_MENU, payload });
 };
+
+export const hideContextMenu = (...args) => (dp, getState) => {
+  const cMenu = getState().main.get('contextMenu');
+  if (cMenu && typeof cMenu.onClose === 'function') {
+    cMenu.onClose(...args);
+  }
+  if (cMenu && cMenu.props && typeof cMenu.props.onClose === 'function') {
+    cMenu.props.onClose(...args);
+  }
+  dp({ type: types.CONTEXT_MENU, payload: null });
+}
 
 // ======================================================
 // Browser

@@ -2,33 +2,26 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
 import { convertedUsers } from './testusers';
-import SW from './AssigneeComponent.swiss';
-import { fromJS } from 'immutable'
 import AssigneeContextMenu from 'src/react/context-menus/assignee-component/AssigneeContextMenu';
+import Button from 'src/react/components/button/Button.js'
 
 @connect(null, {
   contextMenu: mainActions.contextMenu,
 })
 class AssigneeComponent extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      selectedIds: [],
-    }
+  state = {
+    selectedIds: [convertedUsers.getIn([0, 'id'])]
   }
 
-  onClick = (e) => {
+  handleClick = (e) => {
     const { contextMenu } = this.props;
     const options = this.getOptionsForE(e);
 
     const propsTestObj = {
-      users: convertedUsers,
-      teamName: 'Swipes',
-      selectUser: this.selectUser,
-      unselectUser: this.unselectUser,
-      onClose: this.onClose,
-      selectedIds: this.state.selectedIds
+      users: convertedUsers || this.props.users,
+      teamName: 'Swipes' || this.props.teamName,
+      onSelect: this.onSelect,
+      selectedIds: this.state.selectedIds,
     }
 
     contextMenu({
@@ -47,36 +40,16 @@ class AssigneeComponent extends Component {
     };
   }
 
-  selectUser = (id) => {
-    console.log('test');
-    let arr = this.state.selectedIds;
-    if(arr.includes(id)) {
-      return null;
-    } else {
-      arr.push(id);
-      this.setState({ selectedIds: arr })
-    }
-  } 
-
-  unselectUser = (id) => {
-    let arr = this.state.selectedIds
-    if(arr.includes(id)) {
-      const filteredArr = arr.filter((u) => u !== id)
-      this.setState({ selectedIds: filteredArr })      
-    } else { 
-      return null;
-    }
-  }
-
-  onClose = (selectedUsers) => {
-    
+  onSelect = (selectedIds) => {
+    this.setState({ selectedIds });
   }
   render() {
     return (
-      <SW.Wrapper onClick={this.onClick}>
-        <SW.Icon icon='Assign' width="24" height="24" />
-        <SW.Text>Assign People</SW.Text>
-      </SW.Wrapper>
+        <Button 
+          icon='Assign'
+          sideLabel={`${this.state.selectedIds.length} Assigned People`}
+          onClick={this.handleClick}
+        />
     )
   }
 }

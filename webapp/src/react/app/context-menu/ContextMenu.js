@@ -8,7 +8,7 @@ import SW from './ContextMenu.swiss';
 @connect(state => ({
   contextMenu: state.main.get('contextMenu'),
 }), {
-  hide: mainActions.contextMenu,
+  hideContextMenu: mainActions.hideContextMenu,
 })
 export default class ContextMenu extends PureComponent {
   constructor(props) {
@@ -36,7 +36,7 @@ export default class ContextMenu extends PureComponent {
   }
   onKeyDown = (e) => {
     if (e.keyCode === 27) {
-      this.hideContextMenu();
+      this.handleHide();
     }
   }
   fitToScreen() {
@@ -116,20 +116,20 @@ export default class ContextMenu extends PureComponent {
       }
     }
   }
-  hideContextMenu = () => {
+  handleHide = (...args) => {
     const {
-      hide,
+      hideContextMenu,
       contextMenu,
     } = this.props;
     if (contextMenu) {
-      hide(null);
+      hideContextMenu(...args);
     }
   }
   clickedBackground = (e) => {
     const isBackground = e.target.classList.contains('context-menu');
 
     if (isBackground) {
-      this.hideContextMenu();
+      this.handleHide();
     }
   }
   stylesForOptions(options = {}) {
@@ -192,7 +192,7 @@ export default class ContextMenu extends PureComponent {
         <SW.Content
           innerRef={(c) => { this.menuRef = c; }}
           {...this.state.styles}>
-          <Comp hide={this.hideContextMenu} {...props} />
+          <Comp hide={this.handleHide} {...props} />
         </SW.Content>
       </Measure>
     );
