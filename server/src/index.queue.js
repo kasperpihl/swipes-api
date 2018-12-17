@@ -7,9 +7,10 @@ import http from 'http';
 import express from 'express';
 import endpoints from 'src/endpoints/endpoints';
 
-import errorSwipes from 'src/middlewares/error/errorSwipes';
+import { setupLogger } from 'src/utils/logger';
 import errorHandler from 'src/middlewares/error/errorHandler';
 
+setupLogger('queue');
 // process.env.PORT - this is set by default from elastic beanstalk
 const port = process.env.PORT || 6000;
 const app = express();
@@ -22,7 +23,6 @@ app.use('/process', bodyParser.json());
 
 app.use('/process', endpoints.queue);
 
-app.use(errorSwipes);
 app.use(errorHandler);
 
 const server = http.createServer(app);

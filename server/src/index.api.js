@@ -3,7 +3,7 @@ import express from 'express';
 import path from 'path';
 import fs from 'fs';
 import bodyParser from 'body-parser';
-
+import { setupLogger } from 'src/utils/logger';
 import 'src/polyfills/asyncSupport';
 import 'src/polyfills/uncaughtException';
 import 'src/polyfills/errorPrototypes';
@@ -14,11 +14,11 @@ import checkUpdates from 'src/middlewares/checkUpdates';
 import fetchConfig from 'src/middlewares/fetchConfig';
 import redirectToStaging from 'src/middlewares/redirectToStaging';
 import corsHandler from 'src/middlewares/corsHandler';
-import logToAws from 'src/middlewares/logToAws';
-import errorInvalidJson from 'src/middlewares/error/errorInvalidJson';
-import errorSwipes from 'src/middlewares/error/errorSwipes';
-import errorHandler from 'src/middlewares/error/errorHandler';
+
+import errorHandler from 'src/middlewares/errorHandler';
 import endpoints from 'src/endpoints/endpoints';
+
+setupLogger('api');
 
 // Elastic beanstalk passes env.PORT to forward nginx...
 const port = Number(process.env.PORT || 5000);
@@ -40,7 +40,10 @@ if (fs.existsSync(path.join(__dirname, './public'))) {
 app.use(corsHandler);
 
 // Everything on v1 path (which is not multipart form data) is parsed as json
-app.use('/v1', bodyParser.json(), errorInvalidJson);
+app.use('/v1', bodyParser.json(), (err, req, res, next) => {
+  // Malformed JSON error handler
+  res.status(400).send({ ok: false, error: 'Invalid json.' });
+});
 // Merge req.query and req.body into req.params
 app.use('/v1', (req, res, next) => {
   res.locals = Object.assign({}, req.params, req.query, req.body, res.locals);
@@ -55,9 +58,6 @@ app.use('/v1', endpoints.notAuthed);
 app.use('/v1', checkUpdates);
 // Validation of user's token
 app.use('/v1', authParseToken, authCheckToken);
-
-// Logging input to aws, including user id.
-app.use(logToAws);
 
 // Keeping old authed endpoints here, for not being sure if we rely on no org id.
 
@@ -74,7 +74,6 @@ app.use('/v1', (req, res, next) => {
 // Error handlers / they should be at the end of the middleware stack
 // ========================================================================
 
-app.use(errorSwipes);
 app.use(errorHandler);
 
 const server = http.createServer(app);
