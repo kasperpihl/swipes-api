@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
 import { convertedUsers } from './testusers';
@@ -6,17 +6,30 @@ import SW from './AssigneeComponent.swiss';
 import { fromJS } from 'immutable'
 import AssigneeContextMenu from 'src/react/context-menus/assignee-component/AssigneeContextMenu';
 
-const propsTestObj = {
-  users: convertedUsers,
-  team: 'Swips'
-}
 @connect(null, {
   contextMenu: mainActions.contextMenu,
 })
-class AssigneeComponent extends PureComponent {
+class AssigneeComponent extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      selectedIds: [],
+    }
+  }
+
   onClick = (e) => {
     const { contextMenu } = this.props;
     const options = this.getOptionsForE(e);
+
+    const propsTestObj = {
+      users: convertedUsers,
+      teamName: 'Swipes',
+      selectUser: this.selectUser,
+      unselectUser: this.unselectUser,
+      onClose: this.onClose,
+      selectedIds: this.state.selectedIds
+    }
 
     contextMenu({
       options,
@@ -24,20 +37,45 @@ class AssigneeComponent extends PureComponent {
       props: propsTestObj
     });
   }
+
   getOptionsForE = (e) => {
     return {
       boundingRect: e.target.getBoundingClientRect(),
-      alignX: 'right',
+      alignX: 'left',
       excludeY: true,
-      // positionY: 10,
+      positionY: 12,
     };
   }
+
+  selectUser = (id) => {
+    console.log('test');
+    let arr = this.state.selectedIds;
+    if(arr.includes(id)) {
+      return null;
+    } else {
+      arr.push(id);
+      this.setState({ selectedIds: arr })
+    }
+  } 
+
+  unselectUser = (id) => {
+    let arr = this.state.selectedIds
+    if(arr.includes(id)) {
+      const filteredArr = arr.filter((u) => u !== id)
+      this.setState({ selectedIds: filteredArr })      
+    } else { 
+      return null;
+    }
+  }
+
+  onClose = (selectedUsers) => {
+    
+  }
   render() {
-    // console.log(convertedUsers.toJS());
     return (
       <SW.Wrapper onClick={this.onClick}>
         <SW.Icon icon='Assign' width="24" height="24" />
-        <p>Assign People</p>
+        <SW.Text>Assign People</SW.Text>
       </SW.Wrapper>
     )
   }
