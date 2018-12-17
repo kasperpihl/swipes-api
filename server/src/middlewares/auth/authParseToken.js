@@ -17,5 +17,4 @@ export default (req, res, next) => {
   res.locals.dbToken = parsedToken.dbToken;
 
   return next();
-
 };
