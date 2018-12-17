@@ -5,6 +5,7 @@ import 'src/polyfills/errorPrototypes';
 import bodyParser from 'body-parser';
 import http from 'http';
 import express from 'express';
+import { setupLogger } from 'src/utils/logger';
 import MiddlewareComposer from 'src/_legacy-queue/middleware_composer';
 import * as middlewares from 'src/_legacy-queue/middlewares';
 import endpoints from 'src/endpoints/endpoints';
@@ -12,6 +13,7 @@ import endpoints from 'src/endpoints/endpoints';
 import corsHandler from 'src/middlewares/corsHandler';
 import errorHandler from 'src/middlewares/errorHandler';
 
+setupLogger('queue');
 // process.env.PORT - this is set by default from elastic beanstalk
 const port = process.env.PORT || 6000;
 const app = express();

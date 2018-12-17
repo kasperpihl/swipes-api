@@ -6,11 +6,13 @@ import http from 'http';
 import express from 'express';
 import config from 'config';
 import websocketStart from './websocket';
+import { setupLogger } from 'src/utils/logger';
 
 import corsHandler from 'src/middlewares/corsHandler';
 
 import errorHandler from 'src/middlewares/errorHandler';
 
+setupLogger('websocket');
 const port = Number(config.get('apiPort') || 5000);
 const app = express();
 

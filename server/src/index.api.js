@@ -3,6 +3,7 @@ import express from 'express';
 import path from 'path';
 import fs from 'fs';
 import bodyParser from 'body-parser';
+import { setupLogger } from 'src/utils/logger';
 import 'src/polyfills/asyncSupport';
 import 'src/polyfills/uncaughtException';
 import 'src/polyfills/errorPrototypes';
@@ -17,6 +18,8 @@ import errorHandler from 'src/middlewares/errorHandler';
 import * as routes from 'src/_legacy-api/routes';
 import endpoints from 'src/endpoints/endpoints';
 import websocketStart from './websocket';
+
+setupLogger('api');
 
 // Elastic beanstalk passes env.PORT to forward nginx...
 const port = Number(process.env.PORT || 5000);
