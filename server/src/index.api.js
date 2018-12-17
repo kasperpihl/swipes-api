@@ -13,9 +13,7 @@ import checkUpdates from 'src/middlewares/checkUpdates';
 import fetchConfig from 'src/middlewares/fetchConfig';
 import redirectToStaging from 'src/middlewares/redirectToStaging';
 import corsHandler from 'src/middlewares/corsHandler';
-import logToAws from 'src/middlewares/logToAws';
 import errorInvalidJson from 'src/middlewares/error/errorInvalidJson';
-import errorSwipes from 'src/middlewares/error/errorSwipes';
 import errorHandler from 'src/middlewares/error/errorHandler';
 import * as routes from 'src/_legacy-api/routes';
 import endpoints from 'src/endpoints/endpoints';
@@ -67,9 +65,6 @@ app.use('/v1', checkUpdates);
 // Validation of user's token
 app.use('/v1', authParseToken, authCheckToken);
 
-// Logging input to aws, including user id.
-app.use(logToAws);
-
 // Keeping old authed endpoints here, for not being sure if we rely on no org id.
 app.use('/v1', routes.v1Authed);
 
@@ -86,7 +81,6 @@ app.use('/v1', endpoints.authed);
 // Error handlers / they should be at the end of the middleware stack
 // ========================================================================
 
-app.use(errorSwipes);
 app.use(errorHandler);
 
 const server = http.createServer(app);

@@ -1,16 +1,21 @@
 import config from 'config';
 import logger from 'src/utils/logger';
+import randomstring from 'randomstring';
 const env = config.get('env');
 
 export default (error, req, res, next) => {
-  if (env !== 'dev') {
-    logger.log('error', error);
-  } else {
+  const localsCopy = Object.assign({}, res.locals);
+  delete localsCopy.config;
+  if (localsCopy.password) {
+    localsCopy.password = '___PROTECTED___';
+  }
+  if (localsCopy.token) {
+    localsCopy.token = '___PROTECTED___';
+  }
+  const logId = randomstring.generate(50);
+  if (env === 'dev') {
     console.log(`--- ERROR ${req.originalUrl} ---`);
     console.log('--- res.locals ---');
-    const localsCopy = Object.assign({}, res.locals);
-    delete localsCopy.config;
-    delete localsCopy.token;
     console.error(JSON.stringify(localsCopy, null, 2));
     console.log('--- trace ---');
     console.error(error);
@@ -19,20 +24,38 @@ export default (error, req, res, next) => {
     console.log(`--- ERROR END ---`);
   }
 
-  let message = error;
-  if (error.message) {
-    message = error.message;
-  }
-  if (typeof message !== 'string') {
-    message = 'Unknown error';
-  }
-  const result = { ok: false, error: message };
-  if (error.errorInfo) {
-    result.errorInfo = error.errorInfo;
-  }
+  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  logger.log('error', {
+    ip,
+    request_id: logId,
+    user_id: res.locals.user_id,
+    headers: req.headers,
+    endpoint: req.originalUrl,
+    locals: localsCopy,
+    stack: error.stack.split('\n'),
+    message: error.message,
+    info: error.errorInfo,
+  });
+
+  const result = { ok: false, error: logId };
   let code = 400;
   if (error.errorCode) {
     code = error.errorCode;
   }
+
+  if (env === 'dev') {
+    let message = error;
+    if (error.message) {
+      message = error.message;
+    }
+    if (typeof message !== 'string') {
+      message = 'Unknown error';
+    }
+    result.error = message;
+    if (error.errorInfo) {
+      result.errorInfo = error.errorInfo;
+    }
+  }
+
   return res.status(code).send(result);
 };

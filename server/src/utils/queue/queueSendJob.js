@@ -4,7 +4,7 @@ import randomstring from 'randomstring';
 import request from 'request';
 
 const env = config.get('env');
-const { accessKey, secretKey, region, queueUrl } = config.get('aws');
+const { accessKeyId, secretAccessKey, region, queueUrl } = config.get('aws');
 
 export default (options, payload, messageGroupId = null) => {
   return new Promise((resolve, reject) => {
@@ -17,7 +17,7 @@ export default (options, payload, messageGroupId = null) => {
       );
     }
     if (env !== 'dev') {
-      AWS.config.update({ accessKey, secretKey });
+      AWS.config.update({ accessKeyId, secretAccessKey });
 
       const sqs = new AWS.SQS({ region });
       const MessageBody = JSON.stringify({

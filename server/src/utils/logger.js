@@ -6,13 +6,6 @@ const env = config.get('env');
 const { accessKeyId, secretAccessKey, region } = config.get('aws');
 const logger = new winston.Logger();
 
-if (env === 'dev') {
-  logger.add(winston.transports.Console, {
-    timestamp: true,
-    colorize: true,
-  });
-}
-
 const logConfig = {
   logGroupName: 'workspace-log-group',
   logStreamName: env,
@@ -29,10 +22,7 @@ const logConfig = {
 };
 
 // put a check for the dev
-if (env !== 'dev') {
-  logger.add(CloudWatchTransport, logConfig);
-}
-
+logger.add(CloudWatchTransport, logConfig);
 logger.level = process.env.LOG_LEVEL || 'silly';
 
 logger.stream = {

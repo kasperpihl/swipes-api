@@ -10,7 +10,6 @@ import * as middlewares from 'src/_legacy-queue/middlewares';
 import endpoints from 'src/endpoints/endpoints';
 
 import corsHandler from 'src/middlewares/corsHandler';
-import errorSwipes from 'src/middlewares/error/errorSwipes';
 import errorHandler from 'src/middlewares/error/errorHandler';
 
 // process.env.PORT - this is set by default from elastic beanstalk
@@ -48,7 +47,6 @@ app.use('/process', (originalReq, originalRes, originalNext) => {
 
 app.use('/process', endpoints.queue);
 
-app.use(errorSwipes);
 app.use(errorHandler);
 
 const server = http.createServer(app);
