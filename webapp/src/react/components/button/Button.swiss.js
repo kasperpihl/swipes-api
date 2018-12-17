@@ -125,6 +125,7 @@ export default styleSheet('Button', {
     background: 'white',
     boxShadow: '0 6px 12px 1px rgba(0, 12, 47, 0.3)',
     padding: '0 12px',
+    numberOfLines: {},
     show: {
       _flex: ['row', 'center', 'center'],
       position: 'absolute',

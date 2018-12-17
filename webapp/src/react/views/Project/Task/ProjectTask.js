@@ -15,14 +15,14 @@ export default class ProjectTask extends PureComponent {
   }
   componentDidMount() {
     // Wait for sibling components to have re-rendered
-    this.timer = setTimeout(this.checkFocus, 0);
+    setTimeout(this.checkFocus, 0);
   }
   componentDidUpdate() {
     // Wait for all components to have re-rendered
-    this.timer = setTimeout(this.checkFocus, 0);
+    setTimeout(this.checkFocus, 0);
   }
   componentWillUnmount() {
-    clearTimeout(this.timer);
+    this._unmounted = true;
   }
 
   onFocus = () => {
@@ -36,7 +36,8 @@ export default class ProjectTask extends PureComponent {
     this.setState({ isFocused: false });
   };
   onComplete = e => {
-    const { taskId, completion, stateManager } = this.props;
+    const { taskId, stateManager, task } = this.props;
+    const { completion } = task;
     if (completion) {
       stateManager.completeHandler.incomplete(taskId);
     } else {
@@ -48,7 +49,8 @@ export default class ProjectTask extends PureComponent {
     stateManager.editHandler.updateTitle(taskId, e.target.value);
   };
   onExpandClick = () => {
-    const { stateManager, taskId, expanded } = this.props;
+    const { stateManager, taskId, task } = this.props;
+    const { expanded } = task;
     stateManager.expandHandler[expanded ? 'collapse' : 'expand'](taskId);
   };
   onAssigningClose(assignees) {
@@ -58,7 +60,8 @@ export default class ProjectTask extends PureComponent {
     }
   }
   checkFocus = () => {
-    const { isSelected, selectionStart, title } = this.props;
+    if (this._unmounted) return;
+    const { isSelected, selectionStart, title } = this.props.task;
     const { isFocused } = this.state;
     if (isSelected && !isFocused) {
       this.inputRef.focus();
@@ -72,7 +75,13 @@ export default class ProjectTask extends PureComponent {
     }
   };
   render() {
-    const { title, completion, indention, hasChildren, expanded } = this.props;
+    const {
+      title,
+      completion,
+      indention,
+      hasChildren,
+      expanded
+    } = this.props.task;
     const { isFocused } = this.state;
 
     return (
