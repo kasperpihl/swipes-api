@@ -13,8 +13,7 @@ import checkUpdates from 'src/middlewares/checkUpdates';
 import fetchConfig from 'src/middlewares/fetchConfig';
 import redirectToStaging from 'src/middlewares/redirectToStaging';
 import corsHandler from 'src/middlewares/corsHandler';
-import errorInvalidJson from 'src/middlewares/error/errorInvalidJson';
-import errorHandler from 'src/middlewares/error/errorHandler';
+import errorHandler from 'src/middlewares/errorHandler';
 import * as routes from 'src/_legacy-api/routes';
 import endpoints from 'src/endpoints/endpoints';
 import websocketStart from './websocket';
@@ -47,7 +46,10 @@ app.use(
 app.use('/v1', routes.v1Multipart);
 
 // Everything on v1 path (which is not multipart form data) is parsed as json
-app.use('/v1', bodyParser.json(), errorInvalidJson);
+app.use('/v1', bodyParser.json(), (err, req, res, next) => {
+  // Malformed JSON error handler
+  res.status(400).send({ ok: false, error: 'Invalid json.' });
+});
 // Merge req.query and req.body into req.params
 app.use('/v1', (req, res, next) => {
   console.log(req.path);

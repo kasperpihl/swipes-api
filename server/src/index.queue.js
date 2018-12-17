@@ -10,7 +10,7 @@ import * as middlewares from 'src/_legacy-queue/middlewares';
 import endpoints from 'src/endpoints/endpoints';
 
 import corsHandler from 'src/middlewares/corsHandler';
-import errorHandler from 'src/middlewares/error/errorHandler';
+import errorHandler from 'src/middlewares/errorHandler';
 
 // process.env.PORT - this is set by default from elastic beanstalk
 const port = process.env.PORT || 6000;

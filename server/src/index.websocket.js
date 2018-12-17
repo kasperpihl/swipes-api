@@ -9,7 +9,7 @@ import websocketStart from './websocket';
 
 import corsHandler from 'src/middlewares/corsHandler';
 
-import errorHandler from 'src/middlewares/error/errorHandler';
+import errorHandler from 'src/middlewares/errorHandler';
 
 const port = Number(config.get('apiPort') || 5000);
 const app = express();
