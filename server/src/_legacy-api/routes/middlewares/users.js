@@ -2,10 +2,7 @@ import r from 'rethinkdb';
 import sha1 from 'sha1';
 import Promise from 'bluebird';
 import jwt from 'jwt-simple';
-import {
- string, number, object, array, bool 
-} from 'valjs';
-import SwipesError from 'src/utils/SwipesError';
+import { string, number, object, array, bool } from 'valjs';
 import {
   getClientIp,
   valLocals,
@@ -62,8 +59,7 @@ const userAvailability = valLocals(
 
         if (user && user.activated === true) {
           return next(new SwipesError('There is a user with that email'));
-        }
-        if (user && user.activated === false) {
+        } else if (user && user.activated === false) {
           userId = user.id;
 
           setLocals({
@@ -82,7 +78,7 @@ const userAvailability = valLocals(
       .catch(err => {
         return next(err);
       });
-  },
+  }
 );
 const userCheckEmailVsTokenEmail = valLocals(
   'userCheckEmailVsTokenEmail',
@@ -100,13 +96,13 @@ const userCheckEmailVsTokenEmail = valLocals(
     if (token_email !== email) {
       return next(
         new SwipesError(
-          "The email can't be different from the one that you have been invited from ",
-        ),
+          "The email can't be different from the one that you have been invited from "
+        )
       );
     }
 
     return next();
-  },
+  }
 );
 const usersParseInvitationToken = valLocals(
   'usersParseInvitationToken',
@@ -133,7 +129,7 @@ const usersParseInvitationToken = valLocals(
     } catch (err) {
       return next(new SwipesError('Invalid invitation token'));
     }
-  },
+  }
 );
 const usersParseConfirmationToken = valLocals(
   'usersParseConfirmationToken',
@@ -154,7 +150,7 @@ const usersParseConfirmationToken = valLocals(
     } catch (err) {
       return next(new SwipesError('Invalid invitation token'));
     }
-  },
+  }
 );
 const usersActivateUserSignUp = valLocals(
   'usersActivateUserSignUp',
@@ -195,7 +191,7 @@ const usersActivateUserSignUp = valLocals(
       .catch(err => {
         return next(err);
       });
-  },
+  }
 );
 const userSignUp = valLocals(
   'userSignUp',
@@ -257,7 +253,7 @@ const userSignUp = valLocals(
       .catch(err => {
         return next(err);
       });
-  },
+  }
 );
 const userActivatedUserSignUpQueueMessage = valLocals(
   'userActivatedUserSignUpQueueMessage',
@@ -283,7 +279,7 @@ const userActivatedUserSignUpQueueMessage = valLocals(
     });
 
     return next();
-  },
+  }
 );
 const usersGetByEmailWithFields = valLocals(
   'usersGetByEmailWithFields',
@@ -307,7 +303,7 @@ const usersGetByEmailWithFields = valLocals(
       .catch(err => {
         return next(err);
       });
-  },
+  }
 );
 const usersGetByEmailWithoutFields = valLocals(
   'usersGetByEmailWithoutFields',
@@ -331,7 +327,7 @@ const usersGetByEmailWithoutFields = valLocals(
       .catch(err => {
         return next(err);
       });
-  },
+  }
 );
 const usersGetByIdWithFields = valLocals(
   'usersGetByIdWithFields',
@@ -353,7 +349,7 @@ const usersGetByIdWithFields = valLocals(
       .catch(err => {
         return next(err);
       });
-  },
+  }
 );
 const usersComparePasswordSignIn = valLocals(
   'usersComparePasswordSignIn',
@@ -371,7 +367,7 @@ const usersComparePasswordSignIn = valLocals(
     }
 
     return next();
-  },
+  }
 );
 const userSignIn = valLocals(
   'userSignIn',
@@ -396,7 +392,7 @@ const userSignIn = valLocals(
       .catch(err => {
         return next(err);
       });
-  },
+  }
 );
 const usersGetService = valLocals(
   'usersGetService',
@@ -422,7 +418,7 @@ const usersGetService = valLocals(
       .catch(err => {
         return next(err);
       });
-  },
+  }
 );
 const usersCleanupRegisteredWebhooksToService = valLocals(
   'usersCleanupRegisteredWebhooksToService',
@@ -446,7 +442,7 @@ const usersCleanupRegisteredWebhooksToService = valLocals(
     }
 
     return next();
-  },
+  }
 );
 
 const usersRemoveService = valLocals(
@@ -465,7 +461,11 @@ const usersRemoveService = valLocals(
       .catch(err => {
         return next(err);
       });
+<<<<<<< HEAD
   },
+=======
+  }
+>>>>>>> development
 );
 const usersGetSingleWithOrganizations = valLocals(
   'usersGetSingleWithOrganizations',
@@ -486,7 +486,7 @@ const usersGetSingleWithOrganizations = valLocals(
       .catch(err => {
         return next(err);
       });
-  },
+  }
 );
 const userGetInfoForToken = valLocals(
   'userGetInfoForToken',
@@ -511,7 +511,7 @@ const userGetInfoForToken = valLocals(
     });
 
     return next();
-  },
+  }
 );
 const usersRevokeToken = valLocals(
   'usersRevokeToken',
@@ -529,7 +529,7 @@ const usersRevokeToken = valLocals(
       .catch(err => {
         return next(err);
       });
-  },
+  }
 );
 const usersCreateTempUnactivatedUser = valLocals(
   'usersCreateTempUnactivatedUser',
@@ -541,9 +541,7 @@ const usersCreateTempUnactivatedUser = valLocals(
     user: object,
   },
   (req, res, next, setLocals) => {
-    const {
- user_id, organization_id, first_name, email, user 
-} = res.locals;
+    const { user_id, organization_id, first_name, email, user } = res.locals;
     const userDoc = {
       id: generateSlackLikeId('U'),
       services: [],
@@ -578,7 +576,7 @@ const usersCreateTempUnactivatedUser = valLocals(
     }
 
     return next();
-  },
+  }
 );
 const usersAddPendingOrganization = valLocals(
   'usersAddPendingOrganization',
@@ -604,7 +602,7 @@ const usersAddPendingOrganization = valLocals(
       .catch(err => {
         return next(err);
       });
-  },
+  }
 );
 const usersCheckIfInOrganization = valLocals(
   'usersCheckIfInOrganization',
@@ -619,7 +617,7 @@ const usersCheckIfInOrganization = valLocals(
     }
 
     return next();
-  },
+  }
 );
 const usersCreateInvitationToken = valLocals(
   'usersCreateInvitationToken',
@@ -637,7 +635,7 @@ const usersCreateInvitationToken = valLocals(
         organization_id,
         user_id: userId,
       },
-      invitationTokenSecret,
+      invitationTokenSecret
     );
 
     setLocals({
@@ -645,7 +643,7 @@ const usersCreateInvitationToken = valLocals(
     });
 
     return next();
-  },
+  }
 );
 const usersCreateConfirmationToken = valLocals(
   'usersCreateConfirmationToken',
@@ -658,7 +656,7 @@ const usersCreateConfirmationToken = valLocals(
       {
         user_id,
       },
-      confirmationTokenSecret,
+      confirmationTokenSecret
     );
 
     setLocals({
@@ -666,7 +664,7 @@ const usersCreateConfirmationToken = valLocals(
     });
 
     return next();
-  },
+  }
 );
 const usersLeaveOrganizationQueueMessage = valLocals(
   'usersLeaveOrganizationQueueMessage',
@@ -689,7 +687,7 @@ const usersLeaveOrganizationQueueMessage = valLocals(
     });
 
     return next();
-  },
+  }
 );
 const usersDisabledQueueMessage = valLocals(
   'usersDisabledQueueMessage',
@@ -712,7 +710,7 @@ const usersDisabledQueueMessage = valLocals(
     });
 
     return next();
-  },
+  }
 );
 const usersSendInvitationQueueMessage = valLocals(
   'usersSendInvitationQueueMessage',
@@ -749,7 +747,7 @@ const usersSendInvitationQueueMessage = valLocals(
     });
 
     return next();
-  },
+  }
 );
 const usersConfirmEmailQueueMessage = valLocals(
   'usersConfirmEmailQueueMessage',
@@ -769,7 +767,7 @@ const usersConfirmEmailQueueMessage = valLocals(
     });
 
     return next();
-  },
+  }
 );
 const usersInvitedUserQueueMessage = valLocals(
   'usersInvitedUserQueueMessage',
@@ -799,7 +797,7 @@ const usersInvitedUserQueueMessage = valLocals(
     });
 
     return next();
-  },
+  }
 );
 const userSignupQueueMessage = valLocals(
   'userSignupQueueMessage',
@@ -824,7 +822,7 @@ const userSignupQueueMessage = valLocals(
     });
 
     return next();
-  },
+  }
 );
 const usersConfirmEmail = valLocals(
   'usersConfirmEmail',
@@ -841,7 +839,7 @@ const usersConfirmEmail = valLocals(
       .catch(err => {
         return next(err);
       });
-  },
+  }
 );
 
 export {

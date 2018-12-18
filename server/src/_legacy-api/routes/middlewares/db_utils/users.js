@@ -1,7 +1,5 @@
 import r from 'rethinkdb';
-import {
- string, object, array, funcWrap 
-} from 'valjs';
+import { string, object, array, funcWrap } from 'valjs';
 import dbRunQuery from 'src/utils/db/dbRunQuery';
 import SwipesError from 'src/utils/SwipesError';
 
@@ -21,7 +19,7 @@ const dbUsersGetService = funcWrap(
       .nth(0);
 
     return dbRunQuery(q);
-  },
+  }
 );
 const dbUsersRemoveService = funcWrap(
   [string.require(), string.require()],
@@ -41,7 +39,7 @@ const dbUsersRemoveService = funcWrap(
       });
 
     return dbRunQuery(q);
-  },
+  }
 );
 const dbUsersAddSevice = funcWrap(
   [
@@ -76,7 +74,7 @@ const dbUsersAddSevice = funcWrap(
       });
 
     return dbRunQuery(q);
-  },
+  }
 );
 const dbUsersGetServiceWithAuth = funcWrap(
   [
@@ -110,7 +108,7 @@ const dbUsersGetServiceWithAuth = funcWrap(
       .zip();
 
     return dbRunQuery(q);
-  },
+  }
 );
 const dbUsersGetSingleWithOrganizations = funcWrap(
   [
@@ -137,7 +135,7 @@ const dbUsersGetSingleWithOrganizations = funcWrap(
       });
 
     return dbRunQuery(q);
-  },
+  }
 );
 const dbUsersGetByEmailWithFields = funcWrap(
   [
@@ -162,7 +160,7 @@ const dbUsersGetByEmailWithFields = funcWrap(
     }
 
     return dbRunQuery(q);
-  },
+  }
 );
 const dbUsersGetByEmailWithoutFields = funcWrap(
   [
@@ -187,7 +185,7 @@ const dbUsersGetByEmailWithoutFields = funcWrap(
     }
 
     return dbRunQuery(q);
-  },
+  }
 );
 const dbUsersAddOrganization = funcWrap(
   [
@@ -216,7 +214,7 @@ const dbUsersAddOrganization = funcWrap(
       });
 
     return dbRunQuery(q);
-  },
+  }
 );
 const dbUsersCreate = funcWrap(
   [
@@ -234,7 +232,7 @@ const dbUsersCreate = funcWrap(
     const q = r.table('users').insert(user, { returnChanges: true });
 
     return dbRunQuery(q);
-  },
+  }
 );
 const dbUsersActivateAfterSignUp = funcWrap(
   [
@@ -263,11 +261,11 @@ const dbUsersActivateAfterSignUp = funcWrap(
         },
         {
           returnChanges: 'always',
-        },
+        }
       );
 
     return dbRunQuery(q);
-  },
+  }
 );
 const dbUsersConfirmEmail = funcWrap(
   [
@@ -291,7 +289,7 @@ const dbUsersConfirmEmail = funcWrap(
       });
 
     return dbRunQuery(q);
-  },
+  }
 );
 const dbUsersAddPendingOrganization = funcWrap(
   [
@@ -328,7 +326,7 @@ const dbUsersAddPendingOrganization = funcWrap(
         },
         {
           returnChanges: true,
-        },
+        }
       )
       .do(result => {
         return r
@@ -347,7 +345,7 @@ const dbUsersAddPendingOrganization = funcWrap(
       });
 
     return dbRunQuery(q);
-  },
+  }
 );
 const dbUsersGetByEmail = funcWrap(
   [
@@ -365,7 +363,7 @@ const dbUsersGetByEmail = funcWrap(
     const q = r.table('users').getAll(email, { index: 'email' });
 
     return dbRunQuery(q);
-  },
+  }
 );
 const dbUsersResetPassword = funcWrap(
   [
@@ -390,7 +388,7 @@ const dbUsersResetPassword = funcWrap(
       });
 
     return dbRunQuery(q);
-  },
+  }
 );
 const dbUsersGetByIdWithFields = funcWrap(
   [
@@ -413,7 +411,7 @@ const dbUsersGetByIdWithFields = funcWrap(
     }
 
     return dbRunQuery(q);
-  },
+  }
 );
 
 export {
