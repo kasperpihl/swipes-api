@@ -7,7 +7,7 @@ import {
   getClientIp,
   valLocals,
   generateSlackLikeId,
-  createTokens,
+  createTokens
 } from '../../utils';
 import * as services from '../../services';
 import {
@@ -21,7 +21,7 @@ import {
   dbUsersGetByIdWithFields,
   dbUsersAddPendingOrganization,
   dbUsersConfirmEmail,
-  dbUsersGetByEmailWithoutFields,
+  dbUsersGetByEmailWithoutFields
 } from './db_utils/users';
 import { dbTokensInsertSingle, dbTokensRevoke } from './db_utils/tokens';
 
@@ -34,20 +34,20 @@ const defaultSettings = {
       'personalize-swipes',
       'open-swipes-intro',
       'watch-introduction-video',
-      'invite-team',
+      'invite-team'
     ],
     completed: {
-      'create-account': true,
-    },
+      'create-account': true
+    }
   },
   starred_goals: [],
   pinned_goals: [],
-  subscriptions: {},
+  subscriptions: {}
 };
 const userAvailability = valLocals(
   'userAvailability',
   {
-    email: string.format('email').require(),
+    email: string.format('email').require()
   },
   (req, res, next, setLocals) => {
     const { email } = res.locals;
@@ -63,14 +63,14 @@ const userAvailability = valLocals(
           userId = user.id;
 
           setLocals({
-            userActivated: false,
+            userActivated: false
           });
         } else {
           userId = generateSlackLikeId('U');
         }
 
         setLocals({
-          userId,
+          userId
         });
 
         return next();
@@ -84,7 +84,7 @@ const userCheckEmailVsTokenEmail = valLocals(
   'userCheckEmailVsTokenEmail',
   {
     email: string.format('email').require(),
-    token_email: string,
+    token_email: string
   },
   (req, res, next, setLocals) => {
     const { email, token_email } = res.locals;
@@ -107,7 +107,7 @@ const userCheckEmailVsTokenEmail = valLocals(
 const usersParseInvitationToken = valLocals(
   'usersParseInvitationToken',
   {
-    invitation_token: string,
+    invitation_token: string
   },
   (req, res, next, setLocals) => {
     const { invitation_token } = res.locals;
@@ -122,7 +122,7 @@ const usersParseInvitationToken = valLocals(
       setLocals({
         userId: content.user_id,
         organizationId: content.organization_id,
-        token_email: content.email,
+        token_email: content.email
       });
 
       return next();
@@ -134,7 +134,7 @@ const usersParseInvitationToken = valLocals(
 const usersParseConfirmationToken = valLocals(
   'usersParseConfirmationToken',
   {
-    confirmation_token: string.require(),
+    confirmation_token: string.require()
   },
   (req, res, next, setLocals) => {
     const { confirmation_token } = res.locals;
@@ -143,7 +143,7 @@ const usersParseConfirmationToken = valLocals(
       const content = jwt.decode(confirmation_token, confirmationTokenSecret);
 
       setLocals({
-        userId: content.user_id,
+        userId: content.user_id
       });
 
       return next();
@@ -159,7 +159,7 @@ const usersActivateUserSignUp = valLocals(
     password: string.min(1).require(),
     first_name: string.max(32).require(),
     last_name: string.max(32).require(),
-    userActivated: bool,
+    userActivated: bool
   },
   (req, res, next, setLocals) => {
     const {
@@ -167,7 +167,7 @@ const usersActivateUserSignUp = valLocals(
       password,
       first_name,
       last_name,
-      userActivated,
+      userActivated
     } = res.locals;
 
     if (userActivated !== false) {
@@ -176,14 +176,14 @@ const usersActivateUserSignUp = valLocals(
 
     const profile = {
       first_name,
-      last_name,
+      last_name
     };
     const passwordSha1 = sha1(password);
 
     return dbUsersActivateAfterSignUp({
       profile,
       user_id: userId,
-      password: passwordSha1,
+      password: passwordSha1
     })
       .then(() => {
         return next();
@@ -202,7 +202,7 @@ const userSignUp = valLocals(
     last_name: string.require(),
     password: string.min(1).require(),
     tokenInfo: object.require(),
-    userActivated: bool,
+    userActivated: bool
   },
   (req, res, next, setLocals) => {
     const {
@@ -212,11 +212,11 @@ const userSignUp = valLocals(
       last_name,
       password,
       tokenInfo,
-      userActivated,
+      userActivated
     } = res.locals;
 
     const tokens = createTokens({
-      iss: tokenInfo.user_id,
+      iss: tokenInfo.user_id
     });
     const promises = [dbTokensInsertSingle({ token: tokens.token, tokenInfo })];
 
@@ -229,13 +229,13 @@ const userSignUp = valLocals(
         email,
         profile: {
           first_name,
-          last_name,
+          last_name
         },
         password: sha1(password),
         created_at: r.now(),
         updated_at: r.now(),
         settings: defaultSettings,
-        activated: true,
+        activated: true
       };
 
       promises.push(dbUsersCreate({ user: userDoc }));
@@ -245,7 +245,7 @@ const userSignUp = valLocals(
       .then(() => {
         setLocals({
           userId,
-          token: tokens.shortToken,
+          token: tokens.shortToken
         });
 
         return next();
@@ -259,7 +259,7 @@ const userActivatedUserSignUpQueueMessage = valLocals(
   'userActivatedUserSignUpQueueMessage',
   {
     user_id: string.require(),
-    invitation_token: string,
+    invitation_token: string
   },
   (req, res, next, setLocals) => {
     const { user_id, invitation_token } = res.locals;
@@ -270,12 +270,12 @@ const userActivatedUserSignUpQueueMessage = valLocals(
 
     const queueMessage = {
       user_id,
-      event_type: 'user_activated',
+      event_type: 'user_activated'
     };
 
     setLocals({
       queueMessage,
-      messageGroupId: user_id,
+      messageGroupId: user_id
     });
 
     return next();
@@ -285,7 +285,7 @@ const usersGetByEmailWithFields = valLocals(
   'usersGetByEmailWithFields',
   {
     email: string.format('email').require(),
-    fields: array.of(string).require(),
+    fields: array.of(string).require()
   },
   (req, res, next, setLocals) => {
     const { email, fields } = res.locals;
@@ -295,7 +295,7 @@ const usersGetByEmailWithFields = valLocals(
         const user = users[0];
 
         setLocals({
-          user,
+          user
         });
 
         return next();
@@ -309,7 +309,7 @@ const usersGetByEmailWithoutFields = valLocals(
   'usersGetByEmailWithoutFields',
   {
     email: string.format('email').require(),
-    fields: array.of(string, object).require(),
+    fields: array.of(string, object).require()
   },
   (req, res, next, setLocals) => {
     const { email, fields } = res.locals;
@@ -319,7 +319,7 @@ const usersGetByEmailWithoutFields = valLocals(
         const user = users[0];
 
         setLocals({
-          user,
+          user
         });
 
         return next();
@@ -333,7 +333,7 @@ const usersGetByIdWithFields = valLocals(
   'usersGetByIdWithFields',
   {
     userToGetId: string.require(),
-    fields: array.of(string).require(),
+    fields: array.of(string).require()
   },
   (req, res, next, setLocals) => {
     const { userToGetId, fields } = res.locals;
@@ -341,7 +341,7 @@ const usersGetByIdWithFields = valLocals(
     dbUsersGetByIdWithFields({ user_id: userToGetId, fields })
       .then(user => {
         setLocals({
-          user,
+          user
         });
 
         return next();
@@ -356,7 +356,7 @@ const usersComparePasswordSignIn = valLocals(
   {
     user: object,
     password: string.min(1).require(),
-    passwordError: string.require(),
+    passwordError: string.require()
   },
   (req, res, next, setLocals) => {
     const { user, password, passwordError } = res.locals;
@@ -372,17 +372,17 @@ const usersComparePasswordSignIn = valLocals(
 const userSignIn = valLocals(
   'userSignIn',
   {
-    tokenInfo: object.require(),
+    tokenInfo: object.require()
   },
   (req, res, next, setLocals) => {
     const { tokenInfo } = res.locals;
 
     const tokens = createTokens({
-      iss: tokenInfo.user_id,
+      iss: tokenInfo.user_id
     });
 
     setLocals({
-      token: tokens.shortToken,
+      token: tokens.shortToken
     });
 
     dbTokensInsertSingle({ token: tokens.token, tokenInfo })
@@ -398,7 +398,7 @@ const usersGetService = valLocals(
   'usersGetService',
   {
     user_id: string.require(),
-    account_id: string.require(),
+    account_id: string.require()
   },
   (req, res, next, setLocals) => {
     const { user_id, account_id } = res.locals;
@@ -410,7 +410,7 @@ const usersGetService = valLocals(
         }
 
         setLocals({
-          service,
+          service
         });
 
         return next();
@@ -424,7 +424,7 @@ const usersCleanupRegisteredWebhooksToService = valLocals(
   'usersCleanupRegisteredWebhooksToService',
   {
     user_id: string.require(),
-    service: object.require(),
+    service: object.require()
   },
   (req, res, next) => {
     const { user_id, service } = res.locals;
@@ -449,7 +449,7 @@ const usersRemoveService = valLocals(
   'usersRemoveService',
   {
     user_id: string.require(),
-    service: object.require(),
+    service: object.require()
   },
   (req, res, next) => {
     const { user_id, service } = res.locals;
@@ -461,16 +461,12 @@ const usersRemoveService = valLocals(
       .catch(err => {
         return next(err);
       });
-<<<<<<< HEAD
-  },
-=======
   }
->>>>>>> development
 );
 const usersGetSingleWithOrganizations = valLocals(
   'usersGetSingleWithOrganizations',
   {
-    user_id: string.require(),
+    user_id: string.require()
   },
   (req, res, next, setLocals) => {
     const { user_id } = res.locals;
@@ -478,7 +474,7 @@ const usersGetSingleWithOrganizations = valLocals(
     return dbUsersGetSingleWithOrganizations({ user_id })
       .then(user => {
         setLocals({
-          user,
+          user
         });
 
         return next();
@@ -491,7 +487,7 @@ const usersGetSingleWithOrganizations = valLocals(
 const userGetInfoForToken = valLocals(
   'userGetInfoForToken',
   {
-    userId: string.require(),
+    userId: string.require()
   },
   (req, res, next, setLocals) => {
     const { userId } = res.locals;
@@ -505,9 +501,9 @@ const userGetInfoForToken = valLocals(
         user_id: userId,
         info: {
           platform,
-          ip,
-        },
-      },
+          ip
+        }
+      }
     });
 
     return next();
@@ -517,7 +513,7 @@ const usersRevokeToken = valLocals(
   'usersRevokeToken',
   {
     user_id: string.require(),
-    dbToken: string.require(),
+    dbToken: string.require()
   },
   (req, res, next, setLocals) => {
     const { user_id, dbToken } = res.locals;
@@ -538,7 +534,7 @@ const usersCreateTempUnactivatedUser = valLocals(
     organization_id: string.require(),
     first_name: string.require(),
     email: string.require(),
-    user: object,
+    user: object
   },
   (req, res, next, setLocals) => {
     const { user_id, organization_id, first_name, email, user } = res.locals;
@@ -549,13 +545,13 @@ const usersCreateTempUnactivatedUser = valLocals(
       pending_organizations: [organization_id],
       email,
       profile: {
-        first_name,
+        first_name
       },
       created_at: r.now(),
       updated_at: r.now(),
       settings: defaultSettings,
       invited_by: user_id,
-      activated: false,
+      activated: false
     };
 
     if (!user) {
@@ -565,7 +561,7 @@ const usersCreateTempUnactivatedUser = valLocals(
           const user = userChanges.new_val;
 
           setLocals({
-            user,
+            user
           });
 
           return next();
@@ -582,7 +578,7 @@ const usersAddPendingOrganization = valLocals(
   'usersAddPendingOrganization',
   {
     organization_id: string.require(),
-    user: object.require(),
+    user: object.require()
   },
   (req, res, next, setLocals) => {
     const { organization_id, user } = res.locals;
@@ -594,7 +590,7 @@ const usersAddPendingOrganization = valLocals(
         const organization = changes.new_val || changes.old_val;
 
         setLocals({
-          organization,
+          organization
         });
 
         return next();
@@ -607,7 +603,7 @@ const usersAddPendingOrganization = valLocals(
 const usersCheckIfInOrganization = valLocals(
   'usersCheckIfInOrganization',
   {
-    user: object.require(),
+    user: object.require()
   },
   (req, res, next, setLocals) => {
     const { user } = res.locals;
@@ -624,7 +620,7 @@ const usersCreateInvitationToken = valLocals(
   {
     email: string.require(),
     organization_id: string.require(),
-    user: object.require(),
+    user: object.require()
   },
   (req, res, next, setLocals) => {
     const { email, organization_id, user } = res.locals;
@@ -633,13 +629,13 @@ const usersCreateInvitationToken = valLocals(
       {
         email,
         organization_id,
-        user_id: userId,
+        user_id: userId
       },
       invitationTokenSecret
     );
 
     setLocals({
-      invitationToken,
+      invitationToken
     });
 
     return next();
@@ -648,19 +644,19 @@ const usersCreateInvitationToken = valLocals(
 const usersCreateConfirmationToken = valLocals(
   'usersCreateConfirmationToken',
   {
-    user_id: string.require(),
+    user_id: string.require()
   },
   (req, res, next, setLocals) => {
     const { user_id } = res.locals;
     const confirmationToken = jwt.encode(
       {
-        user_id,
+        user_id
       },
       confirmationTokenSecret
     );
 
     setLocals({
-      confirmationToken,
+      confirmationToken
     });
 
     return next();
@@ -670,7 +666,7 @@ const usersLeaveOrganizationQueueMessage = valLocals(
   'usersLeaveOrganizationQueueMessage',
   {
     user_id: string.require(),
-    organization_id: string.require(),
+    organization_id: string.require()
   },
   (req, res, next, setLocals) => {
     const { user_id, organization_id } = res.locals;
@@ -678,12 +674,12 @@ const usersLeaveOrganizationQueueMessage = valLocals(
     const queueMessage = {
       user_id,
       organization_id,
-      event_type: 'user_organization_left',
+      event_type: 'user_organization_left'
     };
 
     setLocals({
       queueMessage,
-      messageGroupId: user_id,
+      messageGroupId: user_id
     });
 
     return next();
@@ -693,7 +689,7 @@ const usersDisabledQueueMessage = valLocals(
   'usersDisabledQueueMessage',
   {
     user_to_disable_id: string.require(),
-    organization_id: string.require(),
+    organization_id: string.require()
   },
   (req, res, next, setLocals) => {
     const { user_to_disable_id, organization_id } = res.locals;
@@ -701,12 +697,12 @@ const usersDisabledQueueMessage = valLocals(
     const queueMessage = {
       organization_id,
       user_id: user_to_disable_id,
-      event_type: 'user_disabled',
+      event_type: 'user_disabled'
     };
 
     setLocals({
       queueMessage,
-      messageGroupId: user_to_disable_id,
+      messageGroupId: user_to_disable_id
     });
 
     return next();
@@ -719,7 +715,7 @@ const usersSendInvitationQueueMessage = valLocals(
     organization_id: string.require(),
     email: string.require(),
     invitationToken: string.require(),
-    user: object.require(),
+    user: object.require()
   },
   (req, res, next, setLocals) => {
     const {
@@ -727,7 +723,7 @@ const usersSendInvitationQueueMessage = valLocals(
       organization_id,
       email,
       invitationToken,
-      user,
+      user
     } = res.locals;
 
     const userId = user.id;
@@ -738,12 +734,12 @@ const usersSendInvitationQueueMessage = valLocals(
       invitationToken,
       first_name,
       inviter_user_id: user_id,
-      event_type: 'user_invitation_email',
+      event_type: 'user_invitation_email'
     };
 
     setLocals({
       queueMessage,
-      messageGroupId: userId,
+      messageGroupId: userId
     });
 
     return next();
@@ -752,18 +748,18 @@ const usersSendInvitationQueueMessage = valLocals(
 const usersConfirmEmailQueueMessage = valLocals(
   'usersConfirmEmailQueueMessage',
   {
-    user_id: string.require(),
+    user_id: string.require()
   },
   (req, res, next, setLocals) => {
     const { user_id } = res.locals;
     const queueMessage = {
       user_id,
-      event_type: 'user_confirm',
+      event_type: 'user_confirm'
     };
 
     setLocals({
       queueMessage,
-      messageGroupId: user_id,
+      messageGroupId: user_id
     });
 
     return next();
@@ -773,7 +769,7 @@ const usersInvitedUserQueueMessage = valLocals(
   'usersInvitedUserQueueMessage',
   {
     user: object.require(),
-    organization: object,
+    organization: object
   },
   (req, res, next, setLocals) => {
     const { user, organization } = res.locals;
@@ -788,12 +784,12 @@ const usersInvitedUserQueueMessage = valLocals(
       organization_id: id,
       organization_name: name,
       user_id: userId,
-      event_type: 'user_invited',
+      event_type: 'user_invited'
     };
 
     setLocals({
       queueMessage,
-      messageGroupId: userId,
+      messageGroupId: userId
     });
 
     return next();
@@ -804,7 +800,7 @@ const userSignupQueueMessage = valLocals(
   {
     email: string.format('email').require(),
     confirmation_token: string.require(),
-    first_name: string.require(),
+    first_name: string.require()
   },
   (req, res, next, setLocals) => {
     const { email, confirmation_token, first_name } = res.locals;
@@ -813,12 +809,12 @@ const userSignupQueueMessage = valLocals(
       email,
       confirmation_token,
       first_name,
-      event_type: 'user_signup',
+      event_type: 'user_signup'
     };
 
     setLocals({
       queueMessage,
-      messageGroupId: email,
+      messageGroupId: email
     });
 
     return next();
@@ -827,7 +823,7 @@ const userSignupQueueMessage = valLocals(
 const usersConfirmEmail = valLocals(
   'usersConfirmEmail',
   {
-    user_id: string.require(),
+    user_id: string.require()
   },
   (req, res, next) => {
     const { user_id } = res.locals;
@@ -872,5 +868,5 @@ export {
   usersParseConfirmationToken,
   userCheckEmailVsTokenEmail,
   usersConfirmEmail,
-  usersConfirmEmailQueueMessage,
+  usersConfirmEmailQueueMessage
 };
