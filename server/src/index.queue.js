@@ -8,7 +8,7 @@ import express from 'express';
 import endpoints from 'src/endpoints/endpoints';
 
 import { setupLogger } from 'src/utils/logger';
-import errorHandler from 'src/middlewares/error/errorHandler';
+import errorHandler from 'src/middlewares/errorHandler';
 
 setupLogger('queue');
 // process.env.PORT - this is set by default from elastic beanstalk
