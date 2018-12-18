@@ -301,7 +301,6 @@ const usersGetByEmailWithFields = valLocals(
         return next();
       })
       .catch(err => {
-        console.log('what do you want?');
         return next(err);
       });
   }
