@@ -1,7 +1,5 @@
 import r from 'rethinkdb';
-import {
- string, object, array, funcWrap 
-} from 'valjs';
+import { string, object, array, funcWrap } from 'valjs';
 import dbRunQuery from 'src/utils/db/dbRunQuery';
 import SwipesError from 'src/utils/SwipesError';
 
@@ -21,7 +19,7 @@ const dbUsersGetService = funcWrap(
       .nth(0);
 
     return dbRunQuery(q);
-  },
+  }
 );
 const dbUsersRemoveService = funcWrap(
   [string.require(), string.require()],
@@ -37,20 +35,20 @@ const dbUsersRemoveService = funcWrap(
         services: r.row('services').filter(service => {
           return service('id').ne(account_id);
         }),
-        updated_at: r.now(),
+        updated_at: r.now()
       });
 
     return dbRunQuery(q);
-  },
+  }
 );
 const dbUsersAddSevice = funcWrap(
   [
     object
       .as({
         user_id: string.require(),
-        service: object.require(),
+        service: object.require()
       })
-      .require(),
+      .require()
   ],
   (err, { user_id, service }) => {
     if (err) {
@@ -71,12 +69,12 @@ const dbUsersAddSevice = funcWrap(
                 .not();
             })
             .append(service),
-          updated_at: r.now(),
+          updated_at: r.now()
         };
       });
 
     return dbRunQuery(q);
-  },
+  }
 );
 const dbUsersGetServiceWithAuth = funcWrap(
   [
@@ -84,9 +82,9 @@ const dbUsersGetServiceWithAuth = funcWrap(
       .as({
         user_id: string.require(),
         service_name: string.require(),
-        account_id: string.require(),
+        account_id: string.require()
       })
-      .require(),
+      .require()
   ],
   (err, { user_id, service_name, account_id }) => {
     if (err) {
@@ -95,7 +93,7 @@ const dbUsersGetServiceWithAuth = funcWrap(
 
     const filter = {
       id: account_id,
-      service_name,
+      service_name
     };
 
     const q = r
@@ -110,15 +108,15 @@ const dbUsersGetServiceWithAuth = funcWrap(
       .zip();
 
     return dbRunQuery(q);
-  },
+  }
 );
 const dbUsersGetSingleWithOrganizations = funcWrap(
   [
     object
       .as({
-        user_id: string.require(),
+        user_id: string.require()
       })
-      .require(),
+      .require()
   ],
   (err, { user_id }) => {
     if (err) {
@@ -133,20 +131,20 @@ const dbUsersGetSingleWithOrganizations = funcWrap(
         organizations: r
           .table('organizations')
           .getAll(r.args(r.row('organizations')))
-          .coerceTo('ARRAY'),
+          .coerceTo('ARRAY')
       });
 
     return dbRunQuery(q);
-  },
+  }
 );
 const dbUsersGetByEmailWithFields = funcWrap(
   [
     object
       .as({
         email: string.require(),
-        fields: array.of(string).require(),
+        fields: array.of(string).require()
       })
-      .require(),
+      .require()
   ],
   (err, { email, fields }) => {
     if (err) {
@@ -154,7 +152,7 @@ const dbUsersGetByEmailWithFields = funcWrap(
     }
 
     let q = r.table('users').filter({
-      email,
+      email
     });
 
     if (fields.length > 0) {
@@ -162,16 +160,16 @@ const dbUsersGetByEmailWithFields = funcWrap(
     }
 
     return dbRunQuery(q);
-  },
+  }
 );
 const dbUsersGetByEmailWithoutFields = funcWrap(
   [
     object
       .as({
         email: string.require(),
-        fields: array.of(string, object).require(),
+        fields: array.of(string, object).require()
       })
-      .require(),
+      .require()
   ],
   (err, { email, fields }) => {
     if (err) {
@@ -179,7 +177,7 @@ const dbUsersGetByEmailWithoutFields = funcWrap(
     }
 
     let q = r.table('users').filter({
-      email,
+      email
     });
 
     if (fields.length > 0) {
@@ -187,16 +185,16 @@ const dbUsersGetByEmailWithoutFields = funcWrap(
     }
 
     return dbRunQuery(q);
-  },
+  }
 );
 const dbUsersAddOrganization = funcWrap(
   [
     object
       .as({
         user_id: string.require(),
-        organization_id: string.require(),
+        organization_id: string.require()
       })
-      .require(),
+      .require()
   ],
   (err, { user_id, organization_id }) => {
     if (err) {
@@ -212,19 +210,19 @@ const dbUsersAddOrganization = funcWrap(
           .row('pending_organizations')
           .default([])
           .difference([organization_id]),
-        updated_at: r.now(),
+        updated_at: r.now()
       });
 
     return dbRunQuery(q);
-  },
+  }
 );
 const dbUsersCreate = funcWrap(
   [
     object
       .as({
-        user: object.require(),
+        user: object.require()
       })
-      .require(),
+      .require()
   ],
   (err, { user }) => {
     if (err) {
@@ -234,7 +232,7 @@ const dbUsersCreate = funcWrap(
     const q = r.table('users').insert(user, { returnChanges: true });
 
     return dbRunQuery(q);
-  },
+  }
 );
 const dbUsersActivateAfterSignUp = funcWrap(
   [
@@ -242,9 +240,9 @@ const dbUsersActivateAfterSignUp = funcWrap(
       .as({
         profile: object.require(),
         user_id: string.require(),
-        password: string.require(),
+        password: string.require()
       })
-      .require(),
+      .require()
   ],
   (err, { profile, user_id, password }) => {
     if (err) {
@@ -259,23 +257,23 @@ const dbUsersActivateAfterSignUp = funcWrap(
           password,
           profile,
           activated: true,
-          updated_at: r.now(),
+          updated_at: r.now()
         },
         {
-          returnChanges: 'always',
-        },
+          returnChanges: 'always'
+        }
       );
 
     return dbRunQuery(q);
-  },
+  }
 );
 const dbUsersConfirmEmail = funcWrap(
   [
     object
       .as({
-        user_id: string.require(),
+        user_id: string.require()
       })
-      .require(),
+      .require()
   ],
   (err, { user_id }) => {
     if (err) {
@@ -287,20 +285,20 @@ const dbUsersConfirmEmail = funcWrap(
       .get(user_id)
       .update({
         confirmed: true,
-        updated_at: r.now(),
+        updated_at: r.now()
       });
 
     return dbRunQuery(q);
-  },
+  }
 );
 const dbUsersAddPendingOrganization = funcWrap(
   [
     object
       .as({
         user_id: string.require(),
-        organization_id: string.require(),
+        organization_id: string.require()
       })
-      .require(),
+      .require()
   ],
   (err, { user_id, organization_id }) => {
     if (err) {
@@ -324,11 +322,11 @@ const dbUsersAddPendingOrganization = funcWrap(
             .row('active_users')
             .default([])
             .difference([user_id]),
-          updated_at: r.now(),
+          updated_at: r.now()
         },
         {
-          returnChanges: true,
-        },
+          returnChanges: true
+        }
       )
       .do(result => {
         return r
@@ -338,7 +336,7 @@ const dbUsersAddPendingOrganization = funcWrap(
             return {
               pending_organizations: user('pending_organizations')
                 .default([])
-                .setUnion([organization_id]),
+                .setUnion([organization_id])
             };
           })
           .do(() => {
@@ -347,15 +345,15 @@ const dbUsersAddPendingOrganization = funcWrap(
       });
 
     return dbRunQuery(q);
-  },
+  }
 );
 const dbUsersGetByEmail = funcWrap(
   [
     object
       .as({
-        email: string.format('email').require(),
+        email: string.format('email').require()
       })
-      .require(),
+      .require()
   ],
   (err, { email }) => {
     if (err) {
@@ -365,16 +363,16 @@ const dbUsersGetByEmail = funcWrap(
     const q = r.table('users').getAll(email, { index: 'email' });
 
     return dbRunQuery(q);
-  },
+  }
 );
 const dbUsersResetPassword = funcWrap(
   [
     object
       .as({
         user_id: string.require(),
-        password: string.require(),
+        password: string.require()
       })
-      .require(),
+      .require()
   ],
   (err, { user_id, password }) => {
     if (err) {
@@ -386,20 +384,20 @@ const dbUsersResetPassword = funcWrap(
       .get(user_id)
       .update({
         password,
-        updated_at: r.now(),
+        updated_at: r.now()
       });
 
     return dbRunQuery(q);
-  },
+  }
 );
 const dbUsersGetByIdWithFields = funcWrap(
   [
     object
       .as({
         user_id: string.require(),
-        fields: array.of(string).require(),
+        fields: array.of(string).require()
       })
-      .require(),
+      .require()
   ],
   (err, { user_id, fields }) => {
     if (err) {
@@ -413,7 +411,7 @@ const dbUsersGetByIdWithFields = funcWrap(
     }
 
     return dbRunQuery(q);
-  },
+  }
 );
 
 export {
@@ -431,5 +429,5 @@ export {
   dbUsersGetByIdWithFields,
   dbUsersAddPendingOrganization,
   dbUsersConfirmEmail,
-  dbUsersGetByEmailWithoutFields,
+  dbUsersGetByEmailWithoutFields
 };

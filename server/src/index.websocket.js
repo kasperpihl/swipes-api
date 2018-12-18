@@ -7,7 +7,7 @@ import express from 'express';
 import { setupLogger } from 'src/utils/logger';
 import corsHandler from 'src/middlewares/corsHandler';
 
-import errorHandler from 'src/middlewares/error/errorHandler';
+import errorHandler from 'src/middlewares/errorHandler';
 import socketSetup from 'src/utils/socket/socketSetup';
 
 setupLogger('websocket');
