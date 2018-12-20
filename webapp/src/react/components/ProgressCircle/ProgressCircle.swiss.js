@@ -9,7 +9,7 @@ export default styleSheet('ProgressCircle', {
   },
 
   Fill: {
-    _drawProgress: ['#{prog}', 'white', '$green'],
+    _drawProgress: get => [get('prog'), 'white', '$green'],
     _size: '18px',
     overflow: 'hidden',
     borderRadius: '50%',
@@ -19,7 +19,7 @@ export default styleSheet('ProgressCircle', {
     transform: 'translateY(-50%) translateX(-50%)',
 
     'prog>50': {
-      _drawProgress: ['#{prog}', '$green', 'white']
+      _drawProgress: get => [get('prog'), '$green', 'white']
     },
 
     '&:before': {

@@ -1,4 +1,5 @@
 import { styleSheet } from 'swiss-react';
+import { get } from 'https';
 
 export default styleSheet('CompatibleAssignees', {
   Wrapper: {
@@ -10,8 +11,8 @@ export default styleSheet('CompatibleAssignees', {
       display: 'inline-block',
       left: '50%',
       margin: '17px 15px 29px 0',
-      transform: 'translateX(-50%)',
-    },
+      transform: 'translateX(-50%)'
+    }
   },
   Assignee: {
     _size: ['32px'],
@@ -20,12 +21,12 @@ export default styleSheet('CompatibleAssignees', {
     borderRadius: '50%',
     marginTop: '-16px',
     top: '50%',
-    float: '#{float}',
+    float: get => get('float')
   },
   ProfilePic: {
     _el: 'img',
     _size: ['30px'],
-    borderRadius: '50%',
+    borderRadius: '50%'
   },
   Initials: {
     _el: 'p',
@@ -37,6 +38,6 @@ export default styleSheet('CompatibleAssignees', {
     textAlign: 'center',
     display: 'table-cell',
     verticalAlign: 'middle',
-    transform: 'translate(1px, 1px)',
-  },
-})
+    transform: 'translate(1px, 1px)'
+  }
+});

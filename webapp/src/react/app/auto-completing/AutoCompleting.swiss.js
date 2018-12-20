@@ -1,4 +1,4 @@
-import { styleSheet } from 'swiss-react';
+import { styleSheet } from 'swiss-react';
 
 export default styleSheet('AutoCompleting', {
   Wrapper: {
@@ -18,22 +18,22 @@ export default styleSheet('AutoCompleting', {
       pointerEvents: 'all',
       width: '360px',
       height: '250px',
-      top: ({ boundingRect, showOnTop }) => {
-        if (showOnTop) {
-          return `${boundingRect.top - 250}px`;
+      top: get => {
+        if (get('showOnTop')) {
+          return `${get('boundingRect').top - 250}px`;
         }
 
-        return `${boundingRect.bottom}px`;
+        return `${get('boundingRect').bottom}px`;
       },
-      left: ({ boundingRect }) => {
-        return `${boundingRect.left}px`;
-      },
+      left: get => {
+        return `${get('boundingRect').left}px`;
+      }
     }
   },
   Item: {
     padding: '0 18px',
     selected: {
-      backgroundColor: '$sw3',
-    },
+      backgroundColor: '$sw3'
+    }
   }
 });

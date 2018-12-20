@@ -10,17 +10,17 @@ export default styleSheet('Tooltip', {
     zIndex: 10,
     opacity: 0,
     // pointerEvents: 'none',
-    shown :{
+    shown: {
       visibility: 'visible',
       opacity: 1,
       transition: 'visibility 0s 0s, opacity .15s'
-    },
+    }
   },
   Content: {
     _size: 'auto',
     position: 'absolute',
-    top: '#{top}',
-    left: '#{left}',
-    transform: '#{transform}',
-  },
+    top: get => get('top'),
+    left: get => get('left'),
+    transform: get => get('transform')
+  }
 });

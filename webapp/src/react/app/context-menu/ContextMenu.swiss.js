@@ -12,19 +12,19 @@ export default styleSheet('ContextMenu', {
     shown: {
       opacity: 1,
       transition: 'visibility 0s 0s, opacity .15s',
-      visibility: 'visible',
+      visibility: 'visible'
     },
     showBackground: {
-      background: 'rgba($sw1, .8)',
-    },
+      background: 'rgba($sw1, .8)'
+    }
   },
   Content: {
     _size: 'auto',
     position: 'absolute',
-    top: '#{top}',
-    bottom: '#{bottom}',
-    left: '#{left}',
-    right: '#{right}',
-    transform: '#{transform}',
-  },
+    top: get => get('top'),
+    bottom: get => get('bottom'),
+    left: get => get('left'),
+    right: get => get('right'),
+    transform: get => get('transform')
+  }
 });

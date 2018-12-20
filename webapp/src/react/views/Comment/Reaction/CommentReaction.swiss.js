@@ -4,15 +4,7 @@ import Icon from 'src/react/icons/Icon';
 export default styleSheet('CommentReaction', {
   Container: {
     _flex: ['row', 'left', 'center'],
-    display: 'inline-flex',
-    hoverClass: {
-      hasNoLikes: {
-        opacity: 0,
-        '.#{hoverClass} &': {
-          opacity: 1
-        }
-      }
-    }
+    display: 'inline-flex'
   },
   HeartButton: {
     _size: ['30px', '36px'],

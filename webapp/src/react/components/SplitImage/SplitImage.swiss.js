@@ -2,9 +2,9 @@ import { styleSheet } from 'swiss-react';
 
 export default styleSheet('SplitImage', {
   Container: {
-    width: '#{size}px',
-    height: '#{size}px',
-    position: 'relative',
+    width: get => `${get('size')}px`,
+    height: get => `${get('size')}px`,
+    position: 'relative'
   },
 
   Left: {
@@ -16,8 +16,8 @@ export default styleSheet('SplitImage', {
     zIndex: 0,
     borderRadius: '50%',
     'numberOfImages>1': {
-      _size: '67%',
-    },
+      _size: '67%'
+    }
   },
 
   Right: {
@@ -27,6 +27,6 @@ export default styleSheet('SplitImage', {
     right: 0,
     zIndex: 1,
     borderRadius: '50%',
-    overflow: 'hidden',
-  },
-})
+    overflow: 'hidden'
+  }
+});

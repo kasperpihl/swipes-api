@@ -4,7 +4,7 @@ import Icon from 'src/react/icons/Icon';
 export default styleSheet('ProjectTask', {
   Wrapper: {
     _flex: ['row', 'left', 'center'],
-    paddingLeft: ({ indention }) => `${indention * 24}px`,
+    paddingLeft: get => `${get('indention') * 24}px`,
     paddingRight: '6px',
     selected: {
       background: '$blue'
