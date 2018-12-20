@@ -4,6 +4,7 @@ import React from 'react';
 import { render } from 'react-dom';
 
 import { Provider } from 'react-redux';
+import { SwissProvider } from 'swiss-react';
 import { OptimistProvider } from 'react-optimist';
 import { PersistGate } from 'redux-persist/es/integration/react';
 
@@ -44,11 +45,13 @@ window.analytics = new Analytics(store);
 render(
   <Provider store={store}>
     <PersistGate persistor={persistor}>
-      <BrowserRouter>
-        <OptimistProvider>
-          <Root />
-        </OptimistProvider>
-      </BrowserRouter>
+      <SwissProvider>
+        <BrowserRouter>
+          <OptimistProvider>
+            <Root />
+          </OptimistProvider>
+        </BrowserRouter>
+      </SwissProvider>
     </PersistGate>
   </Provider>,
   document.getElementById('content')

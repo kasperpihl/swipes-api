@@ -1,5 +1,5 @@
-import './variables/colors';
-import './variables/screenSizes';
+import './constants/colors';
+import './constants/screenSizes';
 
 import './plugins/hexToRGB';
 import './plugins/minify';

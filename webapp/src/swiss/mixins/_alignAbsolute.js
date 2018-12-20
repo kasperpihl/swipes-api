@@ -1,24 +1,24 @@
-import { addMixin } from 'swiss-react';
+import { addMixin } from 'swiss-react';
 
-addMixin('alignAbsolute', (getProp, x=null, y=null) => {
+addMixin('alignAbsolute', (x = null, y = null) => {
   const res = {
     position: 'absolute',
     left: x || 0,
-    top: y || 0,
+    top: y || 0
   };
 
-  if(x === 'center') {
+  if (x === 'center') {
     res.left = '50%';
-    res.transform  = 'translate(-50%, 0)';
+    res.transform = 'translate(-50%, 0)';
   }
-  if(y === 'center') {
+  if (y === 'center') {
     res.top = '50%';
-    res.transform  = 'translate(0, -50%)';
+    res.transform = 'translate(0, -50%)';
   }
 
   if (x === 'center' && y === 'center') {
     res.transform = 'translate(-50%, -50%)';
   }
-  
+
   return res;
 });

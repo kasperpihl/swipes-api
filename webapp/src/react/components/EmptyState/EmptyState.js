@@ -1,12 +1,11 @@
 import React from 'react';
-import { SwissProvider } from 'swiss-react';
 import parseLinks from 'src/utils/parseLinks';
 import parseNewLines from 'src/utils/parseNewLines';
 import SW from './EmptyState.swiss';
 
 const EmptyState = props => {
   return (
-    <SwissProvider
+    <SW.ProvideContext
       large={!!props.large}
       fill={!!props.fill}
       takeAction={props.takeAction}
@@ -24,7 +23,7 @@ const EmptyState = props => {
           {parseLinks(parseNewLines(props.description))}
         </SW.Description>
       </SW.Wrapper>
-    </SwissProvider>
+    </SW.ProvideContext>
   );
 };
 

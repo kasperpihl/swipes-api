@@ -129,7 +129,7 @@ export default styleSheet('Button', {
     show: {
       _flex: ['row', 'center', 'center'],
       position: 'absolute',
-      top: props => `calc(-${props.numberOfLines}*18px - 18px)`,
+      top: get => `calc(-${get('numberOfLines')}*18px - 18px)`,
       left: '50%',
       transform: 'translateX(-50%)',
 

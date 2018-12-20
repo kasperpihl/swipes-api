@@ -1,5 +1,4 @@
 import React, { PureComponent, Fragment } from 'react';
-import { SwissProvider } from 'swiss-react';
 import { List } from 'immutable';
 import Button from 'src/react/components/button/Button';
 import AssigneeImage from './AssigneeImage';
@@ -17,12 +16,12 @@ class Assigning extends PureComponent {
       component: AssigneeTooltip,
       props: {
         assignees,
-        size: 24,
+        size: 24
       },
       options: {
         boundingRect: e.target.getBoundingClientRect(),
-        position: tooltipAlign || 'right',
-      },
+        position: tooltipAlign || 'right'
+      }
     });
   };
   onMouseLeave = () => {
@@ -41,7 +40,7 @@ class Assigning extends PureComponent {
     const extraNumber = Math.max(assignees.size - maxImages, 0);
 
     return (
-      <SwissProvider
+      <SW.ProvideContext
         size={size}
         blackAndWhite={this.props.blackAndWhite}
         images={Math.min(assignees.size, maxImages)}
@@ -52,29 +51,28 @@ class Assigning extends PureComponent {
           onMouseLeave={this.onMouseLeave}
         >
           <SW.AbsoluteWrapper>
-            {assignees.map(
-              (user, i) =>
-                i < maxImages ? (
-                  <Fragment key={i}>
-                    <SW.WhiteBackground index={i} />
-                    <SW.ImageWrapper
-                      isPic={msgGen.users.getPhoto(user)}
-                      index={i}
-                    >
-                      <AssigneeImage
-                        user={user}
-                        size={size}
-                        blackAndWhite={this.props.blackAndWhite}
-                      />
-                    </SW.ImageWrapper>
-                  </Fragment>
-                ) : null
+            {assignees.map((user, i) =>
+              i < maxImages ? (
+                <Fragment key={i}>
+                  <SW.WhiteBackground index={i} />
+                  <SW.ImageWrapper
+                    isPic={msgGen.users.getPhoto(user)}
+                    index={i}
+                  >
+                    <AssigneeImage
+                      user={user}
+                      size={size}
+                      blackAndWhite={this.props.blackAndWhite}
+                    />
+                  </SW.ImageWrapper>
+                </Fragment>
+              ) : null
             )}
           </SW.AbsoluteWrapper>
 
           {!!extraNumber && <SW.ExtraNumber>+{extraNumber}</SW.ExtraNumber>}
         </SW.Wrapper>
-      </SwissProvider>
+      </SW.ProvideContext>
     );
   }
 }

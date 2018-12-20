@@ -1,6 +1,6 @@
-import { addVariables } from 'swiss-react';
+import { addConstants } from 'swiss-react';
 
-addVariables({
+addConstants({
   sw1: '#2E2E2D',
   sw2: '#7A7A79',
   sw3: '#C7C6C5',

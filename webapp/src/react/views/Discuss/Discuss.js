@@ -1,6 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
 import SW from './Discuss.swiss';
-import { SwissProvider } from 'swiss-react';
 import CardHeader from 'src/react/components/CardHeader/CardHeader';
 import DiscussionList from 'src/react/views/Discussion/List/DiscussionList';
 import HOCDiscussionOverview from 'src/react/views/Discussion/Overview/HOCDiscussionOverview';
@@ -69,7 +68,7 @@ export default class Discuss extends PureComponent {
     const { tabIndex, selectedId } = this.state;
     const { viewWidth } = this.props;
     return (
-      <SwissProvider viewWidth={viewWidth}>
+      <SW.ProvideContext viewWidth={viewWidth}>
         <SW.ParentWrapper>
           <SW.LeftSide>
             <SWView
@@ -94,7 +93,7 @@ export default class Discuss extends PureComponent {
             )}
           </SW.RightSide>
         </SW.ParentWrapper>
-      </SwissProvider>
+      </SW.ProvideContext>
     );
   }
 }

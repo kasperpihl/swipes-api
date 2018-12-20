@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import SW from './Dropdown.swiss';
-import { SwissProvider } from 'swiss-react';
 
 export default class Dropdown extends Component {
   constructor(props) {
@@ -35,7 +34,7 @@ export default class Dropdown extends Component {
     const { rounded } = this.props;
 
     return (
-      <SwissProvider rounded={rounded}>
+      <SW.ProvideContext rounded={rounded}>
         <SW.Wrapper>
           <SW.Background onClick={this.toggleDropdown}>
             <SW.Text>Text</SW.Text>
@@ -63,7 +62,7 @@ export default class Dropdown extends Component {
             </SW.Row>
           </SW.DropdownBox>
         </SW.Wrapper>
-      </SwissProvider>
+      </SW.ProvideContext>
     );
   }
 }

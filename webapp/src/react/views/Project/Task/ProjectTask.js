@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import { SwissProvider } from 'swiss-react';
 import Icon from 'src/react/icons/Icon';
 
 import SW from './ProjectTask.swiss';
@@ -85,7 +84,7 @@ export default class ProjectTask extends PureComponent {
     const { isFocused } = this.state;
 
     return (
-      <SwissProvider selected={isFocused} done={completion}>
+      <SW.ProvideContext selected={isFocused} done={completion}>
         <SW.Wrapper indention={indention} className="js-item-class">
           <SW.ExpandWrapper onClick={this.onExpandClick}>
             {hasChildren && (
@@ -113,7 +112,7 @@ export default class ProjectTask extends PureComponent {
             }}
           />
         </SW.Wrapper>
-      </SwissProvider>
+      </SW.ProvideContext>
     );
   }
 }

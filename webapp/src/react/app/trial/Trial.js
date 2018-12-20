@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 import SW from './Trial.swiss';
-import { SwissProvider } from '../../../../node_modules/swiss-react';
 
 @connect(
   state => ({
@@ -10,11 +9,11 @@ import { SwissProvider } from '../../../../node_modules/swiss-react';
     subscribed: state.me.getIn(['organizations', 0, 'stripe_subscription_id']),
     organization: state.me.get('organizations'),
     trial: state.me.getIn(['organizations', 0, 'trial']),
-    isAccount: state.navigation.getIn(['primary', 'id']) === 'AccountList',
+    isAccount: state.navigation.getIn(['primary', 'id']) === 'AccountList'
   }),
   {
     navSet: navigationActions.set,
-    navPush: navigationActions.push,
+    navPush: navigationActions.push
   }
 )
 export default class Trial extends PureComponent {
@@ -22,7 +21,7 @@ export default class Trial extends PureComponent {
     super(props);
     this.state = {
       daysLeft: msgGen.orgs.getDaysLeft(),
-      dismissed: false,
+      dismissed: false
     };
   }
   componentDidMount() {
@@ -51,11 +50,11 @@ export default class Trial extends PureComponent {
     this.onDismiss();
     navSet('primary', {
       id: 'AccountList',
-      title: 'Account',
+      title: 'Account'
     });
     navPush('primary', {
       id: 'Billing',
-      title: 'Billing',
+      title: 'Billing'
     });
   };
   onDismiss = () => {
@@ -121,7 +120,7 @@ export default class Trial extends PureComponent {
     }
 
     return (
-      <SwissProvider displayActions={displayActions}>
+      <SW.ProvideContext displayActions={displayActions}>
         <SW.PopupWrapper>
           <SW.Popup>
             <SW.Title>Dear {name}, your free trial has expired.</SW.Title>
@@ -145,7 +144,7 @@ export default class Trial extends PureComponent {
             </SW.Actions>
           </SW.Popup>
         </SW.PopupWrapper>
-      </SwissProvider>
+      </SW.ProvideContext>
     );
   }
   render() {

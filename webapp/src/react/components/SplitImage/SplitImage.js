@@ -1,16 +1,15 @@
-import React, {Component} from 'react';
-import { SwissProvider } from 'swiss-react';
+import React, { Component } from 'react';
 import SW from './SplitImage.swiss';
 import AssigneeImage from '../assigning/AssigneeImage';
 
 class SplitImage extends Component {
-  render () {
+  render() {
     const { users, size } = this.props;
 
-    if(!users) return null;
+    if (!users) return null;
 
     return (
-      <SwissProvider numberOfImages={users.length} size={size}>
+      <SW.ProvideContext numberOfImages={users.length} size={size}>
         <SW.Container>
           <SW.Left>
             <AssigneeImage user={users[0]} />
@@ -21,8 +20,8 @@ class SplitImage extends Component {
             </SW.Right>
           )}
         </SW.Container>
-      </SwissProvider>
-    )
+      </SW.ProvideContext>
+    );
   }
 }
 

@@ -1,6 +1,6 @@
 import { addMixin } from 'swiss-react';
 
-addMixin('textStyle', (props, style = 'item') => {
+addMixin('textStyle', (style = 'item') => {
   switch (style) {
     case 'body':
       return {

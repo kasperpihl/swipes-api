@@ -1,6 +1,6 @@
-import { addMixin } from 'swiss-react';
+import { addMixin } from 'swiss-react';
 
-addMixin('size', (getProp, width=null, height=null) => ({
+addMixin('size', (width = null, height = null) => ({
   width: width || 'auto',
-  height: height || width || 'auto',
+  height: height || width || 'auto'
 }));

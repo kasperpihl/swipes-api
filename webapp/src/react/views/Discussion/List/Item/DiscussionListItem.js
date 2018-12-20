@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import { SwissProvider } from 'swiss-react';
 import { connect } from 'react-redux';
 import {
   setupLoading,
@@ -69,7 +68,7 @@ export default class DiscussionListItem extends PureComponent {
     }
 
     return (
-      <SwissProvider
+      <SW.ProvideContext
         selected={selected}
         unread={unread}
         siblingToSelectedItem={siblingToSelectedItem}
@@ -110,7 +109,7 @@ export default class DiscussionListItem extends PureComponent {
             </SW.Time>
           </SW.RightWrapper>
         </SW.Wrapper>
-      </SwissProvider>
+      </SW.ProvideContext>
     );
   }
 }

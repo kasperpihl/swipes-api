@@ -1,6 +1,6 @@
-import { addVariables } from 'swiss-react';
+import { addConstants } from 'swiss-react';
 
-addVariables({
+addConstants({
   min400: 'screen and (min-width: 400px)',
   min600: 'screen and (min-width: 600px)',
   min800: 'screen and (min-width: 800px)',
@@ -17,5 +17,5 @@ addVariables({
   max1600: 'screen and (max-width: 1600px)',
 
   maxH800: 'screen and (max-height: 800px)',
-  maxH950: 'screen and (max-height: 950px)',
+  maxH950: 'screen and (max-height: 950px)'
 });

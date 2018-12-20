@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import { SwissProvider } from 'swiss-react';
 import SW from './Button.swiss';
 
 export default class extends PureComponent {
@@ -62,7 +61,7 @@ export default class extends PureComponent {
     if (error) status = 'error';
 
     return (
-      <SwissProvider
+      <SW.ProvideContext
         hasIcon={status !== '' || !!icon}
         status={status}
         rounded={rounded}
@@ -80,7 +79,7 @@ export default class extends PureComponent {
           {this.renderSideLabel(status)}
           <SW.Title textOutside={!!textOutside}>Text</SW.Title>
         </SW.ATag>
-      </SwissProvider>
+      </SW.ProvideContext>
     );
   }
 }

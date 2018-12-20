@@ -5,7 +5,6 @@ import { setupCachedCallback } from 'react-delegate';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 import SW from './Sidebar.swiss';
-import { SwissProvider } from 'swiss-react';
 
 @connect(
   state => ({
@@ -74,7 +73,7 @@ export default class Sidebar extends PureComponent {
     const active = item.id === navId;
 
     return (
-      <SwissProvider active={active} key={item.id}>
+      <SW.ProvideContext active={active} key={item.id}>
         <SW.Item
           onClick={this.onClickCached(item.id, 'primary')}
           onContextMenu={this.onRightClickCached(item.id, 'secondary')}
@@ -93,7 +92,7 @@ export default class Sidebar extends PureComponent {
             <SW.NotificationCounter>{count}</SW.NotificationCounter>
           ) : null}
         </SW.Item>
-      </SwissProvider>
+      </SW.ProvideContext>
     );
   }
 

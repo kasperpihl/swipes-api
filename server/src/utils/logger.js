@@ -1,10 +1,10 @@
 import config from 'config';
-import { createLogger } from 'winston';
+import winston from 'winston';
 import CloudWatchTransport from 'winston-aws-cloudwatch';
 
 const env = config.get('env');
 const { accessKeyId, secretAccessKey, region } = config.get('aws');
-const logger = createLogger();
+const logger = winston.createLogger();
 export const setupLogger = type => {
   const logConfig = {
     logGroupName: `workspace-${env}`,
@@ -14,11 +14,11 @@ export const setupLogger = type => {
     awsConfig: {
       accessKeyId,
       secretAccessKey,
-      region,
+      region
     },
     formatLog: item => {
       return `${item.level}: ${item.message} ${JSON.stringify(item.meta)}`;
-    },
+    }
   };
 
   // put a check for the dev
@@ -30,7 +30,7 @@ logger.level = process.env.LOG_LEVEL || 'silly';
 logger.stream = {
   write: (message, encoding) => {
     logger.info(message);
-  },
+  }
 };
 
 export default logger;
