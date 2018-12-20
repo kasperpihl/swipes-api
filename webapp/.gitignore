@@ -4,3 +4,4 @@ dist
 .tmp
 dev
 src/Tester.js
+dump.rdb
