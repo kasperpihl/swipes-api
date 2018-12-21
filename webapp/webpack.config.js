@@ -22,7 +22,10 @@ module.exports = {
   resolve: {
     modules: [path.join(__dirname, 'node_modules')],
     alias: {
-      // 'swiss-react': path.resolve(__dirname, '../../../swiss-react/dist/es'),
+      // 'swiss-react': path.resolve(
+      //   __dirname,
+      //   '../../opensource/swiss-react/dist/es'
+      // ),
       // 'react-optimist': path.resolve(__dirname, '../../opensource/react-optimist/dist/es'),
       src: path.resolve(__dirname, 'src'),
       styles: path.resolve(__dirname, 'src/react/global-styles'),
