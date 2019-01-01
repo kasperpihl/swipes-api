@@ -46,12 +46,12 @@ export default endpointCreate(
 
     // Creating the actual tokens
     const token = createToken({
-      iss: user.id
+      iss: user.user_id
     });
 
     await query(
       'INSERT INTO tokens (timestamp, token, user_id, info, revoked) VALUES ($1, $2, $3, $4, $5)',
-      [new Date(), token, user.id, tokenInfo, false]
+      [new Date(), token, user.user_id, tokenInfo, false]
     );
 
     // Create response data.
@@ -59,4 +59,4 @@ export default endpointCreate(
       token
     };
   }
-).background(async (req, res) => {});
+);
