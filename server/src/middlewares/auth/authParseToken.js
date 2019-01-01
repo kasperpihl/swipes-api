@@ -8,7 +8,6 @@ export default (req, res, next) => {
   }
   const parsedToken = parseToken(token);
 
-  console.log('parsedToken', parsedToken);
   if (!parsedToken) {
     throw Error('not_authed');
   }

@@ -33,7 +33,6 @@ export default endpointCreate(
       [project_id, user_id]
     );
 
-    console.log('project', projectRes.rows.length);
     if (!projectRes || !projectRes.rows.length) {
       throw Error('project_not_found').code(404);
     }
