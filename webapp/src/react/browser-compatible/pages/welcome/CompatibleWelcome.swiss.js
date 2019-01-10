@@ -79,13 +79,19 @@ export default styleSheet('CompatibleWelcome', {
     marginTop: '30px',
   },
   InputWrapper: {
+    _flex: 'row',
     _size: ['100%', '45px'],
   },
   Input: {
     _el: 'input',
-    _size: ['100%', '45px'],
+    _size: ['60%', '45px'],
     _font: ['15px', '25px'],
-    _borderRadius: '6px',
+    rightInput: {
+      _size: ['40%', '45px'],
+    },
+    leftRadius: {
+      _borderRadius: ['6px', '0', '0', '6px'],
+    },
     color: '$sw2',
     border: '1px solid $sw3',
     padding: '0 15px',
@@ -97,51 +103,34 @@ export default styleSheet('CompatibleWelcome', {
     },
   },
   Button: {
-    _size: ['60px', '44px'],
+    _size: ['70px', '45px'],
     _borderRadius: ['0', '6px', '6px', '0'],
-    position: 'absolute',
-    top: '0',
-    right: '0',
-    borderLeft: '1px solid $sw3',
+    border: '1px solid $sw3',
     transition: '.2s ease',
+    backgroundColor: '$sw3',
+    borderLeft: 'none',
     loading: {
       backgroundColor: '$blue',
-      borderLeft: '1px solid $blue',
+      border: '1px solid $blue',
+      borderLeft: 'none',
       transition: '.2s ease',
     },
-    '!loading': {
-      '&:hover': {
-        backgroundColor: '$sw3',
-        transition: '.2s ease',
-      },
-    },
-    focused: {
+    '&:hover': {
       backgroundColor: '$blue',
-      borderLeft: '1px solid $blue',
+      border: '1px solid $blue',
+      borderLeft: 'none',
       transition: '.2s ease',
-      '!loading': {
-        '&:hover': {
-          backgroundColor: '$blue80',
-          transition: '.2s ease',
-        },
-      },
     },
   },
   SVG: {
     _el: Icon,
     _size: '24px',
-    _svgColor: '$sw3',
+    _svgColor: '$sw1',
     position: 'absolute',
     left: '18px',
     top: '10px',
     transition: '.2s ease',
-    '!focused': {
-      '.button-hover:hover &': {
-        _svgColor: '$sw1',
-        transition: '.2s ease',
-      },
-    },
-    focused: {
+    '.button-hover:hover &': {
       _svgColor: 'white',
       transition: '.2s ease',
     },

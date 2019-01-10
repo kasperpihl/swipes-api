@@ -1,10 +1,5 @@
 import express from 'express';
-import {
-  string,
-  object,
-  array,
-  any,
-} from 'valjs';
+import { string, object, array, any } from 'valjs';
 import MiddlewareComposer from './middleware_composer';
 import {
   organizationsCreate,
@@ -55,20 +50,10 @@ import {
   usersInvitedUserQueueMessage,
   usersAddPendingOrganization,
 } from './middlewares/users';
-import {
-  notificationsPushToQueue,
-} from './middlewares/notifications';
-import {
-  organizationConcatUsers,
-} from './middlewares/utils';
-import {
-  onboardingGetMiddlewares,
-} from './middlewares/onboarding';
-import {
-  valBody,
-  valResponseAndSend,
-  mapLocals,
-} from '../utils';
+import { notificationsPushToQueue } from './middlewares/notifications';
+import { organizationConcatUsers } from './middlewares/utils';
+import { onboardingGetMiddlewares } from './middlewares/onboarding';
+import { valBody, valResponseAndSend, mapLocals } from '../utils';
 
 const authed = express.Router();
 const notAuthed = express.Router();
@@ -77,6 +62,7 @@ authed.all(
   '/organizations.create',
   valBody({
     organization_name: string.require(),
+    discount_code: string,
   }),
   mapLocals(locals => ({
     fields: ['organizations'],
@@ -95,7 +81,7 @@ authed.all(
       },
       (err, req, res, next) => {
         return originalNext(err);
-      },
+      }
     );
 
     return composer.run();
@@ -104,7 +90,7 @@ authed.all(
   notificationsPushToQueue,
   valResponseAndSend({
     organization: object.require(),
-  }),
+  })
 );
 
 authed.all(
@@ -133,7 +119,7 @@ authed.all(
   notificationsPushToQueue,
   valResponseAndSend({
     organization: object.require(),
-  }),
+  })
 );
 
 authed.all(
@@ -157,7 +143,7 @@ authed.all(
   notificationsPushToQueue,
   valResponseAndSend({
     organization: object.require(),
-  }),
+  })
 );
 
 authed.all(
@@ -176,7 +162,7 @@ authed.all(
   notificationsPushToQueue,
   valResponseAndSend({
     organization: object.require(),
-  }),
+  })
 );
 
 authed.all(
@@ -195,7 +181,7 @@ authed.all(
   notificationsPushToQueue,
   valResponseAndSend({
     organization: object.require(),
-  }),
+  })
 );
 
 authed.all(
@@ -227,7 +213,7 @@ authed.all(
   notificationsPushToQueue,
   valResponseAndSend({
     organization: object.require(),
-  }),
+  })
 );
 
 authed.all(
@@ -256,7 +242,7 @@ authed.all(
   notificationsPushToQueue,
   valResponseAndSend({
     organization: object.require(),
-  }),
+  })
 );
 authed.all(
   '/organizations.enableUser',
@@ -288,7 +274,7 @@ authed.all(
   notificationsPushToQueue,
   valResponseAndSend({
     organization: object.require(),
-  }),
+  })
 );
 
 authed.all(
@@ -317,7 +303,7 @@ authed.all(
   notificationsPushToQueue,
   valResponseAndSend({
     organization: object.require(),
-  }),
+  })
 );
 
 authed.all(
@@ -331,7 +317,7 @@ authed.all(
   organizationsUpdateStripeCardDetails,
   organizationsUpdatedQueueMessage,
   notificationsPushToQueue,
-  valResponseAndSend(),
+  valResponseAndSend()
 );
 
 authed.all(
@@ -346,7 +332,7 @@ authed.all(
   notificationsPushToQueue,
   valResponseAndSend({
     organization: object.require(),
-  }),
+  })
 );
 
 authed.all(
@@ -364,7 +350,7 @@ authed.all(
   })),
   valResponseAndSend({
     organization: object.require(),
-  }),
+  })
 );
 
 authed.all(
@@ -378,7 +364,7 @@ authed.all(
   organizationsDisableAllUsers,
   organizationsDeletedQueueMessage,
   notificationsPushToQueue,
-  valResponseAndSend(),
+  valResponseAndSend()
 );
 
 authed.all(
@@ -415,7 +401,7 @@ authed.all(
     user: object.require(),
     invitation_token: string.require(),
     organization: object,
-  }),
+  })
 );
 
 authed.all(
@@ -430,7 +416,7 @@ authed.all(
   valResponseAndSend({
     organization_id: string.require(),
     milestone_order: array.require(),
-  }),
+  })
 );
 
 notAuthed.all(
@@ -445,10 +431,7 @@ notAuthed.all(
     download_links: object.require(),
     organization: object,
     invited_by: object,
-  }),
+  })
 );
 
-export {
-  authed,
-  notAuthed,
-};
+export { authed, notAuthed };

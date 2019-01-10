@@ -13,51 +13,57 @@ class CompatibleWelcome extends PureComponent {
     super(props);
     this.state = {
       createText: '',
-      focused: false,
+      discountCodeText: '',
     };
     setupDelegate(this, 'onOrganizationCreate', 'onOrganizationJoin');
-    bindAll(this, ['onKeyDown', 'onChange', 'onCreate', 'onFocus', 'onBlur']);
+    bindAll(this, [
+      'onKeyDown',
+      'onChange',
+      'onChangeDiscountCode',
+      'onCreate',
+    ]);
   }
   onChange(e) {
     this.setState({ createText: e.target.value });
   }
-  onKeyDown(e) {
-    if(e.keyCode === 13) {
+  onChangeDiscountCode(e) {
+    this.setState({ discountCodeText: e.target.value });
+  }
+  onKeyDown(e) {
+    if (e.keyCode === 13) {
       this.onCreate(e);
       e.preventDefault();
     }
   }
   onCreate(e) {
-    const { createText } = this.state;
-    if(createText.length) {
-      this.onOrganizationCreate(createText, e);
+    const { createText, discountCodeText } = this.state;
+
+    if (createText.length) {
+      this.onOrganizationCreate(createText, discountCodeText, e);
     }
   }
-  onFocus() {
-    this.setState({
-      focused: !this.state.focused,
-    });
-  }
-  onBlur() {
-    this.setState({
-      focused: !this.state.focused,
-    });
-  }
   renderHeader() {
-
-    const subtitle = 'You can join your team in an existing organization in the Workspace. Just accept the invitation for it.'
+    const subtitle =
+      'You can join your team in an existing organization in the Workspace. Just accept the invitation for it.';
 
     return (
-      <CompatibleHeader title="Great! Now let’s join in your organization" subtitle={subtitle} />
-    )
+      <CompatibleHeader
+        title="Great! Now let’s join in your organization"
+        subtitle={subtitle}
+      />
+    );
   }
   renderRow(org) {
-    const { isLoading } = this.props;
+    const { isLoading } = this.props;
     const id = org.get('id');
     const name = org.get('name');
 
     return (
-      <SW.TableRow key={id} className="row-hover" onClick={this.onOrganizationJoinCached(id)}>
+      <SW.TableRow
+        key={id}
+        className="row-hover"
+        onClick={this.onOrganizationJoinCached(id)}
+      >
         <SW.RowItemName>{name}</SW.RowItemName>
         <SW.RowItemButton>
           {isLoading(id) ? (
@@ -67,66 +73,76 @@ class CompatibleWelcome extends PureComponent {
           )}
         </SW.RowItemButton>
       </SW.TableRow>
-    )
+    );
   }
   renderJoinOrg() {
     const { me } = this.props;
     const pendingOrgs = me.get('pending_organizations');
 
-    if(!pendingOrgs || !pendingOrgs.size) {
+    if (!pendingOrgs || !pendingOrgs.size) {
       return undefined;
     }
 
     const renderRows = pendingOrgs.map(o => this.renderRow(o)).toArray();
 
-    return ([
-      <CompatibleSubHeader title="If your company does not have a Workspace account yet, create one below and invite your team." key="1" />,
+    return [
+      <CompatibleSubHeader
+        title="If your company does not have a Workspace account yet, create one below and invite your team."
+        key="1"
+      />,
       <SW.Table key="2">
         <SW.TableHeader>
           <SW.TableCol>Pending invitations:</SW.TableCol>
-          <SW.ClearFix></SW.ClearFix>
+          <SW.ClearFix />
         </SW.TableHeader>
         {renderRows}
-      </SW.Table>
-    ])
+      </SW.Table>,
+    ];
   }
   renderCreateOrg() {
-    const { isLoading } = this.props;
-    const { createText, focused } = this.state;
+    const { isLoading } = this.props;
+    const { createText, discountCodeText } = this.state;
 
     return (
-      <SwissProvider loading={isLoading('creating')} focused={focused}>
+      <SwissProvider loading={isLoading('creating')}>
         <SW.CreateOrganization>
-          <label htmlFor="create-org-input">
-            <SW.InputWrapper>
-              <SW.Input
-                id="create-org-input"
-                type="text"
-                className="input-focus"
-                placeholder="Name of company"
-                onKeyDown={this.onKeyDown}
-                value={createText}
-                onChange={this.onChange}
-                onFocus={this.onFocus}
-                onBlur={this.onBlur}
-              />
-              <SW.Button className="button-hover" onClick={this.onCreate}>
-                {isLoading('creating') ? (
-                  <SW.Loader icon="loader" width="12" height="12" />
-                ) : (
-                  <SW.SVG icon="ArrowRightLong" />
-                )}
-              </SW.Button>
-            </SW.InputWrapper>
-          </label>
+          <SW.InputWrapper>
+            <SW.Input
+              leftRadius
+              id="create-org-input"
+              type="text"
+              placeholder="Name of company"
+              onKeyDown={this.onKeyDown}
+              value={createText}
+              onChange={this.onChange}
+            />
+            <SW.Input
+              rightInput
+              id="discount-code-input"
+              type="text"
+              placeholder="Discount code"
+              onKeyDown={this.onKeyDown}
+              value={discountCodeText}
+              onChange={this.onChangeDiscountCode}
+            />
+            <SW.Button className="button-hover" onClick={this.onCreate}>
+              {isLoading('creating') ? (
+                <SW.Loader icon="loader" width="12" height="12" />
+              ) : (
+                <SW.SVG icon="ArrowRightLong" />
+              )}
+            </SW.Button>
+          </SW.InputWrapper>
         </SW.CreateOrganization>
       </SwissProvider>
-    )
+    );
   }
 
   render() {
     const { me } = this.props;
-    const hint = `Hint: If you haven’t received an invitation for ${me.get('email')} yet, ask your Account Admin for one. 😉`;
+    const hint = `Hint: If you haven’t received an invitation for ${me.get(
+      'email'
+    )} yet, ask your Account Admin for one. 😉`;
 
     return (
       <SW.Wrapper>
