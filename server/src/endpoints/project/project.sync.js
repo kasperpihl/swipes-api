@@ -24,7 +24,8 @@ const expectedInput = {
 
 export default endpointCreate(
   {
-    expectedInput
+    expectedInput,
+    permissionKey: 'project_id'
   },
   async (req, res) => {
     const { user_id } = res.locals;

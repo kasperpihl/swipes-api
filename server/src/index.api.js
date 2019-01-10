@@ -50,12 +50,12 @@ app.use('/v1', (req, res, next) => {
   return next();
 });
 // Get the config table into res.locals.config
-app.use('/v1', fetchConfig);
-app.use('/v1', redirectToStaging);
+// app.use('/v1', fetchConfig);
+// app.use('/v1', redirectToStaging);
 // No authed routes goes here
 app.use('/v1', endpoints.notAuthed);
 // Checking for updates
-app.use('/v1', checkUpdates);
+// app.use('/v1', checkUpdates);
 // Validation of user's token
 app.use('/v1', authParseToken, authCheckToken);
 

@@ -8,29 +8,19 @@ const expectedInput = {
 
 export default endpointCreate(
   {
-    expectedInput
+    expectedInput,
+    permissionKey: 'project_id'
   },
   async (req, res) => {
-    const { user_id } = res.locals;
     const { project_id } = res.locals.input;
-
     const projectRes = await query(
       `
-        SELECT p.project_id, p.name, p.discussion_id, p.due_date, p.ordering, p.indention, p.completion, p.rev, p.owned_by, p.completion_percentage
-        FROM project_permissions
-        AS pp
-        INNER JOIN projects
-        AS p
-        ON pp.project_id = p.project_id
-        WHERE pp.project_id = $1
-        AND pp.granted_to = (
-          SELECT permission_to
-          FROM permissions
-          WHERE user_id = $2
-        )
-        AND p.deleted = FALSE
+        SELECT project_id, name, discussion_id, due_date, ordering, indention, completion, rev, owned_by, completion_percentage
+        FROM projects
+        WHERE project_id = $1
+        AND deleted = FALSE
       `,
-      [project_id, user_id]
+      [project_id]
     );
 
     if (!projectRes || !projectRes.rows.length) {

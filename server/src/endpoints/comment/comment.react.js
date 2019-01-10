@@ -10,13 +10,13 @@ import pushSend from 'src/utils/push/pushSend';
 
 const expectedInput = {
   comment_id: string.require(),
-  reaction: string,
+  reaction: string
 };
 
 export default endpointCreate(
   {
     endpoint: '/comment.react',
-    expectedInput,
+    expectedInput
   },
   async (req, res) => {
     // Get inputs
@@ -25,8 +25,8 @@ export default endpointCreate(
 
     const q = dbUpdateQuery('comments', comment_id, {
       reactions: {
-        [user_id]: reaction || r.literal(),
-      },
+        [user_id]: reaction || r.literal()
+      }
     });
 
     const commentRes = await dbRunQuery(q);
@@ -35,8 +35,8 @@ export default endpointCreate(
     let updates = [
       {
         type: 'comment',
-        data: comment,
-      },
+        data: comment
+      }
     ];
 
     if (reaction) {
@@ -46,16 +46,18 @@ export default endpointCreate(
         comment.discussion_id,
         {
           last_comment_at: comment.updated_at,
-          last_comment: `loved the comment: ${mentionsClean(comment.message).slice(0, 60)}`,
+          last_comment: `loved the comment: ${mentionsClean(
+            comment.message
+          ).slice(0, 60)}`,
           last_comment_by: user_id,
           last_two_comments_by: r
             .row('last_two_comments_by')
             .filter(a => a.ne(user_id))
             .append(user_id)
-            .do((a) => {
+            .do(a => {
               return r.branch(a.count().gt(2), a.deleteAt(0), a);
-            }),
-        },
+            })
+        }
       );
       // Updating read_at to be newest comment.
       // Also ensuring that user follows discussion
@@ -66,15 +68,15 @@ export default endpointCreate(
           id: `${comment.discussion_id}-${user_id}`,
           discussion_id: comment.discussion_id,
           read_at: comment.updated_at,
-          organization_id,
+          organization_id
         },
         {
-          conflict: 'update',
-        },
+          conflict: 'update'
+        }
       );
       const result = await Promise.all([
         dbRunQuery(updateFollowerQ),
-        dbRunQuery(updateDiscussionQ),
+        dbRunQuery(updateDiscussionQ)
       ]);
       const discussion = result[1].changes[0].new_val;
 
@@ -88,18 +90,18 @@ export default endpointCreate(
       updates = [
         {
           type: 'discussion',
-          data: discussion,
-        },
+          data: discussion
+        }
       ].concat(updates);
     }
 
     // Create response data.
     res.locals.output = {
       updates,
-      reaction,
+      reaction
     };
     res.locals.messageGroupId = comment_id;
-  },
+  }
 ).background(async (req, res) => {
   dbSendUpdates(res.locals);
   const { organization_id, user_id } = res.locals;
@@ -113,24 +115,26 @@ export default endpointCreate(
       return;
     }
     // Fetch sender (to have the name)
-    const sender = await dbRunQuery(r
-      .table('users')
-      .get(user_id)
-      .pluck('profile', 'id'));
+    const sender = await dbRunQuery(
+      r
+        .table('users')
+        .get(user_id)
+        .pluck('profile', 'id')
+    );
 
     await pushSend(
       {
         orgId: organization_id,
         users: [comment.sent_by],
         targetId: discussion.id,
-        targetType: 'discussion',
+        targetType: 'discussion'
       },
       {
         content: `${
           sender.profile.first_name
         } loved your comment: ${mentionsClean(comment.message).slice(0, 60)}`,
-        heading: discussion.topic,
-      },
+        heading: discussion.topic
+      }
     );
   }
 });

@@ -3,8 +3,9 @@ import { object, array, string } from 'valjs';
 import endpointCreate from 'src/utils/endpointCreate';
 import dbRunQuery from 'src/utils/db/dbRunQuery';
 import idGenerate from 'src/utils/idGenerate';
-import dbInsertQuery from 'src/utils/db/dbInsertQuery';
-import dbUpdateQuery from 'src/utils/db/dbUpdateQuery';
+import { transaction } from 'src/utils/db/db';
+import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
+
 import dbSendUpdates from 'src/utils/db/dbSendUpdates';
 import dbSendNotifications from 'src/utils/db/dbSendNotifications';
 import mentionsGetArray from 'src/utils/mentions/mentionsGetArray';
@@ -14,122 +15,93 @@ import pushSend from 'src/utils/push/pushSend';
 const expectedInput = {
   discussion_id: string.require(),
   message: string.require(),
-  attachments: array.of(object),
-};
-
-const commentAddMiddleware = async (req, res, next) => {
-  // Get inputs
-  const { input, user_id } = res.locals;
-  const {
-    discussion_id, message, attachments, organization_id,
-  } = input;
-  // Inserting the comment object.
-  const insertCommentQ = dbInsertQuery('comments', {
-    discussion_id,
-    message,
-    organization_id,
-    id: `${discussion_id}-${idGenerate('C', 7)}`,
-    sent_at: r.now(),
-    attachments: attachments || [],
-    sent_by: user_id,
-    reactions: {},
-  });
-
-  const commentRes = await dbRunQuery(insertCommentQ);
-  const comment = commentRes.changes[0].new_val;
-
-  // Updating read_at to be newest comment.
-  // Also ensuring that user follows discussion
-  const updateFollowerQ = dbInsertQuery(
-    'discussion_followers',
-    {
-      user_id,
-      id: `${discussion_id}-${user_id}`,
-      discussion_id,
-      read_at: comment.sent_at,
-      organization_id,
-    },
-    {
-      conflict: 'update',
-    },
-  );
-
-  // T_TODO: update only if comment.sent_at is greater than existing value
-  // And update the discussion to include latest comment.
-  const updateDiscussionQ = dbUpdateQuery('discussions', discussion_id, {
-    last_comment_at: comment.sent_at,
-    last_comment: mentionsClean(message).slice(0, 100),
-    last_comment_by: user_id,
-    last_two_comments_by: r.row('last_two_comments_by').filter(a => a.ne(user_id)).append(user_id).do((a) => {
-      return r.branch(a.count().gt(2), a.deleteAt(0), a);
-    }),
-  });
-
-  const result = await Promise.all([
-    dbRunQuery(updateFollowerQ),
-    dbRunQuery(updateDiscussionQ),
-  ]);
-
-  const discussion = result[1].changes[0].new_val;
-
-  // Fetch the latest followers to ensure they're up to date.
-  const followersQ = r
-    .table('discussion_followers')
-    .getAll(discussion_id, { index: 'discussion_id' })
-    .pluck('user_id', 'read_at');
-
-  discussion.followers = await dbRunQuery(followersQ);
-
-  // Create response data.
-  res.locals.output = {
-    updates: [
-      { type: 'discussion', data: discussion },
-      { type: 'comment', data: comment },
-    ],
-  };
-  res.locals.messageGroupId = discussion.id;
-};
-
-const commentAddMiddlewareWithNext = async (req, res, next) => {
-  await commentAddMiddleware(req, res, next);
-
-  return next();
+  attachments: array.of(object)
 };
 
 export default endpointCreate(
   {
     endpoint: '/comment.add',
     expectedInput,
+    permissionKey: 'discussion_id'
   },
-  commentAddMiddleware,
+  async (req, res, next) => {
+    // Get inputs
+    const { input, user_id } = res.locals;
+    const { discussion_id, message, attachments, organization_id } = input;
+    // Inserting the comment object.
+    const [commentRes, discussionRes] = await transaction([
+      sqlInsertQuery('discussion_comments', {
+        discussion_id,
+        message,
+        comment_id: idGenerate('C', 7),
+        sent_at: 'now()',
+        attachments: attachments || [],
+        sent_by: user_id,
+        reactions: {}
+      }),
+      results => ({
+        text: `
+          UPDATE discussions
+          SET
+            last_comment_at = $1,
+            last_comment_by = $2,
+            last_comment = $3,
+            followers = followers || jsonb_build_object('${user_id}', '${results[0].rows[0].sent_at.toISOString()}')
+          WHERE discussion_id = $4
+          RETURNING discussion_id, last_comment, last_comment_at, last_comment_by, followers
+        `,
+        values: [
+          results[0].rows[0].sent_at,
+          user_id,
+          mentionsClean(message).slice(0, 100),
+          discussion_id
+        ]
+      })
+    ]);
+
+    // Create response data.
+    res.locals.output = {
+      updates: [
+        { type: 'discussion', data: discussionRes.rows[0] },
+        { type: 'comment', data: commentRes.rows[0] }
+      ]
+    };
+  }
 ).background(async (req, res) => {
   dbSendUpdates(res.locals);
-  const { organization_id, user_id } = res.locals;
+  return;
+  const { user_id } = res.locals;
   const { updates } = res.locals.output;
 
   const discussion = updates[0].data;
   const comment = updates[1].data;
   // Fetch sender (to have the name)
-  const sender = await dbRunQuery(r
-    .table('users')
-    .get(user_id)
-    .pluck('profile', 'id'));
+  const sender = await dbRunQuery(
+    r
+      .table('users')
+      .get(user_id)
+      .pluck('profile', 'id')
+  );
 
   const mentions = mentionsGetArray(comment.message);
-  await dbSendNotifications(mentions.map(m => ({
-    id: `${m}-${comment.id}-mention`,
-    user_id: m,
-    organization_id,
-    title: `<!${sender.id}> mentioned you in a comment: ${mentionsClean(comment.message).slice(0, 60)}...`,
-    done_by: [user_id],
-    target: {
-      id: comment.discussion_id,
-      item_id: comment.id,
-    },
-  })));
+  await dbSendNotifications(
+    mentions.map(m => ({
+      id: `${m}-${comment.id}-mention`,
+      user_id: m,
+      organization_id,
+      title: `<!${sender.id}> mentioned you in a comment: ${mentionsClean(
+        comment.message
+      ).slice(0, 60)}...`,
+      done_by: [user_id],
+      target: {
+        id: comment.discussion_id,
+        item_id: comment.id
+      }
+    }))
+  );
 
   const followers = [
-    ...new Set(discussion.followers.map(f => f.user_id).concat(mentions)),
+    ...new Set(discussion.followers.map(f => f.user_id).concat(mentions))
   ];
 
   // Fire push to all the receivers.
@@ -140,14 +112,14 @@ export default endpointCreate(
         orgId: organization_id,
         users: receivers,
         targetId: discussion.id,
-        targetType: 'discussion',
+        targetType: 'discussion'
       },
       {
-        content: `${sender.profile.first_name}: ${mentionsClean(comment.message)}`,
-        heading: discussion.topic,
-      },
+        content: `${sender.profile.first_name}: ${mentionsClean(
+          comment.message
+        )}`,
+        heading: discussion.topic
+      }
     );
   }
 });
-
-export { commentAddMiddleware, commentAddMiddlewareWithNext };

@@ -1,58 +1,37 @@
-import r from 'rethinkdb';
-import { object, array, string } from 'valjs';
+import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpointCreate';
-import dbInsertQuery from 'src/utils/db/dbInsertQuery';
-import dbRunQuery from 'src/utils/db/dbRunQuery';
-import dbUpdateQuery from 'src/utils/db/dbUpdateQuery';
-import dbSendUpdates from 'src/utils/db/dbSendUpdates';
+import { query } from 'src/utils/db/db';
 
 const expectedInput = {
-  discussion_id: string.require(),
+  discussion_id: string.require()
 };
 
-export default endpointCreate({
-  endpoint: '/discussion.follow',
-  expectedInput,
-}, async (req, res) => {
-  // Get inputs
-  const { user_id } = res.locals;
-  const {
-    discussion_id,
-  } = res.locals.input;
+export default endpointCreate(
+  {
+    endpoint: '/discussion.follow',
+    expectedInput,
+    permissionKey: 'discussion_id'
+  },
+  async (req, res) => {
+    // Get inputs
+    const { user_id } = res.locals;
+    const { discussion_id } = res.locals.input;
 
-  // Do queries and stuff here on the endpoint
-  const addFollowerQ = dbInsertQuery('discussion_followers', {
-    id: `${discussion_id}-${user_id}`,
-    user_id: res.locals.user_id,
-    discussion_id: discussion_id,
-    read_at: r.table('discussions').get(discussion_id)('last_comment_at'),
-  }, {
-    conflict: 'update',
-  });
-  
-  const updateDiscussionQ = dbUpdateQuery('discussions', discussion_id)
+    const discussionRes = await query(
+      `
+        UPDATE discussions
+        SET
+          updated_at = now(),
+          followers = followers || jsonb_build_object('${user_id}', last_comment_at)
+        WHERE discussion_id = $1
+        RETURNING followers, discussion_id
+      `,
+      [discussion_id]
+    );
 
-
-  await Promise.all([
-    dbRunQuery(addFollowerQ),
-    dbRunQuery(updateDiscussionQ)
-  ])
-
-  const q = r.table('discussions')
-            .get(discussion_id)
-            .merge(obj => ({
-              followers: r.table('discussion_followers')
-                .getAll(obj('id'), { index: 'discussion_id' })
-                .pluck('user_id', 'read_at')
-                .coerceTo('array'),
-            }));
-
-  const discussion = await dbRunQuery(q);
-
-  // Create response data.
-  res.locals.output = {
-    updates: [
-      { type: 'discussion', data: discussion },
-    ]
-  };
-});
+    // Create response data.
+    res.locals.output = {
+      updates: [{ type: 'discussion', data: discussionRes.rows[0] }]
+    };
+  }
+);

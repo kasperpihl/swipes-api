@@ -1,10 +1,12 @@
 import { Pool } from 'pg';
 
 const pool = new Pool({
-  host: 'workspace.cuaunhcnlbha.us-east-1.rds.amazonaws.com',
+  // host: 'workspace.cuaunhcnlbha.us-east-1.rds.amazonaws.com',
+  host: 'localhost',
   port: 5432,
   user: 'postgres',
-  password: 'GAze0UGQyj',
+  password: '',
+  // password: 'GAze0UGQyj',
   database: 'workspace'
 });
 

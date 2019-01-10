@@ -1,4 +1,5 @@
 import valInput from 'src/middlewares/val/valInput';
+import valPermissions from 'src/middlewares/val/valPermissions';
 import valResponseAndSend from 'src/middlewares/val/valResponseAndSend';
 import queueSendJob from 'src/utils/queue/queueSendJob';
 import queueCreateJob from 'src/utils/queue/queueCreateJob';
@@ -39,6 +40,7 @@ export default (options, middleware) => {
     routers[options.type || 'authed'].all(
       endpointName,
       valInput(options.expectedInput),
+      valPermissions(options),
       middleware,
       async (req, res, next) => {
         if (addToQueue) {

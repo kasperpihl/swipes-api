@@ -27,6 +27,9 @@ export default (tableName, mapping, options = { returning: true }) => {
           if (typeof obj[key] === 'undefined') {
             throw `dbInsertQuery expected key "${key}" in row[${i}]`;
           }
+          if (options.dontPrepare && options.dontPrepare[key]) {
+            return obj[key];
+          }
           return insertVariable(obj[key]);
         })})`
     )

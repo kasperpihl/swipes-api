@@ -1,36 +1,42 @@
-import r from 'rethinkdb';
-import { object, array, string } from 'valjs';
+import { object, string } from 'valjs';
+import { query } from 'dist/utils/db/db';
 import endpointCreate from 'src/utils/endpointCreate';
-import dbRunQuery from 'src/utils/db/dbRunQuery';
 
 const expectedInput = {
-  discussion_id: string.require(),
+  discussion_id: string.require()
 };
 const expectedOutput = {
-  discussion: object.require(),
+  discussion: object.require()
 };
 
-export default endpointCreate({
-  endpoint: '/discussion.get',
-  expectedInput,
-  expectedOutput,
-}, async (req, res, next) => {
-  // Get inputs
-  const { user_id } = res.locals;
-  const { discussion_id } = res.locals.input;
+export default endpointCreate(
+  {
+    endpoint: '/discussion.get',
+    permissionKey: 'discussion_id',
+    expectedInput,
+    expectedOutput
+  },
+  async (req, res) => {
+    // Get inputs
+    const { user_id } = res.locals;
+    const { discussion_id } = res.locals.input;
 
-  const q = r.table('discussions')
-            .get(discussion_id)
-            .merge(obj => ({
-              followers: r.table('discussion_followers')
-                .getAll(obj('id'), { index: 'discussion_id' })
-                .pluck('user_id', 'read_at')
-                .coerceTo('array'),
-            }));
+    const discussionRes = await query(
+      `
+        SELECT *
+        FROM discussions
+        WHERE discussion_id = $1
+      `,
+      [discussion_id]
+    );
 
-  const discussion = await dbRunQuery(q);
-  // Create response data.
-  res.locals.output = {
-    discussion,
-  };
-});
+    if (!discussionRes || !discussionRes.rows.length) {
+      throw Error('not_found').code(404);
+    }
+
+    // Create response data.
+    res.locals.output = {
+      discussion: discussionRes.rows[0]
+    };
+  }
+);

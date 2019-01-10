@@ -7,49 +7,34 @@ import dbUpdateQuery from 'src/utils/db/dbUpdateQuery';
 import dbSendUpdates from 'src/utils/db/dbSendUpdates';
 
 const expectedInput = {
-  discussion_id: string.require(),
-  read_at: string.format('iso8601'),
+  discussion_id: string.require()
 };
 
-export default endpointCreate({
-  endpoint: '/discussion.markAsRead',
-  expectedInput,
-}, async (req, res) => {
-  // Get inputs
-  const { user_id } = res.locals;
-  const {
-    discussion_id,
-    read_at,
-  } = res.locals.input;
+export default endpointCreate(
+  {
+    endpoint: '/discussion.markAsRead',
+    expectedInput,
+    permissionKey: 'discussion_id'
+  },
+  async (req, res) => {
+    const { user_id } = res.locals;
+    const { discussion_id } = res.locals.input;
 
-  // Do queries and stuff here on the endpoint
-  const addFollowerQ = dbUpdateQuery('discussion_followers', `${discussion_id}-${user_id}`, {
-    read_at: read_at,
-  });
-  
-  const updateDiscussionQ = dbUpdateQuery('discussions', discussion_id)
+    const discussionRes = await query(
+      `
+        UPDATE discussions
+        SET
+          updated_at = now(),
+          followers = followers || jsonb_build_object('${user_id}', last_comment_at)
+        WHERE discussion_id = $1
+        RETURNING followers, discussion_id
+      `,
+      [discussion_id]
+    );
 
-
-  await Promise.all([
-    dbRunQuery(addFollowerQ),
-    dbRunQuery(updateDiscussionQ)
-  ])
-
-  const q = r.table('discussions')
-            .get(discussion_id)
-            .merge(obj => ({
-              followers: r.table('discussion_followers')
-                .getAll(obj('id'), { index: 'discussion_id' })
-                .pluck('user_id', 'read_at')
-                .coerceTo('array'),
-            }));
-
-  const discussion = await dbRunQuery(q);
-
-  // Create response data.
-  res.locals.output = {
-    updates: [
-      { type: 'discussion', data: discussion },
-    ]
-  };
-});
+    // Create response data.
+    res.locals.output = {
+      updates: [{ type: 'discussion', data: discussionRes.rows[0] }]
+    };
+  }
+);
