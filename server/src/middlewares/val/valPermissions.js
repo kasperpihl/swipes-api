@@ -1,10 +1,13 @@
 import { query } from 'src/utils/db/db';
+
 export default function valPermissions({ permissionKey, permissionCreateKey }) {
   return async (req, res, next) => {
     if (!permissionKey && !permissionCreateKey) {
       return next();
     }
+
     const { user_id } = res.locals;
+
     if (permissionCreateKey) {
       const permissionRes = await query(
         `
@@ -32,10 +35,12 @@ export default function valPermissions({ permissionKey, permissionCreateKey }) {
         `,
         [res.locals[permissionKey], user_id]
       );
+
       if (!permissionRes || !permissionRes.rows.length) {
         throw Error('not_found').code(404);
       }
     }
+
     return next();
   };
 }
