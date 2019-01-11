@@ -63,5 +63,5 @@ export default endpointCreate(
     `,
     [user_id, project_id]
   );
-  console.log(openedRes.rows[0].opened_at);
+  // console.log(openedRes.rows[0].opened_at);
 });
