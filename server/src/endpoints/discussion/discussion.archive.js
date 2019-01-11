@@ -1,7 +1,7 @@
 import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpointCreate';
 import dbSendUpdates from 'src/utils/db/dbSendUpdates';
-import { query } from 'dist/utils/db/db';
+import { query } from 'src/utils/db/db';
 
 const expectedInput = {
   discussion_id: string.min(1).require()

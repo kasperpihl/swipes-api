@@ -1,5 +1,5 @@
 import { object, string } from 'valjs';
-import { query } from 'dist/utils/db/db';
+import { query } from 'src/utils/db/db';
 import endpointCreate from 'src/utils/endpointCreate';
 
 const expectedInput = {

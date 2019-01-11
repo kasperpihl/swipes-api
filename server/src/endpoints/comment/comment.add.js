@@ -1,7 +1,5 @@
-import r from 'rethinkdb';
 import { object, array, string } from 'valjs';
 import endpointCreate from 'src/utils/endpointCreate';
-import dbRunQuery from 'src/utils/db/dbRunQuery';
 import idGenerate from 'src/utils/idGenerate';
 import { transaction } from 'src/utils/db/db';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
@@ -69,19 +67,18 @@ export default endpointCreate(
   }
 ).background(async (req, res) => {
   dbSendUpdates(res.locals);
-  return;
   const { user_id } = res.locals;
   const { updates } = res.locals.output;
 
   const discussion = updates[0].data;
   const comment = updates[1].data;
+
   // Fetch sender (to have the name)
-  const sender = await dbRunQuery(
-    r
-      .table('users')
-      .get(user_id)
-      .pluck('profile', 'id')
+  const senderRes = await query(
+    'SELECT profile, user_id FROM users WHERE user_id = $1',
+    [user_id]
   );
+  const sender = senderRes.rows[0];
 
   const mentions = mentionsGetArray(comment.message);
   await dbSendNotifications(
@@ -95,13 +92,13 @@ export default endpointCreate(
       done_by: [user_id],
       target: {
         id: comment.discussion_id,
-        item_id: comment.id
+        item_id: comment.comment_id
       }
     }))
   );
 
   const followers = [
-    ...new Set(discussion.followers.map(f => f.user_id).concat(mentions))
+    ...new Set(Object.keys(discussion.followers).concat(mentions))
   ];
 
   // Fire push to all the receivers.
@@ -109,9 +106,8 @@ export default endpointCreate(
   if (receivers.length) {
     await pushSend(
       {
-        orgId: organization_id,
         users: receivers,
-        targetId: discussion.id,
+        targetId: discussion.discussion_id,
         targetType: 'discussion'
       },
       {

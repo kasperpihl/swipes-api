@@ -1,14 +1,12 @@
-import r from 'rethinkdb';
 import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpointCreate';
-import dbRunQuery from 'src/utils/db/dbRunQuery';
 import dbSendUpdates from 'src/utils/db/dbSendUpdates';
-import dbUpdateQuery from 'src/utils/db/dbUpdateQuery';
-import dbInsertQuery from 'src/utils/db/dbInsertQuery';
 import mentionsClean from 'src/utils/mentions/mentionsClean';
 import pushSend from 'src/utils/push/pushSend';
+import { query, transaction } from 'src/utils/db/db';
 
 const expectedInput = {
+  discussion_id: string.require(),
   comment_id: string.require(),
   reaction: string
 };
@@ -16,95 +14,73 @@ const expectedInput = {
 export default endpointCreate(
   {
     endpoint: '/comment.react',
+    permissionKey: 'discussion_id',
     expectedInput
   },
   async (req, res) => {
     // Get inputs
-    const { user_id, organization_id } = res.locals;
-    const { comment_id, reaction } = res.locals.input;
+    const { user_id, input } = res.locals;
+    const { comment_id, reaction, discussion_id } = input;
 
-    const q = dbUpdateQuery('comments', comment_id, {
-      reactions: {
-        [user_id]: reaction || r.literal()
-      }
-    });
-
-    const commentRes = await dbRunQuery(q);
-    const comment = commentRes.changes[0].new_val;
-
-    let updates = [
+    const [commentRes, discussionRes] = await transaction([
       {
-        type: 'comment',
-        data: comment
-      }
-    ];
-
-    if (reaction) {
-      // Show like in the recent history.
-      const updateDiscussionQ = dbUpdateQuery(
-        'discussions',
-        comment.discussion_id,
-        {
-          last_comment_at: comment.updated_at,
-          last_comment: `loved the comment: ${mentionsClean(
-            comment.message
-          ).slice(0, 60)}`,
-          last_comment_by: user_id,
-          last_two_comments_by: r
-            .row('last_two_comments_by')
-            .filter(a => a.ne(user_id))
-            .append(user_id)
-            .do(a => {
-              return r.branch(a.count().gt(2), a.deleteAt(0), a);
-            })
-        }
-      );
-      // Updating read_at to be newest comment.
-      // Also ensuring that user follows discussion
-      const updateFollowerQ = dbInsertQuery(
-        'discussion_followers',
-        {
+        text: `
+          UPDATE discussion_comments
+          SET
+            updated_at = now(),
+            reactions = ${
+              reaction
+                ? `reactions || jsonb_build_object('${user_id}', '${reaction}')`
+                : `jsonb_strip_nulls(reactions || jsonb_build_object('${user_id}', null))`
+            }
+            
+          WHERE discussion_id = $1
+          AND comment_id = $2
+          RETURNING discussion_id, comment_id, updated_at, reactions, message
+        `,
+        values: [discussion_id, comment_id]
+      },
+      results => ({
+        text: `
+          UPDATE discussions
+          SET
+            updated_at = now(),
+            last_comment_at = $1,
+            last_comment_by = $2,
+            last_comment = $3,
+            followers = followers || jsonb_build_object('${user_id}', '${results[0].rows[0].updated_at.toISOString()}')
+          WHERE discussion_id = $4
+          RETURNING last_comment_at, last_comment_by, last_comment, followers, discussion_id, updated_at
+        `,
+        values: [
+          results[0].rows[0].updated_at,
           user_id,
-          id: `${comment.discussion_id}-${user_id}`,
-          discussion_id: comment.discussion_id,
-          read_at: comment.updated_at,
-          organization_id
-        },
-        {
-          conflict: 'update'
-        }
-      );
-      const result = await Promise.all([
-        dbRunQuery(updateFollowerQ),
-        dbRunQuery(updateDiscussionQ)
-      ]);
-      const discussion = result[1].changes[0].new_val;
-
-      // Fetch the latest followers to ensure they're up to date.
-      const followersQ = r
-        .table('discussion_followers')
-        .getAll(discussion.id, { index: 'discussion_id' })
-        .pluck('user_id', 'read_at');
-
-      discussion.followers = await dbRunQuery(followersQ);
-      updates = [
-        {
-          type: 'discussion',
-          data: discussion
-        }
-      ].concat(updates);
-    }
+          `${reaction ? 'loved' : 'unloved'} the comment: ${mentionsClean(
+            results[0].rows[0].message
+          ).slice(0, 60)}`,
+          discussion_id
+        ]
+      })
+    ]);
 
     // Create response data.
     res.locals.output = {
-      updates,
+      updates: [
+        {
+          type: 'discussion',
+          data: discussionRes.rows[0]
+        },
+        {
+          type: 'comment',
+          data: commentRes.rows[0]
+        }
+      ],
       reaction
     };
-    res.locals.messageGroupId = comment_id;
   }
 ).background(async (req, res) => {
   dbSendUpdates(res.locals);
-  const { organization_id, user_id } = res.locals;
+  const { user_id } = res.locals;
   const { updates, reaction } = res.locals.output;
 
   // Fire push to all the commenter.
@@ -114,19 +90,18 @@ export default endpointCreate(
     if (comment.created_by === user_id) {
       return;
     }
+
     // Fetch sender (to have the name)
-    const sender = await dbRunQuery(
-      r
-        .table('users')
-        .get(user_id)
-        .pluck('profile', 'id')
+    const senderRes = await query(
+      'SELECT profile, user_id FROM users WHERE user_id = $1',
+      [user_id]
     );
+    const sender = renderRes.rows[0];
 
     await pushSend(
       {
-        orgId: organization_id,
         users: [comment.sent_by],
-        targetId: discussion.id,
+        targetId: discussion.discussion_id,
         targetType: 'discussion'
       },
       {
