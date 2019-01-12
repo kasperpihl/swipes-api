@@ -5,8 +5,17 @@ export default async (req, res, next) => {
 
   // Check user token
   const tokenQ = await query(
-    'SELECT token FROM tokens WHERE user_id=$1 AND token=$2 AND revoked=$3',
-    [user_id, token, false]
+    `
+      UPDATE tokens 
+      SET
+        expires_at = now() + INTERVAL '30 days',
+        last_seen_at = now()
+      WHERE token=$1
+      AND user_id=$2
+      AND expires_at > now()
+      RETURNING token
+    `,
+    [token, user_id]
   );
 
   if (tokenQ.rows.length === 0) {

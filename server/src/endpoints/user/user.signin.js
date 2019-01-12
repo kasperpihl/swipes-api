@@ -4,6 +4,7 @@ import endpointCreate from 'src/utils/endpointCreate';
 import { query } from 'src/utils/db/db';
 import getClientIp from 'src/utils/getClientIp';
 import createToken from 'src/utils/auth/createToken';
+import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
 
 const expectedInput = {
   email: string.format('email').require(),
@@ -36,22 +37,17 @@ export default endpointCreate(
       throw Error('Wrong email or password');
     }
 
-    // Take information for the token
-    const platform = req.header('sw-platform') || 'browser';
-    const ip = getClientIp(req);
-    const tokenInfo = {
-      platform,
-      ip
-    };
-
-    // Creating the actual tokens
-    const token = createToken({
-      iss: user.user_id
-    });
-
     await query(
-      'INSERT INTO tokens (timestamp, token, user_id, info, revoked) VALUES ($1, $2, $3, $4, $5)',
-      [new Date(), token, user.user_id, tokenInfo, false]
+      sqlInsertQuery('tokens', {
+        token: createToken({
+          iss: user.user_id
+        }),
+        info: {
+          platform: req.header('sw-platform') || 'browser',
+          ip: getClientIp(req)
+        },
+        user_id: user.user_id
+      })
     );
 
     // Create response data.
