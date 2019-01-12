@@ -8,7 +8,6 @@ const expectedInput = {
 
 export default endpointCreate(
   {
-    endpoint: '/discussion.follow',
     expectedInput,
     permissionKey: 'discussion_id'
   },

@@ -19,4 +19,4 @@ export default endpointCreate(
     // Create response data.
     res.locals.output = {};
   }
-).background(async (req, res) => {});
+);

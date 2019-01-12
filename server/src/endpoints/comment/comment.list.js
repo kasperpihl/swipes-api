@@ -13,7 +13,6 @@ const expectedOutput = {
 
 export default endpointCreate(
   {
-    endpoint: '/comment.list',
     expectedInput,
     expectedOutput
   },

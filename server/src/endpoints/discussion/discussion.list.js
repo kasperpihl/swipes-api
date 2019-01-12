@@ -10,7 +10,6 @@ const expectedInput = {
 
 export default endpointCreate(
   {
-    endpoint: '/discussion.list',
     expectedInput
   },
   async (req, res) => {

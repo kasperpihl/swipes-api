@@ -9,7 +9,6 @@ const expectedInput = {
 
 export default endpointCreate(
   {
-    endpoint: '/discussion.archive',
     expectedInput,
     permissionKey: 'discussion_id'
   },

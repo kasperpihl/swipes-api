@@ -10,7 +10,6 @@ const expectedInput = {
 
 export default endpointCreate(
   {
-    endpoint: '/discussion.rename',
     expectedInput,
     permissionKey: 'discussion_id'
   },

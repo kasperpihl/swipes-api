@@ -11,7 +11,6 @@ const expectedOutput = {
 
 export default endpointCreate(
   {
-    endpoint: '/discussion.get',
     permissionKey: 'discussion_id',
     expectedInput,
     expectedOutput

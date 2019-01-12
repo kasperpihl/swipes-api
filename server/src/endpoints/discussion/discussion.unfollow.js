@@ -10,7 +10,6 @@ const expectedInput = {
 
 export default endpointCreate(
   {
-    endpoint: '/discussion.unfollow',
     expectedInput,
     permissionKey: 'discussion_id'
   },

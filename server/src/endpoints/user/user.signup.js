@@ -13,7 +13,6 @@ const expectedInput = {
 
 export default endpointCreate(
   {
-    endpoint: '/user.signup',
     expectedInput,
     type: 'notAuthed'
   },
@@ -70,4 +69,4 @@ export default endpointCreate(
       user_id: userId
     };
   }
-).background(async (req, res) => {});
+);

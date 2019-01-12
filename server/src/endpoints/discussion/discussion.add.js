@@ -12,7 +12,6 @@ const expectedInput = {
 
 export default endpointCreate(
   {
-    endpoint: '/discussion.add',
     expectedInput,
     permissionCreateKey: 'owned_by'
   },

@@ -12,7 +12,6 @@ const expectedInput = {
 
 export default endpointCreate(
   {
-    endpoint: '/discussion.markAsRead',
     expectedInput,
     permissionKey: 'discussion_id'
   },

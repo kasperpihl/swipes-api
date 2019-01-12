@@ -18,7 +18,6 @@ const expectedInput = {
 
 export default endpointCreate(
   {
-    endpoint: '/comment.add',
     expectedInput,
     permissionKey: 'discussion_id'
   },
