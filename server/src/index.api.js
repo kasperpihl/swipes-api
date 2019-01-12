@@ -8,8 +8,7 @@ import 'src/polyfills/asyncSupport';
 import 'src/polyfills/uncaughtException';
 import 'src/polyfills/errorPrototypes';
 
-import authParseToken from 'src/middlewares/auth/authParseToken';
-import authCheckToken from 'src/middlewares/auth/authCheckToken';
+import tokenCheck from 'src/utils/token/tokenCheck';
 import checkUpdates from 'src/middlewares/checkUpdates';
 import fetchConfig from 'src/middlewares/fetchConfig';
 import redirectToStaging from 'src/middlewares/redirectToStaging';
@@ -17,6 +16,7 @@ import corsHandler from 'src/middlewares/corsHandler';
 
 import errorHandler from 'src/middlewares/errorHandler';
 import endpoints from 'src/endpoints/endpoints';
+import tokenCheck from './utils/token/tokenCheck';
 
 setupLogger('api');
 
@@ -56,18 +56,16 @@ app.use('/v1', (req, res, next) => {
 app.use('/v1', endpoints.notAuthed);
 // Checking for updates
 // app.use('/v1', checkUpdates);
+
 // Validation of user's token
-app.use('/v1', authParseToken, authCheckToken);
+app.use('/v1', async (req, res, next) => {
+  res.locals.user_id = await tokenCheck(res.locals.token);
+  return next();
+});
 
-// Keeping old authed endpoints here, for not being sure if we rely on no org id.
-
-// Endpoints that needs to be authed, but not part of an org.
-app.use('/v1', endpoints.noOrg);
-
-// Authed routes goes here (with org)
 app.use('/v1', endpoints.authed);
 
-app.use('/v1', (req, res, next) => {
+app.use('/v1', (req, res) => {
   res.sendStatus(404);
 });
 // ========================================================================

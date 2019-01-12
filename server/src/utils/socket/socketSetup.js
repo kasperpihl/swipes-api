@@ -1,19 +1,15 @@
 import url from 'url';
 import ws from 'ws';
-import parseToken from 'src/utils/auth/parseToken';
+import tokenCheck from 'src/utils/token/tokenCheck';
 import socketPongInterval from 'src/utils/socket/socketPongInterval';
 import redisCreateClient from 'src/utils/redis/redisCreateClient';
 
 export default server => {
   const wss = new ws.Server({ server });
-  wss.on('connection', (socket, req) => {
+  wss.on('connection', async (socket, req) => {
     const parsedUrl = url.parse(req.url, true);
     const { token } = parsedUrl.query;
-    let userId;
-    const decodedToken = token && parseToken(token);
-    if (decodedToken) {
-      userId = decodedToken.tokenContent.iss;
-    }
+    const userId = await tokenCheck(token);
 
     const redisClient = redisCreateClient();
 

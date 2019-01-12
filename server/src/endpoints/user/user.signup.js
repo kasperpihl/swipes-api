@@ -4,7 +4,7 @@ import endpointCreate from 'src/utils/endpointCreate';
 import { transaction } from 'src/utils/db/db';
 import idGenerate from 'src/utils/idGenerate';
 import getClientIp from 'src/utils/getClientIp';
-import createToken from 'src/utils/auth/createToken';
+import tokenCreate from 'src/utils/token/tokenCreate';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
 
 const expectedInput = {
@@ -40,7 +40,7 @@ export default endpointCreate(
     }
 
     // Creating the actual token
-    const token = createToken({
+    const token = tokenCreate({
       iss: userId
     });
 

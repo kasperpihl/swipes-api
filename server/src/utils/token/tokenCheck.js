@@ -1,10 +1,12 @@
 import { query } from 'src/utils/db/db';
+import tokenParse from 'src/utils/token/tokenParse';
 
-export default async (req, res, next) => {
-  const { user_id, token } = res.locals;
+export default async token => {
+  const parsedToken = tokenParse(token);
+  const user_id = parsedToken.tokenContent.iss;
 
   // Check user token
-  const tokenQ = await query(
+  const tokenRes = await query(
     `
       UPDATE tokens 
       SET
@@ -18,9 +20,9 @@ export default async (req, res, next) => {
     [token, user_id]
   );
 
-  if (tokenQ.rows.length === 0) {
+  if (!tokenRes || !tokenRes.rows.length) {
     throw Error('not_authed');
   }
 
-  return next();
+  return user_id;
 };

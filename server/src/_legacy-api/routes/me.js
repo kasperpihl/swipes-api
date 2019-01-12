@@ -1,13 +1,6 @@
 import express from 'express';
-import {
-  object,
-  string,
-} from 'valjs';
-import {
-  valBody,
-  valResponseAndSend,
-  mapLocals,
-} from '../utils';
+import { object, string } from 'valjs';
+import { valBody, valResponseAndSend, mapLocals } from '../utils';
 import {
   meUpdateSettings,
   meUpdateSettingsQueueMessage,
@@ -20,14 +13,9 @@ import {
   meCreateResetToken,
   meResetEmailQueueMessage,
   meVerifyResetToken,
-  meResetPassword,
+  meResetPassword
 } from './middlewares/me';
-import {
-  notificationsPushToQueue,
-} from './middlewares/notifications';
-
-import authParseToken from 'src/middlewares/auth/authParseToken';
-import authCheckToken from 'src/middlewares/auth/authCheckToken'
+import { notificationsPushToQueue } from './middlewares/notifications';
 
 const authed = express.Router();
 const notAuthed = express.Router();
@@ -36,35 +24,33 @@ const multipart = express.Router();
 authed.all(
   '/me.updateSettings',
   valBody({
-    settings: object.require(),
+    settings: object.require()
   }),
   meUpdateSettings,
   meUpdateSettingsQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
-    settings: object.require(),
-  }),
+    settings: object.require()
+  })
 );
 
 authed.all(
   '/me.updateProfile',
   valBody({
-    profile: object.require(),
+    profile: object.require()
   }),
   meUpdateProfile,
   meUpdateProfileQueueMessage,
   notificationsPushToQueue,
   valResponseAndSend({
     user_id: string.require(),
-    profile: object.require(),
-  }),
+    profile: object.require()
+  })
 );
 
 multipart.post(
   '/me.uploadProfilePhoto',
   meUploadProfilePhoto,
-  authParseToken,
-  authCheckToken,
   meProfilePhotoResize,
   meUploadProfilePhotoToS3,
   meUpdateProfile,
@@ -72,47 +58,43 @@ multipart.post(
   notificationsPushToQueue,
   valResponseAndSend({
     user_id: string.require(),
-    profile: object.require(),
-  }),
+    profile: object.require()
+  })
 );
 
 notAuthed.post(
   '/me.sendResetEmail',
   valBody({
-    email: string.format('email').require(),
+    email: string.format('email').require()
   }),
   mapLocals(locals => ({
-    email: locals.email.toLowerCase(),
+    email: locals.email.toLowerCase()
   })),
   meAccountExists,
   meCreateResetToken,
   meResetEmailQueueMessage,
   notificationsPushToQueue,
-  valResponseAndSend(),
+  valResponseAndSend()
 );
 
 notAuthed.post(
   '/me.verifyResetToken',
   valBody({
-    token: string.require(),
+    token: string.require()
   }),
   meVerifyResetToken,
-  valResponseAndSend(),
+  valResponseAndSend()
 );
 
 notAuthed.post(
   '/me.resetPassword',
   valBody({
     token: string.require(),
-    password: string.min(1).require(),
+    password: string.min(1).require()
   }),
   meVerifyResetToken,
   meResetPassword,
-  valResponseAndSend(),
+  valResponseAndSend()
 );
 
-export {
-  notAuthed,
-  authed,
-  multipart,
-};
+export { notAuthed, authed, multipart };

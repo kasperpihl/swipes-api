@@ -3,7 +3,7 @@ import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpointCreate';
 import { query } from 'src/utils/db/db';
 import getClientIp from 'src/utils/getClientIp';
-import createToken from 'src/utils/auth/createToken';
+import tokenCreate from 'src/utils/token/tokenCreate';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
 
 const expectedInput = {
@@ -39,7 +39,7 @@ export default endpointCreate(
 
     await query(
       sqlInsertQuery('tokens', {
-        token: createToken({
+        token: tokenCreate({
           iss: user.user_id
         }),
         info: {
