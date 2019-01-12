@@ -25,8 +25,8 @@ export default (options, middleware) => {
     throw Error('endpointCreate second parameter must be a middleware');
   }
 
-  // FUNCTION MUST BE NAMED endpointCreate. Dont change!
   let addToQueue = false;
+  // FUNCTION MUST BE NAMED endpointCreate. Dont change!
   function endpointCreate(routers) {
     const routerTypes = Object.keys(routers);
 
@@ -66,5 +66,6 @@ export default (options, middleware) => {
     addToQueue = true;
     return endpointCreate;
   };
+
   return endpointCreate;
 };
