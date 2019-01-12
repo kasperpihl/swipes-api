@@ -1,6 +1,6 @@
 import sha1 from 'sha1';
 import { string } from 'valjs';
-import endpointCreate from 'src/utils/endpointCreate';
+import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import { transaction } from 'src/utils/db/db';
 import idGenerate from 'src/utils/idGenerate';
 import getClientIp from 'src/utils/getClientIp';

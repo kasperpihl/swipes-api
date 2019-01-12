@@ -1,6 +1,6 @@
 import r from 'rethinkdb';
 import { object, array, string } from 'valjs';
-import endpointCreate from 'src/utils/endpointCreate';
+import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import dbInsertQuery from 'src/utils/db/dbInsertQuery';
 import dbRunQuery from 'src/utils/db/dbRunQuery';
 import dbUpdateQuery from 'src/utils/db/dbUpdateQuery';

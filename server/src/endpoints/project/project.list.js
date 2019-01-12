@@ -1,4 +1,4 @@
-import endpointCreate from 'src/utils/endpointCreate';
+import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import { query } from 'src/utils/db/db';
 
 const expectedInput = {};

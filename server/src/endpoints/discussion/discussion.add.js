@@ -1,5 +1,5 @@
 import { array, string, any } from 'valjs';
-import endpointCreate from 'src/utils/endpointCreate';
+import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import idGenerate from 'src/utils/idGenerate';
 import { transaction } from 'src/utils/db/db';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';

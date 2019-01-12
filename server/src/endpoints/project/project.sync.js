@@ -1,4 +1,4 @@
-import endpointCreate from 'src/utils/endpointCreate';
+import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import { transaction } from 'src/utils/db/db';
 import { string, object, array, number, bool } from 'valjs';
 import idGenerate from 'src/utils/idGenerate';

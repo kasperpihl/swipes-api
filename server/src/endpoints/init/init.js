@@ -1,5 +1,5 @@
 import { bool, string, object } from 'valjs';
-import endpointCreate from 'src/utils/endpointCreate';
+import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import { query } from 'src/utils/db/db';
 import sofiCreate from 'src/utils/sofiCreate';
 

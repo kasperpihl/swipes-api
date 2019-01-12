@@ -1,5 +1,5 @@
 import { string } from 'valjs';
-import endpointCreate from 'src/utils/endpointCreate';
+import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import dbSendUpdates from 'src/utils/db/dbSendUpdates';
 import mentionsClean from 'src/utils/mentions/mentionsClean';
 import pushSend from 'src/utils/push/pushSend';

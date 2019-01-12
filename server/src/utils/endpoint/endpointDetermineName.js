@@ -4,13 +4,11 @@ export default () => {
   let endpointName;
   try {
     const err = new Error();
-    let currentfile;
-    let prevFile;
 
     Error.prepareStackTrace = (err, stack) => stack;
 
-    currentfile = err.stack.shift().getFileName(); // endpointDetermineName.js
-    prevFile = err.stack.shift().getFileName(); // endpointCreate.js
+    err.stack.shift().getFileName(); // endpointDetermineName.js
+    let prevFile = err.stack.shift().getFileName(); // endpointCreate.js
     while (err.stack.length) {
       callerfile = err.stack.shift().getFileName(); // ...project.list.js (the file calling endpointCreate)
 

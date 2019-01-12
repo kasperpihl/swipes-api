@@ -1,6 +1,6 @@
 import { object, array, string, number } from 'valjs';
 import { query } from 'src/utils/db/db';
-import endpointCreate from 'src/utils/endpointCreate';
+import endpointCreate from 'src/utils/endpoint/endpointCreate';
 
 const expectedInput = {
   discussion_id: string.require(),
