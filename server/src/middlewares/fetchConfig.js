@@ -1,18 +1,10 @@
-import { dbConfigGet } from 'src/_legacy-api/routes/middlewares/db_utils/config';
-import { valLocals } from 'src/_legacy-api/utils';
+import { query } from 'src/utils/db/db';
 
-export default (req, res, next) => {
-  dbConfigGet()
-    .then(results => {
-      const config = {};
-      results.forEach(({ id, value }) => {
-        config[id] = value;
-      });
-      res.locals.config = config;
-
-      return next();
-    })
-    .catch(err => {
-      return next(err);
-    });
+export default async (req, res, next) => {
+  const configRes = await query('SELECT * FROM config');
+  res.locals.config = {};
+  configRes.rows.forEach(row => {
+    res.locals.config[row.config_id] = row.value;
+  });
+  return next();
 };

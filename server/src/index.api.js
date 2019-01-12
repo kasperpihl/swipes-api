@@ -1,12 +1,13 @@
+import 'src/polyfills/asyncSupport';
+import 'src/polyfills/uncaughtException';
+import 'src/polyfills/errorPrototypes';
+
 import http from 'http';
 import express from 'express';
 import path from 'path';
 import fs from 'fs';
 import bodyParser from 'body-parser';
 import { setupLogger } from 'src/utils/logger';
-import 'src/polyfills/asyncSupport';
-import 'src/polyfills/uncaughtException';
-import 'src/polyfills/errorPrototypes';
 
 import tokenCheck from 'src/utils/token/tokenCheck';
 import checkUpdates from 'src/middlewares/checkUpdates';
@@ -16,7 +17,6 @@ import corsHandler from 'src/middlewares/corsHandler';
 
 import errorHandler from 'src/middlewares/errorHandler';
 import endpoints from 'src/endpoints/endpoints';
-import tokenCheck from './utils/token/tokenCheck';
 
 setupLogger('api');
 
@@ -49,13 +49,28 @@ app.use('/v1', (req, res, next) => {
   res.locals = Object.assign({}, req.params, req.query, req.body, res.locals);
   return next();
 });
+
 // Get the config table into res.locals.config
-// app.use('/v1', fetchConfig);
-// app.use('/v1', redirectToStaging);
-// No authed routes goes here
-app.use('/v1', endpoints.notAuthed);
+app.use('/v1', fetchConfig);
+
+// Redirect to staging (used when pushing apps before approval)
+app.use('/v1', redirectToStaging);
+
+// Ensure maintenance is respected
+app.use('/v1', async (req, res, next) => {
+  console.log(res.locals.config.flags.maintenance);
+  if (res.locals.config.flags.maintenance) {
+    console.log('throwing that shit');
+    return next();
+  }
+  return next();
+});
+
 // Checking for updates
 // app.use('/v1', checkUpdates);
+
+// No authed routes goes here
+app.use('/v1', endpoints.notAuthed);
 
 // Validation of user's token
 app.use('/v1', async (req, res, next) => {
