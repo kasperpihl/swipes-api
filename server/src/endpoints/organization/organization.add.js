@@ -29,6 +29,10 @@ export default endpointCreate(
         user_id: user_id,
         admin: true,
         status: 'active'
+      }),
+      sqlInsertQuery('user_permissions', {
+        user_id,
+        permission_to: organizationId
       })
     ]);
 
