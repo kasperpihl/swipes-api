@@ -34,16 +34,16 @@ export default (error, req, res, next) => {
     locals: localsCopy,
     stack: error.stack.split('\n'),
     message: error.message,
-    info: error.errorInfo,
+    info: error.errorInfo
   });
 
-  const result = { ok: false, error: logId };
+  const result = { ok: false, error: 'hidden_error', log_id: logId };
   let code = 400;
   if (error.errorCode) {
     code = error.errorCode;
   }
 
-  if (env === 'dev') {
+  if (env === 'dev' || error.showToClient) {
     let message = error;
     if (error.message) {
       message = error.message;
