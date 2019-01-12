@@ -3,8 +3,8 @@ Error.prototype.info = function(obj) {
   return this;
 };
 
-Error.prototype.toClient = function() {
-  this.showToClient = true;
+Error.prototype.toClient = function(showingMessage) {
+  this.showToClient = showingMessage || this.message;
 };
 
 Error.prototype.code = function(num) {

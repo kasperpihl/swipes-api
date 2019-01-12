@@ -44,15 +44,8 @@ export default (error, req, res, next) => {
   }
 
   if (env === 'dev' || error.showToClient) {
-    let message = error;
-    if (error.message) {
-      message = error.message;
-    }
-    if (typeof message !== 'string') {
-      message = 'Unknown error';
-    }
-    result.error = message;
-    if (error.errorInfo) {
+    result.error = error.showToClient || error.message || 'Unknown error';
+    if (env === 'dev' && error.errorInfo) {
       result.errorInfo = error.errorInfo;
     }
   }
