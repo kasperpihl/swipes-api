@@ -13,7 +13,7 @@ export default endpointCreate(
   },
   async (req, res) => {
     const { resetToken } = res.locals.input;
-    const parsedToken = tokenParse(resetToken);
+    const parsedToken = tokenParse('sw-r', resetToken);
     const now = Math.floor(Date.now() / 1000);
     if (
       !parsedToken ||

@@ -40,7 +40,7 @@ export default endpointCreate(
     }
 
     // Creating the actual token
-    const token = tokenCreate({
+    const token = tokenCreate('sw', {
       iss: userId
     });
 

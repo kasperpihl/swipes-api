@@ -27,7 +27,7 @@ export default endpointCreate(
     const user = userRes.rows[0];
 
     if (user && user.user_id) {
-      const resetToken = tokenCreate({
+      const resetToken = tokenCreate('sw-r', {
         iss: user.user_id,
         exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60
       });
