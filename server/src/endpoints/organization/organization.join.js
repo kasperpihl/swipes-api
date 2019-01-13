@@ -42,11 +42,17 @@ export default endpointCreate(
     }
 
     await transaction([
-      sqlInsertQuery('organization_users', {
-        user_id,
-        organization_id,
-        status: 'active'
-      }),
+      sqlInsertQuery(
+        'organization_users',
+        {
+          user_id,
+          organization_id,
+          status: 'active'
+        },
+        {
+          upsert: 'organization_users_pkey'
+        }
+      ),
       {
         text: `
           UPDATE organizations
