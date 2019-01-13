@@ -38,7 +38,7 @@ export default endpointCreate(
     }
 
     await query(
-      sqlInsertQuery('tokens', {
+      sqlInsertQuery('sessions', {
         token: tokenCreate({
           iss: user.user_id
         }),

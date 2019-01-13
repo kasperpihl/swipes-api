@@ -12,7 +12,7 @@ export default endpointCreate(
 
     // Revoke user's token
     await query(
-      'UPDATE tokens SET expires_at = now() WHERE user_id=$1 AND token=$2',
+      'UPDATE sessions SET expires_at = now() WHERE user_id=$1 AND token=$2',
       [user_id, token]
     );
 

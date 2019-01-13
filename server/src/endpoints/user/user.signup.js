@@ -45,7 +45,7 @@ export default endpointCreate(
     });
 
     await transaction([
-      sqlInsertQuery('tokens', {
+      sqlInsertQuery('sessions', {
         token,
         user_id: userId,
         info: {

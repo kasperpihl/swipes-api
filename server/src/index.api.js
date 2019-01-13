@@ -40,10 +40,8 @@ if (fs.existsSync(path.join(__dirname, './public'))) {
 app.use(corsHandler);
 
 // Everything on v1 path (which is not multipart form data) is parsed as json
-app.use('/v1', bodyParser.json(), (err, req, res, next) => {
-  // Malformed JSON error handler
-  res.status(400).send({ ok: false, error: 'Invalid json.' });
-});
+app.use('/v1', bodyParser.json());
+
 // Merge req.query and req.body into req.params
 app.use('/v1', (req, res, next) => {
   res.locals = Object.assign({}, req.params, req.query, req.body, res.locals);
@@ -58,9 +56,8 @@ app.use('/v1', redirectToStaging);
 
 // Ensure maintenance is respected
 app.use('/v1', async (req, res, next) => {
-  console.log(res.locals.config.flags.maintenance);
   if (res.locals.config.flags.maintenance) {
-    console.log('throwing that shit');
+    throw Error('maintenance').toClient();
     return next();
   }
   return next();
@@ -69,7 +66,7 @@ app.use('/v1', async (req, res, next) => {
 // Checking for updates
 // app.use('/v1', checkUpdates);
 
-// No authed routes goes here
+// Not authed routes goes here
 app.use('/v1', endpoints.notAuthed);
 
 // Validation of user's token
@@ -78,15 +75,15 @@ app.use('/v1', async (req, res, next) => {
   return next();
 });
 
+// Run all authenticated endpoints
 app.use('/v1', endpoints.authed);
 
+// Send 404 if no endpoint was found
 app.use('/v1', (req, res) => {
   res.sendStatus(404);
 });
-// ========================================================================
-// Error handlers / they should be at the end of the middleware stack
-// ========================================================================
 
+// Error handler
 app.use(errorHandler);
 
 const server = http.createServer(app);

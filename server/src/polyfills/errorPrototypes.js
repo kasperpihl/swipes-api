@@ -5,6 +5,7 @@ Error.prototype.info = function(obj) {
 
 Error.prototype.toClient = function(showingMessage) {
   this.showToClient = showingMessage || this.message;
+  return this;
 };
 
 Error.prototype.code = function(num) {
