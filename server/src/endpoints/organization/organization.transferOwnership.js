@@ -1,6 +1,7 @@
+import sha1 from 'sha1';
 import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
-import { query } from 'src/utils/db/db';
+import { query, transaction } from 'src/utils/db/db';
 import userOrganizationCheck from 'src/utils/userOrganizationCheck';
 
 const expectedInput = {
@@ -41,14 +42,25 @@ export default endpointCreate(
     });
 
     // creating a new user from scratch
-    await query(
-      `
-        UPDATE organizations
-        SET owner_id = $1
-        WHERE organization_id = $2
-      `,
-      [target_user_id, organization_id]
-    );
+    await transaction([
+      {
+        text: `
+          UPDATE organizations
+          SET owner_id = $1
+          WHERE organization_id = $2
+        `,
+        values: [target_user_id, organization_id]
+      },
+      {
+        text: `
+          UPDATE organization_users
+          SET admin = true
+          WHERE user_id = $1
+          AND organization_id = $2
+        `,
+        values: [target_user_id, organization_id]
+      }
+    ]);
 
     // Create response data.
     res.locals.output = {};

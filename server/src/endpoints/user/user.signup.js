@@ -41,7 +41,8 @@ export default endpointCreate(
 
     // Creating the actual token
     const token = tokenCreate('sw', {
-      iss: userId
+      iss: userId,
+      iat: Math.floor(Date.now() / 1000)
     });
 
     await transaction([

@@ -2,7 +2,7 @@ import jwt from 'jwt-simple';
 import config from 'config';
 
 export default (prefix, token) => {
-  const tokenWithoutPrefix = token.substr(0, prefix.length + 1);
+  const tokenWithoutPrefix = token.substr(prefix.length + 1);
 
   try {
     const tokenContent = jwt.decode(

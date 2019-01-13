@@ -36,12 +36,14 @@ export default endpointCreate(
     if (!user || sha1Password !== user.password) {
       throw Error('Wrong email or password');
     }
+    const token = tokenCreate('sw', {
+      iss: user.user_id,
+      iat: Math.floor(Date.now() / 1000)
+    });
 
     await query(
       sqlInsertQuery('sessions', {
-        token: tokenCreate('sw', {
-          iss: user.user_id
-        }),
+        token,
         info: {
           platform: req.header('sw-platform') || 'browser',
           ip: getClientIp(req)
