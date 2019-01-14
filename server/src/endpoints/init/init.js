@@ -25,10 +25,46 @@ export default endpointCreate(
 
     const full_fetch = !timestamp;
 
-    const meRes = await query(`
-      SELECT created_at, updated_at, user_id, email, profile, activated, settings from users WHERE user_id = '${user_id}'
-    `);
+    const meRes = await query(
+      `
+        SELECT user_id, email, profile, activated, settings
+        FROM users
+        WHERE user_id = $1
+      `,
+      [user_id]
+    );
 
+    const orgRes = await query(
+      `
+        SELECT organization_id, name, trial_ending, owner_id, pending_users, plan, stripe_subscription_id, stripe_customer_id
+        FROM organizations
+        WHERE organization_id
+        IN (
+          SELECT organization_id
+          FROM organization_users
+          WHERE user_id = $1
+          AND status = 'active'
+        )
+      `,
+      [user_id]
+    );
+
+    const usersRes = await query(
+      `
+        SELECT ou.status, ou.organization_id, ou.admin, u.profile, u.email, u.user_id, u.username
+        FROM organization_users ou
+        LEFT JOIN users u
+        ON u.user_id = ou.user_id
+        WHERE ou.organization_id
+        IN (
+          SELECT organization_id
+          FROM organization_users
+          WHERE user_id = $1
+          AND status = 'active'
+        )
+      `,
+      [user_id]
+    );
     // const discussionTs = user.settings.discussion_counter_ts || defTs;
     // const discussionCounterQ = r
     //   .table('discussions')
@@ -61,6 +97,8 @@ export default endpointCreate(
     // Create response data.
     res.locals.output = {
       me: meRes.rows[0],
+      organizations: orgRes.rows,
+      users: usersRes.rows,
       sofi: sofiCreate(),
       full_fetch,
       timestamp: now
