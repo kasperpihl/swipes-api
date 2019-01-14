@@ -45,6 +45,11 @@ export default endpointCreate(
     });
 
     await transaction([
+      sqlInsertQuery('users', {
+        user_id: userId,
+        email,
+        password: passwordSha1
+      }),
       sqlInsertQuery('sessions', {
         token,
         user_id: userId,
@@ -52,11 +57,6 @@ export default endpointCreate(
           platform: req.header('sw-platform') || 'browser',
           ip: getClientIp(req)
         }
-      }),
-      sqlInsertQuery('users', {
-        user_id: userId,
-        email,
-        password: passwordSha1
       }),
       sqlInsertQuery('user_permissions', {
         user_id: userId,
