@@ -14,6 +14,7 @@ export const query = (text, params) => {
   if (typeof text === 'object' && text.text && text.values) {
     return pool.query(text.text, text.values);
   }
+
   return pool.query(text, params);
 };
 

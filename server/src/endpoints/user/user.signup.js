@@ -1,7 +1,7 @@
 import sha1 from 'sha1';
 import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
-import { transaction } from 'src/utils/db/db';
+import { query, transaction } from 'src/utils/db/db';
 import idGenerate from 'src/utils/idGenerate';
 import getClientIp from 'src/utils/getClientIp';
 import tokenCreate from 'src/utils/token/tokenCreate';
@@ -27,14 +27,13 @@ export default endpointCreate(
     email = email.toLowerCase();
 
     // check if this user is available
-    const checkUserQ = await query(
-      'SELECT email, activated FROM users WHERE email=$1',
-      [email]
-    );
+    const checkUserQ = await query('SELECT email FROM users WHERE email=$1', [
+      email
+    ]);
     const user = checkUserQ.rows[0];
 
     if (user) {
-      throw Error('user_exists');
+      throw Error().toClient('User already exists');
     } else {
       userId = idGenerate('U');
     }
