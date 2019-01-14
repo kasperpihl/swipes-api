@@ -3,6 +3,7 @@ import ws from 'ws';
 import tokenCheck from 'src/utils/token/tokenCheck';
 import socketPongInterval from 'src/utils/socket/socketPongInterval';
 import redisCreateClient from 'src/utils/redis/redisCreateClient';
+import { query } from 'src/utils/db/db';
 
 export default server => {
   const wss = new ws.Server({ server });
@@ -11,11 +12,21 @@ export default server => {
     const { token } = parsedUrl.query;
     const userId = await tokenCheck(token);
 
+    const orgRes = await query(
+      `
+        SELECT organization_id
+        FROM organization_users
+        WHERE user_id = $1
+      `,
+      [userId]
+    );
     const redisClient = redisCreateClient();
 
     redisClient.subscribe('global');
     redisClient.subscribe(userId);
-    // TODO: Subscribe to all organizations that user is part of.
+    orgRes.rows.forEach(org => {
+      redisClient.subscribe(org.organization_id);
+    });
 
     redisClient.on('message', (channel, actionString) => {
       const action = JSON.parse(actionString);
