@@ -16,7 +16,7 @@ export default function valPermissions({ permissionKey, permissionCreateKey }) {
             WHERE user_id = $1
             AND permission_to = $2
         `,
-        [user_id, res.locals[permissionCreateKey]]
+        [user_id, res.locals.input[permissionCreateKey]]
       );
       if (!permissionRes || !permissionRes.rows.length) {
         throw Error('forbidden').code(403);
@@ -27,13 +27,14 @@ export default function valPermissions({ permissionKey, permissionCreateKey }) {
           SELECT permission_id
           FROM permissions
           WHERE permission_id = $1
-          AND granted_to = (
+          AND granted_to
+          IN (
             SELECT permission_to
             FROM user_permissions
             WHERE user_id = $2
           )
         `,
-        [res.locals[permissionKey], user_id]
+        [res.locals.input[permissionKey], user_id]
       );
 
       if (!permissionRes || !permissionRes.rows.length) {
