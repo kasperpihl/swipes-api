@@ -23,7 +23,10 @@ export default class ProfileHeader extends PureComponent {
     const file = e.target.files[0];
     if (file) {
       this.setLoading('uploadImage');
-      request('me.updateFoto').then(res => {
+      request(
+        { command: 'me.updatePhoto', formData: true },
+        { photo: file }
+      ).then(res => {
         this.clearLoading('uploadImage');
         if (res.ok) {
           window.analytics.sendEvent('Profile photo updated', {});
