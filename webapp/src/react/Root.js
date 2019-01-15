@@ -20,6 +20,7 @@ import 'src/react/global-styles/app.scss';
 
 @withRouter
 @connect(state => ({
+  auth: state.auth,
   isHydrated: state.main.get('isHydrated'),
   isMaximized: state.main.get('isMaximized'),
   isFullscreen: state.main.get('isFullscreen'),
@@ -30,8 +31,11 @@ import 'src/react/global-styles/app.scss';
 @hot(module)
 export default class extends PureComponent {
   renderRoutes() {
-    const { status, lastConnect, isHydrated } = this.props;
-    if (!isHydrated || (!lastConnect && status === 'connecting')) {
+    const { status, lastConnect, isHydrated, auth } = this.props;
+    if (
+      !isHydrated ||
+      (auth.get('token') && !lastConnect && status !== 'online')
+    ) {
       return <SwipesLoader center text="Loading" size={90} />;
     }
     return [
