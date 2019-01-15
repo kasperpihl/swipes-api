@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { setupLoading } from 'swipes-core-js/classes/utils';
-import Button from 'src/react/components/button/Button';
 import SW from './ProfileNameChange.swiss.js';
 
 import request from 'swipes-core-js/utils/request';
@@ -47,7 +46,7 @@ export default class ProfileNameChange extends PureComponent {
         last_name: lastName
       }).then(res => {
         if (res && res.ok) {
-          this.clearLoading('button', 'success', 1500);
+          this.clearLoading('button', 'success', 1500, this.props.hideModal);
         } else {
           this.clearLoading('button', '!Something went wrong');
         }
@@ -57,19 +56,29 @@ export default class ProfileNameChange extends PureComponent {
   render() {
     return (
       <SW.Wrapper>
-        <SW.Input
-          type="text"
-          placeholder="First Name"
-          value={this.state.firstName}
-          onChange={this.handleChangeCached('firstName')}
-        />
-        <SW.Input
-          type="text"
-          placeholder="Last Name"
-          value={this.state.lastName}
-          onChange={this.handleChangeCached('lastName')}
-        />
-        <Button
+        <SW.Title>Update profile</SW.Title>
+        <SW.InputContainer>
+          <SW.InputWrapper>
+            <SW.InputLabel>First Name</SW.InputLabel>
+            <SW.Input
+              type="text"
+              placeholder="First Name"
+              value={this.state.firstName}
+              onChange={this.handleChangeCached('firstName')}
+              autoFocus
+            />
+          </SW.InputWrapper>
+          <SW.InputWrapper>
+            <SW.InputLabel>Last Name</SW.InputLabel>
+            <SW.Input
+              type="text"
+              placeholder="Last Name"
+              value={this.state.lastName}
+              onChange={this.handleChangeCached('lastName')}
+            />
+          </SW.InputWrapper>
+        </SW.InputContainer>
+        <SW.Button
           title="Update"
           onClick={this.handleSave}
           {...this.getLoading('button')}

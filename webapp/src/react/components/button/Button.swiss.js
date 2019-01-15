@@ -18,7 +18,7 @@ export default styleSheet('Button', {
     _flex: ['row', 'left', 'center'],
     display: 'inline-flex',
     flex: 'none',
-    'status=loading|success|error': {
+    'status=loading|success': {
       pointerEvents: 'none'
     },
     userSelect: 'none',

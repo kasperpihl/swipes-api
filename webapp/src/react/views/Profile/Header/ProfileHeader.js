@@ -65,7 +65,9 @@ export default class ProfileHeader extends PureComponent {
   };
   renderProfileImage() {
     const { me } = this.props;
-    const initials = `${me.get('first_name')[0]}${me.get('last_name')[0]}`;
+    const initials = `${me.get('first_name').charAt(0)}${me
+      .get('last_name')
+      .charAt(0)}`;
     const profilePic = undefined;
 
     return (
