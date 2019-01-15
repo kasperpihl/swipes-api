@@ -10,20 +10,9 @@ import sqlJsonbBuild from 'src/utils/sql/sqlJsonbBuild';
 
 const expectedInput = {};
 
-const {
-  s3BucketName,
-  s3Url,
-  s3Region,
-  secretAccessKey,
-  accessKeyId
-} = config.get('aws');
+const { s3BucketName, s3Url, s3Region } = config.get('aws');
 
-AWS.config.update({
-  accessKeyId,
-  secretAccessKey
-});
-
-const validateUpload = (req, res) =>
+const upload = (req, res) =>
   new Promise((resolve, reject) =>
     multer({ dest: '/tmp/' }).single('photo')(
       req,
@@ -46,7 +35,7 @@ export default endpointCreate(
 
     const { user_id } = res.locals;
 
-    await validateUpload(req, res);
+    await upload(req, res);
 
     const file = req.file;
 

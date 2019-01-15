@@ -24,7 +24,7 @@ export default class ProfileHeader extends PureComponent {
     if (file) {
       this.setLoading('uploadImage');
       request(
-        { command: 'me.updatePhoto', formData: true },
+        { command: 'me.uploadPhoto', formData: true },
         { photo: file }
       ).then(res => {
         this.clearLoading('uploadImage');
