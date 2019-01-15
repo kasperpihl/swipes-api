@@ -52,8 +52,6 @@ export default class Sidebar extends PureComponent {
   }
   getTitleForId(id) {
     switch (id) {
-      case 'AccountList':
-        return 'Account';
       default:
         return id;
     }
@@ -112,7 +110,7 @@ export default class Sidebar extends PureComponent {
       return undefined;
     }
 
-    return this.renderItem({ id: 'AccountList', personId: me.get('id') });
+    return this.renderItem({ id: 'Profile', personId: me.get('id') });
   }
   renderStore() {
     // For later
