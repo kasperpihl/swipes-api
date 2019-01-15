@@ -21,16 +21,18 @@ import SWView from 'src/react/app/view-controller/SWView';
 export default class Profile extends PureComponent {
   handleLogout = e => {
     const { confirm } = this.props;
-    const options = this.getOptionsForE({
-      boundingRect: e.target.getBoundingClientRect(),
-      alignX: 'center',
-      title: 'Log out',
-      message: 'Do you want to log out?'
-    });
 
-    confirm(options, i => {
-      i === 1 && request('user.signout');
-    });
+    confirm(
+      {
+        boundingRect: e.target.getBoundingClientRect(),
+        alignX: 'center',
+        title: 'Log out',
+        message: 'Do you want to log out?'
+      },
+      i => {
+        i === 1 && request('user.signout');
+      }
+    );
   };
   handleCreateOrganization = () => {
     const { openModal } = this.props;

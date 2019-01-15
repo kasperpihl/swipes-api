@@ -9,7 +9,7 @@ import * as navigationActions from 'src/redux/navigation/navigationActions';
   state => ({
     isHydrated: state.main.get('isHydrated'),
     token: state.auth.get('token'),
-    hasConnected: state.connection.get('hasConnected'),
+    lastConnect: state.connection.get('lastConnect'),
     goToUrl: state.navigation.get('url')
   }),
   {
@@ -35,7 +35,7 @@ export default class Redirect extends PureComponent {
   checkRedirects() {
     // Reset if any
     const { location } = this.props;
-    const { goToUrl, token, isHydrated, setUrl, hasConnected } = this.props;
+    const { goToUrl, token, isHydrated, setUrl, lastConnect } = this.props;
 
     if (goToUrl && location.pathname === (goToUrl.to.pathname || goToUrl.to)) {
       setUrl(null);
@@ -48,7 +48,7 @@ export default class Redirect extends PureComponent {
         setUrl('/login');
       }
     }
-    if (isHydrated && hasConnected) {
+    if (isHydrated && lastConnect) {
       if (['/login', '/register'].indexOf(path) > -1) {
         setUrl('/');
       }
