@@ -37,7 +37,17 @@ export default (options, middleware) => {
         }". Expected ${routerTypes.join(', ')}`
       );
     }
-    routers[options.type || 'authed'].all(
+
+    const methods = ['post', 'get', 'delete', 'put'];
+    let method = 'all';
+    if (options.method) {
+      if (methods.indexOf(options.method.toLowerCase()) > -1) {
+        method = options.method.toLowerCase();
+      } else {
+        throw Error('endpointCreate invalid method (post, put, get, delete)');
+      }
+    }
+    routers[options.type || 'authed'][method](
       endpointName,
       valInput(options.expectedInput),
       valPermissions(options),

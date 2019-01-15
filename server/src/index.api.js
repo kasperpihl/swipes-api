@@ -39,13 +39,13 @@ if (fs.existsSync(path.join(__dirname, './public'))) {
 
 app.use(corsHandler);
 
-// Everything on v1 path (which is not multipart form data) is parsed as json
-app.use('/v1', bodyParser.json());
-
-// Merge req.query and req.body into req.params
+// If Content-Type is application/json, parse as json
 app.use('/v1', (req, res, next) => {
-  res.locals = Object.assign({}, req.params, req.query, req.body, res.locals);
-  return next();
+  if (req.header('Content-Type') === 'application/json') {
+    bodyParser.json()(req, res, next);
+  } else {
+    next();
+  }
 });
 
 // Get the config table into res.locals.config
@@ -58,7 +58,6 @@ app.use('/v1', redirectToStaging);
 app.use('/v1', async (req, res, next) => {
   if (res.locals.config.flags.maintenance) {
     throw Error('maintenance').toClient();
-    return next();
   }
   return next();
 });
@@ -71,7 +70,10 @@ app.use('/v1', endpoints.notAuthed);
 
 // Validation of user's token
 app.use('/v1', async (req, res, next) => {
-  res.locals.user_id = await tokenCheck(res.locals.token);
+  let token = req.header('Authorization');
+  token = token && token.substr(7);
+
+  res.locals.user_id = await tokenCheck(token);
   return next();
 });
 
