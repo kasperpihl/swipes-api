@@ -17,7 +17,7 @@ export default endpointCreate(
     const { email } = res.locals.input;
     const userRes = await query(
       `
-        SELECT user_id, profile, email
+        SELECT user_id, first_name, username, email
         FROM users 
         WHERE email = $1
       `,
@@ -33,7 +33,7 @@ export default endpointCreate(
       });
       res.locals.backgroundInput = {
         email: user.email,
-        firstName: user.profile.first_name,
+        firstName: user.username || user.first_name || '', // first name and username are optional
         resetToken
       };
     }
