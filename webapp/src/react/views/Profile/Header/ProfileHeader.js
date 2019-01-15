@@ -1,10 +1,13 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { setupLoading } from 'swipes-core-js/classes/utils';
-import request from 'swipes-core-js/utils/request';
-
+import ProfileNameChange from 'src/react/views/Profile/NameChange/ProfileNameChange';
 import SW from './ProfileHeader.swiss';
 
+import request from 'swipes-core-js/utils/request';
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
+
+@navWrapper
 @connect(state => ({
   me: state.me,
   auth: state.auth
@@ -12,42 +15,29 @@ import SW from './ProfileHeader.swiss';
 export default class ProfileHeader extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      firstName: props.me.get('first_name') || '',
-      lastName: props.me.get('last_name') || ''
-    };
+
     setupLoading(this);
   }
-  getKeyForServer(key) {
-    switch (key) {
-      case 'firstName':
-        return 'first_name';
-      case 'lastName':
-        return 'last_name';
-      default:
-        return key;
-    }
-  }
-  handleChangeCached = key => e => {
-    this.setState({ [key]: e.target.value });
-  };
-  handleBlurCached = key => e => {
-    const { me } = this.props;
-    const value = this.state[key];
-    const serverKey = this.getKeyForServer(key);
-    const orgVal = me.get(serverKey);
-    if (value !== orgVal) {
-      this.setLoading(key);
-      request('me.updateProfile', { [serverKey]: value }).then(res => {
-        if (res && res.ok) {
-          this.clearLoading(key, 'success', 1500);
-        } else {
-          this.clearLoading(key, '!Something went wrong');
+  onImageChange = e => {
+    const { uploadProfilePhoto } = this.props;
+    const file = e.target.files[0];
+    if (file) {
+      this.setLoading('uploadImage');
+      request('me.updateFoto').then(res => {
+        this.clearLoading('uploadImage');
+        if (res.ok) {
+          window.analytics.sendEvent('Profile photo updated', {});
         }
       });
     }
   };
-
+  handleOpenModal = () => {
+    const { openModal } = this.props;
+    openModal({
+      component: ProfileNameChange,
+      position: 'center'
+    });
+  };
   handleProfileChange = () => {
     const { auth } = this.props;
     const file = e.target.files[0];
@@ -73,21 +63,41 @@ export default class ProfileHeader extends PureComponent {
       }
     });
   };
+  renderProfileImage() {
+    const { me } = this.props;
+    const initials = `${me.get('first_name')[0]}${me.get('last_name')[0]}`;
+    const profilePic = undefined;
+
+    return (
+      <SW.ProfileImage>
+        {profilePic ? (
+          <SW.Picture
+            src={profilePic}
+            role="presentation"
+            className="initials"
+          />
+        ) : (
+          <SW.HeaderInitials className="initials">{initials}</SW.HeaderInitials>
+        )}
+
+        <SW.HeaderFileInput
+          className="fileInput"
+          onChange={this.onImageChange}
+          type="file"
+          accept="image/x-png,image/jpeg"
+          innerRef={c => (this.imageUpload = c)}
+        />
+        <SW.OverlaySVG icon="Plus" />
+      </SW.ProfileImage>
+    );
+  }
   render() {
+    const { me } = this.props;
+    const fullName = `${me.get('first_name')} ${me.get('last_name')}`;
     return (
       <SW.Wrapper>
-        <input
-          type="text"
-          placeholder="First name"
-          value={this.state.firstName}
-          onChange={this.handleChangeCached('firstName')}
-        />
-        <input
-          type="text"
-          placeholder="Last name"
-          value={this.state.lastName}
-          onChange={this.handleChangeCached('lastName')}
-        />
+        {this.renderProfileImage()}
+        <SW.NameField onClick={this.handleOpenModal}>{fullName}</SW.NameField>
       </SW.Wrapper>
     );
   }

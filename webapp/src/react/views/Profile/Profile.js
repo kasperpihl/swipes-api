@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import ProfileHeader from './Header/ProfileHeader';
 import ProfileOrgItem from './OrgItem/ProfileOrgItem';
-import ProfileOrgCreate from './OrgCreate/ProfileOrgCreate';
+import ProfileOrgCreate from 'src/react/views/Profile/OrgCreate/ProfileOrgCreate';
 import * as menuActions from 'src/redux/menu/menuActions';
 
 import navWrapper from 'src/react/app/view-controller/NavWrapper';

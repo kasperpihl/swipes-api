@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import AssigneeImage from 'src/react/components/assigning/AssigneeImage';
 import SW from './AssigneeContextMenu.swiss';
 
 export default class extends Component {
@@ -38,7 +37,7 @@ export default class extends Component {
         selected={this.state.selectedIds.indexOf(u.get('id')) !== -1}
         onClick={() => this.toggleUser(u.get('id'))}
       >
-        {/* <AssigneeImage /> */}
+        {/* <SW.Image src="testImage.svg" /> */}
         <SW.UserName>
           {`${u.getIn(['profile', 'first_name'])} ${u.getIn([
             'profile',

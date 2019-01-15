@@ -69,5 +69,12 @@ export default styleSheet('AssigneeContextMenu', {
     _font: ['16px', '18px', '400'],
     marginLeft: '6px',
     userSelect: 'none'
+  },
+
+  Image: {
+    _el: 'img',
+    _size: '36px',
+    flexShrink: '0',
+    marginRight: '12px'
   }
 });
