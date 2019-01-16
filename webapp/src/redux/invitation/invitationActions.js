@@ -2,7 +2,7 @@ import * as types from '../constants';
 import request from 'swipes-core-js/utils/request';
 
 export const fetch = invitationToken => dispatch => {
-  request('organization.readInvitationToken', {
+  request('organization.inviteReadToken', {
     invitation_token: invitationToken
   }).then(res => {
     if (res.ok) {
