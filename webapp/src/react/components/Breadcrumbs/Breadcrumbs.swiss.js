@@ -3,7 +3,7 @@ import Icon from 'src/react/icons/Icon';
 
 const navbarH = '48px';
 
-export default styleSheet('BreadCrumbs', {
+export default styleSheet('Breadcrumbs', {
   Wrapper: {
     _size: ['100%', navbarH],
     _flex: '',

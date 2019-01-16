@@ -29,7 +29,7 @@ import 'src/react/global-styles/app.scss';
   lastConnect: state.connection.get('lastConnect')
 }))
 @hot(module)
-export default class extends PureComponent {
+export default class Root extends PureComponent {
   renderRoutes() {
     const { status, lastConnect, isHydrated, auth } = this.props;
     if (

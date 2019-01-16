@@ -1,28 +1,28 @@
 import { styleSheet } from 'swiss-react';
 import Button from 'src/react/components/button/Button';
 
-export default styleSheet('Previewer', {
+export default styleSheet('Preview', {
   Footer: {
     _size: ['100%', '60px'],
     _flex: ['row', 'right', 'center'],
     backgroundColor: '$sw5',
     borderTop: '1px solid $sw3',
-    padding: '0 30px',
+    padding: '0 30px'
   },
   FooterButton: {
     _el: Button,
-    marginLeft: '15px',
+    marginLeft: '15px'
   },
   LoaderWrapper: {
-    _size: '100%',
+    _size: '100%'
   },
   NoPreviewWrapper: {
     _size: '100%',
-    _flex: 'column',
+    _flex: 'column'
   },
   NoPreviewHeader: {
     _font: ['27px', '36px'],
-    color: '$sw1',
+    color: '$sw1'
   },
   NoPreviewText: {
     _size: ['100%', 'auto'],
@@ -36,9 +36,7 @@ export default styleSheet('Previewer', {
   FileWrapper: {
     _size: '100%',
     hidden: {
-      opacity: 0,
+      opacity: 0
     }
-  },
-
+  }
 });
-

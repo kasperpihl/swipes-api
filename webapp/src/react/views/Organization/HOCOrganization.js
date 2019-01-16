@@ -14,7 +14,7 @@ import Organization from './Organization';
   state => ({
     users: cs.users.getAllButSofi(state),
     me: state.me,
-    organization: state.me.getIn(['organizations', 0]),
+    organization: state.me.getIn(['organizations', 0])
   }),
   {
     invite: ca.organizations.inviteUser,
@@ -25,7 +25,7 @@ import Organization from './Organization';
     disableUser: ca.organizations.disableUser,
     enableUser: ca.organizations.enableUser,
     promoteToAdmin: ca.organizations.promoteToAdmin,
-    contextMenu: mainActions.contextMenu,
+    contextMenu: mainActions.contextMenu
   }
 )
 export default class extends PureComponent {
@@ -38,7 +38,7 @@ export default class extends PureComponent {
       firstNameVal: '',
       emailVal: '',
       tabs: ['Active accounts', 'Disabled accounts'],
-      tabIndex: 0,
+      tabIndex: 0
     };
     setupLoading(this);
   }
@@ -59,7 +59,7 @@ export default class extends PureComponent {
         this.setState({ emailVal: '', firstNameVal: '' });
         this.clearLoading('invite', `Invited ${firstNameVal}`, 3000);
         window.analytics.sendEvent('Invitation sent', {
-          User: res.user.id,
+          User: res.user.id
         });
       } else {
         if (res.error.message) {
@@ -81,7 +81,7 @@ export default class extends PureComponent {
       if (res.ok) {
         this.clearLoading(uId, `Sent`, 3000);
         window.analytics.sendEvent('Invitation resent', {
-          User: uId,
+          User: uId
         });
       } else {
         this.clearLoading(uId, '!Something went wrong', 3000);
@@ -139,7 +139,7 @@ export default class extends PureComponent {
       me,
       confirm,
       leaveOrg,
-      deleteOrg,
+      deleteOrg
     } = this.props;
     const options = this.getOptionsForE(e);
     const isOwner = organization.get('owner_id') === me.get('id');
@@ -147,8 +147,8 @@ export default class extends PureComponent {
       {
         title: 'Delete account',
         subtitle:
-          'Your account will be closed and all users removed. Any subscription will be canceled.',
-      },
+          'Your account will be closed and all users removed. Any subscription will be canceled.'
+      }
     ];
     if (!isOwner) {
       items[0].title = 'Leave organization';
@@ -160,7 +160,7 @@ export default class extends PureComponent {
       items.push({
         title: 'Leave organization',
         disabled: true,
-        subtitle: 'The owner cannot leave the organization',
+        subtitle: 'The owner cannot leave the organization'
       });
     }
     const delegate = {
@@ -168,7 +168,7 @@ export default class extends PureComponent {
         confirm(
           Object.assign({}, options, {
             title: items[0].title,
-            message: 'This cannot be undone. Are you sure?',
+            message: 'This cannot be undone. Are you sure?'
           }),
           i => {
             if (i === 1) {
@@ -184,7 +184,7 @@ export default class extends PureComponent {
             }
           }
         );
-      },
+      }
     };
 
     contextMenu({
@@ -194,9 +194,9 @@ export default class extends PureComponent {
         delegate,
         items,
         style: {
-          width: '360px',
-        },
-      },
+          width: '360px'
+        }
+      }
     });
   }
   onContext(uId, e) {
@@ -209,21 +209,21 @@ export default class extends PureComponent {
         id: 'promote',
         title: 'Make an admin',
         subtitle:
-          'Admins have full access to the account including disable accounts and handle billing',
-      },
+          'Admins have full access to the account including disable accounts and handle billing'
+      }
     ];
     if (user.get('disabled')) {
       items[0] = {
         id: 'enable',
         title: 'Enable account',
-        subtitle: 'If a user needs his account again, reopen it from here.',
+        subtitle: 'If a user needs his account again, reopen it from here.'
       };
     } else {
       if (organization.get('admins').contains(uId)) {
         items[0] = {
           id: 'demote',
           title: 'Demote to user',
-          subtitle: 'Users cannot deactive accounts or handle billing',
+          subtitle: 'Users cannot deactive accounts or handle billing'
         };
       }
       if (organization.get('owner_id') === uId) {
@@ -234,7 +234,7 @@ export default class extends PureComponent {
           id: 'disable',
           title: 'Disable account',
           subtitle:
-            'If a user no longer needs an account, you can close it from here.',
+            'If a user no longer needs an account, you can close it from here.'
         });
       }
 
@@ -244,7 +244,7 @@ export default class extends PureComponent {
           title: 'Resend invitation',
           subtitle: `Remind ${msgGen.users.getName(
             uId
-          )} about the invitation to join in`,
+          )} about the invitation to join in`
         });
       }
     }
@@ -268,7 +268,7 @@ export default class extends PureComponent {
         if (item.id === 'resend') {
           this.onResend(uId);
         }
-      },
+      }
     };
 
     contextMenu({
@@ -278,23 +278,23 @@ export default class extends PureComponent {
         delegate,
         items,
         style: {
-          width: '360px',
-        },
-      },
+          width: '360px'
+        }
+      }
     });
   }
   tabDidChange(index) {
     const { tabIndex } = this.state;
     if (tabIndex !== index) {
       this.setState({
-        tabIndex: index,
+        tabIndex: index
       });
     }
   }
   getOptionsForE(e) {
     return {
       boundingRect: e.target.getBoundingClientRect(),
-      alignX: 'right',
+      alignX: 'right'
     };
   }
   render() {

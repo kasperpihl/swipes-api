@@ -10,8 +10,8 @@ import NotFound from './NotFound/NotFound';
 import Organize from './Organize/Organize';
 import Profile from './Profile/Profile';
 import ProjectOverview from './Project/Overview/ProjectOverview';
-// import Previewer from './previewer/Previewer';
-// import SideNote from './side-note/HOCSideNote';
+// import Preview from './Preview/Preview';
+// import SideNote from './SideNote/SideNote';
 // import Tester from './tester/Tester';
 
 export {
@@ -23,7 +23,7 @@ export {
   // DiscussionOverview,
   NotFound,
   Organize,
-  // Previewer,
+  // Preview,
   Profile,
   ProjectOverview
   // Organization,

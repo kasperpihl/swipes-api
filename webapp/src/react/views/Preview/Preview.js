@@ -9,7 +9,7 @@ import * as mainActions from 'src/redux/main/mainActions';
 import * as ca from 'swipes-core-js/actions';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import * as Files from './files';
-import SW from './Previewer.swiss';
+import SW from './Preview.swiss';
 
 @navWrapper
 @connect(
@@ -19,7 +19,7 @@ import SW from './Previewer.swiss';
     browser: mainActions.browser
   }
 )
-export default class extends PureComponent {
+export default class Preview extends PureComponent {
   static minWidth() {
     return 750;
   }

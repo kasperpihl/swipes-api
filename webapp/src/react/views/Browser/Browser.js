@@ -11,7 +11,7 @@ import SW from './Browser.swiss';
 @connect(state => ({
   me: state.me
 }))
-export default class extends PureComponent {
+export default class Browser extends PureComponent {
   static minWidth() {
     return 800;
   }

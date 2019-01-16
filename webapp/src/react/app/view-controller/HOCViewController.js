@@ -7,7 +7,7 @@ import * as navigationActions from 'src/redux/navigation/navigationActions';
 import * as views from 'src/react/views';
 import { setupCachedCallback } from 'react-delegate';
 import debounce from 'swipes-core-js/utils/debounce';
-import HOCBreadCrumbs from 'src/react/components/bread-crumbs/HOCBreadCrumbs';
+import Breadcrumbs from 'src/react/components/Breadcrumbs/Breadcrumbs';
 import ContextWrapper from './ContextWrapper';
 import './styles/view-controller';
 import Modal from 'src/react/app/modal/Modal';
@@ -242,7 +242,7 @@ export default class extends PureComponent {
 
     return (
       <div className="view-container__header">
-        <HOCBreadCrumbs target={target} />
+        <Breadcrumbs target={target} />
         <div className="view-container__actions">
           {fullscreenButton}
           {lockButton}

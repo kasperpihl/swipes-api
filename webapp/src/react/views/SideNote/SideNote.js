@@ -16,7 +16,7 @@ import debounce from 'swipes-core-js/utils/debounce';
 import dayStringForDate from 'swipes-core-js/utils/time/dayStringForDate';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as ca from 'swipes-core-js/actions';
-import SW from './HOCSideNote.swiss';
+import SW from './SideNote.swiss';
 
 const emptyState = convertToRaw(EditorState.createEmpty().getCurrentContent());
 const maxWidth = 820;
@@ -51,7 +51,7 @@ const mapStateToProps = (state, props) => {
     browser: mainActions.browser
   }
 )
-export default class HOCSideNote extends PureComponent {
+export default class SideNote extends PureComponent {
   static sizes() {
     return [600, 900];
   }
