@@ -92,7 +92,7 @@ export default endpointCreate(
 
     // Fetch sender (to have the name)
     const senderRes = await query(
-      'SELECT profile, user_id FROM users WHERE user_id = $1',
+      'SELECT first_name, user_id FROM users WHERE user_id = $1',
       [user_id]
     );
     const sender = renderRes.rows[0];
@@ -104,9 +104,9 @@ export default endpointCreate(
         targetType: 'discussion'
       },
       {
-        content: `${
-          sender.profile.first_name
-        } loved your comment: ${mentionsClean(comment.message).slice(0, 60)}`,
+        content: `${sender.first_name} loved your comment: ${mentionsClean(
+          comment.message
+        ).slice(0, 60)}`,
         heading: discussion.topic
       }
     );

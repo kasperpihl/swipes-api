@@ -26,7 +26,7 @@ export default endpointCreate(
 
     const orgRes = await query(
       `
-        SELECT ou.status, o.name, o.pending_users, u.user_id, iu.email as inviter_email, iu.profile as inviter_profile
+        SELECT ou.status, o.name, o.pending_users, u.user_id, iu.email as inviter_email, iu.first_name as inviter_first_name
         FROM organizations o
         LEFT JOIN users u
         ON email = $1
@@ -71,7 +71,7 @@ export default endpointCreate(
       email: target_email,
       inviteToken,
       organizationName: org.name,
-      inviterProfile: org.inviter_profile,
+      inviterFirstName: org.inviter_first_name,
       inviterEmail: org.inviter_email
     };
 
@@ -83,7 +83,7 @@ export default endpointCreate(
     email,
     inviteToken,
     organizationName,
-    inviterProfile,
+    inviterFirstName,
     inviterEmail
   } = res.locals.input;
 
@@ -92,7 +92,7 @@ export default endpointCreate(
       email,
       inviteToken,
       organizationName,
-      inviterProfile.first_name || inviterEmail
+      inviterFirstName || inviterEmail
     );
   }
 });
