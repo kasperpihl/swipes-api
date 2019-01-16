@@ -27,8 +27,8 @@ export default class ProfileOrgDelete extends PureComponent {
       <SW.Wrapper>
         <SW.Title>Delete Organization</SW.Title>
         <SW.Text>
-          Are you sure that you want to delete the organization
-          {orgName}?
+          Are you sure that you want to delete the organization <b>{orgName}</b>
+          ?
         </SW.Text>
         <SW.ButtonWrapper>
           <SW.Button title="No" onClick={hideModal} />

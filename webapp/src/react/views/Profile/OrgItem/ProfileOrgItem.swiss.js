@@ -9,7 +9,7 @@ export default styleSheet('ProfileOrgItem', {
 
   OrgName: {
     _el: 'h1',
-    _font: ['18px', '18px', '400'],
+    _textStyle: 'item',
     marginRight: 'auto'
   },
 
@@ -20,6 +20,7 @@ export default styleSheet('ProfileOrgItem', {
 
   UserAmount: {
     _el: 'p',
-    _font: ['14px', '18px', '400']
+    _textStyle: 'labelDark',
+    marginRight: '12px'
   }
 });

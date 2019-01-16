@@ -13,13 +13,13 @@ export default styleSheet('ProfileOrgDelete', {
 
   Title: {
     _el: 'h1',
-    _font: ['30px', '30px', 'bold'],
+    _textStyle: 'cardTitle',
     marginBottom: '24px'
   },
 
   Text: {
     _el: 'p',
-    _font: ['16px', '20px', '400']
+    _textStyle: 'body'
   },
 
   ButtonWrapper: {

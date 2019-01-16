@@ -12,7 +12,7 @@ export default styleSheet('ProfileNameChange', {
 
   Title: {
     _el: 'h1',
-    _font: ['30px', '30px', 'bold'],
+    _textStyle: 'cardTitle',
     marginBottom: '24px'
   },
 
@@ -32,14 +32,14 @@ export default styleSheet('ProfileNameChange', {
 
   InputLabel: {
     _el: 'h3',
-    _font: ['12px', '16px', '400'],
+    _textStyle: 'body',
     marginBottom: '6px'
   },
 
   Input: {
     _el: 'input',
     _size: ['100%', 'auto'],
-    _font: ['14px', '14px', '400'],
+    _textStyle: 'body',
     padding: '6px',
     border: '1px solid $sw3'
   },

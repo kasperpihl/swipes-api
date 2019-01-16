@@ -1,35 +1,45 @@
 import React, { PureComponent } from 'react';
-import ProfileOrgDelete from 'src/react/views/Profile/OrgDelete/ProfileOrgDelete';
-import Button from 'src/react/components/button/Button';
+import { connect } from 'react-redux';
+import moment from 'moment';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import SW from './ProfileOrgItem.swiss';
 
 @navWrapper
+@connect(state => ({
+  me: state.me
+}))
 export default class ProfileOrgItem extends PureComponent {
-  openDeleteModal = () => {
-    const { openModal, organization } = this.props;
-
-    openModal({
-      component: ProfileOrgDelete,
-      position: 'center',
+  handleOpenOrganization = () => {
+    const { organization, navPush, me } = this.props;
+    const now = moment();
+    const endingAt = moment(organization.get('trial_ending'));
+    const expired = endingAt.isBefore(now);
+    const daysLeft = endingAt.diff(now, 'days');
+    navPush({
+      id: 'Organization',
+      title: 'Organization',
       props: {
-        orgName: organization.get('name'),
-        orgId: organization.get('organization_id')
+        organizationId: organization.get('organization_id'),
+        organizationName: organization.get('name'),
+        ownerId: organization.get('owner_id'),
+        admin: organization.getIn(['users', me.get('user_id'), 'admin']),
+        activeSubscription: organization.get('stripe_subscription_id'),
+        trialExpired: expired,
+        daysLeft: daysLeft
       }
     });
   };
   render() {
-    const { organization } = this.props;
-    console.log(organization.toJS());
+    const { organization, me } = this.props;
+
     return (
-      <SW.Wrapper>
+      <SW.Wrapper onClick={this.handleOpenOrganization}>
         <SW.OrgName>{organization.get('name')}</SW.OrgName>
         <SW.Options>
           <SW.UserAmount>
             {organization.get('users').size}{' '}
             {organization.get('users').size === 1 ? 'user' : 'users'}
           </SW.UserAmount>
-          <Button icon="Delete" onClick={this.openDeleteModal} />
         </SW.Options>
       </SW.Wrapper>
     );
