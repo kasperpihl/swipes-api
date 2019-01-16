@@ -39,8 +39,8 @@ export default styleSheet('ProfileNameChange', {
   Input: {
     _el: 'input',
     _size: ['100%', 'auto'],
-    padding: '6px',
     _font: ['14px', '14px', '400'],
+    padding: '6px',
     border: '1px solid $sw3'
   },
 

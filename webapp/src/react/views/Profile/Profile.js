@@ -7,6 +7,7 @@ import * as menuActions from 'src/redux/menu/menuActions';
 
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Button from 'src/react/components/button/Button';
+import SW from './Profile.swiss';
 import SWView from 'src/react/app/view-controller/SWView';
 
 @navWrapper
@@ -46,19 +47,21 @@ export default class Profile extends PureComponent {
     const { organization } = this.props;
     return (
       <SWView header={this.renderHeader()}>
-        <Button
-          title="Create Organization"
-          onClick={this.handleCreateOrganization}
-        />
-        {organization
-          .map(org => (
-            <ProfileOrgItem
-              key={org.get('organization_id')}
-              organization={org}
-            />
-          ))
-          .toList()}
-        <Button title="Log out" onClick={this.handleLogout} />
+        <SW.Wrapper>
+          <SW.Button
+            title="Create Organization"
+            onClick={this.handleCreateOrganization}
+          />
+          {organization
+            .map(org => (
+              <ProfileOrgItem
+                key={org.get('organization_id')}
+                organization={org}
+              />
+            ))
+            .toList()}
+          <Button title="Log out" onClick={this.handleLogout} />
+        </SW.Wrapper>
       </SWView>
     );
   }

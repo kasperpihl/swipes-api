@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import ProfileNameChange from 'src/react/views/Profile/NameChange/ProfileNameChange';
+import UserImage from 'src/react/components/UserImage/UserImage';
+
 import SW from './ProfileHeader.swiss';
 
 import request from 'swipes-core-js/utils/request';
@@ -66,6 +68,9 @@ export default class ProfileHeader extends PureComponent {
       }
     });
   };
+  handleUpload = () => {
+    this.imageUpload.click();
+  };
   renderProfileImage() {
     const { me } = this.props;
     const initials = `${me.get('first_name').charAt(0)}${me
@@ -75,16 +80,7 @@ export default class ProfileHeader extends PureComponent {
 
     return (
       <SW.ProfileImage>
-        {profilePic ? (
-          <SW.Picture
-            src={profilePic}
-            role="presentation"
-            className="initials"
-          />
-        ) : (
-          <SW.HeaderInitials className="initials">{initials}</SW.HeaderInitials>
-        )}
-
+        <UserImage userId="me" />
         <SW.HeaderFileInput
           className="fileInput"
           onChange={this.onImageChange}
@@ -92,7 +88,9 @@ export default class ProfileHeader extends PureComponent {
           accept="image/x-png,image/jpeg"
           innerRef={c => (this.imageUpload = c)}
         />
-        <SW.OverlaySVG icon="Plus" />
+        <SW.ButtonWrapper onClick={this.handleUpload}>
+          <SW.OverlaySVG icon="Plus" />
+        </SW.ButtonWrapper>
       </SW.ProfileImage>
     );
   }

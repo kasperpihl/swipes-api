@@ -10,7 +10,8 @@ export default styleSheet('ProfileHeader', {
 
   NameField: {
     _size: 'auto',
-    userSelect: 'none'
+    userSelect: 'none',
+    cursor: 'pointer'
   },
 
   ProfileImage: {
@@ -21,6 +22,7 @@ export default styleSheet('ProfileHeader', {
     borderRadius: '50%',
     marginRight: '30px',
     overflow: 'hidden',
+    userSelect: 'none',
 
     '&': {
       _size: '72px',
@@ -43,17 +45,26 @@ export default styleSheet('ProfileHeader', {
 
   HeaderFileInput: {
     _el: 'input',
-    _size: ['144px'],
     backgroundColor: '$sw1',
     opacity: '0',
+    overflow: 'hidden',
     position: 'absolute',
-    top: '-50%',
+    zIndex: '-1'
+  },
+
+  ButtonWrapper: {
+    _size: '100%',
+    _flex: 'center',
+    position: 'absolute',
+    top: '0',
+    left: '0',
+    backgroundColor: 'transparent',
 
     '&:hover': {
+      backgroundColor: '$blue',
       opacity: '0.6',
-      backgroundColor: 'blue',
       transition: '.25s ease',
-      pointerEvents: 'all'
+      cursor: 'pointer'
     }
   },
 
@@ -64,7 +75,7 @@ export default styleSheet('ProfileHeader', {
     opacity: '0',
     position: 'absolute',
 
-    '.fileInput:hover + &': {
+    '.ProfileHeader_ButtonWrapper:hover &': {
       opacity: '1',
       transition: '.25s ease',
       pointerEvents: 'none'
