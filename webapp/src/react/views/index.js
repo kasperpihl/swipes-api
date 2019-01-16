@@ -12,7 +12,7 @@ import Profile from './Profile/Profile';
 import ProjectOverview from './Project/Overview/ProjectOverview';
 // import Preview from './Preview/Preview';
 // import SideNote from './SideNote/SideNote';
-// import Tester from './tester/Tester';
+// import Tester from './Tester/Tester';
 
 export {
   // AccountList,
