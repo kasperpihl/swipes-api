@@ -15,6 +15,7 @@ export default class ProfileOrgItem extends PureComponent {
     const endingAt = moment(organization.get('trial_ending'));
     const expired = endingAt.isBefore(now);
     const daysLeft = endingAt.diff(now, 'days');
+
     navPush({
       id: 'Organization',
       title: 'Organization',
@@ -25,12 +26,13 @@ export default class ProfileOrgItem extends PureComponent {
         admin: organization.getIn(['users', me.get('user_id'), 'admin']),
         activeSubscription: organization.get('stripe_subscription_id'),
         trialExpired: expired,
-        daysLeft: daysLeft
+        daysLeft: daysLeft,
+        pendingUsers: organization.get('pending_users')
       }
     });
   };
   render() {
-    const { organization, me } = this.props;
+    const { organization } = this.props;
 
     return (
       <SW.Wrapper onClick={this.handleOpenOrganization}>

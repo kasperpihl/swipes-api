@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import CardHeader from 'src/react/components/CardHeader/CardHeader';
 import SW from './OrganizationHeader.swiss';
 
 export default class OrganizationHeader extends PureComponent {
@@ -22,8 +23,7 @@ export default class OrganizationHeader extends PureComponent {
   render() {
     const { name, trialExpired, activeSubscription } = this.props;
     return (
-      <SW.Wrapper>
-        <SW.Title>{name}</SW.Title>
+      <CardHeader title={name}>
         <SW.SubscriptionStatus>
           Your Subscription Status:
           <SW.Container>
@@ -33,7 +33,7 @@ export default class OrganizationHeader extends PureComponent {
             {this.renderSubscriptionStatus()}
           </SW.Container>
         </SW.SubscriptionStatus>
-      </SW.Wrapper>
+      </CardHeader>
     );
   }
 }

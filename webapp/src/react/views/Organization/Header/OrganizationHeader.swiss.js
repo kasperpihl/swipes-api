@@ -14,7 +14,8 @@ export default styleSheet('OrganizationHeader', {
   SubscriptionStatus: {
     _flex: ['row', 'center', 'center'],
     _textStyle: 'labelDark',
-    marginLeft: 'auto'
+    marginLeft: 'auto',
+    flexShrink: '0'
   },
 
   Container: {
