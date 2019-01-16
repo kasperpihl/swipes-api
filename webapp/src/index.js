@@ -2,7 +2,7 @@ import 'src/utils/polyfills';
 
 import React from 'react';
 import { render } from 'react-dom';
-
+import { fromJS } from 'immutable';
 import { Provider } from 'react-redux';
 import { SwissProvider } from 'swiss-react';
 import { OptimistProvider } from 'react-optimist';
@@ -14,13 +14,20 @@ import configureStore from 'src/redux/configureStore';
 
 import Analytics from 'src/classes/analytics';
 import IpcListener from 'src/classes/ipc-listener';
-
+import urlGetParameter from 'src/utils/url/urlGetParameter';
 import { setStore } from 'swipes-core-js/utils/store/storeGet';
 import Socket from 'swipes-core-js/classes/Socket';
 
 // Init core!
+if (urlGetParameter('invitation_token')) {
+  localStorage.setItem('invitation_token', urlGetParameter('invitation_token'));
+}
 const { store, persistor } = configureStore({
-  global: getGlobals()
+  global: getGlobals(),
+  invitation: fromJS({
+    invitationToken: localStorage.getItem('invitation_token') || null,
+    invitedToOrg: null
+  })
 });
 
 setStore(store); // Make store accessible from core

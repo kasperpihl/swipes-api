@@ -70,7 +70,7 @@ export default class extends PureComponent {
   }
   onResetPassword(e) {
     e.preventDefault();
-    const { request, inputMenu, alert } = this.props;
+    const { inputMenu, alert } = this.props;
     const { formData } = this.state;
 
     const options = { boundingRect: e.target.getBoundingClientRect() };
@@ -83,7 +83,7 @@ export default class extends PureComponent {
       },
       resetEmail => {
         if (resetEmail && resetEmail.length) {
-          request('me.sendResetEmail', {
+          request('user.sendResetEmail', {
             email: resetEmail
           }).then(res => {
             alert({

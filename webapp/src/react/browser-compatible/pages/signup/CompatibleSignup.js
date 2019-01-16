@@ -20,7 +20,7 @@ class CompatibleSignup extends PureComponent {
     const { organization } = this.props;
 
     if (!organization) {
-      return 'In the Workspace, you unite the work of your team. Start your 14-day free trial by signing up. No credit card required. ';
+      return 'The workspace is free for personal use, and paid for companies.';
     }
 
     return 'Your team is waiting for you. Sign up to join them.';
@@ -32,9 +32,7 @@ class CompatibleSignup extends PureComponent {
       return 'Get Started';
     }
 
-    return `Join ${msgGen.users.getFirstName(
-      inviter
-    )} and the ${organization.get('name')} team`;
+    return `Join the ${organization.get('name')}-team`;
   }
   renderHeader() {
     const { inviter } = this.props;

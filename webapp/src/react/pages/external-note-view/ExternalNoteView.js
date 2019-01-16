@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import loadPage from 'src/react/pages/load';
-import { bindAll, getURLParameter } from 'swipes-core-js/classes/utils';
+import { bindAll } from 'swipes-core-js/classes/utils';
+import urlGetParameter from 'src/utils/url/urlGetParameter';
 import NoteEditor from 'src/react/components/note-editor/NoteEditor';
 import SW from './ExternalNoteView.swiss';
 
@@ -33,9 +34,9 @@ class ExternalNoteView extends PureComponent {
       method: 'POST',
       headers: new Headers({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({
-        token: getURLParameter('token'),
-        note_id: getURLParameter('note_id'),
-        organization_id: getURLParameter('organization_id')
+        token: urlGetParameter('token'),
+        note_id: urlGetParameter('note_id'),
+        organization_id: urlGetParameter('organization_id')
       })
     };
     fetch(`${location.origin}/v1/notes.get`, serData)

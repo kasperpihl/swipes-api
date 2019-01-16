@@ -12,7 +12,7 @@ import devConf from './configureStore.dev';
 
 const rootReducer = combineReducers({
   ...coreReducers,
-  ...reducers,
+  ...reducers
 });
 
 let config = {
@@ -22,8 +22,8 @@ let config = {
     transforms: [immutableTransform()],
     whitelist: ['navigation', 'auth'],
     key: 'root',
-    storage,
-  },
+    storage
+  }
 };
 
 if (process.env.NODE_ENV !== 'production') {
@@ -42,6 +42,6 @@ export default function configureStore(preloadedState = {}) {
 
   return {
     persistor,
-    store,
+    store
   };
 }

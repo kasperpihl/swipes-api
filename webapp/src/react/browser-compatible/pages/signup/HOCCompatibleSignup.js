@@ -2,7 +2,8 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 import request from 'swipes-core-js/utils/request';
-import { setupLoading, getURLParameter } from 'swipes-core-js/classes/utils';
+import { setupLoading } from 'swipes-core-js/classes/utils';
+import urlGetParameter from 'src/utils/url/urlGetParameter';
 import { fromJS, Map } from 'immutable';
 import CompatibleSignup from './CompatibleSignup';
 import CompatibleCard from 'src/react/browser-compatible/components/card/CompatibleCard';
@@ -20,19 +21,18 @@ export default class extends PureComponent {
     super(props);
     this.state = {
       formData: Map(),
-      invitationToken: getURLParameter('invitation_token')
+      invitationToken: urlGetParameter('invitation_token')
     };
 
     setupLoading(this);
   }
   componentWillMount() {
     window.analytics.sendEvent('Signup opened', {});
-    const { request } = this.props;
     const { formData, invitationToken } = this.state;
     if (invitationToken) {
       this.setLoading('signup');
 
-      request('organizations.getInfoFromInvitationToken', {
+      request('organization.getInfoFromInvitationToken', {
         invitation_token: invitationToken
       }).then(res => {
         if (res && res.ok && res.me && !this._unmounted) {

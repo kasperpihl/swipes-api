@@ -9,13 +9,13 @@ const initialState = fromJS({
   successState: false,
   modals: {
     primary: null,
-    secondary: null,
+    secondary: null
   },
   dragAndDrop: {
     global: [],
     primary: [],
-    secondary: [],
-  },
+    secondary: []
+  }
 });
 
 export default function main(state = initialState, action) {
@@ -53,14 +53,18 @@ export default function main(state = initialState, action) {
     // DragAndDrop
     // ======================================================
     case types.SUBSCRIBE_TO_DROP: {
-      return state.updateIn(['dragAndDrop', payload.target ||'global'], s => s.push({
-        handler: payload.handler,
-        title: payload.title,
-      }));
+      return state.updateIn(['dragAndDrop', payload.target || 'global'], s =>
+        s.push({
+          handler: payload.handler,
+          title: payload.title
+        })
+      );
     }
 
     case types.UNSUBSCRIBE_FROM_DROP: {
-      return state.updateIn(['dragAndDrop', payload.target ||'global'], s => s.filter(o => o.handler !== payload.handler));
+      return state.updateIn(['dragAndDrop', payload.target || 'global'], s =>
+        s.filter(o => o.handler !== payload.handler)
+      );
     }
     // ======================================================
     // Context Menu
@@ -74,7 +78,9 @@ export default function main(state = initialState, action) {
     // Success animation
     // ======================================================
     case types.SUCCESS_GRADIENT: {
-      return state.set('successState', new Date()).set('successColor', payload.color || 'green');
+      return state
+        .set('successState', new Date())
+        .set('successColor', payload.color || 'green');
     }
 
     default:

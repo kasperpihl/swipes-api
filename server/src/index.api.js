@@ -83,7 +83,9 @@ app.use('/v1', endpoints.authed);
 
 // Send 404 if no endpoint was found
 app.use('/v1', (req, res) => {
-  res.sendStatus(404);
+  throw Error('not_found')
+    .code(404)
+    .toClient();
 });
 
 // Error handler

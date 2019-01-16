@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import request from 'swipes-core-js/utils/request';
-import { setupLoading, getURLParameter } from 'swipes-core-js/classes/utils';
+import { setupLoading } from 'swipes-core-js/classes/utils';
+import urlGetParameter from 'src/utils/url/urlGetParameter';
 import SW from './Unsubscribe.swiss';
 
 export default class extends PureComponent {
@@ -9,12 +10,12 @@ export default class extends PureComponent {
     setupLoading(this);
   }
   componentWillMount() {
-    const email = getURLParameter('email');
-    const emailType = getURLParameter('email_type');
+    const email = urlGetParameter('email');
+    const emailType = urlGetParameter('email_type');
     this.setLoading('unsubscribe', 'Unsubscribing...');
     request('users.unsubscribe', {
       email,
-      email_type: emailType,
+      email_type: emailType
     }).then(res => {
       if (res.ok) {
         this.clearLoading(
