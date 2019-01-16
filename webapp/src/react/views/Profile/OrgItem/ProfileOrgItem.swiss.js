@@ -16,5 +16,10 @@ export default styleSheet('ProfileOrgItem', {
   Options: {
     _flex: ['row', 'center', 'center'],
     marginLeft: 'auto'
+  },
+
+  UserAmount: {
+    _el: 'p',
+    _font: ['14px', '18px', '400']
   }
 });

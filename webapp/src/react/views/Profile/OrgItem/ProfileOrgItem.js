@@ -20,10 +20,15 @@ export default class ProfileOrgItem extends PureComponent {
   };
   render() {
     const { organization } = this.props;
+    console.log(organization.toJS());
     return (
       <SW.Wrapper>
         <SW.OrgName>{organization.get('name')}</SW.OrgName>
         <SW.Options>
+          <SW.UserAmount>
+            {organization.get('users').size}{' '}
+            {organization.get('users').size === 1 ? 'user' : 'users'}
+          </SW.UserAmount>
           <Button icon="Delete" onClick={this.openDeleteModal} />
         </SW.Options>
       </SW.Wrapper>
