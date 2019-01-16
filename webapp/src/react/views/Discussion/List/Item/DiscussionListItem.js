@@ -7,7 +7,6 @@ import {
 } from 'swipes-core-js/classes/utils';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as menuActions from 'src/redux/menu/menuActions';
-import * as ca from 'swipes-core-js/actions';
 import SplitImage from 'src/react/components/SplitImage/SplitImage';
 import Attachment from 'src/react/components/attachment/Attachment';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
@@ -21,8 +20,7 @@ import SW from './DiscussionListItem.swiss';
   }),
   {
     contextMenu: mainActions.contextMenu,
-    confirm: menuActions.confirm,
-    request: ca.api.request
+    confirm: menuActions.confirm
   }
 )
 export default class DiscussionListItem extends PureComponent {

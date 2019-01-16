@@ -6,16 +6,15 @@ import Loader from 'src/react/components/loaders/Loader';
 import SWView from 'src/react/app/view-controller/SWView';
 import CardHeader from 'src/react/components/CardHeader/CardHeader';
 import * as mainActions from 'src/redux/main/mainActions';
-import * as ca from 'swipes-core-js/actions';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import * as Files from './files';
 import SW from './Preview.swiss';
+import request from 'swipes-core-js/utils/request';
 
 @navWrapper
 @connect(
   null,
   {
-    request: ca.api.request,
     browser: mainActions.browser
   }
 )
@@ -96,7 +95,6 @@ export default class Preview extends PureComponent {
     return Comp[1];
   }
   fetch(params) {
-    const { request } = this.props;
     let endpoint = 'find.preview';
     if (typeof params === 'string') {
       endpoint = 'links.preview';

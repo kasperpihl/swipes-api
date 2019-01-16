@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
-import * as ca from 'swipes-core-js/actions';
 import DiscussionListItem from './Item/DiscussionListItem';
 import PaginationScrollToMore from 'src/react/components/pagination/PaginationScrollToMore';
 import { withOptimist } from 'react-optimist';
@@ -10,18 +9,14 @@ import Button from 'src/react/components/button/Button';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import DiscussionComposer from 'src/react/views/Discussion/Composer/DiscussionComposer';
 import SW from './DiscussionList.swiss';
+import request from 'swipes-core-js/utils/request';
 
 @navWrapper
 @withOptimist
-@connect(
-  state => ({
-    counter: state.counter.get('discussion'),
-    myId: state.me.get('id'),
-  }),
-  {
-    apiRequest: ca.api.request,
-  }
-)
+@connect(state => ({
+  counter: state.counter.get('discussion'),
+  myId: state.me.get('id')
+}))
 export default class DiscussionList extends PureComponent {
   constructor(props) {
     super(props);
@@ -35,16 +30,16 @@ export default class DiscussionList extends PureComponent {
       position: 'center',
       props: {
         context,
-        taggedUsers,
-      },
+        taggedUsers
+      }
     });
   };
   onInitialLoad = () => {
-    const { tabIndex, apiRequest, counter } = this.props;
+    const { tabIndex, counter } = this.props;
     if (tabIndex === 0 && counter && counter.size) {
-      apiRequest('me.clearCounter', {
+      request('me.clearCounter', {
         type: 'discussion',
-        cleared_at: counter.first().get('ts'),
+        cleared_at: counter.first().get('ts')
       });
     }
   };
@@ -56,14 +51,10 @@ export default class DiscussionList extends PureComponent {
     if (!results || results.size === 0) {
       return (
         <SW.EmptyState>
-          <SW.Label>
-          There’s nothing here, yet.
-          </SW.Label>
-          <Button
-            title="Start a new discussion"
-            onClick={this.onDiscuss} />
+          <SW.Label>There’s nothing here, yet.</SW.Label>
+          <Button title="Start a new discussion" onClick={this.onDiscuss} />
         </SW.EmptyState>
-      )
+      );
     }
 
     if (results && results.size) {
@@ -75,7 +66,7 @@ export default class DiscussionList extends PureComponent {
     }, 0);
 
     return (results || fromJS([]))
-      .map((item) => {
+      .map(item => {
         const selected = optimist.get('discussSelectedId') === item.get('id');
         let siblingToSelectedItem = false;
 
@@ -117,13 +108,13 @@ export default class DiscussionList extends PureComponent {
         request={{
           body: { type },
           url: 'discussion.list',
-          resPath: 'discussions',
+          resPath: 'discussions'
         }}
         onInitialLoad={this.onInitialLoad}
         cache={{
           path: 'discussion',
           filter,
-          orderBy: '-last_comment_at',
+          orderBy: '-last_comment_at'
         }}
       >
         {pagination => (

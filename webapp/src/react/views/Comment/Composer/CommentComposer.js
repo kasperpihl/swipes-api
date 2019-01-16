@@ -5,12 +5,12 @@ import { setupCachedCallback } from 'react-delegate';
 import { attachmentIconForService } from 'swipes-core-js/classes/utils';
 import AutoCompleteInput from 'src/react/components/auto-complete-input/AutoCompleteInput';
 import * as linkActions from 'src/redux/link/linkActions';
-import * as ca from 'swipes-core-js/actions';
 import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
 import AttachButton from 'src/react/components/attach-button/AttachButton';
 import editorStateToPlainMention from 'src/utils/draft-js/editorStateToPlainMention';
 import Attachment from 'src/react/components/attachment/Attachment';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
+import request from 'swipes-core-js/utils/request';
 
 import SW from './CommentComposer.swiss';
 
@@ -20,7 +20,6 @@ import SW from './CommentComposer.swiss';
     myId: state.me.get('id')
   }),
   {
-    request: ca.api.request,
     preview: linkActions.preview
   }
 )
@@ -51,7 +50,7 @@ export default class CommentComposer extends PureComponent {
   };
   onAddComment = () => {
     const { attachments } = this.state;
-    const { addComment, request, discussionId } = this.props;
+    const { addComment, discussionId } = this.props;
     const message = editorStateToPlainMention(this.editorState);
     if (!message.length) {
       return;

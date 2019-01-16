@@ -1,8 +1,7 @@
 // Account
-// import AccountList from './account/account-list/HOCAccountList';
-// import Billing from './account/billing/HOCBilling';
+// import Billing from './Billing/Billing';
 // import Browser from './Browser/Browser';
-// import Organization from './account/organization/HOCOrganization';
+// import Organization from './Organization/Organization';
 // import Discuss from './Discuss/Discuss';
 // import DiscussionComposer from './Discussion/Composer/DiscussionComposer';
 // import DiscussionOverview from './Discussion/Overview/HOCDiscussionOverview';
@@ -15,7 +14,6 @@ import ProjectOverview from './Project/Overview/ProjectOverview';
 // import Tester from './Tester/Tester';
 
 export {
-  // AccountList,
   // Billing,
   // Browser,
   // Discuss,

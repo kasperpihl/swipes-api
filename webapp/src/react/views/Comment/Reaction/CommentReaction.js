@@ -1,19 +1,21 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
-import * as ca from 'swipes-core-js/actions';
 import { withOptimist } from 'react-optimist';
+import request from 'swipes-core-js/utils/request';
 import AssigneeTooltip from 'src/react/components/assigning/AssigneeTooltip';
 import SW from './CommentReaction.swiss';
 
 @withOptimist
-@connect(state => ({
-  myId: state.me.get('id'),
-}), {
-  successGradient: mainActions.successGradient,
-  tooltip: mainActions.tooltip,
-  request: ca.api.request,
-})
+@connect(
+  state => ({
+    myId: state.me.get('id')
+  }),
+  {
+    successGradient: mainActions.successGradient,
+    tooltip: mainActions.tooltip
+  }
+)
 export default class CommentReaction extends PureComponent {
   constructor(props) {
     super(props);
@@ -24,46 +26,40 @@ export default class CommentReaction extends PureComponent {
     this.size = this.props.reactions.size;
   }
   componentWillReceiveProps(nextProps) {
-    if(nextProps.reactions !== this.props.reactions) {
+    if (nextProps.reactions !== this.props.reactions) {
       this.size = nextProps.reactions.size;
     }
   }
   componentWillUnmount() {
     clearTimeout(this.tooltipDelay);
   }
-  doILike = () => {
-    const { optimist, reactions, myId } = this.props;
+  doILike = () => {
+    const { optimist, reactions, myId } = this.props;
     return optimist.get('like', !!reactions.get(myId));
-  }
+  };
   onReaction = () => {
-    const {
-      optimist,
-      commentId,
-      request,
-      successGradient,
-    } = this.props;
+    const { optimist, commentId, successGradient } = this.props;
 
     successGradient('red');
     optimist.set({
       key: 'like',
       value: !this.doILike(),
-      handler: (next) => {
+      handler: next => {
         request('comment.react', {
           reaction: this.doILike() ? 'like' : null,
-          comment_id: commentId,
-        }).then((res) => {
+          comment_id: commentId
+        }).then(res => {
           next();
           if (res.ok) {
             window.analytics.sendEvent('Reaction added', {
-              Where: commentId ? 'Comment' : 'Post',
+              Where: commentId ? 'Comment' : 'Post'
             });
           }
         });
       }
     });
-
-  }
-  onEnter = (e) => {
+  };
+  onEnter = e => {
     if (!this.size) {
       return;
     }
@@ -73,45 +69,46 @@ export default class CommentReaction extends PureComponent {
       const { tooltip, reactions } = this.props;
       const position = 'top';
       const userIds = reactions.keySeq().toArray();
-      
 
       const data = {
         component: AssigneeTooltip,
         props: {
-          assignees: userIds,
+          assignees: userIds
         },
         options: {
           boundingRect: target,
-          position,
-        },
+          position
+        }
       };
 
       tooltip(data);
     }, 200);
-  }
+  };
   onLeave = () => {
     const { tooltip } = this.props;
 
     clearTimeout(this.tooltipDelay);
     tooltip(null);
-  }
+  };
   renderButton() {
     const { alignRight } = this.props;
 
     return (
-      <SW.HeartButton alignRight={!!alignRight} className="heart-button" onClick={this.onReaction}>
-        <SW.HeartSvg icon="Heart" liked={this.doILike()}/>
+      <SW.HeartButton
+        alignRight={!!alignRight}
+        className="heart-button"
+        onClick={this.onReaction}
+      >
+        <SW.HeartSvg icon="Heart" liked={this.doILike()} />
       </SW.HeartButton>
-    )
+    );
   }
   renderString() {
     return (
-      <SW.LikeString
-        show={!!this.size}
-        liked={this.doILike()}>
+      <SW.LikeString show={!!this.size} liked={this.doILike()}>
         {this.size}
       </SW.LikeString>
-    )
+    );
   }
 
   render() {

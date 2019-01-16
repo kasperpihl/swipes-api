@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import NoteEditor from 'src/react/components/note-editor/NoteEditor';
 import SWView from 'src/react/app/view-controller/SWView';
-import HOCDiscussButton from 'src/react/components/discuss-button/HOCDiscussButton';
 import CardHeader from 'src/react/components/CardHeader/CardHeader';
 import TimeAgo from 'swipes-core-js/components/TimeAgo';
 import { convertToRaw, EditorState } from 'draft-js';
@@ -215,12 +214,6 @@ export default class SideNote extends PureComponent {
       <SW.Header>
         <CardHeader title={title} target={target} subtitle={subtitle}>
           {buttonHtml}
-          <HOCDiscussButton
-            context={{
-              id: note.get('id'),
-              title
-            }}
-          />
         </CardHeader>
       </SW.Header>
     );

@@ -8,13 +8,13 @@ import { connect } from 'react-redux';
 import * as menuActions from 'src/redux/menu/menuActions';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
-import * as ca from 'swipes-core-js/actions';
 import SW from './DiscussionHeader.swiss';
 import Button from 'src/react/components/button/Button';
 import Attachment from 'src/react/components/attachment/Attachment';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import CardHeader from 'src/react/components/CardHeader/CardHeader';
 import AssigneeTooltip from 'src/react/components/assigning/AssigneeTooltip';
+import request from 'swipes-core-js/utils/request';
 
 @navWrapper
 @connect(
@@ -24,8 +24,7 @@ import AssigneeTooltip from 'src/react/components/assigning/AssigneeTooltip';
   {
     tooltip: mainActions.tooltip,
     inputMenu: menuActions.input,
-    confirm: menuActions.confirm,
-    request: ca.api.request
+    confirm: menuActions.confirm
   }
 )
 export default class DiscussionHeader extends PureComponent {
@@ -56,7 +55,7 @@ export default class DiscussionHeader extends PureComponent {
     tooltip(null);
   };
   onTitleClick = e => {
-    const { inputMenu, discussion, request } = this.props;
+    const { inputMenu, discussion } = this.props;
 
     inputMenu(
       {
@@ -76,7 +75,7 @@ export default class DiscussionHeader extends PureComponent {
     );
   };
   onArchive(options) {
-    const { discussion, confirm, request } = this.props;
+    const { discussion, confirm } = this.props;
     confirm(
       Object.assign({}, options, {
         title: 'Delete discussion',
@@ -105,7 +104,7 @@ export default class DiscussionHeader extends PureComponent {
     openSecondary(navForContext(discussion.get('context')));
   };
   onFollowClick = () => {
-    const { request, myId, discussion } = this.props;
+    const { myId, discussion } = this.props;
 
     this.setLoading('following');
     let endpoint = 'discussion.follow';
