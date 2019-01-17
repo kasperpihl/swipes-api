@@ -9,10 +9,10 @@ export default class ProfileOrgDelete extends PureComponent {
 
     setupLoading(this);
   }
-  handleDeleteCached = org => {
+  handleDeleteCached = orgId => {
     this.setLoading('deleteOrg');
     request('organization.delete', {
-      organization_id: org
+      organization_id: orgId
     }).then(res => {
       if (res && res.ok) {
         this.clearLoading('deleteOrg', 'Success', 1500, this.props.hideModal);

@@ -21,13 +21,8 @@ export default class ProfileOrgItem extends PureComponent {
       title: 'Organization',
       props: {
         organizationId: organization.get('organization_id'),
-        organizationName: organization.get('name'),
-        ownerId: organization.get('owner_id'),
-        admin: organization.getIn(['users', me.get('user_id'), 'admin']),
         activeSubscription: organization.get('stripe_subscription_id'),
-        trialExpired: expired,
-        daysLeft: daysLeft,
-        pendingUsers: organization.get('pending_users')
+        trialExpired: expired
       }
     });
   };

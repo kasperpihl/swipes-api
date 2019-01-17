@@ -7,7 +7,8 @@ export default styleSheet('ProfileNameChange', {
     _flex: ['column', 'flex-start', 'flex-start'],
     margin: '0 auto',
     boxShadow: '0 1px 20px 3px rgba(00,37,82, .1)',
-    padding: '24px'
+    padding: '24px',
+    backgroundColor: '$sw5'
   },
 
   Title: {
