@@ -52,6 +52,7 @@ export default endpointCreate(
     }
 
     const inviteToken = tokenCreate('sw-i', {
+      iss: user_id,
       aud: target_email,
       sub: organization_id,
       exp: Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60

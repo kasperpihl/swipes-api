@@ -1,14 +1,14 @@
 import { styleSheet } from 'swiss-react';
 import { Link } from 'react-router-dom';
+import TabBar from 'src/react/components/tab-bar/TabBar';
 
-export default styleSheet('SignUp', {
+export default styleSheet('Authentication', {
   Wrapper: {
     paddingTop: '30px'
   },
 
   Form: {
     _el: 'form',
-    marginTop: '40px',
     color: '$sw2',
 
     '@media $max600': {
@@ -19,27 +19,13 @@ export default styleSheet('SignUp', {
       marginTop: '30px'
     }
   },
-
-  Illustration: {
-    _size: ['50%', 'auto'],
-    marginLeft: '50%',
-    transform: 'translateX(-50%)'
+  StyledTabBar: {
+    _el: TabBar,
+    marginTop: '24px'
   },
-
-  Loader: {
-    _widthSpecifications: ['initial', '100%'],
-    margin: '0 auto',
-
-    '& img': {
-      _widthSpecifications: ['initial', '100%'],
-      left: '50%',
-      transform: 'translateX(-50% !important)'
-    }
-  },
-
   SubmitWrapper: {
     _size: ['100%', 'auto'],
-    _flex: ['column', 'left', 'center'],
+    _flex: ['row', 'left', 'center'],
     paddingTop: '24px'
   },
 
@@ -53,7 +39,7 @@ export default styleSheet('SignUp', {
 
   Switch: {
     _font: ['12px', '18px', '500'],
-    // padding: '0 15px',
+    padding: '0 12px',
     color: '$sw2',
 
     '& a': {
@@ -73,6 +59,7 @@ export default styleSheet('SignUp', {
   Footer: {
     _font: ['12px', '18px', '500'],
     marginTop: '30px',
+    textAlign: 'left',
     color: '$sw2',
 
     '& a': {
@@ -91,13 +78,12 @@ export default styleSheet('SignUp', {
     _size: ['100%', '45px'],
     _font: ['15px', '25px'],
     marginTop: '15px',
-    color: '$sw2',
+    color: '$sw1',
     transition: '.2s ease',
     borderBottom: '1px solid $sw3',
     '&:focus': {
       borderBottom: '1px solid $blue',
-      transition: '.2s ease',
-      color: '$sw1'
+      transition: '.2s ease'
     }
   }
 });

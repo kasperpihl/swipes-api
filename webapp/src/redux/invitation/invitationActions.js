@@ -9,12 +9,17 @@ export const fetch = invitationToken => dispatch => {
       dispatch({
         type: types.INVITATION_SET_ORGANIZATION,
         payload: {
-          organization: res.organization
+          org: res.organization
         }
       });
     } else {
       localStorage.removeItem('invitation_token');
-      dispatch({ type: types.INVITATION_DECLINE });
+      dispatch({ type: types.INVITATION_CLEAR });
     }
   });
+};
+
+export const clear = () => {
+  localStorage.removeItem('invitation_token');
+  return { type: types.INVITATION_CLEAR };
 };

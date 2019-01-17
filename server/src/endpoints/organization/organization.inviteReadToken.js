@@ -22,7 +22,12 @@ export default endpointCreate(
       throw Error('invalid_token');
     }
 
-    const { sub: organization_id, aud: email, exp } = parsedToken.tokenContent;
+    const {
+      sub: organization_id,
+      aud: email,
+      exp,
+      iss: invited_by_user_id
+    } = parsedToken.tokenContent;
 
     const orgRes = await query(
       `
@@ -40,6 +45,8 @@ export default endpointCreate(
     }
     delete org.pending_users;
     org.invitation_token = invitation_token;
+    org.invited_by_user_id = invited_by_user_id;
+
     // Create response data.
     res.locals.output = { organization: org };
   }

@@ -8,8 +8,8 @@ import {
   Redirect as RedirectDOM
 } from 'react-router-dom';
 import Unsubscribe from 'src/react/browser-compatible/pages/unsubscribe/Unsubscribe';
-import HOCCompatibleLogin from 'src/react/browser-compatible/pages/login/HOCCompatibleLogin';
-import CompatibleSignup from 'src/react/browser-compatible/pages/signup/CompatibleSignup';
+import Authentication from 'src/react/views/Authentication/Authentication';
+
 import CompatibleConfirm from 'src/react/browser-compatible/pages/confirm/CompatibleConfirm';
 import SwipesLoader from 'src/react/components/loaders/SwipesLoader';
 import Redirect from 'src/react/app/redirect/Redirect';
@@ -80,8 +80,8 @@ export default class Root extends PureComponent {
         />
         ,
         <Route path="/unsubscribe" component={Unsubscribe} />,
-        <Route path="/login" component={HOCCompatibleLogin} />,
-        <Route path="/register" component={CompatibleSignup} />,
+        <Route path="/login" component={Authentication} />,
+        <Route path="/register" component={Authentication} />,
         <Route path="/confirm" component={CompatibleConfirm} />
       </Switch>
     );

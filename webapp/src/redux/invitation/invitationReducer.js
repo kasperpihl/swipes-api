@@ -12,7 +12,7 @@ export default function invitationReducer(state = initialState, action) {
     case types.INVITATION_SET_ORGANIZATION: {
       return initialState.set('invitedToOrg', fromJS(action.payload.org));
     }
-    case types.INVITATION_DECLINE: {
+    case types.INVITATION_CLEAR: {
       return initialState;
     }
     default:

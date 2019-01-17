@@ -36,7 +36,6 @@ export default class Redirect extends PureComponent {
     // Reset if any
     const { location } = this.props;
     const { goToUrl, token, isHydrated, setUrl, lastConnect } = this.props;
-    return;
     if (goToUrl && location.pathname === (goToUrl.to.pathname || goToUrl.to)) {
       setUrl(null);
     }
