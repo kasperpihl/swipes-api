@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { injectStripe } from 'react-stripe-elements';
 import { setupDelegate } from 'react-delegate';
-import Button from 'src/react/components/button/Button';
+import Button from 'src/react/components/Button/Button';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import CardSection from './CardSection';
 import SW from './ChangeCardDetailsModal.swiss';

@@ -1,5 +1,5 @@
 import { styleSheet } from 'swiss-react';
-import Button from 'src/react/components/button/Button';
+import Button from 'src/react/components/Button/Button';
 
 export default styleSheet('ProfileOrgDelete', {
   Wrapper: {

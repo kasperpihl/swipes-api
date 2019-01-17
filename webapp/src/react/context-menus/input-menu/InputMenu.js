@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Button from 'src/react/components/button/Button';
+import Button from 'src/react/components/Button/Button';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import SW from './InputMenu.swiss';
 

@@ -7,7 +7,7 @@ import * as noteActions from 'swipes-core-js/redux/note/noteActions';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import request from 'swipes-core-js/utils/request';
 import { setupDelegate } from 'react-delegate';
-import Button from 'src/react/components/button/Button';
+import Button from 'src/react/components/Button/Button';
 import { fromJS } from 'immutable';
 import { EditorState, convertToRaw } from 'draft-js';
 import SW from './AttachButton.swiss';

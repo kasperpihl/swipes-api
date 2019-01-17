@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
-import Button from 'src/react/components/button/Button';
+import Button from 'src/react/components/Button/Button';
 import SW from './ChangeBillingPlan.swiss';
 
 class ChangeBillingPlan extends PureComponent {

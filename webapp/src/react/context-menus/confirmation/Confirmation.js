@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { setupCachedCallback } from 'react-delegate';
-import Button from 'src/react/components/button/Button';
+import Button from 'src/react/components/Button/Button';
 import SW from './Confirmation.swiss';
 
 class Confirmation extends Component {

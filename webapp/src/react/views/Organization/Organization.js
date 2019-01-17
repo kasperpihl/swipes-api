@@ -3,7 +3,7 @@ import { setupDelegate } from 'react-delegate';
 import SWView from 'src/react/app/view-controller/SWView';
 import CardHeader from 'src/react/components/CardHeader/CardHeader';
 import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
-import Button from 'src/react/components/button/Button';
+import Button from 'src/react/components/Button/Button';
 import TabBar from 'src/react/components/tab-bar/TabBar';
 import SW from './Organization.swiss';
 

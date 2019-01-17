@@ -4,7 +4,7 @@ import { bindAll } from 'swipes-core-js/classes/utils';
 import { setupCachedCallback } from 'react-delegate';
 import CardHeader from 'src/react/components/CardHeader/CardHeader';
 import SWView from 'src/react/app/view-controller/SWView';
-import Button from 'src/react/components/button/Button';
+import Button from 'src/react/components/Button/Button';
 import SW from './Profile.swiss';
 
 class Profile extends PureComponent {

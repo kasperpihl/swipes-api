@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
 import { convertedUsers } from './testusers';
 import AssigneeContextMenu from 'src/react/context-menus/assignee-component/AssigneeContextMenu';
-import Button from 'src/react/components/button/Button.js'
+import Button from 'src/react/components/Button/Button.js'
 
 @connect(null, {
   contextMenu: mainActions.contextMenu,

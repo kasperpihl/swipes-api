@@ -5,7 +5,7 @@ import DiscussionListItem from './Item/DiscussionListItem';
 import PaginationScrollToMore from 'src/react/components/pagination/PaginationScrollToMore';
 import { withOptimist } from 'react-optimist';
 import PaginationProvider from 'swipes-core-js/components/pagination/PaginationProvider';
-import Button from 'src/react/components/button/Button';
+import Button from 'src/react/components/Button/Button';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import DiscussionComposer from 'src/react/views/Discussion/Composer/DiscussionComposer';
 import SW from './DiscussionList.swiss';

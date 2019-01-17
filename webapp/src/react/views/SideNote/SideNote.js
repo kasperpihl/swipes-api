@@ -6,7 +6,7 @@ import SWView from 'src/react/app/view-controller/SWView';
 import CardHeader from 'src/react/components/CardHeader/CardHeader';
 import TimeAgo from 'swipes-core-js/components/TimeAgo';
 import { convertToRaw, EditorState } from 'draft-js';
-import Button from 'src/react/components/button/Button';
+import Button from 'src/react/components/Button/Button';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import getDiffServerClient from 'src/utils/draft-js/getDiffServerClient';
 import { setupLoading } from 'swipes-core-js/classes/utils';

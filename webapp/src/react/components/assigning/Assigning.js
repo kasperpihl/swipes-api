@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import { List } from 'immutable';
-import Button from 'src/react/components/button/Button';
+import Button from 'src/react/components/Button/Button';
 import AssigneeImage from './AssigneeImage';
 import AssigneeTooltip from './AssigneeTooltip';
 import SW from './Assigning.swiss';

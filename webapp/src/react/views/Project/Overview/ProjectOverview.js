@@ -5,7 +5,7 @@ import ProjectProvider from 'swipes-core-js/components/project/ProjectProvider';
 import ProjectStateManager from 'swipes-core-js/classes/ProjectStateManager';
 import ProjectTask from 'src/react/views/Project/Task/ProjectTask';
 import StepSlider from 'src/react/components/StepSlider/StepSlider';
-import Button from 'src/react/components/button/Button';
+import Button from 'src/react/components/Button/Button';
 import Dropdown from 'src/react/components/dropdown/Dropdown';
 
 @withRequests(

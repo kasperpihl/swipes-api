@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
 import { setupDelegate } from 'react-delegate';
-import Button from 'src/react/components/button/Button';
+import Button from 'src/react/components/Button/Button';
 
 @connect(null, {
   contextMenu: mainActions.contextMenu,

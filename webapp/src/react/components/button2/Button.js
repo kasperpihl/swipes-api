@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import SW from './Button.swiss';
 
-export default class extends PureComponent {
+export default class Button extends PureComponent {
   renderIcon(status) {
     let { icon } = this.props;
     if (!icon && status === '') {

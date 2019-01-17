@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { setupCachedCallback, bindAll } from 'swipes-core-js/classes/utils';
 import getDiffServerClient from 'src/utils/draft-js/getDiffServerClient';
-import Button from 'src/react/components/button/Button';
+import Button from 'src/react/components/Button/Button';
 import {
   convertToRaw,
   convertFromRaw,

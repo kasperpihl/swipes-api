@@ -9,7 +9,7 @@ import * as menuActions from 'src/redux/menu/menuActions';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 import SW from './DiscussionHeader.swiss';
-import Button from 'src/react/components/button/Button';
+import Button from 'src/react/components/Button/Button';
 import Attachment from 'src/react/components/attachment/Attachment';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import CardHeader from 'src/react/components/CardHeader/CardHeader';

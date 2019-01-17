@@ -6,7 +6,7 @@ import ProfileOrgCreate from 'src/react/views/Profile/OrgCreate/ProfileOrgCreate
 import * as menuActions from 'src/redux/menu/menuActions';
 
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-import Button from 'src/react/components/button/Button';
+import Button from 'src/react/components/Button/Button';
 import SW from './Profile.swiss';
 import SWView from 'src/react/app/view-controller/SWView';
 

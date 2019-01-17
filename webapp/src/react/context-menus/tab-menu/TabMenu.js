@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { setupDelegate } from 'react-delegate';
 import { bindAll } from 'swipes-core-js/classes/utils';
 import randomString from 'swipes-core-js/utils/randomString';
-import Button from 'src/react/components/button/Button';
+import Button from 'src/react/components/Button/Button';
 import TabBar from 'src/react/components/tab-bar/TabBar';
 import ResultList from './ResultList';
 import SW from './TabMenu.swiss';

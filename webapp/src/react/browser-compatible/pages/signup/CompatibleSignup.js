@@ -1,21 +1,43 @@
 import React, { PureComponent } from 'react';
-import { setupDelegate } from 'react-delegate';
+import { connect } from 'react-redux';
+import * as navigationActions from 'src/redux/navigation/navigationActions';
+import { Map } from 'immutable';
 import CompatibleHeader from 'src/react/browser-compatible/components/header/CompatibleHeader';
-import CompatibleButton from 'src/react/browser-compatible/components/button/CompatibleButton';
+import Button from 'src/react/components/Button/Button';
+import CompatibleCard from 'src/react/browser-compatible/components/card/CompatibleCard';
 import SW from './CompatibleSignup.swiss';
 
+@connect(
+  state => ({
+    invitedToOrg: state.invitation.get('invitedToOrg')
+  }),
+  {
+    setUrl: navigationActions.url
+  }
+)
 class CompatibleSignup extends PureComponent {
+  state = {
+    formData: Map()
+  };
   constructor(props) {
     super(props);
-    this.state = {};
-    setupDelegate(this, 'onChange', 'onSignup', 'onNavigateToLogin');
-    this.handleKeyDown = this.handleKeyDown.bind(this);
   }
-  handleKeyDown(e) {
+  handleChangeCached = key => {
+    this.changeCache = this.changeCache || {};
+    if (!this.changeCache[key]) {
+      this.changeCache[key] = e => {
+        this.setState({
+          formData: this.state.formData.set(key, e.target.value)
+        });
+      };
+    }
+    return this.changeCache[key];
+  };
+  handleKeyDown = e => {
     if (e.keyCode === 13) {
       this.onSignup();
     }
-  }
+  };
   getSubtitle() {
     const { organization } = this.props;
 
@@ -34,69 +56,21 @@ class CompatibleSignup extends PureComponent {
 
     return `Join the ${organization.get('name')}-team`;
   }
-  renderHeader() {
-    const { inviter } = this.props;
-
-    return [
-      <CompatibleHeader
-        center
-        title={this.generateTitle()}
-        assignee={inviter}
-        key="title"
-      />,
-      <SW.Illustration icon="ESMilestoneAchieved" key="illustration" />,
-      <CompatibleHeader subtitle={this.getSubtitle()} key="subtitle" />
-    ];
-  }
-  renderInputField(key, type, placeholder, props) {
-    const value = this.props.formData.get(key) || '';
-
-    return (
-      <SW.Input
-        type={type}
-        placeholder={placeholder}
-        onKeyDown={this.onKeyDown}
-        value={value}
-        onChange={e => {
-          this.onChange(key, e.target.value);
-        }}
-      />
-    );
-  }
-  renderForm() {
-    return (
-      <SW.Form>
-        {this.renderInputField('email', 'email', 'Email', {
-          autoFocus: true,
-          autoComplete: 'email'
-        })}
-        {this.renderInputField('firstName', 'text', 'First name', {
-          autoComplete: 'given-name'
-        })}
-        {this.renderInputField('lastName', 'text', 'Last name', {
-          autoComplete: 'family-name'
-        })}
-        {this.renderInputField('password', 'password', 'Password', {
-          onKeyDown: this.handleKeyDown
-        })}
-      </SW.Form>
-    );
-  }
   renderFormError() {
-    const { getLoading } = this.props;
-
-    return <SW.ErrorLabel>{getLoading('signupButton').error}</SW.ErrorLabel>;
+    return (
+      <SW.ErrorLabel>{this.getLoading('signupButton').error}</SW.ErrorLabel>
+    );
   }
   renderFooter() {
-    const { inviter, isLoading, getLoading } = this.props;
+    const { inviter, isLoading } = this.props;
 
     return (
       <SW.Footer>
-        {getLoading('signupButton').error && this.renderFormError()}
-        <CompatibleButton
+        {this.getLoading('signupButton').error && this.renderFormError()}
+        <Button
           title="Sign up"
           onClick={this.onSignup}
-          {...getLoading('signupButton')}
+          {...this.getLoading('signupButton')}
         />
         <SW.Switch>
           Already have an account?{' '}
@@ -113,11 +87,43 @@ class CompatibleSignup extends PureComponent {
   }
   render() {
     return (
-      <SW.Wrapper>
-        {this.renderHeader()}
-        {this.renderForm()}
-        {this.renderFooter()}
-      </SW.Wrapper>
+      <CompatibleCard>
+        <SW.Wrapper>
+          <CompatibleHeader center title={this.generateTitle()} />
+          <SW.Form>
+            <SW.Input
+              value={this.state.formData.get('email') || ''}
+              onChange={this.handleChangeCached('email')}
+              autoFocus
+              autoComplete="email"
+              placeHolder="Email"
+              type="email"
+            />
+            <SW.Input
+              value={this.state.formData.get('firstName') || ''}
+              onChange={this.handleChangeCached('firstName')}
+              autoComplete="given-name"
+              placeHolder="First name"
+              type="text"
+            />
+            <SW.Input
+              value={this.state.formData.get('lastName') || ''}
+              onChange={this.handleChangeCached('lastName')}
+              autoComplete="family-name"
+              placeHolder="Last name"
+              type="type"
+            />
+            <SW.Input
+              value={this.state.formData.get('password') || ''}
+              onChange={this.handleChangeCached('password')}
+              onKeyDown={this.handleKeyDown}
+              placeHolder="Password"
+              type="password"
+            />
+          </SW.Form>
+          {this.renderFooter()}
+        </SW.Wrapper>
+      </CompatibleCard>
     );
   }
 }

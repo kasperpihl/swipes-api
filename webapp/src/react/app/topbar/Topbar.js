@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { setupCachedCallback } from 'react-delegate';
 
 import Icon from 'src/react/icons/Icon';
-import Button from 'src/react/components/button/Button';
+import Button from 'src/react/components/Button/Button';
 import './topbar.scss';
 
 @connect(state => ({

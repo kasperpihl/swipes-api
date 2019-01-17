@@ -1,6 +1,6 @@
 import { styleSheet } from 'swiss-react';
 import Icon from 'src/react/icons/Icon';
-import Button from 'src/react/components/button/Button';
+import Button from 'src/react/components/Button/Button';
 
 export default styleSheet('AccountList', {
   Wrapper: {

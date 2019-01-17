@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
-import Button from 'src/react/components/button/Button';
+import Button from 'src/react/components/Button/Button';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 import * as views from 'src/react/views';
