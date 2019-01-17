@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import urlGetParameter from 'src/utils/url/urlGetParameter';
-import CompatibleHeader from 'src/react/browser-compatible/components/header/CompatibleHeader';
+import CardHeader from 'src/react/components/CardHeader/CardHeader';
 import request from 'swipes-core-js/utils/request';
 import CompatibleCard from 'src/react/browser-compatible/components/card/CompatibleCard';
 
@@ -38,7 +38,7 @@ export default class extends PureComponent {
     return (
       <CompatibleCard>
         <div style={{ marginTop: '36px' }}>
-          <CompatibleHeader title="confirming your email" subtitle={subtitle} />
+          <CardHeader title="confirming your email" subtitle={subtitle} />
         </div>
       </CompatibleCard>
     );

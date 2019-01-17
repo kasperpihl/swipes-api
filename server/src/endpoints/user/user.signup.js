@@ -9,7 +9,9 @@ import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
 
 const expectedInput = {
   email: string.format('email').require(),
-  password: string.min(1).require()
+  password: string.min(1).require(),
+  first_name: string.min(1).require(),
+  last_name: string.min(1).require()
 };
 
 export default endpointCreate(
@@ -18,7 +20,7 @@ export default endpointCreate(
     type: 'notAuthed'
   },
   async (req, res, next) => {
-    const { password } = res.locals.input;
+    const { password, first_name, last_name } = res.locals.input;
     const passwordSha1 = sha1(password);
     let { email } = res.locals.input;
     let userId;
@@ -48,6 +50,8 @@ export default endpointCreate(
       sqlInsertQuery('users', {
         user_id: userId,
         email,
+        first_name,
+        last_name,
         password: passwordSha1
       }),
       sqlInsertQuery('sessions', {

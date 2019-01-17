@@ -7,9 +7,9 @@ import * as invitationActions from 'src/redux/invitation/invitationActions';
 import { Map } from 'immutable';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import request from 'swipes-core-js/utils/request';
-import CompatibleHeader from 'src/react/browser-compatible/components/header/CompatibleHeader';
-import Button from 'src/react/components/Button/Button';
 import CompatibleCard from 'src/react/browser-compatible/components/card/CompatibleCard';
+import Button from 'src/react/components/Button/Button';
+import CardHeader from 'src/react/components/CardHeader/CardHeader';
 import SW from './Authentication.swiss';
 
 @withRouter
@@ -77,33 +77,21 @@ export default class Authentication extends PureComponent {
 
     request(endpoint, {
       ...formData.toJS()
-    })
-      .then(res => {
-        if (res.ok) {
-          this.clearLoading('authButton');
-          window.analytics.sendEvent(analyticsEvent, {});
-          if (invitedToOrg && invitedToOrg.get('invited_by_user_id')) {
-            window.analytics.sendEvent('Invitation accepted', {
-              distinct_id: invitedToOrg.get('invited_by_user_id')
-              // 'Minutes since invite':
-            });
-          }
-          if (invitedToOrg) {
-            return request('organization.join', {
-              token: invitedToOrg.get('token')
-            });
-          }
-          return Promise.resolve();
-        } else {
-          this.clearLoading('authButton', `!${res.error}`);
-        }
-      })
-      .then(res => {
-        if (res && res.ok) {
-          invitationClear();
-        }
+    }).then(res => {
+      if (res.ok) {
+        this.clearLoading('authButton');
+        window.analytics.sendEvent(analyticsEvent, {});
+        // if (invitedToOrg && invitedToOrg.get('invited_by_user_id')) {
+        //   window.analytics.sendEvent('Invitation accepted', {
+        //     distinct_id: invitedToOrg.get('invited_by_user_id')
+        //     // 'Minutes since invite':
+        //   });
+        // }
         setUrl('/');
-      });
+      } else {
+        this.clearLoading('authButton', `!${res.error}`);
+      }
+    });
   };
   handleChangeCached = key => {
     this.changeCache = this.changeCache || {};
@@ -209,10 +197,7 @@ export default class Authentication extends PureComponent {
     return (
       <CompatibleCard>
         <SW.Wrapper>
-          <CompatibleHeader
-            title="Swipes Workspace"
-            subtitle={this.getSubtitle()}
-          />
+          <CardHeader title="Swipes Workspace" subtitle={this.getSubtitle()} />
           <SW.StyledTabBar
             delegate={this}
             tabs={['Create account', 'Sign in']}

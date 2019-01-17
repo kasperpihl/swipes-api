@@ -7,7 +7,7 @@ import {
   Switch,
   Redirect as RedirectDOM
 } from 'react-router-dom';
-import Unsubscribe from 'src/react/browser-compatible/pages/unsubscribe/Unsubscribe';
+import Unsubscribe from 'src/react/views/Unsubscribe/Unsubscribe';
 import Authentication from 'src/react/views/Authentication/Authentication';
 
 import CompatibleConfirm from 'src/react/browser-compatible/pages/confirm/CompatibleConfirm';

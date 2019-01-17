@@ -4,6 +4,7 @@ import ProfileHeader from './Header/ProfileHeader';
 import ProfileOrgItem from './OrgItem/ProfileOrgItem';
 import ProfileOrgCreate from 'src/react/views/Profile/OrgCreate/ProfileOrgCreate';
 import * as menuActions from 'src/redux/menu/menuActions';
+import request from 'swipes-core-js/utils/request';
 
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Button from 'src/react/components/Button/Button';
@@ -31,7 +32,9 @@ export default class Profile extends PureComponent {
         message: 'Do you want to log out?'
       },
       i => {
-        i === 1 && request('user.signout');
+        if (i === 1) {
+          request('user.signout');
+        }
       }
     );
   };
