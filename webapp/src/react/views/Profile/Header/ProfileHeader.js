@@ -20,8 +20,7 @@ export default class ProfileHeader extends PureComponent {
 
     setupLoading(this);
   }
-  onImageChange = e => {
-    const { uploadProfilePhoto } = this.props;
+  handleImageChange = e => {
     const file = e.target.files[0];
     if (file) {
       this.setLoading('uploadImage');
@@ -43,57 +42,24 @@ export default class ProfileHeader extends PureComponent {
       position: 'center'
     });
   };
-  handleProfileChange = () => {
-    const { auth } = this.props;
-    const file = e.target.files[0];
-    if (!file) {
-      return;
-    }
-    const formData = new FormData();
-    formData.append('token', auth.get('token'));
-    formData.append('photo', file);
-    this.setLoading('uploadImage');
-    request(
-      {
-        command: 'me.uploadProfilePhoto',
-        formData: true
-      },
-      {
-        photo
-      }
-    ).then(res => {
-      this.clearLoading('uploadImage');
-      if (res.ok) {
-        window.analytics.sendEvent('Profile photo updated', {});
-      }
-    });
-  };
   handleUpload = () => {
     this.imageUpload.click();
   };
-  renderProfileImage() {
-    const { me } = this.props;
-    const initials = `${me.get('first_name').charAt(0)}${me
-      .get('last_name')
-      .charAt(0)}`;
-    const profilePic = undefined;
-
-    return (
-      <SW.ProfileImage>
-        <UserImage userId="me" />
-        <SW.HeaderFileInput
-          className="fileInput"
-          onChange={this.onImageChange}
-          type="file"
-          accept="image/x-png,image/jpeg"
-          innerRef={c => (this.imageUpload = c)}
-        />
-        <SW.ButtonWrapper onClick={this.handleUpload}>
-          <SW.OverlaySVG icon="Plus" />
-        </SW.ButtonWrapper>
-      </SW.ProfileImage>
-    );
-  }
+  renderProfileImage = () => (
+    <SW.ProfileImage>
+      <UserImage userId="me" />
+      <SW.HeaderFileInput
+        className="fileInput"
+        onChange={this.handleImageChange}
+        type="file"
+        accept="image/x-png,image/jpeg"
+        innerRef={c => (this.imageUpload = c)}
+      />
+      <SW.ButtonWrapper onClick={this.handleUpload}>
+        <SW.OverlaySVG icon="Plus" />
+      </SW.ButtonWrapper>
+    </SW.ProfileImage>
+  );
   render() {
     const { me } = this.props;
     const fullName = `${me.get('first_name')} ${me.get('last_name')}`;

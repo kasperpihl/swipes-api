@@ -1,13 +1,13 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import ProfileHeader from './Header/ProfileHeader';
-import ProfileOrgItem from './OrgItem/ProfileOrgItem';
-import ProfileOrgCreate from 'src/react/views/Profile/OrgCreate/ProfileOrgCreate';
+import ProfileHeader from 'src/react/views/Profile/Header/ProfileHeader';
+import ProfileOrgItem from 'src/react/views/Profile/Org/Item/ProfileOrgItem.js';
+import ProfileOrgCreate from 'src/react/views/Profile/Org/Create/ProfileOrgCreate.js';
+import Button from 'src/react/components/Button/Button';
 import * as menuActions from 'src/redux/menu/menuActions';
 import request from 'swipes-core-js/utils/request';
 
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-import Button from 'src/react/components/Button/Button';
 import SW from './Profile.swiss';
 import SWView from 'src/react/app/view-controller/SWView';
 
@@ -21,6 +21,8 @@ import SWView from 'src/react/app/view-controller/SWView';
   }
 )
 export default class Profile extends PureComponent {
+  static sizes = () => [540];
+
   handleLogout = e => {
     const { confirm } = this.props;
 
@@ -51,10 +53,6 @@ export default class Profile extends PureComponent {
     return (
       <SWView header={this.renderHeader()}>
         <SW.Wrapper>
-          <SW.Button
-            title="Create Organization"
-            onClick={this.handleCreateOrganization}
-          />
           {organization
             .map(org => (
               <ProfileOrgItem
@@ -63,7 +61,11 @@ export default class Profile extends PureComponent {
               />
             ))
             .toList()}
-          <Button title="Log out" onClick={this.handleLogout} />
+          <Button
+            title="Create Organization"
+            onClick={this.handleCreateOrganization}
+            rounded
+          />
         </SW.Wrapper>
       </SWView>
     );

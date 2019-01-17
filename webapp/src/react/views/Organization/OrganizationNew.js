@@ -1,9 +1,11 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import ProfileOrgDelete from 'src/react/views/Profile/OrgDelete/ProfileOrgDelete';
+import ProfileOrgDelete from 'src/react/views/Profile/Org/Delete/ProfileOrgDelete.js';
 import OrganizationHeader from 'src/react/views/Organization/Header/OrganizationHeader';
 import OrganizationUser from 'src/react/views/Organization/User/OrganizationUser';
-import TabBar from 'src/react/components/tab-bar/TabBar';
+import OrganizationInviteInput from 'src/react/views/Organization/Invite/Input/OrganizationInviteInput';
+import OrganizationPendingInvites from 'src/react/views/Organization/Invite/PendingInvites/OrganizationPendingInvites';
+
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import SWView from 'src/react/app/view-controller/SWView';
 import request from 'swipes-core-js/utils/request';
@@ -15,12 +17,11 @@ import SW from './OrganizationNew.swiss';
   organization: state.organization.get(props.organizationId)
 }))
 export default class OrganizationNew extends PureComponent {
+  static sizes = () => [540];
   constructor(props) {
     super(props);
 
     this.state = {
-      showPendingInvites: false,
-      emailInputValue: '',
       tabIndex: 0
     };
   }
@@ -44,63 +45,6 @@ export default class OrganizationNew extends PureComponent {
     }
   };
 
-  handleEmailChange = e => {
-    this.setState({ emailInputValue: e.target.value });
-  };
-
-  handleSendInviteCached = email => {
-    const { organization } = this.props;
-
-    request('organization.inviteUser', {
-      organization_id: organization.get('organization_id'),
-      target_email: email
-    });
-  };
-
-  handleRevokeInviteCached = email => {
-    const { organization } = this.props;
-
-    request('organization.inviteRevoke', {
-      organization_id: organization.get('organization_id'),
-      target_email: email
-    });
-  };
-
-  togglePendingInvites = () => {
-    const { showPendingInvites } = this.state;
-    this.setState({ showPendingInvites: !showPendingInvites });
-  };
-
-  handleShowPendingInvites = () => {
-    const { showPendingInvites } = this.state;
-    const { organization } = this.props;
-
-    if (showPendingInvites) {
-      return (
-        <SW.PendingInvites>
-          {organization
-            .get('pending_users')
-
-            .map((ts, email) => (
-              <SW.InviteItem key={email}>
-                <SW.InviteEmail>{email}</SW.InviteEmail>
-                <SW.EmailButton
-                  title="Resend"
-                  onClick={() => this.handleSendInviteCached(email)}
-                />
-                <SW.EmailButton
-                  title="Revoke"
-                  onClick={() => this.handleRevokeInviteCached(email)}
-                />
-              </SW.InviteItem>
-            ))
-            .toList()}
-        </SW.PendingInvites>
-      );
-    }
-    return null;
-  };
-
   renderHeader = () => {
     const {
       organization,
@@ -121,53 +65,9 @@ export default class OrganizationNew extends PureComponent {
     );
   };
 
-  renderInviteInput = () => {
-    const { emailInputValue } = this.state;
-
-    return (
-      <SW.InviteWrapper>
-        <SW.InviteText>Invite others to join</SW.InviteText>
-        <SW.InputWrapper>
-          <SW.EmailInput
-            type="email"
-            placeholder="Email"
-            autoFocus
-            onChange={this.handleEmailChange}
-          />
-          <SW.SendButton
-            title="Send Invite"
-            onClick={() => this.handleSendInviteCached(emailInputValue)}
-          />
-        </SW.InputWrapper>
-      </SW.InviteWrapper>
-    );
-  };
-
-  renderPendingInvites = () => {
-    const { showPendingInvites } = this.state;
-    const { organization } = this.props;
-    const pendingUsersArr = Object.keys(
-      organization.get('pending_users').toJS()
-    );
-
-    return (
-      <SW.PendingInvitesWrapper showInvites={showPendingInvites}>
-        <SW.SectionTitle onClick={this.togglePendingInvites}>
-          <SW.Icon
-            icon="ArrowRightFull"
-            width="24"
-            height="24"
-            showInvites={showPendingInvites}
-          />
-          Pending invitations {pendingUsersArr.length}
-        </SW.SectionTitle>
-      </SW.PendingInvitesWrapper>
-    );
-  };
-
   renderTabBar = () => {
     return (
-      <TabBar
+      <SW.TabBar
         tabs={['Active Users', 'Inactive Users']}
         activeTab={this.state.tabIndex}
         delegate={this}
@@ -197,9 +97,10 @@ export default class OrganizationNew extends PureComponent {
     return (
       <SWView header={this.renderHeader()}>
         <SW.Wrapper>
-          {this.renderInviteInput()}
-          {this.renderPendingInvites()}
-          {this.handleShowPendingInvites()}
+          <OrganizationInviteInput
+            organizationId={organization.get('organization_id')}
+          />
+          <OrganizationPendingInvites organization={organization} />
           {this.renderTabBar()}
           <SW.UsersWrapper>
             {organization
