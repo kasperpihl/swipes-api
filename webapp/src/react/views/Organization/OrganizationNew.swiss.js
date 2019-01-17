@@ -100,6 +100,11 @@ export default styleSheet('OrganizationNew', {
     }
   },
 
+  UsersWrapper: {
+    _size: ['100%', 'auto'],
+    _flex: ['column', 'flex-start', 'flex-start']
+  },
+
   Button: {
     _el: Button,
     border: '1px solid $sw3',

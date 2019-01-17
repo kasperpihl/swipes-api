@@ -40,7 +40,7 @@ export default class UserImage extends PureComponent {
 
     if (photo)
       return (
-        <SW.Wrapper>
+        <SW.Wrapper size={size}>
           <SW.Image
             src={photo.get('192x192')}
             alt={fullName}
@@ -49,7 +49,7 @@ export default class UserImage extends PureComponent {
         </SW.Wrapper>
       );
     return (
-      <SW.Wrapper>
+      <SW.Wrapper size={size}>
         <SW.Initials>
           <SW.Text>{initials}</SW.Text>
         </SW.Initials>

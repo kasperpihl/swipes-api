@@ -5,7 +5,12 @@ export default styleSheet('UserImage', {
     _size: '100%',
     position: 'relative',
     overflow: 'hidden',
-    borderRadius: '50%'
+    borderRadius: '50%',
+
+    'size!=undefined': {
+      width: get => `${get('size')}px`,
+      height: get => `${get('size')}px`
+    }
   },
   Image: {
     _el: 'img',

@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import ProfileOrgDelete from 'src/react/views/Profile/OrgDelete/ProfileOrgDelete';
 import OrganizationHeader from 'src/react/views/Organization/Header/OrganizationHeader';
+import OrganizationUser from 'src/react/views/Organization/User/OrganizationUser';
 import TabBar from 'src/react/components/tab-bar/TabBar';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import SWView from 'src/react/app/view-controller/SWView';
@@ -164,9 +165,7 @@ export default class OrganizationNew extends PureComponent {
     );
   };
 
-  renderUserList = () => {
-    const { organization } = this.props;
-
+  renderTabBar = () => {
     return (
       <TabBar
         tabs={['Active Users', 'Inactive Users']}
@@ -191,7 +190,9 @@ export default class OrganizationNew extends PureComponent {
     return null;
   };
   render() {
-    const { organization } = this.props; // TODO: Remove this when done
+    const { tabIndex } = this.state;
+    const { organization } = this.props;
+    const userStatus = tabIndex === 0 ? 'active' : 'disabled';
 
     return (
       <SWView header={this.renderHeader()}>
@@ -199,8 +200,21 @@ export default class OrganizationNew extends PureComponent {
           {this.renderInviteInput()}
           {this.renderPendingInvites()}
           {this.handleShowPendingInvites()}
-          {this.renderUserList()}
-          {this.renderDeleteButton()}
+          {this.renderTabBar()}
+          <SW.UsersWrapper>
+            {organization
+              .get('users')
+              .filter(u => u.get('status') === userStatus)
+              .map(u => (
+                <OrganizationUser
+                  key={u.get('user_id')}
+                  user={u}
+                  organization={organization}
+                />
+              ))
+              .toList()}
+          </SW.UsersWrapper>
+          {/* {this.renderDeleteButton()} */}
         </SW.Wrapper>
       </SWView>
     );
