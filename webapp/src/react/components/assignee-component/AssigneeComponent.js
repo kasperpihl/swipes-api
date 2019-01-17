@@ -3,17 +3,20 @@ import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
 import { convertedUsers } from './testusers';
 import AssigneeContextMenu from 'src/react/context-menus/assignee-component/AssigneeContextMenu';
-import Button from 'src/react/components/Button/Button.js'
+import Button from 'src/react/components/Button/Button.js';
 
-@connect(null, {
-  contextMenu: mainActions.contextMenu,
-})
+@connect(
+  null,
+  {
+    contextMenu: mainActions.contextMenu
+  }
+)
 class AssigneeComponent extends Component {
   state = {
     selectedIds: [convertedUsers.getIn([0, 'id'])]
-  }
+  };
 
-  handleClick = (e) => {
+  handleClick = e => {
     const { contextMenu } = this.props;
     const options = this.getOptionsForE(e);
 
@@ -21,36 +24,36 @@ class AssigneeComponent extends Component {
       users: convertedUsers || this.props.users,
       teamName: 'Swipes' || this.props.teamName,
       onSelect: this.onSelect,
-      selectedIds: this.state.selectedIds,
-    }
+      selectedIds: this.state.selectedIds
+    };
 
     contextMenu({
       options,
       component: AssigneeContextMenu,
       props: propsTestObj
     });
-  }
+  };
 
-  getOptionsForE = (e) => {
+  getOptionsForE = e => {
     return {
       boundingRect: e.target.getBoundingClientRect(),
       alignX: 'left',
       excludeY: true,
-      positionY: 12,
+      positionY: 12
     };
-  }
+  };
 
-  onSelect = (selectedIds) => {
+  onSelect = selectedIds => {
     this.setState({ selectedIds });
-  }
+  };
   render() {
     return (
-        <Button 
-          icon='Assign'
-          sideLabel={`${this.state.selectedIds.length} Assigned People`}
-          onClick={this.handleClick}
-        />
-    )
+      <Button
+        icon="Assign"
+        sideLabel={`${this.state.selectedIds.length} Assigned People`}
+        onClick={this.handleClick}
+      />
+    );
   }
 }
 

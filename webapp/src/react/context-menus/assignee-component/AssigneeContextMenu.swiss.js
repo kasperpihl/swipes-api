@@ -4,7 +4,7 @@ export default styleSheet('AssigneeContextMenu', {
   Wrapper: {
     _size: ['300px', '240px'],
     _flex: ['column', 'column', 'flex-start'],
-    boxShadow: '0 1px 20px 3px rgba(00,37,82, .1)', // TODO: REMOVE IF READY
+    boxShadow: '0 1px 20px 3px rgba(00,37,82, .1)',
     overflowY: 'scroll',
     minWidth: '200px'
   },

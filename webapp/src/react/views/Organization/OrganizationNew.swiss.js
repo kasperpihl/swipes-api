@@ -42,7 +42,12 @@ export default styleSheet('OrganizationNew', {
   PendingInvitesWrapper: {
     _size: ['100%', 'auto'],
     _flex: ['column', 'flex-star', 'flex-start'],
-    marginTop: '50px'
+    marginTop: '50px',
+    marginBottom: '24px',
+
+    showInvites: {
+      marginBottom: 0
+    }
   },
 
   SectionTitle: {
@@ -77,7 +82,8 @@ export default styleSheet('OrganizationNew', {
   InviteItem: {
     _size: ['100%', '40px'],
     _flex: ['row', 'flex-end', 'center'],
-    margin: '6px 0'
+    margin: '6px 0',
+    borderBottom: '1px solid $sw3'
   },
 
   InviteEmail: {

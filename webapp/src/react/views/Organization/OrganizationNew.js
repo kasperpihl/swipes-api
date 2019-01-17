@@ -151,7 +151,7 @@ export default class OrganizationNew extends PureComponent {
     );
 
     return (
-      <SW.PendingInvitesWrapper>
+      <SW.PendingInvitesWrapper showInvites={showPendingInvites}>
         <SW.SectionTitle onClick={this.togglePendingInvites}>
           <SW.Icon
             icon="ArrowRightFull"
