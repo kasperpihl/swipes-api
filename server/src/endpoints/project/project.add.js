@@ -21,17 +21,17 @@ export default endpointCreate(
     const projectId = idGenerate('P', 15);
     const [projectRes] = await transaction([
       sqlInsertQuery('projects', {
-        project_id: projectId,
         owned_by,
         name,
+        project_id: projectId,
         created_by: user_id
       }),
       sqlInsertQuery('project_tasks', {
         project_id: projectId
       }),
       {
-        text: `INSERT into permissions (permission_id, granted_to) VALUES ($1, $2)`,
-        values: [projectId, owned_by]
+        text: `INSERT into permissions (permission_id, granted_to, owned_by) VALUES ($1, $2, $3)`,
+        values: [projectId, user_id, owned_by]
       }
     ]);
 
