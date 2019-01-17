@@ -14,7 +14,7 @@ import CompatibleConfirm from 'src/react/browser-compatible/pages/confirm/Compat
 import SwipesLoader from 'src/react/components/loaders/SwipesLoader';
 import Redirect from 'src/react/app/redirect/Redirect';
 // import HOCAutoCompleting from 'src/react/app/auto-completing/HOCAutoCompleting';
-// import Trial from 'src/react/app/trial/Trial';
+// import Trial from 'src/react/app/trial/Trial'
 import Tooltip from 'src/react/app/tooltip/Tooltip';
 import Topbar from 'src/react/app/topbar/Topbar';
 import ContextMenu from 'src/react/app/context-menu/ContextMenu';

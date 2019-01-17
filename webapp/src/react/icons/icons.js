@@ -59,7 +59,7 @@ export { default as NoMilestone } from './svgs/no-milestone.svg';
 export { default as Onboarding } from './svgs/onboarding.svg';
 export { default as OrderedList } from './svgs/ordered-list.svg';
 export { default as Person } from './svgs/person.svg';
-export { default as Ping } from './svgs/ping.svg'
+export { default as Ping } from './svgs/ping.svg';
 export { default as Plus } from './svgs/plus.svg';
 export { default as Reload } from './svgs/reload.svg';
 export { default as Reorder } from './svgs/reorder.svg';
@@ -89,9 +89,13 @@ export { default as AndroidDevice } from './svgs/android-device.svg';
 export { default as ESArrow } from './empty-states/es-arrow.svg';
 export { default as ESDiscussions } from './empty-states/es-discussions.svg';
 export { default as ESError } from './empty-states/es-error.svg';
-export { default as ESMilestoneAchieved } from './empty-states/es-milestone-achieved.svg';
+export {
+  default as ESMilestoneAchieved
+} from './empty-states/es-milestone-achieved.svg';
 export { default as ESNoResults } from './empty-states/es-no-results.svg';
-export { default as ESNotifications } from './empty-states/es-notifications.svg';
+export {
+  default as ESNotifications
+} from './empty-states/es-notifications.svg';
 export { default as ESSearch } from './empty-states/es-search.svg';
 export { default as ESWelcome } from './empty-states/es-welcome.svg';
 export { default as ESNotSupported } from './empty-states/es-not-supported.svg';

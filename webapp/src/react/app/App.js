@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import HOCViewController from './view-controller/HOCViewController';
 import ScreenSizeOverlay from './screen-size-overlay/ScreenSizeOverlay';
+import Invitation from 'src/react/app/Invitation/Invitation';
 import Sidebar from './sidebar/Sidebar';
 
 export default class App extends PureComponent {
@@ -11,6 +12,7 @@ export default class App extends PureComponent {
           <Sidebar />
           <HOCViewController />
         </div>
+        <Invitation />
         <ScreenSizeOverlay />
       </div>
     );
