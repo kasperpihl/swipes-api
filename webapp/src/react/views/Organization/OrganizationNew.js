@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import ProfileOrgDelete from 'src/react/views/Profile/OrgDelete/ProfileOrgDelete';
 import OrganizationHeader from 'src/react/views/Organization/Header/OrganizationHeader';
+import TabBar from 'src/react/components/tab-bar/TabBar';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import SWView from 'src/react/app/view-controller/SWView';
 import request from 'swipes-core-js/utils/request';
@@ -18,7 +19,8 @@ export default class OrganizationNew extends PureComponent {
 
     this.state = {
       showPendingInvites: false,
-      emailInputValue: ''
+      emailInputValue: '',
+      tabIndex: 0
     };
   }
 
@@ -33,6 +35,12 @@ export default class OrganizationNew extends PureComponent {
         orgId: organization.get('organization_id')
       }
     });
+  };
+
+  tabDidChange = index => {
+    if (this.state.tabIndex !== index) {
+      this.setState({ tabIndex: index });
+    }
   };
 
   handleEmailChange = e => {
@@ -92,6 +100,26 @@ export default class OrganizationNew extends PureComponent {
     return null;
   };
 
+  renderHeader = () => {
+    const {
+      organization,
+      admin,
+      activeSubscription,
+      trialExpired,
+      daysLeft,
+      me
+    } = this.props;
+    return (
+      <OrganizationHeader
+        name={organization.get('name')}
+        admin={organization.getIn(['users', me.get('user_id'), 'admin'])}
+        activeSubscription={activeSubscription}
+        trialExpired={trialExpired}
+        daysLeft={daysLeft}
+      />
+    );
+  };
+
   renderInviteInput = () => {
     const { emailInputValue } = this.state;
 
@@ -136,6 +164,18 @@ export default class OrganizationNew extends PureComponent {
     );
   };
 
+  renderUserList = () => {
+    const { organization } = this.props;
+
+    return (
+      <TabBar
+        tabs={['Active Users', 'Inactive Users']}
+        activeTab={this.state.tabIndex}
+        delegate={this}
+      />
+    );
+  };
+
   renderDeleteButton = () => {
     const { organization, me } = this.props;
 
@@ -150,25 +190,6 @@ export default class OrganizationNew extends PureComponent {
     }
     return null;
   };
-  renderHeader = () => {
-    const {
-      organization,
-      admin,
-      activeSubscription,
-      trialExpired,
-      daysLeft,
-      me
-    } = this.props;
-    return (
-      <OrganizationHeader
-        name={organization.get('name')}
-        admin={organization.getIn(['users', me.get('user_id'), 'admin'])}
-        activeSubscription={activeSubscription}
-        trialExpired={trialExpired}
-        daysLeft={daysLeft}
-      />
-    );
-  };
   render() {
     const { organization } = this.props; // TODO: Remove this when done
 
@@ -178,6 +199,7 @@ export default class OrganizationNew extends PureComponent {
           {this.renderInviteInput()}
           {this.renderPendingInvites()}
           {this.handleShowPendingInvites()}
+          {this.renderUserList()}
           {this.renderDeleteButton()}
         </SW.Wrapper>
       </SWView>

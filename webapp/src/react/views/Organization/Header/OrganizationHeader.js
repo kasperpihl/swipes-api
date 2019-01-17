@@ -7,7 +7,7 @@ export default class OrganizationHeader extends PureComponent {
     const { activeSubscription, trialExpired } = this.props;
     if (activeSubscription !== null || !trialExpired) {
       return 'Active';
-    } else {
+    } else if (!activeSubscription && trialExpired) {
       return 'Inactive';
     }
   };
