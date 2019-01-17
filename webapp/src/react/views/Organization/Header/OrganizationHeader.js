@@ -4,31 +4,22 @@ import SW from './OrganizationHeader.swiss';
 
 export default class OrganizationHeader extends PureComponent {
   renderSubscriptionStatus = () => {
-    const { admin, activeSubscription, trialExpired, daysLeft } = this.props;
-    if (admin) {
-      if (activeSubscription !== null) {
-        return 'Active';
-      } else {
-        if (!trialExpired) {
-          return `${daysLeft} ${daysLeft === 1 ? 'Day' : 'Days'} Left in Trial`;
-        } else if (trialExpired) {
-          return 'Trial Expired';
-        }
-        return 'Inactive';
-      }
-    } else if (!admin && !activeSubscription && trialExpired) {
+    const { activeSubscription, trialExpired } = this.props;
+    if (activeSubscription !== null || !trialExpired) {
       return 'Active';
+    } else {
+      return 'Inactive';
     }
   };
   render() {
-    const { name, trialExpired, activeSubscription } = this.props;
+    const { name, trialExpired } = this.props;
     return (
       <CardHeader title={name}>
         <SW.SubscriptionStatus>
           Your Subscription Status:
           <SW.Container>
             <SW.Indicator
-              color={trialExpired ? '$red' : '$green'} //TODO: add in activeSubscription to check if user has active payment going on
+              color={trialExpired ? '$red' : '$green'} // TODO: add condition to check if stripe sub is active
             />
             {this.renderSubscriptionStatus()}
           </SW.Container>
