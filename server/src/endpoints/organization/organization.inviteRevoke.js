@@ -2,6 +2,7 @@ import { object, array, string } from 'valjs';
 import { query, transaction } from 'src/utils/db/db';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import userOrganizationCheck from 'src/utils/userOrganizationCheck';
+import sqlJsonbBuild from 'src/utils/sql/sqlJsonbBuild';
 
 const expectedInput = {
   organization_id: string.require(),
