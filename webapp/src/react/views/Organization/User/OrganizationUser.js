@@ -38,12 +38,14 @@ export default class OrganizationUser extends PureComponent {
     return (
       <SW.Wrapper>
         <UserImage userId={user.get('user_id')} size={36} />
-        <SW.Name>
-          {user.get('first_name')} {user.get('last_name')}
-        </SW.Name>
-        <SW.Email>{user.get('email')}</SW.Email>
+        <SW.UserDetails>
+          <SW.Name>
+            {user.get('first_name')} {user.get('last_name')}
+          </SW.Name>
+          <SW.Email>{user.get('email')}</SW.Email>
+        </SW.UserDetails>
         <SW.UserType>{user.get('admin') ? 'Admin' : 'User'}</SW.UserType>
-        <SW.Button icon="ThreeDots" onClick={this.handleClick} />
+        <SW.Button icon="ThreeDots" onClick={this.handleClick} rounded />
       </SW.Wrapper>
     );
   }

@@ -16,7 +16,7 @@ export default styleSheet('OrganizationNew', {
 
   TabBar: {
     _el: TabBar,
-    marginTop: '24px'
+    margin: '24px 0'
   },
 
   Button: {

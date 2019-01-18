@@ -14,31 +14,32 @@ export default styleSheet('OrganizationUser', {
     }
   },
 
-  Name: {
-    _el: 'p',
+  UserDetails: {
+    _flex: ['column', 'flex-start', 'flex-start'],
     marginLeft: '12px'
+  },
+
+  Name: {
+    _el: 'p'
   },
 
   Email: {
     _el: 'p',
     _textStyle: 'body',
-    margin: '0 auto',
     color: '$sw2'
   },
 
   UserType: {
     _el: 'p',
     _textStyle: 'body',
+    color: '$sw2',
     marginLeft: 'auto',
-    color: '$sw2'
+    marginRight: '12px'
   },
 
   Button: {
     _el: Button,
-    overflow: 'hidden',
-    border: '1px solid $sw3',
-    borderRadius: '50%',
-    marginLeft: '12px',
-    flexShrink: '0'
+    flexShrink: '0',
+    justifySelf: 'flex-end'
   }
 });
