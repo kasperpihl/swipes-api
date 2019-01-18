@@ -5,7 +5,8 @@ import userOrganizationCheck from 'src/utils/userOrganizationCheck';
 import stripeCancelSubscription from 'src/utils/stripe/stripeCancelSubscription';
 
 const expectedInput = {
-  organization_id: string.require()
+  organization_id: string.require(),
+  password: string.require()
 };
 
 export default endpointCreate(
@@ -20,6 +21,19 @@ export default endpointCreate(
     await userOrganizationCheck(user_id, organization_id, {
       owner: true
     });
+
+    // check if this user is available
+    const userRes = await query('SELECT password FROM users WHERE user_id=$1', [
+      user_id
+    ]);
+    const user = userRes.rows[0];
+
+    // Validate password
+    const sha1Password = sha1(password);
+
+    if (!user || sha1Password !== user.password) {
+      throw Error('unauthorized');
+    }
 
     await stripeCancelSubscription(organization_id);
 
