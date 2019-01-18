@@ -9,7 +9,9 @@ import SW from './OrganizationUser.swiss';
 
 @navWrapper
 @connect(
-  null,
+  (state, props) => ({
+    organization: state.organization.get(props.organizationId)
+  }),
   {
     contextMenu: mainActions.contextMenu
   }
@@ -25,18 +27,26 @@ export default class OrganizationUser extends PureComponent {
   };
 
   handleClick = e => {
-    const { contextMenu } = this.props;
+    const { contextMenu, openModal, organization, user, me } = this.props;
     const options = this.getOptionsForE(e);
+    const isOwner = organization.get('owner_id') === me.get('user_id');
 
     contextMenu({
       options,
-      component: UserOptionsContextMenu
+      component: UserOptionsContextMenu,
+      props: {
+        openModal,
+        organization,
+        user,
+        isOwner,
+        me
+      }
     });
   };
 
   render() {
-    const { user, organization } = this.props;
-
+    const { user, organization, me } = this.props;
+    console.log('Org:', organization.toJS(), 'user:', user.toJS());
     return (
       <SW.Wrapper>
         <UserImage
@@ -50,7 +60,11 @@ export default class OrganizationUser extends PureComponent {
           </SW.Name>
           <SW.Email>{user.get('email')}</SW.Email>
         </SW.UserDetails>
-        <SW.UserType>{user.get('admin') ? 'Admin' : 'User'}</SW.UserType>
+        <SW.UserType>
+          {organization.get('owner_id') === user.get('user_id')
+            ? 'Owner'
+            : 'User'}
+        </SW.UserType>
         <Button icon="ThreeDots" onClick={this.handleClick} rounded />
       </SW.Wrapper>
     );

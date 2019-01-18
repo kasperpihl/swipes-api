@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import ProfileOrgDelete from 'src/react/views/Profile/Org/Delete/ProfileOrgDelete.js';
+import OrganizationDelete from 'src/react/views/Organization/Delete/OrganizationDelete.js';
 import SW from './OrganizationContextMenu.swiss';
 
 export default class OrganizationContextMenu extends PureComponent {
@@ -7,7 +7,7 @@ export default class OrganizationContextMenu extends PureComponent {
     const { openModal } = this.props;
 
     openModal({
-      component: ProfileOrgDelete,
+      component: OrganizationDelete,
       position: 'center',
       props: {
         orgId: this.props.orgId
