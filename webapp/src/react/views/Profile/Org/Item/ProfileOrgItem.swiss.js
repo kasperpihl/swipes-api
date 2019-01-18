@@ -4,7 +4,10 @@ export default styleSheet('ProfileOrgItem', {
   Wrapper: {
     _size: ['100%', '50px'],
     _flex: ['row', 'flex-start', 'center'],
-    borderBottom: '1px solid $sw3'
+
+    '&:hover': {
+      backgroundColor: '$sw4'
+    }
   },
 
   OrgName: {

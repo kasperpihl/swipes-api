@@ -22,6 +22,15 @@ export default styleSheet('ProfileOrgDelete', {
     _textStyle: 'body'
   },
 
+  PasswordInput: {
+    _el: 'input',
+    _size: ['100%', 'auto'],
+    _textStyle: 'body',
+    padding: '6px',
+    margin: '6px 0',
+    border: '1px solid $sw3'
+  },
+
   ButtonWrapper: {
     _flex: ['row', 'center', 'center'],
     marginTop: '24px',

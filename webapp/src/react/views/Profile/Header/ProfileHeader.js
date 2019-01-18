@@ -1,25 +1,40 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { setupLoading } from 'swipes-core-js/classes/utils';
+import * as mainActions from 'src/redux/main/mainActions';
 import ProfileNameChange from 'src/react/views/Profile/NameChange/ProfileNameChange';
 import UserImage from 'src/react/components/UserImage/UserImage';
-
+import ProfileContextMenu from 'src/react/context-menus/Profile/ProfileContextMenu.js';
 import SW from './ProfileHeader.swiss';
 
 import request from 'swipes-core-js/utils/request';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 
 @navWrapper
-@connect(state => ({
-  me: state.me,
-  auth: state.auth
-}))
+@connect(
+  state => ({
+    me: state.me,
+    auth: state.auth
+  }),
+  {
+    contextMenu: mainActions.contextMenu
+  }
+)
 export default class ProfileHeader extends PureComponent {
   constructor(props) {
     super(props);
 
     setupLoading(this);
   }
+
+  getOptionsForE = e => {
+    return {
+      boundingRect: e.target.getBoundingClientRect(),
+      alignX: 'right',
+      excludeY: true,
+      positionY: 12
+    };
+  };
   handleImageChange = e => {
     const file = e.target.files[0];
     if (file) {
@@ -35,6 +50,7 @@ export default class ProfileHeader extends PureComponent {
       });
     }
   };
+
   handleOpenModal = () => {
     const { openModal } = this.props;
     openModal({
@@ -42,9 +58,24 @@ export default class ProfileHeader extends PureComponent {
       position: 'center'
     });
   };
+
   handleUpload = () => {
     this.imageUpload.click();
   };
+
+  openContextMenu = e => {
+    const { contextMenu, openModal } = this.props;
+    const options = this.getOptionsForE(e);
+
+    contextMenu({
+      options,
+      component: ProfileContextMenu,
+      props: {
+        openModal
+      }
+    });
+  };
+
   renderProfileImage = () => (
     <SW.ProfileImage>
       <UserImage userId="me" />
@@ -67,6 +98,7 @@ export default class ProfileHeader extends PureComponent {
       <SW.Wrapper>
         {this.renderProfileImage()}
         <SW.NameField onClick={this.handleOpenModal}>{fullName}</SW.NameField>
+        <SW.Button icon="ThreeDots" onClick={this.openContextMenu} rounded />
       </SW.Wrapper>
     );
   }

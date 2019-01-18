@@ -7,8 +7,17 @@ export default class ProfileOrgDelete extends PureComponent {
   constructor(props) {
     super(props);
 
+    this.state = {
+      passwordInput: ''
+    };
+
     setupLoading(this);
   }
+
+  handleInputChange = e => {
+    this.setState({ passwordInput: e.target.value });
+  };
+
   handleDeleteCached = orgId => {
     this.setLoading('deleteOrg');
     request('organization.delete', {
@@ -21,6 +30,7 @@ export default class ProfileOrgDelete extends PureComponent {
       }
     });
   };
+
   render() {
     const { orgName, orgId, hideModal } = this.props;
     return (
@@ -30,6 +40,12 @@ export default class ProfileOrgDelete extends PureComponent {
           Are you sure that you want to delete the organization <b>{orgName}</b>
           ?
         </SW.Text>
+        <SW.PasswordInput
+          type="password"
+          placeholder="Enter password"
+          value={this.state.passwordInput}
+          onChange={this.handleInputChange}
+        />
         <SW.ButtonWrapper>
           <SW.Button title="No" onClick={hideModal} />
           <SW.Button

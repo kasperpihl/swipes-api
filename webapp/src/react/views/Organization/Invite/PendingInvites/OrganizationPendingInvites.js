@@ -87,13 +87,13 @@ export default class OrganizationPendingInvites extends PureComponent {
     const { showPendingInvites } = this.state;
     const { organization } = this.props;
     const pendingUsersArr = organization.get('pending_users').keySeq();
-    console.log(pendingUsersArr);
+
     if (!pendingUsersArr.size) {
       return null;
     }
 
     return (
-      <SW.Wrapper showInvites={showPendingInvites}>
+      <SW.Wrapper>
         <SW.SectionTitle onClick={this.togglePendingInvites}>
           Pending invitations ({pendingUsersArr.size})
           <SW.IconWrapper>

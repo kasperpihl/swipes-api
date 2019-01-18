@@ -12,6 +12,11 @@ addMixin('textStyle', (style = 'item') => {
         _font: ['15px', '24px', 400],
         color: '$sw1'
       };
+    case 'bodyLarge':
+      return {
+        _font: ['18px', '24px', 400],
+        color: '$sw1'
+      };
     case 'bodySubtitle':
       return {
         _font: ['13px', '19px', 400],

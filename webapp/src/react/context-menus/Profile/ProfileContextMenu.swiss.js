@@ -1,6 +1,6 @@
 import { styleSheet } from 'swiss-react';
 
-export default styleSheet('UserOptionsContextMenu', {
+export default styleSheet('ProfileContextMenu', {
   Wrapper: {
     _size: ['250px', 'auto'],
     _flex: ['column', 'flex-start', 'flex-start'],

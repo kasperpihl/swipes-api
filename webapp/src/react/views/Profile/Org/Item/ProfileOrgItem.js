@@ -27,10 +27,10 @@ export default class ProfileOrgItem extends PureComponent {
     });
   };
   render() {
-    const { organization } = this.props;
+    const { organization, first } = this.props;
 
     return (
-      <SW.Wrapper onClick={this.handleOpenOrganization}>
+      <SW.Wrapper onClick={this.handleOpenOrganization} first={first}>
         <SW.OrgName>{organization.get('name')}</SW.OrgName>
         <SW.Options>
           <SW.UserAmount>

@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import ProfileHeader from 'src/react/views/Profile/Header/ProfileHeader';
 import ProfileOrgItem from 'src/react/views/Profile/Org/Item/ProfileOrgItem.js';
 import ProfileOrgCreate from 'src/react/views/Profile/Org/Create/ProfileOrgCreate.js';
-import Button from 'src/react/components/Button/Button';
 import * as menuActions from 'src/redux/menu/menuActions';
 import request from 'swipes-core-js/utils/request';
 
@@ -53,19 +52,20 @@ export default class Profile extends PureComponent {
     return (
       <SWView header={this.renderHeader()}>
         <SW.Wrapper>
+          <SW.Title>Organizations</SW.Title>
+          <SW.Button
+            title="Create Organization"
+            onClick={this.handleCreateOrganization}
+            rounded
+          />
           {organization
-            .map(org => (
+            .map((org, i) => (
               <ProfileOrgItem
                 key={org.get('organization_id')}
                 organization={org}
               />
             ))
             .toList()}
-          <Button
-            title="Create Organization"
-            onClick={this.handleCreateOrganization}
-            rounded
-          />
         </SW.Wrapper>
       </SWView>
     );
