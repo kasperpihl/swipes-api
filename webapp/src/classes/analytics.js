@@ -1,6 +1,5 @@
 /* global Intercom */
 import mixpanel from 'mixpanel-browser';
-import { bindAll } from 'swipes-core-js/classes/utils';
 const blockedMixpanelEvents = [];
 
 export default class Analytics {
@@ -16,7 +15,6 @@ export default class Analytics {
     }
     this.store = store;
     this.userId = null;
-    bindAll(this, ['storeChange', 'sendEvent']);
     store.subscribe(this.storeChange);
   }
   getDefaultEventProps() {
@@ -42,7 +40,7 @@ export default class Analytics {
       mixpanel.reset();
     }
   }
-  sendEvent(name, data) {
+  sendEvent = (name, data) => {
     const defs = this.getDefaultEventProps();
     if (this.enable) {
       const props = Object.assign(defs, data);
@@ -53,8 +51,8 @@ export default class Analytics {
         console.log('blocked mixpanel event', name);
       }
     }
-  }
-  storeChange() {
+  };
+  storeChange = () => {
     const { me } = this.store.getState();
 
     if (me && me.get('id') && me.get('id') !== this.userId) {
@@ -82,5 +80,5 @@ export default class Analytics {
         mixpanel.identify(this.userId);
       }
     }
-  }
+  };
 }

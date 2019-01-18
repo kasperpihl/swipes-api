@@ -2,18 +2,16 @@ import React, { PureComponent } from 'react';
 import { injectStripe } from 'react-stripe-elements';
 import { setupDelegate } from 'react-delegate';
 import Button from 'src/react/components/Button/Button';
-import { bindAll } from 'swipes-core-js/classes/utils';
 import CardSection from './CardSection';
 import SW from './ChangeCardDetailsModal.swiss';
 
 class ChangeCardDetailsModal extends PureComponent {
   constructor(props) {
-    super(props)
+    super(props);
 
-    bindAll(this, ['onSubmit']);
     setupDelegate(this, 'onChangeSuccess');
   }
-  onSubmit(e) {
+  onSubmit = e => {
     const { stripe, setLoading, clearLoading } = this.props;
 
     setLoading('changeCardNumber');
@@ -27,7 +25,7 @@ class ChangeCardDetailsModal extends PureComponent {
         this.onChangeSuccess(token);
       }
     });
-  }
+  };
   render() {
     const { getLoading } = this.props;
 
@@ -40,10 +38,11 @@ class ChangeCardDetailsModal extends PureComponent {
           <Button
             title="Change"
             onClick={this.onSubmit}
-            {...getLoading('changeCardNumber') } />
+            {...getLoading('changeCardNumber')}
+          />
         </SW.ActionBar>
       </SW.Wrapper>
-    )
+    );
   }
 }
 

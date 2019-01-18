@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { injectStripe } from 'react-stripe-elements';
 import { setupDelegate } from 'react-delegate';
-import { bindAll, setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { setupCachedCallback } from 'swipes-core-js/classes/utils';
 import SWView from 'src/react/app/view-controller/SWView';
 import CardHeader from 'src/react/components/CardHeader/CardHeader';
 import SW from './Billing.swiss';
@@ -35,7 +35,6 @@ class Billing extends PureComponent {
       'onManage',
       'onCardDetails'
     );
-    bindAll(this, ['onChange', 'onSubmit']);
   }
   getPrice(hasPostfix) {
     const { billingStatus, users } = this.props;
@@ -52,7 +51,7 @@ class Billing extends PureComponent {
 
     return `$${(price * months * numberOfUsers).toFixed(2)}${postfix}`;
   }
-  onSubmit(e) {
+  onSubmit = e => {
     e.preventDefault();
     const { stripe, setLoading, clearLoading } = this.props;
 
@@ -66,10 +65,10 @@ class Billing extends PureComponent {
         this.onSubmitSuccess(token);
       }
     });
-  }
-  onChange(cardState) {
+  };
+  onChange = cardState => {
     this.setState({ cardState });
-  }
+  };
   renderHeader() {
     const { organization } = this.props;
     const hasStripe = organization.get('stripe_subscription_id');

@@ -5,7 +5,7 @@ import SW from './ChangeBillingPlan.swiss';
 
 class ChangeBillingPlan extends PureComponent {
   constructor(props) {
-    super(props)
+    super(props);
     setupDelegate(this, 'onConfirm');
   }
   render() {
@@ -13,17 +13,16 @@ class ChangeBillingPlan extends PureComponent {
 
     return (
       <SW.Wrapper>
-        <SW.ComposerWrapper>
-          {content}
-        </SW.ComposerWrapper>
+        <SW.ComposerWrapper>{content}</SW.ComposerWrapper>
         <SW.ActionBar>
           <Button
             title="Confirm"
             onClick={this.onConfirm}
-            {...getLoading('confirm') } />
+            {...getLoading('confirm')}
+          />
         </SW.ActionBar>
       </SW.Wrapper>
-    )
+    );
   }
 }
 

@@ -1,27 +1,25 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Button from 'src/react/components/Button/Button';
-import { bindAll } from 'swipes-core-js/classes/utils';
 import SW from './InputMenu.swiss';
 
 class InputMenu extends Component {
   constructor(props) {
     super(props);
     this.state = { text: props.text || '' };
-    bindAll(this, ['onAdd', 'onHandleKeyUp', 'onChange']);
   }
   componentDidMount() {
     this.input.focus();
   }
-  onHandleKeyUp(e) {
+  onHandleKeyUp = e => {
     if (e.keyCode === 13) {
       this.onAdd();
     }
-  }
-  onChange(e) {
+  };
+  onChange = e => {
     this.setState({ text: e.target.value });
-  }
-  onAdd() {
+  };
+  onAdd = () => {
     const { onResult, hide, allowEmpty } = this.props;
     let { text } = this.state;
 
@@ -31,7 +29,7 @@ class InputMenu extends Component {
       onResult(text);
       hide();
     }
-  }
+  };
   render() {
     const { placeholder, buttonLabel, buttonIcon, allowEmpty } = this.props;
     const { text } = this.state;
@@ -45,7 +43,7 @@ class InputMenu extends Component {
           onKeyUp={this.onHandleKeyUp}
           type="text"
           autoFocus
-          innerRef={(c) => this.input = c}
+          innerRef={c => (this.input = c)}
         />
         <Button
           title={buttonLabel}
@@ -68,5 +66,5 @@ InputMenu.propTypes = {
   buttonIcon: string,
   allowEmpty: bool,
   hide: func,
-  onResult: func,
+  onResult: func
 };

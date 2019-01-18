@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import loadPage from 'src/react/pages/load';
-import { bindAll } from 'swipes-core-js/classes/utils';
 import urlGetParameter from 'src/utils/url/urlGetParameter';
 import NoteEditor from 'src/react/components/note-editor/NoteEditor';
 import SW from './ExternalNoteView.swiss';
@@ -9,16 +8,15 @@ class ExternalNoteView extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    bindAll(this, ['setEditorState']);
   }
   componentWillMount() {
     this.loadNote();
   }
-  setEditorState(editorState) {
+  setEditorState = editorState => {
     if (!this.state.editorState) {
       this.setState({ editorState });
     }
-  }
+  };
   onLinkClick(url) {
     if (typeof window.postMessage === 'function') {
       window.postMessage(

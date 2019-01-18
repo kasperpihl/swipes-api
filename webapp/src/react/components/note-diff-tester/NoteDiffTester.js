@@ -1,12 +1,8 @@
 import React, { PureComponent } from 'react';
-import { setupCachedCallback, bindAll } from 'swipes-core-js/classes/utils';
+import { setupCachedCallback } from 'swipes-core-js/classes/utils';
 import getDiffServerClient from 'src/utils/draft-js/getDiffServerClient';
 import Button from 'src/react/components/Button/Button';
-import {
-  convertToRaw,
-  convertFromRaw,
-  EditorState,
-} from 'draft-js';
+import { convertToRaw, convertFromRaw, EditorState } from 'draft-js';
 import NoteEditor from './NoteEditor';
 import SW from './NodeDiffTester.js';
 
@@ -16,20 +12,25 @@ class NoteDiffTester extends PureComponent {
     const editorState = NoteEditor.getEmptyEditorState();
     this.state = this.getDefaultState(editorState);
     this.onStateCached = setupCachedCallback(this.onState, this);
-    bindAll(this, ['onOriginalBlur', 'onDiff']);
   }
-  onOriginalBlur() {
+  onOriginalBlur = () => {
     this.setState(this.getDefaultState(this.state.serverOriginal));
-  }
+  };
   onState(key, editorState) {
     this.setState({
-      [key]: editorState,
+      [key]: editorState
     });
   }
-  onDiff() {
-    const serverOrg = convertToRaw(this.state.serverOriginal.getCurrentContent());
-    const clientMod = convertToRaw(this.state.clientModified.getCurrentContent());
-    const serverMod = convertToRaw(this.state.serverModified.getCurrentContent());
+  onDiff = () => {
+    const serverOrg = convertToRaw(
+      this.state.serverOriginal.getCurrentContent()
+    );
+    const clientMod = convertToRaw(
+      this.state.clientModified.getCurrentContent()
+    );
+    const serverMod = convertToRaw(
+      this.state.serverModified.getCurrentContent()
+    );
 
     const newState = getDiffServerClient(serverOrg, serverMod, clientMod);
     let editorState = NoteEditor.getEmptyEditorState();
@@ -38,13 +39,13 @@ class NoteDiffTester extends PureComponent {
     this.setState({ calculatedDiff: editorState });
     console.log('org', serverOrg);
     console.log('edited', newState);
-  }
+  };
   getDefaultState(editorState) {
     return {
       serverOriginal: editorState,
       serverModified: editorState,
       clientModified: editorState,
-      calculatedDiff: null,
+      calculatedDiff: null
     };
   }
   renderServerOriginal() {
@@ -78,12 +79,7 @@ class NoteDiffTester extends PureComponent {
   renderCalculatedDiff() {
     const { calculatedDiff } = this.state;
     if (!calculatedDiff) {
-      return (
-        <Button
-          title="Calculate Diff"
-          onClick={this.onDiff}
-        />
-      );
+      return <Button title="Calculate Diff" onClick={this.onDiff} />;
     }
     return (
       <NoteEditor
@@ -96,20 +92,12 @@ class NoteDiffTester extends PureComponent {
   render() {
     return (
       <SW.Wrapper>
-        <SW.Note>
-          {this.renderServerOriginal()}
-        </SW.Note>
+        <SW.Note>{this.renderServerOriginal()}</SW.Note>
         <SW.Middle>
-          <SW.Note inMiddle>
-            {this.renderServerModified()}
-          </SW.Note>
-          <SW.Note inMiddle>
-            {this.renderClientModified()}
-          </SW.Note>
+          <SW.Note inMiddle>{this.renderServerModified()}</SW.Note>
+          <SW.Note inMiddle>{this.renderClientModified()}</SW.Note>
         </SW.Middle>
-        <SW.Note>
-          {this.renderCalculatedDiff()}
-        </SW.Note>
+        <SW.Note>{this.renderCalculatedDiff()}</SW.Note>
       </SW.Wrapper>
     );
   }
