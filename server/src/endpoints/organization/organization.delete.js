@@ -16,7 +16,7 @@ export default endpointCreate(
   },
   async (req, res) => {
     const { user_id, input } = res.locals;
-    const { organization_id } = input;
+    const { organization_id, password } = input;
 
     // Ensure I have the rights to delete organization.
     await userOrganizationCheck(user_id, organization_id, {
