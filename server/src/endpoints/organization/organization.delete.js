@@ -1,3 +1,4 @@
+import sha1 from 'sha1';
 import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import { transaction, query } from 'src/utils/db/db';
