@@ -8,7 +8,7 @@ const stripe = stripePackage(stripeConfig.secretKey);
 export default async organizationId => {
   const orgRes = await query(
     `
-      SELECT plan, stripe_subscription_id, stripe_customer_id
+      SELECT stripe_subscription_id
       FROM organizations
       WHERE organization_id = $1
     `,
