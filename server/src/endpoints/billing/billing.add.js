@@ -2,6 +2,7 @@ import { object, array, string, any } from 'valjs';
 import { query, transaction } from 'src/utils/db/db';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import userOrganizationCheck from 'src/utils/userOrganizationCheck';
+import stripeGetPlanId from 'src/utils/stripe/stripeGetPlanId';
 
 const expectedInput = {
   stripe_token: string.require(),
@@ -23,6 +24,8 @@ export default endpointCreate(
       admin: true,
       status: 'active'
     });
+
+    const stripePlanId = stripeGetPlanId(plan);
 
     // Create response data.
     res.locals.output = {};
