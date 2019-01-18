@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { bindAll } from 'swipes-core-js/classes/utils';
 import * as mainActions from 'src/redux/main/mainActions';
 import SW from './Modal.swiss';
 import * as views from 'src/react/views';
@@ -17,20 +16,19 @@ export default class HOCModal extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    bindAll(this, ['hideModal', 'clickedBackground']);
   }
-  hideModal() {
+  hideModal = () => {
     const { clear, target } = this.props;
     clear(target);
-  }
-  clickedBackground(e) {
+  };
+  clickedBackground = e => {
     const isBackground =
       e.target.classList.contains('Modal_Container') ||
       e.target.classList.contains('Modal_Content');
     if (isBackground) {
       this.hideModal();
     }
-  }
+  };
   render() {
     const { modal } = this.props;
 
