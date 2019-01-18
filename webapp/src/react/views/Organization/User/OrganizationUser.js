@@ -35,10 +35,15 @@ export default class OrganizationUser extends PureComponent {
   };
 
   render() {
-    const { user } = this.props;
+    const { user, organization } = this.props;
+
     return (
       <SW.Wrapper>
-        <UserImage userId={user.get('user_id')} size={36} />
+        <UserImage
+          userId={user.get('user_id')}
+          organizationId={organization.get('organization_id')}
+          size={36}
+        />
         <SW.UserDetails>
           <SW.Name>
             {user.get('first_name')} {user.get('last_name')}

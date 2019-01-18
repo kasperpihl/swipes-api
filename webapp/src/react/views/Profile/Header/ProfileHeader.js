@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import * as mainActions from 'src/redux/main/mainActions';
+import ProfileContextMenu from 'src/react/context-menus/Profile/ProfileContextMenu.js';
 import ProfileNameChange from 'src/react/views/Profile/NameChange/ProfileNameChange';
 import UserImage from 'src/react/components/UserImage/UserImage';
 import SW from './ProfileHeader.swiss';
@@ -98,7 +99,11 @@ export default class ProfileHeader extends PureComponent {
       <SW.Wrapper>
         {this.renderProfileImage()}
         <SW.NameField onClick={this.handleOpenModal}>{fullName}</SW.NameField>
-        <SW.Button icon="ThreeDots" onClick={this.openContextMenu} rounded />
+        <SW.OptionsButton
+          icon="ThreeDots"
+          onClick={this.openContextMenu}
+          rounded
+        />
       </SW.Wrapper>
     );
   }

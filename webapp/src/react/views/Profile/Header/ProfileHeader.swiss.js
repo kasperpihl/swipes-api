@@ -1,4 +1,5 @@
 import { styleSheet } from 'swiss-react';
+import Button from 'src/react/components/Button/Button';
 import Icon from 'src/react/icons/Icon';
 
 export default styleSheet('ProfileHeader', {
@@ -80,5 +81,10 @@ export default styleSheet('ProfileHeader', {
       transition: '.25s ease',
       pointerEvents: 'none'
     }
+  },
+
+  OptionsButton: {
+    _el: Button,
+    marginLeft: 'auto'
   }
 });
