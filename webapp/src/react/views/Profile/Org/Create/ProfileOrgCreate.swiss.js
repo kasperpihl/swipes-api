@@ -3,7 +3,7 @@ import Button from 'src/react/components/Button/Button';
 
 export default styleSheet('ProfileOrgCreate', {
   Wrapper: {
-    _size: ['600px', 'auto'],
+    _size: ['95%', 'auto'],
     _flex: ['column', 'flex-start', 'flex-start'],
     margin: '0 auto',
     padding: '24px',
@@ -12,7 +12,7 @@ export default styleSheet('ProfileOrgCreate', {
 
   Title: {
     _el: 'h1',
-    _font: ['30px', '30px', 'bold'],
+    _textStyle: 'cardTitle',
     marginBottom: '24px'
   },
 
@@ -31,14 +31,14 @@ export default styleSheet('ProfileOrgCreate', {
   Input: {
     _el: 'input',
     _size: ['100%', 'auto'],
-    _font: ['14px', '14px', '400'],
+    _textStyle: 'body',
     padding: '6px',
     border: '1px solid $sw3'
   },
 
   Text: {
     _el: 'p',
-    _font: ['16px', '16px', '400'],
+    _textStyle: 'bodyMedium',
     fontStyle: 'italic'
   },
 

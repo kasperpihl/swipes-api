@@ -19,15 +19,9 @@ export default class ProfileOrgDelete extends PureComponent {
   };
 
   handleDeleteCached = orgId => {
-    this.setLoading('deleteOrg');
     request('organization.delete', {
-      organization_id: orgId
-    }).then(res => {
-      if (res && res.ok) {
-        this.clearLoading('deleteOrg', 'Success', 1500, this.props.hideModal);
-      } else {
-        this.clearLoading('deleteOrg', 'Something went wrong!');
-      }
+      organization_id: orgId,
+      password: this.state.passwordInput
     });
   };
 
@@ -51,7 +45,6 @@ export default class ProfileOrgDelete extends PureComponent {
           <SW.Button
             title="Yes"
             onClick={() => this.handleDeleteCached(orgId)}
-            {...this.getLoading('deleteOrg')}
           />
         </SW.ButtonWrapper>
       </SW.Wrapper>

@@ -1,4 +1,5 @@
 import { styleSheet } from 'swiss-react';
+import Button from 'src/react/components/Button/Button';
 
 export default styleSheet('OrganizationHeader', {
   Wrapper: {
@@ -11,22 +12,8 @@ export default styleSheet('OrganizationHeader', {
     _textStyle: 'cardTitle'
   },
 
-  SubscriptionStatus: {
-    _flex: ['row', 'center', 'center'],
-    _textStyle: 'labelDark',
-    marginLeft: 'auto',
-    flexShrink: '0'
-  },
-
-  Container: {
-    _flex: ['row', 'center', 'center']
-  },
-
-  Indicator: {
-    _size: '10px',
-    borderRadius: '50%',
-    backgroundColor: get => get('color') || '$sw3',
-    flexShrink: '0',
-    margin: '0 4px'
+  Button: {
+    _el: Button,
+    marginLeft: 'auto'
   }
 });

@@ -4,7 +4,6 @@ import { setupLoading } from 'swipes-core-js/classes/utils';
 import * as mainActions from 'src/redux/main/mainActions';
 import ProfileNameChange from 'src/react/views/Profile/NameChange/ProfileNameChange';
 import UserImage from 'src/react/components/UserImage/UserImage';
-import ProfileContextMenu from 'src/react/context-menus/Profile/ProfileContextMenu.js';
 import SW from './ProfileHeader.swiss';
 
 import request from 'swipes-core-js/utils/request';
@@ -35,6 +34,20 @@ export default class ProfileHeader extends PureComponent {
       positionY: 12
     };
   };
+
+  openContextMenu = e => {
+    const { contextMenu, openModal } = this.props;
+    const options = this.getOptionsForE(e);
+
+    contextMenu({
+      options,
+      component: ProfileContextMenu,
+      props: {
+        openModal
+      }
+    });
+  };
+
   handleImageChange = e => {
     const file = e.target.files[0];
     if (file) {
@@ -61,19 +74,6 @@ export default class ProfileHeader extends PureComponent {
 
   handleUpload = () => {
     this.imageUpload.click();
-  };
-
-  openContextMenu = e => {
-    const { contextMenu, openModal } = this.props;
-    const options = this.getOptionsForE(e);
-
-    contextMenu({
-      options,
-      component: ProfileContextMenu,
-      props: {
-        openModal
-      }
-    });
   };
 
   renderProfileImage = () => (

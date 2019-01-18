@@ -5,12 +5,11 @@ import OrganizationHeader from 'src/react/views/Organization/Header/Organization
 import OrganizationUser from 'src/react/views/Organization/User/OrganizationUser';
 import OrganizationInviteInput from 'src/react/views/Organization/Invite/Input/OrganizationInviteInput';
 import OrganizationPendingInvites from 'src/react/views/Organization/Invite/PendingInvites/OrganizationPendingInvites';
+import SW from './OrganizationNew.swiss';
 
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import propsOrPop from 'src/utils/propsOrPop';
 import SWView from 'src/react/app/view-controller/SWView';
-import request from 'swipes-core-js/utils/request';
-import SW from './OrganizationNew.swiss';
 
 @navWrapper
 @connect((state, props) => ({
@@ -59,6 +58,7 @@ export default class OrganizationNew extends PureComponent {
     return (
       <OrganizationHeader
         name={organization.get('name')}
+        orgId={organization.get('organization_id')}
         admin={organization.getIn(['users', me.get('user_id'), 'admin'])}
         activeSubscription={activeSubscription}
         trialExpired={trialExpired}

@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
+import Button from 'src/react/components/Button/Button';
 import UserImage from 'src/react/components/UserImage/UserImage';
 import UserOptionsContextMenu from 'src/react/context-menus/UserOptions/UserOptionsContextMenu';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
@@ -45,7 +46,7 @@ export default class OrganizationUser extends PureComponent {
           <SW.Email>{user.get('email')}</SW.Email>
         </SW.UserDetails>
         <SW.UserType>{user.get('admin') ? 'Admin' : 'User'}</SW.UserType>
-        <SW.Button icon="ThreeDots" onClick={this.handleClick} rounded />
+        <Button icon="ThreeDots" onClick={this.handleClick} rounded />
       </SW.Wrapper>
     );
   }
