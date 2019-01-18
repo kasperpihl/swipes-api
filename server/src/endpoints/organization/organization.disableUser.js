@@ -2,6 +2,7 @@ import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import { transaction } from 'src/utils/db/db';
 import userOrganizationCheck from 'src/utils/userOrganizationCheck';
+import stripeUpdateQuantity from 'src/utils/stripe/stripeUpdateQuantity';
 
 const expectedInput = {
   organization_id: string.require(),
@@ -61,7 +62,13 @@ export default endpointCreate(
       }
     ]);
 
+    res.locals.backgroundInput = {
+      organization_id
+    };
     // Create response data.
     res.locals.output = {};
   }
-);
+).background(async (req, res) => {
+  const { organization_id } = res.locals.input;
+  await stripeUpdateQuantity(organization_id);
+});

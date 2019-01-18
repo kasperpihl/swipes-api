@@ -3,6 +3,7 @@ import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import { transaction, query } from 'src/utils/db/db';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
 import tokenParse from 'src/utils/token/tokenParse';
+import stripeUpdateQuantity from 'src/utils/stripe/stripeUpdateQuantity';
 
 const expectedInput = {
   invitation_token: string.require()
@@ -70,7 +71,13 @@ export default endpointCreate(
       })
     ]);
 
+    res.locals.backgroundInput = {
+      organization_id
+    };
     // Create response data.
     res.locals.output = {};
   }
-).background(async (req, res) => {});
+).background(async (req, res) => {
+  const { organization_id } = res.locals.input;
+  await stripeUpdateQuantity(organization_id);
+});

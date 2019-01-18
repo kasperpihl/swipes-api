@@ -2,6 +2,7 @@ import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import { transaction } from 'src/utils/db/db';
 import userOrganizationCheck from 'src/utils/userOrganizationCheck';
+import stripeCancelSubscription from 'src/utils/stripe/stripeCancelSubscription';
 
 const expectedInput = {
   organization_id: string.require()
@@ -20,7 +21,7 @@ export default endpointCreate(
       owner: true
     });
 
-    // TODO: cancel stripe subscription if any.
+    await stripeCancelSubscription(organization_id);
 
     // creating a new user from scratch
     await transaction([
