@@ -35,6 +35,9 @@ export default styleSheet('UserImage', {
   },
 
   Text: {
-    _el: 'span'
+    _el: 'span',
+    _textStyle: 'body',
+    fontWeight: 'bold',
+    color: '$sw5'
   }
 });
