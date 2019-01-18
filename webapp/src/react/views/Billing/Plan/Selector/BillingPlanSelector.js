@@ -1,7 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
+import BillingPlanConfirm from 'src/react/views/Billing/Plan/Confirm/BillingPlanConfirm';
 import SW from './BillingPlanSelector.swiss';
 
 const BillingPlanSelector = props => {
+  const currentPlan = null; // TODO: Make this real from db...
+  const [planState, setPlan] = useState('monthly');
+
+  const onClick = plan => {
+    if (!currentPlan) {
+      setPlan(plan);
+    } else {
+      props.openModal({
+        component: BillingPlanConfirm,
+        title: 'Change billing plan',
+        position: 'center',
+        props: {
+          plan,
+          organizationId: organization.get('organization_id'),
+          currentPlan: this.state.billingStatus
+        }
+      });
+    }
+  };
   return (
     <SW.Toggle>
       <SW.ToggleSection

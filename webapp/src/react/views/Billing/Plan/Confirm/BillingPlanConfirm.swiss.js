@@ -1,6 +1,6 @@
 import { styleSheet } from 'swiss-react';
 
-export default styleSheet('BillingChangePlan', {
+export default styleSheet('BillingPlanConfirm', {
   Wrapper: {
     boxShadow: '0 1px 20px 3px rgba($sw1  ,0.1)',
     background: '$sw5',

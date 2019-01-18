@@ -2,9 +2,9 @@ import React, { PureComponent } from 'react';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import request from 'swipes-core-js/utils/request';
 import Button from 'src/react/components/Button/Button';
-import SW from './BillingChangePlan.swiss';
+import SW from './BillingPlanConfirm.swiss';
 
-export default class BillingChangePlan extends PureComponent {
+export default class BillingPlanConfirm extends PureComponent {
   constructor(props) {
     super(props);
     setupLoading(this);
