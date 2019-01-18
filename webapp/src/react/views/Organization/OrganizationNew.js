@@ -7,6 +7,7 @@ import OrganizationInviteInput from 'src/react/views/Organization/Invite/Input/O
 import OrganizationPendingInvites from 'src/react/views/Organization/Invite/PendingInvites/OrganizationPendingInvites';
 
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
+import propsOrPop from 'src/utils/propsOrPop';
 import SWView from 'src/react/app/view-controller/SWView';
 import request from 'swipes-core-js/utils/request';
 import SW from './OrganizationNew.swiss';
@@ -16,6 +17,7 @@ import SW from './OrganizationNew.swiss';
   me: state.me,
   organization: state.organization.get(props.organizationId)
 }))
+@propsOrPop('organization')
 export default class OrganizationNew extends PureComponent {
   static sizes = () => [540];
   constructor(props) {
