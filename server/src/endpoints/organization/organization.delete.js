@@ -1,6 +1,6 @@
 import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
-import { transaction } from 'src/utils/db/db';
+import { transaction, query } from 'src/utils/db/db';
 import userOrganizationCheck from 'src/utils/userOrganizationCheck';
 import stripeCancelSubscription from 'src/utils/stripe/stripeCancelSubscription';
 
