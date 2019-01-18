@@ -1,24 +1,19 @@
 import React, { PureComponent } from 'react';
-import { StripeProvider, Elements } from 'react-stripe-elements';
+import { Elements } from 'react-stripe-elements';
 import { connect } from 'react-redux';
-import * as ca from 'swipes-core-js/actions';
-import * as cs from 'swipes-core-js/selectors';
 
 import { setupLoading } from 'swipes-core-js/classes/utils';
+import request from 'swipes-core-js/utils/request';
+import propsOrPop from 'src/utils/propsOrPop';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Billing from './Billing';
-import HOCChangeBillingPlan from './HOCChangeBillingPlan';
-import HOCChangeCardDetailsModal from './HOCChangeCardDetailsModal';
+import BillingChangePlan from './Change/Plan/BillingChangePlan';
+import BillingChangeCard from './Change/Card/BillingChangeCard';
 
 @navWrapper
-@connect(
-  (state, props) => ({
-    organization: state.organization.get(props.organizationId)
-  }),
-  {
-    createStripeCustomer: ca.organizations.createStripeCustomer
-  }
-)
+@connect((state, props) => ({
+  organization: state.organization.get(props.organizationId)
+}))
 @propsOrPop('organization')
 export default class extends PureComponent {
   constructor(props) {
@@ -54,11 +49,12 @@ export default class extends PureComponent {
       this.setState({ billingStatus: plan });
     } else if (this.state.billingStatus !== plan) {
       openModal({
-        component: HOCChangeBillingPlan,
+        component: BillingChangePlan,
         title: 'Change billing plan',
         position: 'center',
         props: {
           plan,
+          organizationId: organization.get('organization_id'),
           currentPlan: this.state.billingStatus
         }
       });
@@ -75,7 +71,7 @@ export default class extends PureComponent {
     const { openModal } = this.props;
 
     openModal({
-      component: HOCChangeCardDetailsModal,
+      component: BillingChangeCard,
       title: 'Change card details',
       position: 'center',
       props: {}
@@ -85,29 +81,16 @@ export default class extends PureComponent {
     const { billingStatus } = this.state;
     const { organization, users } = this.props;
 
-    // if we need to change the token this is not the only instance of it
-    // we need to fix that
-    let token = 'pk_live_vLIRvcBoJ4AA9sFUpmVT11gQ';
-
-    if (
-      process.env.NODE_ENV !== 'production' ||
-      window.location.hostname === 'staging.swipesapp.com'
-    ) {
-      token = 'pk_test_0pUn7s5EyQy7GeAg93QrsJl9';
-    }
-
     return (
-      <StripeProvider apiKey={token}>
-        <Elements>
-          <Billing
-            delegate={this}
-            billingStatus={billingStatus}
-            organization={organization}
-            users={users}
-            {...this.bindLoading()}
-          />
-        </Elements>
-      </StripeProvider>
+      <Elements>
+        <Billing
+          delegate={this}
+          billingStatus={billingStatus}
+          organization={organization}
+          users={users}
+          {...this.bindLoading()}
+        />
+      </Elements>
     );
   }
 }

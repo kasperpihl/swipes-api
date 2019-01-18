@@ -1,21 +1,21 @@
 import { styleSheet } from 'swiss-react';
 import { CardElement } from 'react-stripe-elements';
 
-export default styleSheet('CardSection', {
+export default styleSheet('BillingCard', {
   Billing: {
     _size: ['420px', '90px'],
-    paddingBottom: '30px',
+    paddingBottom: '30px'
   },
 
   FormRowLabel: {
     _font: ['18px', '24px'],
-    marginBottom: '9px',
+    marginBottom: '9px'
   },
 
   ElementWrapper: {
     _el: 'label',
     _size: ['100%', 'auto'],
-    paddingTop: '9px',
+    paddingTop: '9px'
   },
 
   StripeElement: {
@@ -28,17 +28,17 @@ export default styleSheet('CardSection', {
     display: 'block',
 
     '&:focus': {
-      border: '1px solid $blue',
+      border: '1px solid $blue'
     },
 
     invalid: {
-      borderColor: '#fa755a',
-    },
+      borderColor: '#fa755a'
+    }
   },
 
   CardError: {
     _font: ['12px', '18px'],
     color: '$red',
     padding: '6px 0'
-  },
-})
+  }
+});
