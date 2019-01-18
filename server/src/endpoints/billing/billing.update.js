@@ -1,11 +1,7 @@
 import { string } from 'valjs';
-import config from 'config';
-import stripePackage from 'stripe';
+import stripeClient from 'src/utils/stripe/stripeClient';
 import { query } from 'src/utils/db/db';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
-
-const stripeConfig = config.get('stripe');
-const stripe = stripePackage(stripeConfig.secretKey);
 
 const expectedInput = {
   stripe_token: string.require(),
@@ -41,7 +37,7 @@ export default endpointCreate(
       throw Error('not_stripe_customer');
     }
 
-    await stripe.customer.update(org.stripe_customer_id, {
+    await stripeClient.customer.update(org.stripe_customer_id, {
       source: stripe_token
     });
 

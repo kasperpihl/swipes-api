@@ -1,9 +1,5 @@
-import config from 'config';
-import stripePackage from 'stripe';
+import stripeClient from 'src/utils/stripe/stripeClient';
 import { query } from 'src/utils/db/db';
-
-const stripeConfig = config.get('stripe');
-const stripe = stripePackage(stripeConfig.secretKey);
 
 export default async organizationId => {
   const orgRes = await query(
@@ -20,7 +16,7 @@ export default async organizationId => {
     return;
   }
 
-  await stripe.subscription.del(org.stripe_subscription_id);
+  await stripeClient.subscription.del(org.stripe_subscription_id);
 
   await query(
     `

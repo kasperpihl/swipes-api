@@ -11,17 +11,20 @@ import HOCChangeBillingPlan from './HOCChangeBillingPlan';
 import HOCChangeCardDetailsModal from './HOCChangeCardDetailsModal';
 
 @navWrapper
-@connect(state => ({
-  organization: state.me.getIn(['organizations', 0]),
-  users: cs.users.getAllButSofi(state),
-}), {
-  createStripeCustomer: ca.organizations.createStripeCustomer,
-})
+@connect(
+  (state, props) => ({
+    organization: state.organization.get(props.organizationId)
+  }),
+  {
+    createStripeCustomer: ca.organizations.createStripeCustomer
+  }
+)
+@propsOrPop('organization')
 export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      billingStatus: props.organization.get('plan') || 'monthly',
+      billingStatus: props.organization.get('plan') || 'monthly'
     };
 
     setupLoading(this);
@@ -35,12 +38,13 @@ export default class extends PureComponent {
     const { createStripeCustomer } = this.props;
     const { billingStatus } = this.state;
 
-    createStripeCustomer(token.id, billingStatus).then((res) => {
+    createStripeCustomer(token.id, billingStatus).then(res => {
       if (res.ok) {
         this.clearLoading('submit');
       } else {
-        const message = res.error && res.error.message && res.error.message.message;
-        this.clearLoading('submit', `!${  message}`);
+        const message =
+          res.error && res.error.message && res.error.message.message;
+        this.clearLoading('submit', `!${message}`);
       }
     });
   }
@@ -56,7 +60,7 @@ export default class extends PureComponent {
         props: {
           plan,
           currentPlan: this.state.billingStatus
-        },
+        }
       });
     }
   }
@@ -64,7 +68,7 @@ export default class extends PureComponent {
     const { navPush } = this.props;
     navPush({
       id: 'Organization',
-      title: 'Manage team',
+      title: 'Manage team'
     });
   }
   onCardDetails() {
@@ -74,7 +78,7 @@ export default class extends PureComponent {
       component: HOCChangeCardDetailsModal,
       title: 'Change card details',
       position: 'center',
-      props: {},
+      props: {}
     });
   }
   render() {
@@ -85,7 +89,10 @@ export default class extends PureComponent {
     // we need to fix that
     let token = 'pk_live_vLIRvcBoJ4AA9sFUpmVT11gQ';
 
-    if (process.env.NODE_ENV !== 'production' || window.location.hostname === 'staging.swipesapp.com') {
+    if (
+      process.env.NODE_ENV !== 'production' ||
+      window.location.hostname === 'staging.swipesapp.com'
+    ) {
       token = 'pk_test_0pUn7s5EyQy7GeAg93QrsJl9';
     }
 

@@ -36,7 +36,7 @@ export default endpointCreate(
 
     const orgRes = await query(
       `
-        SELECT organization_id, name, trial_ending, owner_id, pending_users, plan, stripe_subscription_id, stripe_customer_id
+        SELECT organization_id, name, trial_ending, owner_id, pending_users, stripe_subscription_id, stripe_plan_id, stripe_customer_id
         FROM organizations
         WHERE organization_id
         IN (

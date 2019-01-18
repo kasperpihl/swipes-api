@@ -1,5 +1,6 @@
 import { string, any } from 'valjs';
 import { query } from 'src/utils/db/db';
+import stripeClient from 'src/utils/stripe/stripeClient';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import stripeGetPlanId from 'src/utils/stripe/stripeGetPlanId';
 
@@ -45,11 +46,11 @@ export default endpointCreate(
       throw Error('already_on_plan');
     }
 
-    const subscription = await stripe.subscriptions.retrieve(
+    const subscription = await stripeClient.subscriptions.retrieve(
       stripe_subscription_id
     );
 
-    await stripe.subscriptions.update(stripe_subscription_id, {
+    await stripeClient.subscriptions.update(stripe_subscription_id, {
       items: [
         {
           id: subscription.items.data[0].id,

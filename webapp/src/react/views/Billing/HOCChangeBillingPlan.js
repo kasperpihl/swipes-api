@@ -1,30 +1,20 @@
 import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
-import * as ca from 'swipes-core-js/actions';
-import {
-  setupLoading,
-} from 'swipes-core-js/classes/utils';
+import { setupLoading } from 'swipes-core-js/classes/utils';
+import request from 'swipes-core-js/utils/request';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-import ChangeBillingPlan from './ChangeBillingPlan';
+import SW from './ChangeBillingPlan.swiss';
 
 @navWrapper
-@connect(null, {
-  changeBillingPlan: ca.organizations.changeBillingPlan,
-})
-
-export default class extends PureComponent {
+export default class ChangeBillingPlan extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-    };
-
     setupLoading(this);
   }
-  onConfirm(e) {
-    const { changeBillingPlan, hideModal, plan } = this.props;
+  handleConfirm = e => {
+    const { hideModal, plan, organizationId } = this.props;
     this.setLoading('confirm');
 
-    changeBillingPlan(plan).then((res) => {
+    request('billing.updatePlan', { plan, organizationId }).then(res => {
       if (res.ok) {
         this.clearLoading('confirm', 'Changed', 1500, () => {
           if (hideModal) {
@@ -34,8 +24,8 @@ export default class extends PureComponent {
       } else {
         this.clearLoading('confirm', '!Error', 3000);
       }
-    })
-  }
+    });
+  };
 
   render() {
     const { plan, currentPlan } = this.props;
@@ -44,11 +34,16 @@ export default class extends PureComponent {
     Click 'Confirm’ to change the plan.`;
 
     return (
-      <ChangeBillingPlan
-        content={content}
-        delegate={this}
-        {...this.bindLoading() }
-      />
+      <SW.Wrapper>
+        <SW.ComposerWrapper>{content}</SW.ComposerWrapper>
+        <SW.ActionBar>
+          <Button
+            title="Confirm"
+            onClick={this.onConfirm}
+            {...this.getLoading('confirm')}
+          />
+        </SW.ActionBar>
+      </SW.Wrapper>
     );
   }
 }
