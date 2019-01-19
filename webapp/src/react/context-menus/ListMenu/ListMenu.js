@@ -10,7 +10,9 @@ export default class ListMenu extends PureComponent {
         PropTypes.string,
         PropTypes.shape({
           icon: PropTypes.string,
-          title: PropTypes.string.isRequired
+          title: PropTypes.string.isRequired,
+          disabled: PropTypes.bool,
+          subtitle: PropTypes.string
         })
       ]).isRequired
     ).isRequired
