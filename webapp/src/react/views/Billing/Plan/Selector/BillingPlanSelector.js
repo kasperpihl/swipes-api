@@ -4,6 +4,7 @@ import SW from './BillingPlanSelector.swiss';
 
 const BillingPlanSelector = ({ onChange, value }) => {
   const handleClickCached = plan => () => {
+    if (plan === value) return;
     return onChange(plan);
     if (!currentPlan) {
       setPlan(plan);
@@ -37,8 +38,7 @@ const BillingPlanSelector = ({ onChange, value }) => {
         <SW.Price>$6</SW.Price>
         <SW.PriceLabel>per user a month</SW.PriceLabel>
         <SW.Subtitle>
-          billed anually{' '}
-          <SW.SaveLabel className="save">You save 20%</SW.SaveLabel>
+          billed anually <SW.SaveLabel>You save 20%</SW.SaveLabel>
         </SW.Subtitle>
       </SW.Toggle>
     </SW.Wrapper>

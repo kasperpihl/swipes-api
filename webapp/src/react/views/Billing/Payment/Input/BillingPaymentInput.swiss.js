@@ -1,7 +1,7 @@
 import { styleSheet } from 'swiss-react';
 import { CardElement } from 'react-stripe-elements';
 
-export default styleSheet('BillingCard', {
+export default styleSheet('BillingPaymentInput', {
   Billing: {
     _size: ['420px', '90px'],
     paddingBottom: '30px'
