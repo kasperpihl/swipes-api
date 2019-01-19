@@ -26,6 +26,18 @@ const kLeave = {
   }
 )
 export default class OrganizationHeader extends PureComponent {
+  openBillingView = () => {
+    const { navPush, organization } = this.props;
+
+    navPush({
+      id: 'Billing',
+      title: 'Billing',
+      props: {
+        organizationId: organization.get('organization_id')
+      }
+    });
+  };
+
   openContextMenu = e => {
     const { contextMenu, organization, meInOrg } = this.props;
     const activeUsersAmount = organization
@@ -127,6 +139,7 @@ export default class OrganizationHeader extends PureComponent {
     const { name, loader } = this.props;
     return (
       <CardHeader title={name}>
+        <SW.Button title="Billing" onClick={this.openBillingView} rounded />
         <SW.Button
           icon="ThreeDots"
           onClick={this.openContextMenu}

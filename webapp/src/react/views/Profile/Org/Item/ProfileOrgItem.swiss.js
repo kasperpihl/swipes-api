@@ -2,28 +2,44 @@ import { styleSheet } from 'swiss-react';
 
 export default styleSheet('ProfileOrgItem', {
   Wrapper: {
-    _size: ['100%', '50px'],
+    _size: ['100%', 'auto'],
     _flex: ['row', 'flex-start', 'center'],
+    _textStyle: 'bodyMedium',
+    borderBottom: '1px solid $sw3',
+    padding: '12px 0',
 
-    '&:hover': {
-      backgroundColor: '$sw4'
+    '&:first-child': {
+      padding: '0px 0px 12px 0px'
     }
   },
 
   OrgName: {
     _el: 'h1',
-    _textStyle: 'item',
-    marginRight: 'auto'
+    _size: ['100%', 'auto'],
+    _flex: ['column', 'flex-start', 'center'],
+    _textStyle: 'body'
   },
 
   Options: {
-    _flex: ['row', 'center', 'center'],
-    marginLeft: 'auto'
+    _size: ['160px', 'auto'],
+    _flex: ['row', 'flex-end', 'center'],
+    flexShrink: '0'
   },
 
-  UserAmount: {
+  OrganizationInfo: {
     _el: 'p',
-    _textStyle: 'labelDark',
-    marginRight: '12px'
+    _textStyle: 'body',
+    color: '$sw2',
+    flexShrink: '0',
+
+    error: {
+      color: '$red'
+    },
+
+    right: {
+      _size: ['50px', 'auto'],
+      _flex: ['row', 'flex-end', 'center'],
+      marginLeft: '12px'
+    }
   }
 });
