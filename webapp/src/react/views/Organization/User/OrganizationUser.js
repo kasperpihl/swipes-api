@@ -191,7 +191,8 @@ export default class OrganizationUser extends PureComponent {
           </SW.Name>
           <SW.Email>{user.get('email')}</SW.Email>
         </SW.UserDetails>
-        {isOwner || meUser ? null : (
+        {(isOwner && this.getUserTag(user) !== 'active') ||
+        (meUser && this.getUserTag(user) !== 'active') ? null : (
           <SW.OptionsButton
             icon="ThreeDots"
             onClick={this.openListMenu}

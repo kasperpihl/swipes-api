@@ -24,19 +24,19 @@ export default styleSheet('UserImage', {
 
   Initials: {
     _size: ['100%'],
-    _font: ['10px', '18px', 500],
     _flex: 'center',
-    'size>=30': {
-      _font: ['12px', '18px', 500]
-    },
     textTransform: 'uppercase',
     color: '$sw5',
-    backgroundColor: '$sw1'
+    backgroundColor: '$sw1',
+
+    'size>=30': {
+      _font: ['12px', '18px', 500]
+    }
   },
 
   Text: {
     _el: 'span',
-    _textStyle: 'body',
+    _textStyle: 'bodyMedium',
     fontWeight: 'bold',
     color: '$sw5'
   }

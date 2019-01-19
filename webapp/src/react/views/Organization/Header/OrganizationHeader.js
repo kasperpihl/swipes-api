@@ -1,13 +1,24 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
-import OrganizationContextMenu from 'src/react/context-menus/Organization/OrganizationContextMenu.js';
+import withLoader from 'src/react/_hocs/withLoader';
+import ConfirmationModal from 'src/react/components/ConfirmationModal/ConfirmationModal';
+import ListMenu from 'src/react/context-menus/ListMenu/ListMenu';
 import CardHeader from 'src/react/components/CardHeader/CardHeader';
 import SW from './OrganizationHeader.swiss';
-
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
+import request from 'swipes-core-js/utils/request';
+
+const kDelete = {
+  title: 'Delete organization'
+};
+const kLeave = {
+  title: 'Leave organization',
+  subtitle: 'Transfer ownership before leaving'
+};
 
 @navWrapper
+@withLoader
 @connect(
   null,
   {
@@ -15,42 +26,113 @@ import navWrapper from 'src/react/app/view-controller/NavWrapper';
   }
 )
 export default class OrganizationHeader extends PureComponent {
-  getOptionsForE = e => {
-    return {
-      boundingRect: e.target.getBoundingClientRect(),
-      alignX: 'right',
-      excludeY: true,
-      positionY: 12
-    };
-  };
-
   openContextMenu = e => {
-    const { contextMenu, openModal, orgId } = this.props;
-    const options = this.getOptionsForE(e);
+    const { contextMenu, organization, meInOrg } = this.props;
+    const activeUsersAmount = organization
+      .get('users')
+      .filter(u => u.get('status') === 'active').size;
+
+    kLeave.disabled =
+      organization.get('owner_id') === meInOrg.get('user_id') &&
+      activeUsersAmount > 1;
+
+    let buttons = [kLeave];
+    if (organization.get('owner_id') === meInOrg.get('user_id')) {
+      if (activeUsersAmount > 1) {
+        buttons = [kLeave, kDelete];
+      } else {
+        buttons = [kDelete];
+      }
+    }
 
     contextMenu({
-      options,
-      component: OrganizationContextMenu,
+      options: {
+        boundingRect: e.target.getBoundingClientRect(),
+        alignX: 'right',
+        excludeY: true,
+        positionY: 12
+      },
+      component: ListMenu,
       props: {
-        openModal,
-        orgId
+        buttons,
+        onClick: this.handleListClick
       }
     });
   };
 
-  renderSubscriptionStatus = () => {
-    const { activeSubscription, trialExpired } = this.props;
-    if (activeSubscription !== null || !trialExpired) {
-      return 'Active';
-    } else if (!activeSubscription && trialExpired) {
-      return 'Inactive';
+  runRequest = (endpoint, options) => {
+    const { loader } = this.props;
+
+    loader.set('ThreeDots');
+    request(endpoint, options).then(res => {
+      if (res.ok) {
+        loader.clear('ThreeDots');
+      } else {
+        loader.error('ThreeDots', res.error, 2000);
+      }
+    });
+  };
+
+  handleDeleteOrganization = password => {
+    const { organization } = this.props;
+
+    this.runRequest('organization.delete', {
+      organization_id: organization.get('organization_id'),
+      password
+    });
+  };
+
+  handleLeaveOrganization = () => {
+    const { organization, meInOrg } = this.props;
+
+    this.runRequest('organization.disableUser', {
+      organization_id: organization.get('organization_id'),
+      target_user_id: meInOrg.get('user_id')
+    });
+  };
+
+  openConfirmationModal = ({ ...props }) => {
+    const { openModal } = this.props;
+
+    openModal({
+      component: ConfirmationModal,
+      position: 'center',
+      props
+    });
+  };
+
+  handleListClick = (i, button) => {
+    if (button.title === kDelete.title) {
+      const modalOptions = {
+        title: 'Delete organization',
+        text:
+          'Are you sure you want to delete this organization? Deleting it is permanent and cannot be reversed.',
+        callback: this.handleDeleteOrganization,
+        disablePasswordInput: false
+      };
+      return this.openConfirmationModal(modalOptions);
+    }
+    if (button.title === kLeave.title) {
+      const modalOptions = {
+        title: 'Leave organization',
+        text: 'Are you sure that you want to leave this organization?',
+        callback: this.handleLeaveOrganization,
+        disablePasswordInput: true
+      };
+
+      return this.openConfirmationModal(modalOptions);
     }
   };
   render() {
-    const { name, trialExpired } = this.props;
+    const { name, loader } = this.props;
     return (
       <CardHeader title={name}>
-        <SW.Button icon="ThreeDots" onClick={this.openContextMenu} rounded />
+        <SW.Button
+          icon="ThreeDots"
+          onClick={this.openContextMenu}
+          rounded
+          {...loader.get('ThreeDots')}
+        />
       </CardHeader>
     );
   }

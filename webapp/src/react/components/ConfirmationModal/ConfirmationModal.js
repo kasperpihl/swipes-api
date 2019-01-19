@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
-import SW from './PasswordInputModal.swiss';
+import SW from './ConfirmationModal.swiss';
 
-export default class PasswordInputModal extends PureComponent {
+export default class ConfirmationModal extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -24,19 +24,28 @@ export default class PasswordInputModal extends PureComponent {
   };
 
   render() {
-    const { text, title, hideModal, callback } = this.props;
+    const {
+      text,
+      title,
+      hideModal,
+      callback,
+      disablePasswordInput
+    } = this.props;
+
     return (
       <SW.Wrapper>
         <SW.Title>{title}</SW.Title>
         <SW.Text>{text}</SW.Text>
-        <SW.PasswordInput
-          type="password"
-          placeholder="Enter password"
-          value={this.state.passwordInput}
-          onChange={this.handleInputChange}
-          onKeyUp={this.handleSubmit}
-          autoFocus
-        />
+        {disablePasswordInput ? null : (
+          <SW.PasswordInput
+            type="password"
+            placeholder="Enter password"
+            value={this.state.passwordInput}
+            onChange={this.handleInputChange}
+            onKeyUp={this.handleSubmit}
+            autoFocus
+          />
+        )}
         <SW.ButtonWrapper>
           <SW.Button title="Cancel" onClick={hideModal} />
           <SW.Button
