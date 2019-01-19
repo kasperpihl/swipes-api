@@ -1,5 +1,5 @@
 // Account
-// export { default as Billing } from './Billing/Billing';
+export { default as Billing } from './Billing/HOCBilling';
 // export { default as Browser } from './Browser/Browser';
 // export { default as Discuss } from './Discuss/Discuss';
 // export { default as DiscussionComposer } from './Discussion/Composer/DiscussionComposer';

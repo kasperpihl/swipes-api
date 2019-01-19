@@ -6,7 +6,7 @@ const BillingPlanSelector = props => {
   const currentPlan = null; // TODO: Make this real from db...
   const [planState, setPlan] = useState('monthly');
 
-  const onClick = plan => {
+  const handleClickCached = plan => {
     if (!currentPlan) {
       setPlan(plan);
     } else {
@@ -16,8 +16,8 @@ const BillingPlanSelector = props => {
         position: 'center',
         props: {
           plan,
-          organizationId: organization.get('organization_id'),
-          currentPlan: this.state.billingStatus
+          organizationId: props.organization.get('organization_id'),
+          currentPlan: currentPlan
         }
       });
     }
@@ -26,7 +26,7 @@ const BillingPlanSelector = props => {
     <SW.Toggle>
       <SW.ToggleSection
         first={billingStatus === 'monthly' ? true : false}
-        onClick={this.onSwitchPlanCached('monthly')}
+        onClick={handleClickCached('monthly')}
       >
         <SW.TogglePrice>$7.50</SW.TogglePrice>
         <SW.ToggleLabel>per user a month</SW.ToggleLabel>
@@ -34,7 +34,7 @@ const BillingPlanSelector = props => {
       </SW.ToggleSection>
       <SW.ToggleSection
         first={billingStatus === 'monthly' ? true : false}
-        onClick={this.onSwitchPlanCached('yearly')}
+        onClick={handleClickCached('yearly')}
       >
         <SW.TogglePrice>$6</SW.TogglePrice>
         <SW.ToggleLabel>per user a month</SW.ToggleLabel>

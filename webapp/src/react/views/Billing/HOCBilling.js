@@ -2,33 +2,21 @@ import React, { PureComponent } from 'react';
 import { Elements } from 'react-stripe-elements';
 import { connect } from 'react-redux';
 
-import { setupLoading } from 'swipes-core-js/classes/utils';
+import withLoader from 'src/react/_hocs/withLoader';
 import request from 'swipes-core-js/utils/request';
 import propsOrPop from 'src/react/_hocs/propsOrPop';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-import Billing from './Billing';
-import BillingChangePlan from './Change/Plan/BillingChangePlan';
+import BillingPlanSelector from './Plan/Selector/BillingPlanSelector';
+import BillingPlanConfirm from './Plan/Confirm/BillingPlanConfirm';
 import BillingChangeCard from './Change/Card/BillingChangeCard';
 
 @navWrapper
+@withLoader
 @connect((state, props) => ({
   organization: state.organization.get(props.organizationId)
 }))
 @propsOrPop('organization')
-export default class extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      billingStatus: props.organization.get('plan') || 'monthly'
-    };
-
-    setupLoading(this);
-  }
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.organization.get('plan') !== this.state.billingStatus) {
-      this.setState({ billingStatus: nextProps.organization.get('plan') });
-    }
-  }
+export default class Billing extends PureComponent {
   onSubmitSuccess(token) {
     const { createStripeCustomer } = this.props;
     const { billingStatus } = this.state;
@@ -49,7 +37,7 @@ export default class extends PureComponent {
       this.setState({ billingStatus: plan });
     } else if (this.state.billingStatus !== plan) {
       openModal({
-        component: BillingChangePlan,
+        component: BillingPlanConfirm,
         title: 'Change billing plan',
         position: 'center',
         props: {
@@ -79,18 +67,7 @@ export default class extends PureComponent {
   }
   render() {
     const { billingStatus } = this.state;
-    const { organization, users } = this.props;
 
-    return (
-      <Elements>
-        <Billing
-          delegate={this}
-          billingStatus={billingStatus}
-          organization={organization}
-          users={users}
-          {...this.bindLoading()}
-        />
-      </Elements>
-    );
+    return <Elements>hi</Elements>;
   }
 }
