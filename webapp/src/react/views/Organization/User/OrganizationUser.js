@@ -3,10 +3,17 @@ import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
 import Button from 'src/react/components/Button/Button';
 import UserImage from 'src/react/components/UserImage/UserImage';
-import UserOptionsContextMenu from 'src/react/context-menus/UserOptions/UserOptionsContextMenu';
+import ListMenu from 'src/react/context-menus/ListMenu/ListMenu';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
+import request from 'swipes-core-js/utils/request';
+import { setupLoading } from 'swipes-core-js/classes/utils';
 import SW from './OrganizationUser.swiss';
 
+const kPromote = 'Promote';
+const kDemote = 'Demote';
+const kDisable = 'Disable';
+const kTransfer = 'Transfer';
+const kInvite = 'Invite';
 @navWrapper
 @connect(
   (state, props) => ({
@@ -17,6 +24,11 @@ import SW from './OrganizationUser.swiss';
   }
 )
 export default class OrganizationUser extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    setupLoading(this);
+  }
   getOptionsForE = e => {
     return {
       boundingRect: e.target.getBoundingClientRect(),
@@ -25,28 +37,116 @@ export default class OrganizationUser extends PureComponent {
       positionY: 12
     };
   };
-
-  handleClick = e => {
-    const { contextMenu, openModal, organization, user, me } = this.props;
+  handleListClick = (i, title) => {
+    const { organization, user, loader } = this.props;
+    let endpoint;
+    let buttonMessage;
+    const options = {
+      organization_id: organization.get('organization_id'),
+      target_user_id: user.get('user_id')
+    };
+    if (title === kDemote) {
+      endpoint = 'organization.demoteAdmin';
+      buttonMessage = 'Demoted';
+    } else if (title === kPromote) {
+      endpoint = 'organization.promoteAdmin';
+      buttonMessage = 'Promoted';
+    } else if (title === kDisable) {
+      endpoint = 'organization.disableUser';
+      buttonMessage = 'Disabled';
+    } else if (title === kTransfer) {
+      endpoint = 'organization.transferOwnership';
+      buttonMessage = 'Transferred';
+    } else if (title === kInvite) {
+      delete options.target_user_id;
+      options.target_email = user.get('email');
+      endpoint = 'organization.inviteUser';
+      buttonMessage = 'Invite sent';
+    }
+    if (endpoint) {
+      this.setLoading('buttonClicked');
+      request(endpoint, options).then(res => {
+        if (res.ok) {
+          this.clearLoading('buttonClicked', buttonMessage, 1500);
+        } else {
+          this.clearLoading('buttonClicked', '!Something went wrong', 2000);
+        }
+      });
+    }
+  };
+  openListMenu = e => {
+    const { contextMenu, organization, user, me } = this.props;
     const options = this.getOptionsForE(e);
-    const isOwner = organization.get('owner_id') === me.get('user_id');
+    const meTag = this.getUserTag(
+      organization.getIn(['users', me.get('user_id')])
+    );
+    const targetTag = this.getUserTag(user);
+
+    if (meTag === 'User' || targetTag === 'Owner') {
+      return;
+    }
+    let buttons = [kPromote, kDisable];
+    if (targetTag === 'Admin') {
+      buttons[0] = kDemote;
+    }
+    if (meTag === 'Owner') {
+      buttons.push(kTransfer);
+    }
+    if (targetTag === 'Disabled') {
+      buttons = [kInvite];
+    }
 
     contextMenu({
       options,
-      component: UserOptionsContextMenu,
+      component: ListMenu,
       props: {
-        openModal,
-        organization,
-        user,
-        isOwner,
-        me
+        buttons,
+        onClick: this.handleListClick
       }
     });
   };
 
+  handlePromoteAdmin = () => {
+    const { organization, user } = this.props;
+
+    request('organization.promoteAdmin', {
+      organization_id: organization.get('organization_id'),
+      target_user_id: user.get('user_id')
+    });
+  };
+
+  handleDemoteAdmin = () => {
+    const { organization, user } = this.props;
+
+    request('organization.demoteAdmin', {
+      organization_id: organization.get('organization_id'),
+      target_user_id: user.get('user_id')
+    });
+  };
+
+  getUserTag = user => {
+    const { organization } = this.props;
+    if (user.get('user_id') === organization.get('owner_id')) {
+      return 'Owner';
+    }
+    if (user.get('admin')) {
+      return 'Admin';
+    }
+    if (user.get('status') === 'disabled') {
+      return 'Disabled';
+    }
+    return 'User';
+  };
+
   render() {
     const { user, organization, me } = this.props;
-    console.log('Org:', organization.toJS(), 'user:', user.toJS());
+    const isOwner = this.getUserTag(user) === 'Owner';
+    const isUser =
+      this.getUserTag(user) === 'User' && this.getUserTag(me) === 'User';
+    const meOwner = this.getUserTag(me) === 'Owner';
+
+    console.log(isUser);
+
     return (
       <SW.Wrapper>
         <UserImage
@@ -60,12 +160,14 @@ export default class OrganizationUser extends PureComponent {
           </SW.Name>
           <SW.Email>{user.get('email')}</SW.Email>
         </SW.UserDetails>
-        <SW.UserType>
-          {organization.get('owner_id') === user.get('user_id')
-            ? 'Owner'
-            : 'User'}
-        </SW.UserType>
-        <Button icon="ThreeDots" onClick={this.handleClick} rounded />
+        {isOwner || isUser ? null : (
+          <SW.OptionsButton
+            icon="ThreeDots"
+            onClick={this.openListMenu}
+            {...this.getLoading('buttonClicked')}
+          />
+        )}
+        <SW.UserType>{this.getUserTag(user)}</SW.UserType>
       </SW.Wrapper>
     );
   }
