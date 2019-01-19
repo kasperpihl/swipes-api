@@ -10,6 +10,10 @@ export default styleSheet('ProfileOrgItem', {
 
     '&:first-child': {
       padding: '0px 0px 12px 0px'
+    },
+
+    '&:hover': {
+      backgroundColor: '$sw4'
     }
   },
 
