@@ -3,6 +3,8 @@ import { query, transaction } from 'src/utils/db/db';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import userOrganizationCheck from 'src/utils/userOrganizationCheck';
 import stripeGetPlanId from 'src/utils/stripe/stripeGetPlanId';
+import stripeCreateOrUpdateCustomer from 'src/utils/stripe/stripeCreateOrUpdateCustomer';
+import stripeCreateSubscription from 'src/utils/stripe/stripeCreateSubscription';
 
 const expectedInput = {
   stripe_token: string.require(),
@@ -25,7 +27,42 @@ export default endpointCreate(
       status: 'active'
     });
 
+    const customer = await stripeCreateOrUpdateCustomer(
+      organization_id,
+      stripe_token,
+      { plan }
+    );
+
+    await query(
+      `
+        UPDATE organizations
+        SET
+          updated_at = now(),
+          stripe_customer_id = $1
+        WHERE organization_id = $2
+      `,
+      [customer.id, organization_id]
+    );
+
     const stripePlanId = stripeGetPlanId(plan);
+
+    const subscription = await stripeCreateSubscription(
+      organization_id,
+      stripePlanId
+    );
+
+    await query(
+      `
+        UPDATE organizations
+        SET
+          updated_at = now(),
+          stripe_subscription_id = $1,
+          stripe_plan_id = $2,
+          plan = $3
+        WHERE organization_id = $4
+      `,
+      [subscription.id, stripePlanId, plan, organization_id]
+    );
 
     // Create response data.
     res.locals.output = {};
