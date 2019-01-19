@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
 import withLoader from 'src/react/_hocs/withLoader';
 import UserImage from 'src/react/components/UserImage/UserImage';
+import PasswordInputModal from 'src/react/components/PasswordInput/PasswordInputModal.js';
 import ListMenu from 'src/react/context-menus/ListMenu/ListMenu';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import request from 'swipes-core-js/utils/request';
@@ -35,8 +36,46 @@ export default class OrganizationUser extends PureComponent {
       positionY: 12
     };
   };
+  openTransferModal() {
+    const { openModal } = this.props;
+    openModal({
+      component: PasswordInputModal,
+      position: 'center',
+      props: {
+        title: 'Transfer ownership of organization',
+        text:
+          'Warrning: Transferring the ownership is permanent and it cannot be reversed!',
+        callback: this.handleTransferOwnership
+      }
+    });
+  }
+  handleTransferOwnership = password => {
+    const { organization, user, loader } = this.props;
+
+    loader.set('buttonClicked');
+    request('organization.transferOwnership', {
+      organization_id: organization.get('organization_id'),
+      target_user_id: user.get('user_id'),
+      password
+    }).then(res => {
+      if (res.ok) {
+        loader.success('buttonClicked', 'Transferred');
+      } else {
+        loader.error('buttonClicked', res.error);
+      }
+    });
+  };
   handleListClick = (i, title) => {
     const { organization, user, loader } = this.props;
+
+    if (loader.check('buttonClicked')) {
+      return;
+    }
+
+    if (title === kTransfer) {
+      return this.openTransferModal();
+    }
+
     let endpoint;
     let buttonMessage;
     const options = {
@@ -52,34 +91,27 @@ export default class OrganizationUser extends PureComponent {
     } else if (title === kDisable) {
       endpoint = 'organization.disableUser';
       buttonMessage = 'Disabled';
-    } else if (title === kTransfer) {
-      endpoint = 'organization.transferOwnership';
-      buttonMessage = 'Transferred';
     } else if (title === kInvite) {
       delete options.target_user_id;
       options.target_email = user.get('email');
       endpoint = 'organization.inviteUser';
       buttonMessage = 'Invite sent';
     }
-    if (loader.check('buttonClicked')) {
-      return;
-    }
+
     loader.set('buttonClicked');
-    if (endpoint) {
-      request(endpoint, options).then(res => {
-        if (res.ok) {
-          loader.clear('buttonClicked');
-        } else {
-          loader.error('buttonClicked', res.error);
-        }
-      });
-    }
+    request(endpoint, options).then(res => {
+      if (res.ok) {
+        loader.success('buttonClicked', buttonMessage, 1500);
+      } else {
+        loader.error('buttonClicked', res.error, 2000);
+      }
+    });
   };
   openListMenu = e => {
-    const { contextMenu, organization, user, me } = this.props;
+    const { contextMenu, organization, user, meInOrg } = this.props;
     const options = this.getOptionsForE(e);
     const meTag = this.getUserTag(
-      organization.getIn(['users', me.get('user_id')])
+      organization.getIn(['users', meInOrg.get('user_id')])
     );
     const targetTag = this.getUserTag(user);
 
@@ -140,10 +172,11 @@ export default class OrganizationUser extends PureComponent {
   };
 
   render() {
-    const { user, organization, me, loader } = this.props;
+    const { user, organization, meInOrg, loader } = this.props;
     const isOwner = this.getUserTag(user) === 'Owner';
-    const isUser =
-      this.getUserTag(user) === 'User' && this.getUserTag(me) === 'User';
+    const meUser =
+      this.getUserTag(meInOrg) !== 'Owner' &&
+      this.getUserTag(meInOrg) !== 'Admin';
 
     return (
       <SW.Wrapper>
@@ -158,7 +191,7 @@ export default class OrganizationUser extends PureComponent {
           </SW.Name>
           <SW.Email>{user.get('email')}</SW.Email>
         </SW.UserDetails>
-        {isOwner || isUser ? null : (
+        {isOwner || meUser ? null : (
           <SW.OptionsButton
             icon="ThreeDots"
             onClick={this.openListMenu}
