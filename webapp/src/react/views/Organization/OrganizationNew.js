@@ -8,7 +8,7 @@ import OrganizationPendingInvites from 'src/react/views/Organization/Invite/Pend
 import SW from './OrganizationNew.swiss';
 
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-import propsOrPop from 'src/utils/propsOrPop';
+import propsOrPop from 'src/react/_hocs/propsOrPop';
 import SWView from 'src/react/app/view-controller/SWView';
 
 @navWrapper

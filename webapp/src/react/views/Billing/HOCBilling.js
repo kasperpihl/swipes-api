@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import request from 'swipes-core-js/utils/request';
-import propsOrPop from 'src/utils/propsOrPop';
+import propsOrPop from 'src/react/_hocs/propsOrPop';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import Billing from './Billing';
 import BillingChangePlan from './Change/Plan/BillingChangePlan';

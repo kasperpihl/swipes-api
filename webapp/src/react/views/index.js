@@ -11,4 +11,4 @@ export { default as Profile } from './Profile/Profile';
 export { default as ProjectOverview } from './Project/Overview/ProjectOverview';
 // export { default as Preview } from './Preview/Preview';
 // export { default as SideNote } from './SideNote/SideNote';
-// export { default as Tester } from './Tester/Tester';
+export { default as Tester } from './Tester/Tester';
