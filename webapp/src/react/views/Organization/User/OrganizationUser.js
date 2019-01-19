@@ -76,10 +76,10 @@ export default class OrganizationUser extends PureComponent {
     }
   };
   openListMenu = e => {
-    const { contextMenu, organization, user, me } = this.props;
+    const { contextMenu, organization, user, meInOrg } = this.props;
     const options = this.getOptionsForE(e);
     const meTag = this.getUserTag(
-      organization.getIn(['users', me.get('user_id')])
+      organization.getIn(['users', meInOrg.get('user_id')])
     );
     const targetTag = this.getUserTag(user);
 
@@ -140,10 +140,11 @@ export default class OrganizationUser extends PureComponent {
   };
 
   render() {
-    const { user, organization, me, loader } = this.props;
+    const { user, organization, meInOrg, loader } = this.props;
     const isOwner = this.getUserTag(user) === 'Owner';
-    const isUser =
-      this.getUserTag(user) === 'User' && this.getUserTag(me) === 'User';
+    const meUser =
+      this.getUserTag(meInOrg) !== 'Owner' &&
+      this.getUserTag(meInOrg) !== 'Admin';
 
     return (
       <SW.Wrapper>
@@ -158,7 +159,7 @@ export default class OrganizationUser extends PureComponent {
           </SW.Name>
           <SW.Email>{user.get('email')}</SW.Email>
         </SW.UserDetails>
-        {isOwner || isUser ? null : (
+        {isOwner || meUser ? null : (
           <SW.OptionsButton
             icon="ThreeDots"
             onClick={this.openListMenu}

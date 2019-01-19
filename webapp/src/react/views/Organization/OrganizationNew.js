@@ -13,7 +13,11 @@ import SWView from 'src/react/app/view-controller/SWView';
 
 @navWrapper
 @connect((state, props) => ({
-  me: state.me,
+  meInOrg: state.organization.getIn([
+    props.organizationId,
+    'users',
+    state.me.get('user_id')
+  ]),
   organization: state.organization.get(props.organizationId)
 }))
 @propsOrPop('organization')
@@ -49,17 +53,16 @@ export default class OrganizationNew extends PureComponent {
   renderHeader = () => {
     const {
       organization,
-      admin,
       activeSubscription,
       trialExpired,
       daysLeft,
-      me
+      meInOrg
     } = this.props;
     return (
       <OrganizationHeader
         name={organization.get('name')}
         orgId={organization.get('organization_id')}
-        admin={organization.getIn(['users', me.get('user_id'), 'admin'])}
+        admin={organization.getIn(['users', meInOrg.get('user_id'), 'admin'])}
         activeSubscription={activeSubscription}
         trialExpired={trialExpired}
         daysLeft={daysLeft}
@@ -78,9 +81,9 @@ export default class OrganizationNew extends PureComponent {
   };
 
   renderDeleteButton = () => {
-    const { organization, me } = this.props;
+    const { organization, meInOrg } = this.props;
 
-    if (me.get('user_id') === organization.get('owner_id')) {
+    if (meInOrg.get('user_id') === organization.get('owner_id')) {
       return (
         <SW.Button
           icon="Delete"
@@ -93,7 +96,7 @@ export default class OrganizationNew extends PureComponent {
   };
   render() {
     const { tabIndex } = this.state;
-    const { organization, me } = this.props;
+    const { organization, meInOrg } = this.props;
     const userStatus = tabIndex === 0 ? 'active' : 'disabled';
 
     return (
@@ -113,7 +116,7 @@ export default class OrganizationNew extends PureComponent {
                   key={u.get('user_id')}
                   user={u}
                   organizationId={organization.get('organization_id')}
-                  me={me}
+                  meInOrg={meInOrg}
                 />
               ))
               .toList()}
