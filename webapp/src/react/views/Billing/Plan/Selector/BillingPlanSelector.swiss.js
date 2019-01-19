@@ -15,6 +15,10 @@ export default styleSheet('BillingPlanSelector', {
     cursor: 'pointer',
     backgroundColor: '$blue',
     color: 'white',
+    '& > *': {
+      pointerEvents: 'none',
+      userSelect: 'none'
+    },
 
     '!selected': {
       backgroundColor: 'transparent',

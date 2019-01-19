@@ -9,6 +9,9 @@ import SWView from 'src/react/app/view-controller/SWView';
 
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import BillingHeader from './Header/BillingHeader';
+import BillingPaymentActive from './Payment/Active/BillingPaymentActive';
+import BillingPaymentSubmit from './Payment/Submit/BillingPaymentSubmit';
+
 import BillingPlanSelector from './Plan/Selector/BillingPlanSelector';
 import BillingPlanConfirm from './Plan/Confirm/BillingPlanConfirm';
 import BillingChangeCard from './Change/Card/BillingChangeCard';
@@ -24,20 +27,6 @@ export default class Billing extends PureComponent {
   state = {
     plan: 'monthly'
   };
-  onSubmitSuccess(token) {
-    const { createStripeCustomer } = this.props;
-    const { billingStatus } = this.state;
-
-    createStripeCustomer(token.id, billingStatus).then(res => {
-      if (res.ok) {
-        this.clearLoading('submit');
-      } else {
-        const message =
-          res.error && res.error.message && res.error.message.message;
-        this.clearLoading('submit', `!${message}`);
-      }
-    });
-  }
   onSwitchPlan(plan) {
     const { organization, openModal } = this.props;
     if (!organization.get('stripe_subscription_id')) {
@@ -55,13 +44,6 @@ export default class Billing extends PureComponent {
       });
     }
   }
-  handleManage = () => {
-    const { navPush, organization } = this.props;
-    navPush({
-      id: 'Organization',
-      title: 'Manage team'
-    });
-  };
   onCardDetails() {
     const { openModal } = this.props;
 
@@ -72,16 +54,28 @@ export default class Billing extends PureComponent {
       props: {}
     });
   }
-  getPrice = () => 7.5;
   handlePlanChange = plan => {
-    console.log(plan);
+    const { openModal, organization } = this.props;
+    if (!organization.get('stripe_subscription_id')) {
+      this.setState({ plan });
+    } else {
+      openModal({
+        component: BillingPlanConfirm,
+        title: 'Change billing plan',
+        position: 'center',
+        props: {
+          plan,
+          organizationId: organization.get('organization_id'),
+          currentPlan: this.state.plan
+        }
+      });
+    }
     this.setState({ plan });
   };
   render() {
     const { organization } = this.props;
-    const numberOfUsers = organization
-      .get('users')
-      .filter(u => u.get('status') === 'active').size;
+    const { plan } = this.state;
+
     return (
       <Elements>
         <SWView header={<BillingHeader organization={organization} />}>
@@ -90,13 +84,13 @@ export default class Billing extends PureComponent {
               value={this.state.plan}
               onChange={this.handlePlanChange}
             />
-            <SW.PaymentToggle>
-              <SW.ToggleSubtitle>
-                You have {numberOfUsers} users in {organization.get('name')}.{' '}
-                {`That's ${this.getPrice(true)}`}
-              </SW.ToggleSubtitle>
-              <SW.ManageButton title="Manage team" onClick={this.onManage} />
-            </SW.PaymentToggle>
+            <SW.PaymentSection>
+              {organization.get('stripe_subscription_id') ? (
+                <BillingPaymentActive />
+              ) : (
+                <BillingPaymentSubmit organization={organization} plan={plan} />
+              )}
+            </SW.PaymentSection>
           </SW.Wrapper>
         </SWView>
       </Elements>
