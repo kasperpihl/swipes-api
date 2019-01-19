@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import BillingPlanConfirm from 'src/react/views/Billing/Plan/Confirm/BillingPlanConfirm';
 import SW from './BillingPlanSelector.swiss';
 
-const BillingPlanSelector = props => {
-  const currentPlan = null; // TODO: Make this real from db...
-  const [planState, setPlan] = useState('monthly');
-
-  const handleClickCached = plan => {
+const BillingPlanSelector = ({ onChange, value }) => {
+  const handleClickCached = plan => () => {
+    return onChange(plan);
     if (!currentPlan) {
       setPlan(plan);
     } else {
@@ -23,27 +21,27 @@ const BillingPlanSelector = props => {
     }
   };
   return (
-    <SW.Toggle>
-      <SW.ToggleSection
-        first={billingStatus === 'monthly' ? true : false}
+    <SW.Wrapper>
+      <SW.Toggle
+        selected={value === 'monthly'}
         onClick={handleClickCached('monthly')}
       >
-        <SW.TogglePrice>$7.50</SW.TogglePrice>
-        <SW.ToggleLabel>per user a month</SW.ToggleLabel>
-        <SW.ToggleSubLabel>billed monthly</SW.ToggleSubLabel>
-      </SW.ToggleSection>
-      <SW.ToggleSection
-        first={billingStatus === 'monthly' ? true : false}
+        <SW.Price>$7.50</SW.Price>
+        <SW.PriceLabel>per user a month</SW.PriceLabel>
+        <SW.Subtitle>billed monthly</SW.Subtitle>
+      </SW.Toggle>
+      <SW.Toggle
+        selected={value === 'yearly'}
         onClick={handleClickCached('yearly')}
       >
-        <SW.TogglePrice>$6</SW.TogglePrice>
-        <SW.ToggleLabel>per user a month</SW.ToggleLabel>
-        <SW.ToggleSubLabel>
+        <SW.Price>$6</SW.Price>
+        <SW.PriceLabel>per user a month</SW.PriceLabel>
+        <SW.Subtitle>
           billed anually{' '}
           <SW.SaveLabel className="save">You save 20%</SW.SaveLabel>
-        </SW.ToggleSubLabel>
-      </SW.ToggleSection>
-    </SW.Toggle>
+        </SW.Subtitle>
+      </SW.Toggle>
+    </SW.Wrapper>
   );
 };
 

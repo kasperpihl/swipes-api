@@ -17,7 +17,7 @@ export default class ProfileOrgItem extends PureComponent {
     const daysLeft = endingAt.diff(now, 'days');
 
     navPush({
-      id: 'Organization',
+      id: 'Billing',
       title: 'Organization',
       props: {
         organizationId: organization.get('organization_id'),

@@ -1,10 +1,9 @@
 import React, { PureComponent } from 'react';
 import { injectStripe } from 'react-stripe-elements';
-import { setupDelegate } from 'react-delegate';
-import { setupCachedCallback } from 'swipes-core-js/classes/utils';
 import SWView from 'src/react/app/view-controller/SWView';
 import CardHeader from 'src/react/components/CardHeader/CardHeader';
 import SW from './Billing.swiss';
+import BillingPlanSelector from './Plan/Selector/BillingPlanSelector';
 
 const style = {
   base: {
@@ -26,7 +25,8 @@ class Billing extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      errorMessage: ''
+      errorMessage: '',
+      plan: 'monthly'
     };
     setupDelegate(
       this,
@@ -51,6 +51,9 @@ class Billing extends PureComponent {
 
     return `$${(price * months * numberOfUsers).toFixed(2)}${postfix}`;
   }
+  handlePlanChange = plan => {
+    this.setState({ plan });
+  };
   onSubmit = e => {
     e.preventDefault();
     const { stripe, setLoading, clearLoading } = this.props;
@@ -85,110 +88,24 @@ class Billing extends PureComponent {
       </CardHeader>
     );
   }
-  renderToggle() {
-    const { billingStatus } = this.props;
 
-    return (
-      <SW.Toggle>
-        <SW.ToggleSection
-          first={billingStatus === 'monthly' ? true : false}
-          onClick={this.onSwitchPlanCached('monthly')}
-        >
-          <SW.TogglePrice>$7.50</SW.TogglePrice>
-          <SW.ToggleLabel>per user a month</SW.ToggleLabel>
-          <SW.ToggleSubLabel>billed monthly</SW.ToggleSubLabel>
-        </SW.ToggleSection>
-        <SW.ToggleSection
-          first={billingStatus === 'monthly' ? true : false}
-          onClick={this.onSwitchPlanCached('yearly')}
-        >
-          <SW.TogglePrice>$6</SW.TogglePrice>
-          <SW.ToggleLabel>per user a month</SW.ToggleLabel>
-          <SW.ToggleSubLabel>
-            billed anually{' '}
-            <SW.SaveLabel className="save">You save 20%</SW.SaveLabel>
-          </SW.ToggleSubLabel>
-        </SW.ToggleSection>
-      </SW.Toggle>
-    );
-  }
-  renderBottomSection() {
-    const { organization, users, billingStatus, getLoading } = this.props;
-    const hasStripe = organization.get('stripe_subscription_id');
-
-    return (
-      <SW.PaymentSection>
-        <SW.TopSection success={hasStripe ? true : ''}>
-          <SW.CardSection label="Credit or debit card" />
-          <SW.SubmitButton
-            {...getLoading('submit')}
-            title="Submit Payment"
-            onClick={this.onSubmit}
-          />
-          <SW.SubmitButtonSubtitle>
-            You will be billed {this.getPrice()}.
-          </SW.SubmitButtonSubtitle>
-          {billingStatus === 'monthly' ? (
-            <SW.CardSectionSubtitle>
-              Your subscription will automatically renew every month. You can
-              always cancel your account by writing to us on help@swipesapp.com.
-              <br />
-              <br />
-              By Clicking the 'Submit Payment' button above, you are agreeing to
-              our{' '}
-              <SW.Link href="https://s3.amazonaws.com/cdn.swipesapp.com/downloads/Policies.pdf">
-                Terms of Service
-              </SW.Link>
-              .
-            </SW.CardSectionSubtitle>
-          ) : (
-            <SW.CardSectionSubtitle>
-              Your subscription will automatically renew every year. You can
-              always cancel your account by writing to us on help@swipesapp.com.
-              <br />
-              <br />
-              By Clicking the 'Submit Payment' button above, you are agreeing to
-              our{' '}
-              <SW.Link href="https://s3.amazonaws.com/cdn.swipesapp.com/downloads/Policies.pdf">
-                Terms of Service
-              </SW.Link>
-              .
-            </SW.CardSectionSubtitle>
-          )}
-        </SW.TopSection>
-        <SW.BottomSection success={hasStripe ? true : ''}>
-          <SW.BottomSectionTitle>
-            Thank you for your purchase.
-          </SW.BottomSectionTitle>
-          <SW.PaymentStatus>
-            <SW.PaymentStatusLabel>
-              Your subscription status is:
-            </SW.PaymentStatusLabel>
-            <SW.Status active={!hasStripe ? false : true}>Active</SW.Status>
-          </SW.PaymentStatus>
-          <SW.ChangeDetails
-            title="Change card details"
-            onClick={this.onCardDetails}
-          />
-        </SW.BottomSection>
-      </SW.PaymentSection>
-    );
-  }
   render() {
-    const { organization, users } = this.props;
-    const numberOfUsers = users.filter(u => u.get('active')).size;
+    const { organization } = this.props;
+    const numberOfUsers = 9;
     return (
       <SWView header={this.renderHeader()}>
         <SW.Wrapper>
+          <BillingPlanSelector
+            value={this.state.plan}
+            onChange={this.handlePlanChange}
+          />
           <SW.PaymentToggle>
-            {this.renderToggle()}
             <SW.ToggleSubtitle>
               You have {numberOfUsers} users in {organization.get('name')}.{' '}
               {`That's ${this.getPrice(true)}`}
             </SW.ToggleSubtitle>
             <SW.ManageButton title="Manage team" onClick={this.onManage} />
           </SW.PaymentToggle>
-          {this.renderBottomSection()}
         </SW.Wrapper>
       </SWView>
     );

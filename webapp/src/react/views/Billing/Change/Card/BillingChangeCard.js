@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { Elements, injectStripe } from 'react-stripe-elements';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import request from 'swipes-core-js/utils/request';
+import BillingCard from 'src/react/views/Billing/Card/BillingCard';
 
 import SW from './BillingChangeCard.swiss';
 
@@ -44,7 +45,7 @@ export default class BillingChangeCard extends PureComponent {
     return (
       <SW.Wrapper>
         <SW.ComposerWrapper>
-          <CardSection label="Change card details" />
+          <BillingCard label="Change card details" />
         </SW.ComposerWrapper>
         <SW.ActionBar>
           <Button
