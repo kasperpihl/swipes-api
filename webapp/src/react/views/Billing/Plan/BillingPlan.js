@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import SW from './BillingPlanSelector.swiss';
+import SW from './BillingPlan.swiss';
 
-export default function BillingPlanSelector({ onChange, value }) {
+export default function BillingPlan({ onChange, value }) {
   const handleClickCached = plan => () => {
     if (plan === value) return;
     return onChange(plan);

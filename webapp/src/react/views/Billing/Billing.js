@@ -1,115 +1,82 @@
 import React, { PureComponent } from 'react';
-import { injectStripe } from 'react-stripe-elements';
+import { Elements } from 'react-stripe-elements';
+import { connect } from 'react-redux';
+
+import withLoader from 'src/react/_hocs/withLoader';
+import request from 'swipes-core-js/utils/request';
+import propsOrPop from 'src/react/_hocs/propsOrPop';
 import SWView from 'src/react/app/view-controller/SWView';
-import CardHeader from 'src/react/components/CardHeader/CardHeader';
+
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
+import ConfirmationModal from 'src/react/components/ConfirmationModal/ConfirmationModal';
+import BillingHeader from './Header/BillingHeader';
+import BillingPaymentActive from './Payment/Active/BillingPaymentActive';
+import BillingPaymentSubmit from './Payment/Submit/BillingPaymentSubmit';
+
+import BillingPlan from './Plan/BillingPlan';
+
 import SW from './Billing.swiss';
-import BillingPlanSelector from './Plan/Selector/BillingPlanSelector';
 
-const style = {
-  base: {
-    color: '#32325d',
-    lineHeight: '24px',
-    fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-    fontSmoothing: 'antialiased',
-    fontSize: '16px',
-    '::placeholder': {
-      color: '#aab7c4'
-    }
-  },
-  invalid: {
-    color: '#fa755a',
-    iconColor: '#fa755a'
-  }
-};
-class Billing extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      errorMessage: '',
-      plan: 'monthly'
-    };
-    setupDelegate(
-      this,
-      'onSwitchPlan',
-      'onSubmitSuccess',
-      'onManage',
-      'onCardDetails'
-    );
-  }
-  getPrice(hasPostfix) {
-    const { billingStatus, users } = this.props;
-    const numberOfUsers = users.filter(u => u.get('active')).size;
-    let price = 7.5;
-    let months = 1;
-    let postfix = hasPostfix ? ' monthly' : '';
-
-    if (billingStatus === 'yearly') {
-      price = 6;
-      months = 12;
-      postfix = hasPostfix ? ` annually ($${price * numberOfUsers}/month)` : '';
-    }
-
-    return `$${(price * months * numberOfUsers).toFixed(2)}${postfix}`;
-  }
-  handlePlanChange = plan => {
-    this.setState({ plan });
+@navWrapper
+@withLoader
+@connect((state, props) => ({
+  organization: state.organization.get(props.organizationId)
+}))
+@propsOrPop('organization')
+export default class Billing extends PureComponent {
+  state = {
+    plan: 'monthly'
   };
-  onSubmit = e => {
-    e.preventDefault();
-    const { stripe, setLoading, clearLoading } = this.props;
+  updatePlanRequest = plan => {
+    const { organization } = this.props;
 
-    setLoading('submit');
-    stripe.createToken().then(({ token, error }) => {
-      if (error) {
-        clearLoading('submit');
-        this.setState({ errorMessage: error.message });
-      } else {
-        console.log('Received Stripe token:', token);
-        this.onSubmitSuccess(token);
-      }
+    request('billing.updatePlan', {
+      plan,
+      organization_id: organization.get('organization_id')
     });
   };
-  onChange = cardState => {
-    this.setState({ cardState });
+  handlePlanChange = plan => {
+    const { openModal, organization } = this.props;
+    if (!organization.get('stripe_subscription_id')) {
+      this.setState({ plan });
+    } else {
+      openModal({
+        component: ConfirmationModal,
+        position: 'center',
+        props: {
+          title: 'Change billing plan',
+          text: `You are about to change your billing plan from ${organization.get(
+            'plan'
+          )} to ${plan}. Any unused time from the current subscription will be converted in credits that will be used for future payments.
+    
+          Click 'Confirm’ to change the plan.`,
+          callback: this.updatePlanRequest.bind(null, plan)
+        }
+      });
+    }
   };
-  renderHeader() {
-    const { organization } = this.props;
-    const hasStripe = organization.get('stripe_subscription_id');
-    const status = !hasStripe ? 'Inactive' : 'Active';
-
-    return (
-      <CardHeader title="Payment">
-        <SW.PaymentStatus>
-          <SW.PaymentStatusLabel>
-            Your subscription status is:
-          </SW.PaymentStatusLabel>
-          <SW.Status active={!hasStripe ? false : true}>{status}</SW.Status>
-        </SW.PaymentStatus>
-      </CardHeader>
-    );
-  }
-
   render() {
-    const { organization } = this.props;
-    const numberOfUsers = 9;
+    const { organization, openModal } = this.props;
+    const { plan } = this.state;
+
     return (
-      <SWView header={this.renderHeader()}>
-        <SW.Wrapper>
-          <BillingPlanSelector
-            value={this.state.plan}
-            onChange={this.handlePlanChange}
-          />
-          <SW.PaymentToggle>
-            <SW.ToggleSubtitle>
-              You have {numberOfUsers} users in {organization.get('name')}.{' '}
-              {`That's ${this.getPrice(true)}`}
-            </SW.ToggleSubtitle>
-            <SW.ManageButton title="Manage team" onClick={this.onManage} />
-          </SW.PaymentToggle>
-        </SW.Wrapper>
-      </SWView>
+      <Elements>
+        <SWView header={<BillingHeader organization={organization} />}>
+          <SW.Wrapper>
+            <BillingPlan
+              value={this.state.plan}
+              onChange={this.handlePlanChange}
+            />
+            <SW.PaymentSection>
+              {organization.get('stripe_subscription_id') ? (
+                <BillingPaymentActive openModal={openModal} />
+              ) : (
+                <BillingPaymentSubmit organization={organization} plan={plan} />
+              )}
+            </SW.PaymentSection>
+          </SW.Wrapper>
+        </SWView>
+      </Elements>
     );
   }
 }
-
-export default injectStripe(Billing);

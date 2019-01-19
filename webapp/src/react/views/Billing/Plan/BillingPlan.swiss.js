@@ -1,6 +1,6 @@
 import { styleSheet } from 'swiss-react';
 
-export default styleSheet('BillingPlanSelector', {
+export default styleSheet('BillingPlan', {
   Wrapper: {
     _size: ['420px', '213px'],
     _flex: ['row'],
