@@ -1,30 +1,14 @@
 // Account
-// import Billing from './Billing/Billing';
-// import Browser from './Browser/Browser';
-// import Discuss from './Discuss/Discuss';
-// import DiscussionComposer from './Discussion/Composer/DiscussionComposer';
-// import DiscussionOverview from './Discussion/Overview/HOCDiscussionOverview';
-import NotFound from './NotFound/NotFound';
-import Organization from './Organization/OrganizationNew';
-import Organize from './Organize/Organize';
-import Profile from './Profile/Profile';
-import ProjectOverview from './Project/Overview/ProjectOverview';
-// import Preview from './Preview/Preview';
-// import SideNote from './SideNote/SideNote';
-// import Tester from './Tester/Tester';
-
-export {
-  // Billing,
-  // Browser,
-  // Discuss,
-  // DiscussionComposer,
-  // DiscussionOverview,
-  NotFound,
-  Organize,
-  // Preview,
-  Profile,
-  ProjectOverview,
-  Organization
-  // SideNote,
-  // Tester,
-};
+// export { default as Billing } from './Billing/Billing';
+// export { default as Browser } from './Browser/Browser';
+// export { default as Discuss } from './Discuss/Discuss';
+// export { default as DiscussionComposer } from './Discussion/Composer/DiscussionComposer';
+// export { default as DiscussionOverview } from './Discussion/Overview/HOCDiscussionOverview';
+export { default as NotFound } from './NotFound/NotFound';
+export { default as Organization } from './Organization/OrganizationNew';
+export { default as Organize } from './Organize/Organize';
+export { default as Profile } from './Profile/Profile';
+export { default as ProjectOverview } from './Project/Overview/ProjectOverview';
+// export { default as Preview } from './Preview/Preview';
+// export { default as SideNote } from './SideNote/SideNote';
+export { default as Tester } from './Tester/Tester';

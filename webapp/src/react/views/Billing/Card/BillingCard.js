@@ -1,5 +1,5 @@
 import React from 'react';
-import SW from './CardSection.swiss';
+import SW from './BillingCard.swiss';
 
 const style = {
   base: {
@@ -18,23 +18,20 @@ const style = {
   }
 };
 
-class CardSection extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      errorMessage: ''
-    };
-  }
+export default class BillingCard extends React.Component {
+  state = {
+    errorMessage: ''
+  };
 
-  onChange = cardState => {
+  handleChange = cardState => {
     this.setState({ cardState });
   };
   render() {
     const { label } = this.props;
-    let { errorMessage, cardState } = this.state;
+    const { cardState } = this.state;
 
-    errorMessage =
-      errorMessage || (cardState && cardState.error && cardState.error.message);
+    const errorMessage =
+      cardState && cardState.error && cardState.error.message;
 
     return (
       <SW.Billing>
@@ -44,7 +41,7 @@ class CardSection extends React.Component {
             <SW.StripeElement
               hidePostalCode
               style={style}
-              onChange={this.onChange}
+              onChange={this.handleChange}
             />
           </SW.ElementWrapper>
           <SW.CardError role="alert">{errorMessage}</SW.CardError>
@@ -53,5 +50,3 @@ class CardSection extends React.Component {
     );
   }
 }
-
-export default CardSection;

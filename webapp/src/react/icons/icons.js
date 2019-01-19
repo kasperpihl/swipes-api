@@ -85,17 +85,4 @@ export { default as IphoneDevice } from './svgs/iphone-device.svg';
 export { default as AndroidDevice } from './svgs/android-device.svg';
 
 // Empty states
-
-export { default as ESArrow } from './empty-states/es-arrow.svg';
-export { default as ESDiscussions } from './empty-states/es-discussions.svg';
-export { default as ESError } from './empty-states/es-error.svg';
-export {
-  default as ESMilestoneAchieved
-} from './empty-states/es-milestone-achieved.svg';
-export { default as ESNoResults } from './empty-states/es-no-results.svg';
-export {
-  default as ESNotifications
-} from './empty-states/es-notifications.svg';
-export { default as ESSearch } from './empty-states/es-search.svg';
-export { default as ESWelcome } from './empty-states/es-welcome.svg';
-export { default as ESNotSupported } from './empty-states/es-not-supported.svg';
+export { default as EmptyState } from './svgs/empty-state.svg';

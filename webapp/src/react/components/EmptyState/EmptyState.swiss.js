@@ -8,30 +8,11 @@ export default styleSheet('EmptyState', {
     pointerEvents: 'none',
     fill: {
       height: '100%'
-    },
-
-    'page=takeAction': {
-      transform: 'translateY(-38px)',
-      transition: '.15s ease'
-    },
-
-    'page=searchResult': {
-      transform: 'translateY(140px)'
-    },
-
-    'page=Discussions': {
-      transform: 'translateY(100%)'
     }
   },
 
   ImageWrapper: {
-    paddingBottom: '30px',
-
-    searchResult: {
-      _size: ['100%', 'auto'],
-      _flex: ['column', 'center', 'center'],
-      marginBotton: '12px'
-    }
+    paddingBottom: '30px'
   },
 
   Image: {
@@ -40,17 +21,6 @@ export default styleSheet('EmptyState', {
 
     large: {
       _size: ['300px', 'auto']
-    },
-
-    'page=takeAction': {
-      _size: ['54px', '114px'],
-      transform: 'translateX(calc(-50% + 6px))'
-    },
-
-    searchResult: {
-      _size: ['auto', '100%'],
-      maxWidth: '360px',
-      opacity: '0.8'
     }
   },
 
@@ -61,16 +31,6 @@ export default styleSheet('EmptyState', {
 
     large: {
       _font: ['18px', '24px']
-    },
-
-    'page=takeAction': {
-      color: '$sw1'
-    },
-
-    searchResult: {
-      _font: ['11px', '18px', 'bold'],
-      textTransform: 'uppercase',
-      pointerEvents: 'all'
     }
   },
 

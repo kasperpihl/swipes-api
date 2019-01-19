@@ -78,10 +78,9 @@ export default class DiscussionOverview extends PureComponent {
         ))}
         {pagination.results && !pagination.results.size && (
           <EmptyState
-            icon="ESNotifications"
+            showIcon
             title="IT’S STILL AND QUIET"
             description={`Whenever someone comments on this discussion \n it will show up here.`}
-            page="Discussions"
           />
         )}
       </SW.CommentWrapper>

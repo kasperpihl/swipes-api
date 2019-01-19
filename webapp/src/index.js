@@ -17,6 +17,7 @@ import IpcListener from 'src/classes/ipc-listener';
 import urlGetParameter from 'src/utils/url/urlGetParameter';
 import { setStore } from 'swipes-core-js/utils/store/storeGet';
 import Socket from 'swipes-core-js/classes/Socket';
+import { StripeProvider } from 'react-stripe-elements';
 
 // Init core!
 if (urlGetParameter('invitation_token')) {
@@ -49,13 +50,24 @@ if (process.env.NODE_ENV !== 'production') {
 window.ipcListener = new IpcListener(store);
 window.analytics = new Analytics(store);
 
+let token = 'pk_live_vLIRvcBoJ4AA9sFUpmVT11gQ';
+
+if (
+  process.env.NODE_ENV !== 'production' ||
+  window.location.hostname === 'staging.swipesapp.com'
+) {
+  token = 'pk_test_0pUn7s5EyQy7GeAg93QrsJl9';
+}
+
 render(
   <Provider store={store}>
     <PersistGate persistor={persistor}>
       <SwissProvider>
         <BrowserRouter>
           <OptimistProvider>
-            <Root />
+            <StripeProvider apiKey={token}>
+              <Root />
+            </StripeProvider>
           </OptimistProvider>
         </BrowserRouter>
       </SwissProvider>
