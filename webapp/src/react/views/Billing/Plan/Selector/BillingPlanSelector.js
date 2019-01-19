@@ -1,26 +1,12 @@
 import React, { useState } from 'react';
-import BillingPlanConfirm from 'src/react/views/Billing/Plan/Confirm/BillingPlanConfirm';
 import SW from './BillingPlanSelector.swiss';
 
-const BillingPlanSelector = ({ onChange, value }) => {
+export default function BillingPlanSelector({ onChange, value }) {
   const handleClickCached = plan => () => {
     if (plan === value) return;
     return onChange(plan);
-    if (!currentPlan) {
-      setPlan(plan);
-    } else {
-      props.openModal({
-        component: BillingPlanConfirm,
-        title: 'Change billing plan',
-        position: 'center',
-        props: {
-          plan,
-          organizationId: props.organization.get('organization_id'),
-          currentPlan: currentPlan
-        }
-      });
-    }
   };
+
   return (
     <SW.Wrapper>
       <SW.Toggle
@@ -43,6 +29,4 @@ const BillingPlanSelector = ({ onChange, value }) => {
       </SW.Toggle>
     </SW.Wrapper>
   );
-};
-
-export default BillingPlanSelector;
+}

@@ -119,8 +119,7 @@ export default class OrganizationHeader extends PureComponent {
         title: 'Delete organization',
         text:
           'Are you sure you want to delete this organization? Deleting it is permanent and cannot be reversed.',
-        callback: this.handleDeleteOrganization,
-        disablePasswordInput: false
+        callback: this.handleDeleteOrganization
       };
       return this.openConfirmationModal(modalOptions);
     }
@@ -129,7 +128,7 @@ export default class OrganizationHeader extends PureComponent {
         title: 'Leave organization',
         text: 'Are you sure that you want to leave this organization?',
         callback: this.handleLeaveOrganization,
-        disablePasswordInput: true
+        checkPassword: true
       };
 
       return this.openConfirmationModal(modalOptions);

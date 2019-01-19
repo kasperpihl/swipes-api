@@ -4,9 +4,9 @@ import { setupLoading } from 'swipes-core-js/classes/utils';
 import request from 'swipes-core-js/utils/request';
 import BillingPaymentInput from 'src/react/views/Billing/Payment/Input/BillingPaymentInput';
 
-import SW from './BillingChangeCard.swiss';
+import SW from './BillingPaymentModal.swiss';
 
-export default class BillingChangeCard extends PureComponent {
+export default class BillingPaymentModal extends PureComponent {
   constructor(props) {
     super(props);
     setupLoading(this);

@@ -8,13 +8,13 @@ import propsOrPop from 'src/react/_hocs/propsOrPop';
 import SWView from 'src/react/app/view-controller/SWView';
 
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
+import ConfirmationModal from 'src/react/components/ConfirmationModal/ConfirmationModal';
 import BillingHeader from './Header/BillingHeader';
 import BillingPaymentActive from './Payment/Active/BillingPaymentActive';
 import BillingPaymentSubmit from './Payment/Submit/BillingPaymentSubmit';
 
 import BillingPlanSelector from './Plan/Selector/BillingPlanSelector';
-import BillingPlanConfirm from './Plan/Confirm/BillingPlanConfirm';
-import BillingChangeCard from './Change/Card/BillingChangeCard';
+
 import SW from './Billing.swiss';
 
 @navWrapper
@@ -27,53 +27,36 @@ export default class Billing extends PureComponent {
   state = {
     plan: 'monthly'
   };
-  onSwitchPlan(plan) {
-    const { organization, openModal } = this.props;
-    if (!organization.get('stripe_subscription_id')) {
-      this.setState({ billingStatus: plan });
-    } else if (this.state.billingStatus !== plan) {
-      openModal({
-        component: BillingPlanConfirm,
-        title: 'Change billing plan',
-        position: 'center',
-        props: {
-          plan,
-          organizationId: organization.get('organization_id'),
-          currentPlan: this.state.billingStatus
-        }
-      });
-    }
-  }
-  onCardDetails() {
-    const { openModal } = this.props;
+  updatePlanRequest = plan => {
+    const { organization } = this.props;
 
-    openModal({
-      component: BillingChangeCard,
-      title: 'Change card details',
-      position: 'center',
-      props: {}
+    request('billing.updatePlan', {
+      plan,
+      organization_id: organization.get('organization_id')
     });
-  }
+  };
   handlePlanChange = plan => {
     const { openModal, organization } = this.props;
     if (!organization.get('stripe_subscription_id')) {
       this.setState({ plan });
     } else {
       openModal({
-        component: BillingPlanConfirm,
-        title: 'Change billing plan',
+        component: ConfirmationModal,
         position: 'center',
         props: {
-          plan,
-          organizationId: organization.get('organization_id'),
-          currentPlan: this.state.plan
+          title: 'Change billing plan',
+          text: `You are about to change your billing plan from ${organization.get(
+            'plan'
+          )} to ${plan}. Any unused time from the current subscription will be converted in credits that will be used for future payments.
+    
+          Click 'Confirm’ to change the plan.`,
+          callback: this.updatePlanRequest.bind(null, plan)
         }
       });
     }
-    this.setState({ plan });
   };
   render() {
-    const { organization } = this.props;
+    const { organization, openModal } = this.props;
     const { plan } = this.state;
 
     return (
@@ -86,7 +69,7 @@ export default class Billing extends PureComponent {
             />
             <SW.PaymentSection>
               {organization.get('stripe_subscription_id') ? (
-                <BillingPaymentActive />
+                <BillingPaymentActive openModal={openModal} />
               ) : (
                 <BillingPaymentSubmit organization={organization} plan={plan} />
               )}

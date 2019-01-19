@@ -45,7 +45,8 @@ export default class OrganizationUser extends PureComponent {
         title: 'Transfer ownership of organization',
         text:
           'Warrning: Transferring the ownership is permanent and it cannot be reversed!',
-        callback: this.handleTransferOwnership
+        callback: this.handleTransferOwnership,
+        checkPassword: true
       }
     });
   }

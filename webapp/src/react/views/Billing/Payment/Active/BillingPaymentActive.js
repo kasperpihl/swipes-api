@@ -1,9 +1,16 @@
 import React from 'react';
 import useLoader from 'src/react/_hooks/useLoader';
+import BillingPaymentModal from 'src/react/views/Billing/Payment/Modal/BillingPaymentModal';
 import SW from './BillingPaymentActive.swiss';
 
-export default function BillingPaymentActive() {
-  const handleCardDetails = () => null;
+export default function BillingPaymentActive({ openModal }) {
+  const handleCardDetails = () => {
+    openModal({
+      component: BillingPaymentModal,
+      title: 'Change card details',
+      position: 'center'
+    });
+  };
   return (
     <SW.Wrapper>
       <SW.Title>Thank you for your purchase.</SW.Title>
