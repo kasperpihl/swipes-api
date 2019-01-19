@@ -61,7 +61,8 @@ export default class OrganizationNew extends PureComponent {
     return (
       <OrganizationHeader
         name={organization.get('name')}
-        orgId={organization.get('organization_id')}
+        organization={organization}
+        meInOrg={meInOrg}
         admin={organization.getIn(['users', meInOrg.get('user_id'), 'admin'])}
         activeSubscription={activeSubscription}
         trialExpired={trialExpired}

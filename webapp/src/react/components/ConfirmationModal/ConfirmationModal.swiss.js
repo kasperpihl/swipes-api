@@ -1,7 +1,7 @@
 import { styleSheet } from 'swiss-react';
 import Button from 'src/react/components/Button/Button';
 
-export default styleSheet('PasswordInputModal', {
+export default styleSheet('ConfirmationModal', {
   Wrapper: {
     _size: ['500px', 'auto'],
     _flex: ['column', 'flex-start', 'flex-start'],

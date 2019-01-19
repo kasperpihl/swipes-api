@@ -25,11 +25,17 @@ export default class ListMenu extends PureComponent {
       <SW.ItemRow
         key={i}
         onClick={() => {
-          onClick(i, b);
-          hide();
+          if (b.disabled) {
+            return null;
+          } else {
+            onClick(i, b);
+            hide();
+          }
         }}
+        disabled={b.disabled}
       >
-        {b.title || b}
+        <SW.Title>{b.title || b}</SW.Title>
+        {!!b.disabled ? <SW.Subtitle>{b.subtitle}</SW.Subtitle> : null}
       </SW.ItemRow>
     ));
   };
