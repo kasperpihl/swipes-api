@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { setupLoading } from 'swipes-core-js/classes/utils';
+import withLoader from 'src/react/_hocs/withLoader';
 import SW from './ProfileNameChange.swiss.js';
 
 import request from 'swipes-core-js/utils/request';
@@ -8,6 +8,7 @@ import request from 'swipes-core-js/utils/request';
 @connect(state => ({
   me: state.me
 }))
+@withLoader
 export default class ProfileNameChange extends PureComponent {
   constructor(props) {
     super(props);
@@ -16,8 +17,6 @@ export default class ProfileNameChange extends PureComponent {
       firstName: props.me.get('first_name') || '',
       lastName: props.me.get('last_name') || ''
     };
-
-    setupLoading(this);
   }
   getKeyForServer(key) {
     switch (key) {
@@ -32,28 +31,34 @@ export default class ProfileNameChange extends PureComponent {
   handleChangeCached = key => e => {
     this.setState({ [key]: e.target.value });
   };
-  handleSave = () => {
-    const { me } = this.props;
+  handleSave = e => {
+    const { me, loader, hideModal } = this.props;
     const { firstName, lastName } = this.state;
+    if (loader.check('changeName')) {
+      return;
+    }
 
-    if (
-      firstName !== me.get('first_name') ||
-      lastName !== me.get('last_name')
-    ) {
-      this.setLoading('button');
-      request('me.updateProfile', {
-        first_name: firstName,
-        last_name: lastName
-      }).then(res => {
-        if (res && res.ok) {
-          this.clearLoading('button', 'success', 1500, this.props.hideModal);
-        } else {
-          this.clearLoading('button', '!Something went wrong');
-        }
-      });
+    if (!e.keyCode || e.keyCode === 13) {
+      if (
+        firstName !== me.get('first_name') ||
+        lastName !== me.get('last_name')
+      ) {
+        loader.set('changeName');
+        request('me.updateProfile', {
+          first_name: firstName,
+          last_name: lastName
+        }).then(res => {
+          if (res && res.ok) {
+            loader.success('changeName', 'Success', 1500, hideModal);
+          } else {
+            loader.error('changeName', res.error, 2000);
+          }
+        });
+      }
     }
   };
   render() {
+    const { loader } = this.props;
     return (
       <SW.Wrapper>
         <SW.Title>Update profile</SW.Title>
@@ -65,6 +70,7 @@ export default class ProfileNameChange extends PureComponent {
               placeholder="First Name"
               value={this.state.firstName}
               onChange={this.handleChangeCached('firstName')}
+              onKeyUp={this.handleSave}
               autoFocus
             />
           </SW.InputWrapper>
@@ -75,13 +81,14 @@ export default class ProfileNameChange extends PureComponent {
               placeholder="Last Name"
               value={this.state.lastName}
               onChange={this.handleChangeCached('lastName')}
+              onKeyUp={this.handleSave}
             />
           </SW.InputWrapper>
         </SW.InputContainer>
         <SW.Button
           title="Update"
           onClick={this.handleSave}
-          {...this.getLoading('button')}
+          {...loader.get('changeName')}
         />
       </SW.Wrapper>
     );
