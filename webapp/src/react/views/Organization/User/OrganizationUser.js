@@ -1,12 +1,11 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
-import Button from 'src/react/components/Button/Button';
+import withLoader from 'src/react/_hocs/withLoader';
 import UserImage from 'src/react/components/UserImage/UserImage';
 import ListMenu from 'src/react/context-menus/ListMenu/ListMenu';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import request from 'swipes-core-js/utils/request';
-import { setupLoading } from 'swipes-core-js/classes/utils';
 import SW from './OrganizationUser.swiss';
 
 const kPromote = 'Promote';
@@ -15,6 +14,7 @@ const kDisable = 'Disable';
 const kTransfer = 'Transfer';
 const kInvite = 'Invite';
 @navWrapper
+@withLoader
 @connect(
   (state, props) => ({
     organization: state.organization.get(props.organizationId)
@@ -26,8 +26,6 @@ const kInvite = 'Invite';
 export default class OrganizationUser extends PureComponent {
   constructor(props) {
     super(props);
-
-    setupLoading(this);
   }
   getOptionsForE = e => {
     return {
@@ -63,13 +61,16 @@ export default class OrganizationUser extends PureComponent {
       endpoint = 'organization.inviteUser';
       buttonMessage = 'Invite sent';
     }
+    if (loader.check('buttonClicked')) {
+      return;
+    }
+    loader.set('buttonClicked');
     if (endpoint) {
-      this.setLoading('buttonClicked');
       request(endpoint, options).then(res => {
         if (res.ok) {
-          this.clearLoading('buttonClicked', buttonMessage, 1500);
+          loader.clear('buttonClicked');
         } else {
-          this.clearLoading('buttonClicked', '!Something went wrong', 2000);
+          loader.error('buttonClicked', res.error);
         }
       });
     }
@@ -139,7 +140,7 @@ export default class OrganizationUser extends PureComponent {
   };
 
   render() {
-    const { user, organization, me } = this.props;
+    const { user, organization, me, loader } = this.props;
     const isOwner = this.getUserTag(user) === 'Owner';
     const isUser =
       this.getUserTag(user) === 'User' && this.getUserTag(me) === 'User';
@@ -161,7 +162,7 @@ export default class OrganizationUser extends PureComponent {
           <SW.OptionsButton
             icon="ThreeDots"
             onClick={this.openListMenu}
-            {...this.getLoading('buttonClicked')}
+            {...loader.get('buttonClicked')}
           />
         )}
         <SW.UserType>{this.getUserTag(user)}</SW.UserType>
