@@ -143,9 +143,6 @@ export default class OrganizationUser extends PureComponent {
     const isOwner = this.getUserTag(user) === 'Owner';
     const isUser =
       this.getUserTag(user) === 'User' && this.getUserTag(me) === 'User';
-    const meOwner = this.getUserTag(me) === 'Owner';
-
-    console.log(isUser);
 
     return (
       <SW.Wrapper>
