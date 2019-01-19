@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
 import withLoader from 'src/react/_hocs/withLoader';
 import UserImage from 'src/react/components/UserImage/UserImage';
-import PasswordInputModal from 'src/react/components/PasswordInput/PasswordInputModal.js';
+import ConfirmationModal from 'src/react/components/ConfirmationModal/ConfirmationModal';
 import ListMenu from 'src/react/context-menus/ListMenu/ListMenu';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import request from 'swipes-core-js/utils/request';
@@ -39,7 +39,7 @@ export default class OrganizationUser extends PureComponent {
   openTransferModal() {
     const { openModal } = this.props;
     openModal({
-      component: PasswordInputModal,
+      component: ConfirmationModal,
       position: 'center',
       props: {
         title: 'Transfer ownership of organization',
