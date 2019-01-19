@@ -3,12 +3,15 @@ import useLoader from 'src/react/_hooks/useLoader';
 import BillingPaymentModal from 'src/react/views/Billing/Payment/Modal/BillingPaymentModal';
 import SW from './BillingPaymentActive.swiss';
 
-export default function BillingPaymentActive({ openModal }) {
+export default function BillingPaymentActive({ openModal, organization }) {
   const handleCardDetails = () => {
     openModal({
       component: BillingPaymentModal,
       title: 'Change card details',
-      position: 'center'
+      position: 'center',
+      props: {
+        organizationId: organization.get('organization_id')
+      }
     });
   };
   return (

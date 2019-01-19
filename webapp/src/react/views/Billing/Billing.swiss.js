@@ -8,6 +8,7 @@ export default styleSheet('Billing', {
   },
   PaymentSection: {
     _size: ['420px', 'auto'],
-    _flex: ['column', 'center']
+    _flex: ['column', 'center'],
+    paddingTop: '24px'
   }
 });

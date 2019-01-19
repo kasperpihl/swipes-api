@@ -1,5 +1,6 @@
 import { string } from 'valjs';
 import stripeClient from 'src/utils/stripe/stripeClient';
+import userOrganizationCheck from 'src/utils/userOrganizationCheck';
 import { query } from 'src/utils/db/db';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 
@@ -37,7 +38,7 @@ export default endpointCreate(
       throw Error('not_stripe_customer');
     }
 
-    await stripeClient.customer.update(org.stripe_customer_id, {
+    await stripeClient.customers.update(org.stripe_customer_id, {
       source: stripe_token
     });
 

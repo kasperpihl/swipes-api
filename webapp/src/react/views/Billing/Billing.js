@@ -64,12 +64,15 @@ export default class Billing extends PureComponent {
         <SWView header={<BillingHeader organization={organization} />}>
           <SW.Wrapper>
             <BillingPlan
-              value={this.state.plan}
+              value={organization.get('plan') || plan}
               onChange={this.handlePlanChange}
             />
             <SW.PaymentSection>
               {organization.get('stripe_subscription_id') ? (
-                <BillingPaymentActive openModal={openModal} />
+                <BillingPaymentActive
+                  openModal={openModal}
+                  organization={organization}
+                />
               ) : (
                 <BillingPaymentSubmit organization={organization} plan={plan} />
               )}

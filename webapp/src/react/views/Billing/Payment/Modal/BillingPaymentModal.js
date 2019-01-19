@@ -1,25 +1,23 @@
 import React, { PureComponent } from 'react';
 import { Elements, injectStripe } from 'react-stripe-elements';
-import { setupLoading } from 'swipes-core-js/classes/utils';
+import withLoader from 'src/react/_hocs/withLoader';
 import request from 'swipes-core-js/utils/request';
 import BillingPaymentInput from 'src/react/views/Billing/Payment/Input/BillingPaymentInput';
+import Button from 'src/react/components/Button/Button';
 
 import SW from './BillingPaymentModal.swiss';
 
+@withLoader
 export default class BillingPaymentModal extends PureComponent {
-  constructor(props) {
-    super(props);
-    setupLoading(this);
-  }
   handleSubmit = e => {
-    const { organizationId } = this.props;
-    this.setLoading('changeCardNumber');
+    const { organizationId, hideModal, loader } = this.props;
+    loader.set('changeCardNumber');
     this.stripe
       .createToken()
       .then(({ token, error }) => {
         if (error) {
           console.log(error);
-          this.clearLoading('changeCardNumber', `!${error.message}`);
+          loader.error('changeCardNumber', error.message);
           return;
         }
         console.log('Received Stripe token:', token);
@@ -30,17 +28,18 @@ export default class BillingPaymentModal extends PureComponent {
       })
       .then(res => {
         if (res.ok) {
-          this.clearLoading('changeCardNumber', 'Changed', 1500, () => {
+          loader.success('changeCardNumber', 'Changed', 1500, () => {
             if (hideModal) {
               hideModal();
             }
           });
         } else {
-          this.clearLoading('changeCardNumber', '!Error', 3000);
+          loader.error('changeCardNumber', res.error, 3000);
         }
       });
   };
   RenderForm = injectStripe(props => {
+    const { loader } = this.props;
     this.stripe = props.stripe;
     return (
       <SW.Wrapper>
@@ -51,7 +50,7 @@ export default class BillingPaymentModal extends PureComponent {
           <Button
             title="Change"
             onClick={this.handleSubmit}
-            {...this.getLoading('changeCardNumber')}
+            {...loader.get('changeCardNumber')}
           />
         </SW.ActionBar>
       </SW.Wrapper>
@@ -60,7 +59,7 @@ export default class BillingPaymentModal extends PureComponent {
   render() {
     return (
       <Elements>
-        <RenderForm />
+        <this.RenderForm />
       </Elements>
     );
   }

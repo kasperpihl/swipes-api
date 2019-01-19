@@ -1,6 +1,7 @@
 import { string, any } from 'valjs';
 import { query } from 'src/utils/db/db';
 import stripeClient from 'src/utils/stripe/stripeClient';
+import userOrganizationCheck from 'src/utils/userOrganizationCheck';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import stripeGetPlanId from 'src/utils/stripe/stripeGetPlanId';
 
@@ -37,8 +38,8 @@ export default endpointCreate(
 
     const org = orgRes.rows[0];
 
-    if (!org.stripe_customer_id) {
-      throw Error('not_stripe_customer');
+    if (!org.stripe_subscription_id) {
+      throw Error('no_stripe_subscription');
     }
 
     const stripePlanId = stripeGetPlanId(plan);
@@ -47,10 +48,10 @@ export default endpointCreate(
     }
 
     const subscription = await stripeClient.subscriptions.retrieve(
-      stripe_subscription_id
+      org.stripe_subscription_id
     );
 
-    await stripeClient.subscriptions.update(stripe_subscription_id, {
+    await stripeClient.subscriptions.update(org.stripe_subscription_id, {
       items: [
         {
           id: subscription.items.data[0].id,
@@ -62,10 +63,12 @@ export default endpointCreate(
     await query(
       `
         UPDATE organizations
-        SET stripe_plan_id = $1
-        WHERE organization_id = $2
+        SET
+          stripe_plan_id = $1,
+          plan = $2
+        WHERE organization_id = $3
       `,
-      [stripePlanId, organization_id]
+      [stripePlanId, plan, organization_id]
     );
 
     // Create response data.
