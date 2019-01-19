@@ -3,9 +3,8 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 import * as menuActions from 'src/redux/menu/menuActions';
-import * as invitationActions from 'src/redux/invitation/invitationActions';
 import { Map } from 'immutable';
-import { setupLoading } from 'swipes-core-js/classes/utils';
+import withLoader from 'src/react/_hocs/withLoader';
 import request from 'swipes-core-js/utils/request';
 import CompatibleCard from 'src/react/browser-compatible/components/card/CompatibleCard';
 import Button from 'src/react/components/Button/Button';
@@ -13,6 +12,7 @@ import CardHeader from 'src/react/components/CardHeader/CardHeader';
 import SW from './Authentication.swiss';
 
 @withRouter
+@withLoader
 @connect(
   state => ({
     invitedToOrg: state.invitation.get('invitedToOrg')
@@ -20,18 +20,13 @@ import SW from './Authentication.swiss';
   {
     setUrl: navigationActions.url,
     inputMenu: menuActions.input,
-    alert: menuActions.alert,
-    invitationClear: invitationActions.clear
+    alert: menuActions.alert
   }
 )
 export default class Authentication extends PureComponent {
   state = {
     formData: Map()
   };
-  constructor(props) {
-    super(props);
-    setupLoading(this);
-  }
   handleResetPassword = e => {
     e.preventDefault();
     const { inputMenu, alert } = this.props;
@@ -64,13 +59,13 @@ export default class Authentication extends PureComponent {
   };
   handleAuthentication = () => {
     const { formData } = this.state;
-    const { setUrl, invitedToOrg, invitationClear } = this.props;
+    const { setUrl, loader } = this.props;
 
-    if (this.isLoading('authButton')) {
+    if (loader.check('authButton')) {
       return;
     }
 
-    this.setLoading('authButton');
+    loader.set('authButton');
 
     const endpoint = this.isLogin() ? 'user.signin' : 'user.signup';
     const analyticsEvent = this.isLogin() ? 'Logged in' : 'Signed up';
@@ -79,17 +74,11 @@ export default class Authentication extends PureComponent {
       ...formData.toJS()
     }).then(res => {
       if (res.ok) {
-        this.clearLoading('authButton');
+        loader.clear('authButton');
         window.analytics.sendEvent(analyticsEvent, {});
-        // if (invitedToOrg && invitedToOrg.get('invited_by_user_id')) {
-        //   window.analytics.sendEvent('Invitation accepted', {
-        //     distinct_id: invitedToOrg.get('invited_by_user_id')
-        //     // 'Minutes since invite':
-        //   });
-        // }
         setUrl('/');
       } else {
-        this.clearLoading('authButton', `!${res.error}`);
+        loader.error('authButton', res.error);
       }
     });
   };
@@ -194,6 +183,7 @@ export default class Authentication extends PureComponent {
     );
   }
   render() {
+    const { loader } = this.props;
     return (
       <CompatibleCard>
         <SW.Wrapper>
@@ -205,17 +195,15 @@ export default class Authentication extends PureComponent {
           />
           <SW.Form>
             {this.renderInputs()}
-            {this.getLoading('authButton').error && (
-              <SW.ErrorLabel>
-                {this.getLoading('authButton').error}
-              </SW.ErrorLabel>
+            {loader.get('authButton').error && (
+              <SW.ErrorLabel>{loader.get('authButton').error}</SW.ErrorLabel>
             )}
             <SW.SubmitWrapper>
               <Button
                 rounded
                 title={this.isLogin() ? 'Sign in' : 'Create account'}
                 onClick={this.handleAuthentication}
-                {...this.getLoading('authButton')}
+                {...loader.get('authButton')}
               />
               {this.renderSwitch()}
             </SW.SubmitWrapper>
