@@ -15,6 +15,7 @@ export default styleSheet('OrganizationUser', {
   },
 
   UserDetails: {
+    _size: ['100%', 'auto'],
     _flex: ['column', 'flex-start', 'flex-start'],
     marginLeft: '12px'
   },
@@ -32,14 +33,19 @@ export default styleSheet('OrganizationUser', {
   UserType: {
     _el: 'p',
     _textStyle: 'body',
-    color: '$sw2',
-    marginLeft: 'auto',
-    marginRight: '12px'
+    color: '$sw2'
   },
 
   Button: {
     _el: Button,
     flexShrink: '0',
     justifySelf: 'flex-end'
+  },
+
+  OptionsButton: {
+    _el: Button,
+    marginLeft: 'auto',
+    marginRight: '12px',
+    flexShrink: '0'
   }
 });

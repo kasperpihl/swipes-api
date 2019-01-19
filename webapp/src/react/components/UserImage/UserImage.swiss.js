@@ -17,7 +17,7 @@ export default styleSheet('UserImage', {
     _el: 'img',
     _size: '100%',
 
-    blackAndWhite: {
+    grayscale: {
       filter: 'grayscale(100%)'
     }
   },

@@ -30,7 +30,7 @@ export default class UserImage extends PureComponent {
     return user;
   };
   render() {
-    const { blackAndWhite, size } = this.props;
+    const { grayscale, size } = this.props;
     const user = this.getUser();
     const photo = user.get('photo');
     const fullName = `${user.get('first_name')} ${user.get('last_name')}`;
@@ -44,7 +44,7 @@ export default class UserImage extends PureComponent {
           <SW.Image
             src={photo.get('192x192')}
             alt={fullName}
-            blackAndWhite={blackAndWhite}
+            grayscale={grayscale}
           />
         </SW.Wrapper>
       );

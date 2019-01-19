@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import request from 'swipes-core-js/utils/request';
-import SW from './ProfileOrgDelete.swiss';
+import SW from './OrganizationDelete.swiss';
 
-export default class ProfileOrgDelete extends PureComponent {
+export default class OrganizationDelete extends PureComponent {
   constructor(props) {
     super(props);
 
