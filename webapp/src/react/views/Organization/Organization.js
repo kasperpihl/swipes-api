@@ -72,12 +72,18 @@ export default class Organization extends PureComponent {
   };
 
   renderTabBar = () => {
+    const { organization } = this.props;
+    const disabledUsersAmount = organization
+      .get('users')
+      .filter(u => u.get('status') === 'disabled').size;
+
+    // console.log(organization.get('users').toJS());
+    let tabs = ['Active users'];
+    if (disabledUsersAmount > 0) {
+      tabs.push('Disabled users');
+    }
     return (
-      <SW.TabBar
-        tabs={['Active Users', 'Inactive Users']}
-        activeTab={this.state.tabIndex}
-        delegate={this}
-      />
+      <SW.TabBar tabs={tabs} activeTab={this.state.tabIndex} delegate={this} />
     );
   };
 
