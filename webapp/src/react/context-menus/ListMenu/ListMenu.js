@@ -34,7 +34,7 @@ export default class ListMenu extends PureComponent {
         }}
         disabled={b.disabled}
       >
-        <SW.Title>{b.title || b}</SW.Title>
+        <SW.Title disabled={b.disabled}>{b.title || b}</SW.Title>
         {!!b.disabled ? <SW.Subtitle>{b.subtitle}</SW.Subtitle> : null}
       </SW.ItemRow>
     ));

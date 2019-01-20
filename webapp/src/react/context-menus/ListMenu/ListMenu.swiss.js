@@ -20,21 +20,26 @@ export default styleSheet('ListMenu', {
     },
 
     disabled: {
-      backgroundColor: '$sw3',
+      backgroundColor: '$sw4',
 
       '&:hover': {
-        backgroundColor: '$sw3'
+        backgroundColor: '$sw4'
       }
     }
   },
 
   Title: {
     _el: 'h1',
-    _textStyle: 'body'
+    _textStyle: 'body',
+
+    disabled: {
+      opacity: '0.5'
+    }
   },
 
   Subtitle: {
     _el: 'h3',
-    _textStyle: 'caption'
+    _textStyle: 'caption',
+    opacity: '0.5'
   }
 });
