@@ -9,11 +9,11 @@ import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import request from 'swipes-core-js/utils/request';
 import SW from './OrganizationUser.swiss';
 
-const kPromote = 'Promote';
-const kDemote = 'Demote';
-const kDisable = 'Disable';
-const kTransfer = 'Transfer';
-const kInvite = 'Invite';
+const kPromote = 'Promote to admin';
+const kDemote = 'Demote to user';
+const kDisable = 'Disable user';
+const kTransfer = 'Transfer ownership';
+const kInvite = 'Invite user';
 @navWrapper
 @withLoader
 @connect(

@@ -12,7 +12,7 @@ export default styleSheet('ListMenu', {
     _size: ['100%', 'auto'],
     _flex: ['column', 'flex-start', 'flex-start'],
     _textStyle: 'body',
-    padding: '6px',
+    padding: '12px',
     userSelect: 'none',
 
     '&:hover': {
