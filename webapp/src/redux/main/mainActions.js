@@ -1,6 +1,4 @@
 import * as types from '../constants';
-import request from 'swipes-core-js/utils/request';
-import * as coreTypes from 'swipes-core-js/redux/constants';
 import * as navigationActions from '../navigation/navigationActions';
 
 export const setMaximized = toggle => ({
@@ -65,7 +63,7 @@ export const hideContextMenu = (...args) => (dp, getState) => {
     cMenu.props.onClose(...args);
   }
   dp({ type: types.CONTEXT_MENU, payload: null });
-}
+};
 
 // ======================================================
 // Browser
@@ -93,21 +91,3 @@ export const browser = (from, url, onLoad) => (dp, getState) => {
 export function successGradient(color) {
   return { type: types.SUCCESS_GRADIENT, payload: { color } };
 }
-
-// ======================================================
-// Account related
-// ======================================================
-export const forceLogout = dp => {
-  window.analytics.logout();
-  dp({ type: coreTypes.RESET_STATE });
-};
-
-export const signout = cb => dp =>
-  request('users.signout').then(res => {
-    if (cb) {
-      cb(res);
-    }
-    if (res && res.ok) {
-      dp(forceLogout);
-    }
-  });

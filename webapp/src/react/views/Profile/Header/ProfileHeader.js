@@ -1,50 +1,64 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { setupLoading } from 'swipes-core-js/classes/utils';
+import withLoader from 'src/react/_hocs/withLoader';
 import * as mainActions from 'src/redux/main/mainActions';
-import ProfileContextMenu from 'src/react/context-menus/Profile/ProfileContextMenu.js';
 import ProfileNameChange from 'src/react/views/Profile/NameChange/ProfileNameChange';
+import ConfirmationModal from 'src/react/components/ConfirmationModal/ConfirmationModal';
 import UserImage from 'src/react/components/UserImage/UserImage';
 import SW from './ProfileHeader.swiss';
-
+import ListMenu from 'src/react/context-menus/ListMenu/ListMenu';
 import request from 'swipes-core-js/utils/request';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 
 @navWrapper
+@withLoader
 @connect(
   state => ({
-    me: state.me,
-    auth: state.auth
+    me: state.me
   }),
   {
     contextMenu: mainActions.contextMenu
   }
 )
 export default class ProfileHeader extends PureComponent {
-  constructor(props) {
-    super(props);
-
-    setupLoading(this);
+  logout() {
+    const { openModal, loader } = this.props;
+    openModal({
+      component: ConfirmationModal,
+      position: 'center',
+      props: {
+        title: 'Log out',
+        text: 'Do you want to log out?',
+        callback: () => {
+          loader.set('ThreeDots');
+          request('user.signout').then(res => {
+            if (res.error) {
+              loader.error('ThreeDots', res.error, 3000);
+            }
+          });
+        }
+      }
+    });
   }
-
-  getOptionsForE = e => {
-    return {
-      boundingRect: e.target.getBoundingClientRect(),
-      alignX: 'right',
-      excludeY: true,
-      positionY: 12
-    };
+  handleListClick = (i, button) => {
+    if (button === 'Log out') {
+      this.logout();
+    }
   };
-
-  openContextMenu = e => {
-    const { contextMenu, openModal } = this.props;
-    const options = this.getOptionsForE(e);
+  handleThreeDots = e => {
+    const { contextMenu } = this.props;
 
     contextMenu({
-      options,
-      component: ProfileContextMenu,
+      options: {
+        boundingRect: e.target.getBoundingClientRect(),
+        alignX: 'right',
+        excludeY: true,
+        positionY: 12
+      },
+      component: ListMenu,
       props: {
-        openModal
+        buttons: ['Log out'],
+        onClick: this.handleListClick
       }
     });
   };
@@ -93,7 +107,7 @@ export default class ProfileHeader extends PureComponent {
     </SW.ProfileImage>
   );
   render() {
-    const { me } = this.props;
+    const { me, loader } = this.props;
     const fullName = `${me.get('first_name')} ${me.get('last_name')}`;
     return (
       <SW.Wrapper>
@@ -101,7 +115,8 @@ export default class ProfileHeader extends PureComponent {
         <SW.NameField onClick={this.handleOpenModal}>{fullName}</SW.NameField>
         <SW.OptionsButton
           icon="ThreeDots"
-          onClick={this.openContextMenu}
+          onClick={this.handleThreeDots}
+          {...loader.get('ThreeDots')}
           rounded
         />
       </SW.Wrapper>
