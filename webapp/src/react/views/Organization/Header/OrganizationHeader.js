@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
 import withLoader from 'src/react/_hocs/withLoader';
 import ConfirmationModal from 'src/react/components/ConfirmationModal/ConfirmationModal';
-import NameChangeModal from 'src/react/components/OrganizationNameChange/OrganizationNameChange';
+import FormModal from 'src/react/components/FormModal/FormModal';
 import ListMenu from 'src/react/context-menus/ListMenu/ListMenu';
 import CardHeader from 'src/react/components/CardHeader/CardHeader';
 import SW from './OrganizationHeader.swiss';
@@ -16,11 +16,6 @@ const kDelete = {
 const kLeave = {
   title: 'Leave organization',
   subtitle: 'Transfer ownership before leaving'
-};
-const kRenameOrganization = {
-  title: 'Rename organization',
-  placeholder: 'Enter name of organization',
-  type: 'text'
 };
 
 @navWrapper
@@ -45,16 +40,24 @@ export default class OrganizationHeader extends PureComponent {
   };
 
   openRenameModal = () => {
-    const { openModal, organization, name } = this.props;
+    const { openModal, organization } = this.props;
 
     openModal({
-      component: NameChangeModal,
+      component: FormModal,
       position: 'center',
       props: {
-        input: kRenameOrganization,
-        callback: this.runRequest,
-        orgId: organization.get('organization_id'),
-        currentName: name
+        title: 'Rename organization',
+        components: [
+          {
+            placeholder: 'Enter name of organization',
+            type: 'text',
+            label: 'test',
+            autoFocus: true,
+            initialValue: organization.get('name')
+          }
+        ],
+        confirmLabel: 'Rename',
+        onConfirm: this.handleRenameOrganization
       }
     });
   };
@@ -124,7 +127,7 @@ export default class OrganizationHeader extends PureComponent {
     });
   };
 
-  handleRenameOrganization = name => {
+  handleRenameOrganization = ([name]) => {
     const { organization } = this.props;
 
     this.runRequest('organization.rename', {

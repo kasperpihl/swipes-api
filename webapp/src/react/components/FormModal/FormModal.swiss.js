@@ -1,7 +1,7 @@
 import { styleSheet } from 'swiss-react';
 import Button from 'src/react/components/Button/Button';
 
-export default styleSheet('OrganizationNameChange', {
+export default styleSheet('FormModal', {
   Wrapper: {
     _size: ['90%', 'auto'],
     _flex: ['column', 'flex-start', 'flex-start'],
@@ -13,13 +13,24 @@ export default styleSheet('OrganizationNameChange', {
 
   Title: {
     _el: 'h1',
-    _textStyle: 'cardTitle',
-    marginBottom: '18px'
+    _textStyle: 'cardTitle'
+  },
+
+  Subtitle: {
+    _el: 'p',
+    _textStyle: 'body',
+    margin: '6px 0 18px 0'
   },
 
   InputContainer: {
     _size: ['100%', 'auto'],
     _flex: ['column', 'center', 'center']
+  },
+
+  InputWrapper: {
+    _size: ['100%', 'auto'],
+    _flex: ['column', 'flex-start', 'flex-start'],
+    marginTop: '12px'
   },
 
   Input: {
@@ -31,9 +42,17 @@ export default styleSheet('OrganizationNameChange', {
     marginBottom: '12px'
   },
 
+  Label: {
+    _el: 'h3',
+    _textStyle: 'body',
+    margin: '0 0 6px 6px',
+    color: '$sw2'
+  },
+
   ButtonWrapper: {
     _size: ['100%', 'auto'],
-    _flex: ['row', 'flex-end', 'center']
+    _flex: ['row', 'flex-end', 'center'],
+    marginTop: '6px'
   },
 
   Button: {
