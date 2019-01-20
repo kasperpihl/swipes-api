@@ -1,13 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { bindAll } from 'swipes-core-js/classes/utils';
 import { setupDelegate } from 'react-delegate';
-import {
-  EditorState,
-  Modifier,
-  RichUtils,
-  SelectionState,
-} from 'draft-js';
+import { EditorState, Modifier, RichUtils, SelectionState } from 'draft-js';
 
 import Icon from 'src/react/icons/Icon';
 import ControlButton from './ControlButton';
@@ -18,10 +12,9 @@ class ControlPanel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showInput: false,
+      showInput: false
     };
     setupDelegate(this, 'onFocus');
-    bindAll(this, ['addLink', 'handleKeyUp', 'onToggle']);
   }
   componentWillReceiveProps(nextProps) {
     if (!nextProps.show && this.props.show) {
@@ -33,26 +26,16 @@ class ControlPanel extends Component {
       this.refs.input.focus();
     }
   }
-  onToggle(style, type) {
+  onToggle = (style, type) => {
     const { editorState, delegate } = this.props;
     const { setEditorState } = delegate;
     if (type === 'block') {
-      setEditorState(
-        RichUtils.toggleBlockType(
-          editorState,
-          style,
-        ),
-      );
+      setEditorState(RichUtils.toggleBlockType(editorState, style));
       setTimeout(this.onFocus, 5);
     }
 
     if (type === 'inline') {
-      setEditorState(
-        RichUtils.toggleInlineStyle(
-          editorState,
-          style,
-        ),
-      );
+      setEditorState(RichUtils.toggleInlineStyle(editorState, style));
       setTimeout(this.onFocus, 5);
     }
 
@@ -61,9 +44,9 @@ class ControlPanel extends Component {
         this.setState({ showInput: true });
       }
     }
-  }
+  };
 
-  handleKeyUp(e) {
+  handleKeyUp = e => {
     if (e.keyCode === 13) {
       this.addLink();
     }
@@ -71,46 +54,50 @@ class ControlPanel extends Component {
       this.setState({ showInput: false });
       this.onFocus();
     }
-  }
+  };
 
-  addLink() {
+  addLink = () => {
     const { input } = this.refs;
     const { editorState, delegate } = this.props;
     const { setEditorState } = delegate;
 
-
     if (input.value.length) {
       let contentState = editorState.getCurrentContent();
-      contentState = contentState.createEntity(
-        'LINK',
-        'MUTABLE',
-        { url: input.value },
-      );
+      contentState = contentState.createEntity('LINK', 'MUTABLE', {
+        url: input.value
+      });
       const entityKey = contentState.getLastCreatedEntityKey();
 
       const selection = editorState.getSelection();
       const newContentState = Modifier.applyEntity(
         contentState,
         selection,
-        entityKey,
+        entityKey
       );
 
-      let newEditorState = EditorState.set(editorState, { currentContent: newContentState });
+      let newEditorState = EditorState.set(editorState, {
+        currentContent: newContentState
+      });
 
       newEditorState = RichUtils.toggleLink(
         newEditorState,
         selection,
-        entityKey,
+        entityKey
       );
 
       // Clear selection!
-      const emptySelection = SelectionState.createEmpty(selection.getStartKey());
-      newEditorState = EditorState.acceptSelection(newEditorState, emptySelection);
+      const emptySelection = SelectionState.createEmpty(
+        selection.getStartKey()
+      );
+      newEditorState = EditorState.acceptSelection(
+        newEditorState,
+        emptySelection
+      );
 
       setEditorState(newEditorState);
       this.setState({ showInput: false });
     }
-  }
+  };
   renderButtons() {
     const styleOptions = {
       block: [
@@ -118,24 +105,27 @@ class ControlPanel extends Component {
         { label: 'HeaderTwo', style: 'header-two' },
         { label: 'OrderedList', style: 'ordered-list-item' },
         { label: 'UnorderedList', style: 'unordered-list-item' },
-        { label: 'Checklist', style: 'checklist' },
+        { label: 'Checklist', style: 'checklist' }
       ],
       inline: [
         { label: 'Bold', style: 'BOLD' },
         { label: 'Itallic', style: 'ITALIC' },
-        { label: 'Underline', style: 'UNDERLINE' },
+        { label: 'Underline', style: 'UNDERLINE' }
       ],
-      entities: [
-        { label: 'Hyperlink', style: 'link' },
-      ],
+      entities: [{ label: 'Hyperlink', style: 'link' }]
     };
 
-    const blockHtml = styleOptions.block.map(option => this.renderButton(option.label, option.style, 'block'));
+    const blockHtml = styleOptions.block.map(option =>
+      this.renderButton(option.label, option.style, 'block')
+    );
 
-    const inlineHtml = styleOptions.inline.map(option => this.renderButton(option.label, option.style, 'inline'));
+    const inlineHtml = styleOptions.inline.map(option =>
+      this.renderButton(option.label, option.style, 'inline')
+    );
 
-    const entityHtml = styleOptions.entities.map(option => this.renderButton(option.label, option.style, 'entity'));
-
+    const entityHtml = styleOptions.entities.map(option =>
+      this.renderButton(option.label, option.style, 'entity')
+    );
 
     return (
       <div className="buttons">
@@ -175,7 +165,10 @@ class ControlPanel extends Component {
             placeholder="Enter url"
             onKeyUp={this.handleKeyUp}
           />
-          <button className="RichEditor-controls__input-submit" onClick={this.addLink}>
+          <button
+            className="RichEditor-controls__input-submit"
+            onClick={this.addLink}
+          >
             <Icon icon="ArrowRightLine" className="RichEditor-controls__icon" />
           </button>
         </div>
@@ -214,5 +207,5 @@ ControlPanel.propTypes = {
   show: bool,
   style: object,
   setEditorState: func,
-  delegate: object,
+  delegate: object
 };

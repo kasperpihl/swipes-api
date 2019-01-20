@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { setupLoading } from 'swipes-core-js/classes/utils';
 import { setupCachedCallback } from 'react-delegate';
 import Loader from 'src/react/components/loaders/Loader';
 import SWView from 'src/react/app/view-controller/SWView';

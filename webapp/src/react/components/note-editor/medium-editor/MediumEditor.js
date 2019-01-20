@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
-import { bindAll, traverseElement } from 'swipes-core-js/classes/utils';
+import { traverseElement } from 'swipes-core-js/classes/utils';
 import { getVisibleSelectionRect } from 'draft-js';
 import ControlPanel from './ControlPanel';
 import prefixAll from 'inline-style-prefixer/static';
@@ -13,9 +13,8 @@ class MediumEditor extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      showPanel: false,
+      showPanel: false
     };
-    bindAll(this, ['onKeyDown', 'onKeyUp', 'onMouseMove', 'onMouseUp']);
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.editorState !== this.props.editorState) {
@@ -39,7 +38,7 @@ class MediumEditor extends PureComponent {
     clearTimeout(this._shiftTimer);
     this._unmounted = true;
   }
-  onKeyDown(e) {
+  onKeyDown = e => {
     //
     if (e.keyCode === 16) {
       clearTimeout(this._shiftTimer);
@@ -47,14 +46,14 @@ class MediumEditor extends PureComponent {
         this.showPanel();
       }, 500);
     }
-  }
-  onKeyUp(e) {
+  };
+  onKeyUp = e => {
     if (e.keyCode === 16) {
       clearTimeout(this._shiftTimer);
     }
-  }
+  };
 
-  onMouseUp(e) {
+  onMouseUp = e => {
     const br = this.container.getBoundingClientRect();
     const scrollTop = this.getScrollTop();
     const x = e.pageX - br.left;
@@ -63,12 +62,12 @@ class MediumEditor extends PureComponent {
     setTimeout(() => {
       this.showPanel({ x, y });
     }, 1);
-  }
-  onMouseMove() {
+  };
+  onMouseMove = () => {
     setTimeout(() => {
       this.showPanel();
     }, 1);
-  }
+  };
   getScrollTop() {
     let scrollTop = 0;
     if (this.container) {
@@ -122,7 +121,7 @@ class MediumEditor extends PureComponent {
   getControlPanelSize() {
     const def = {
       w: 0,
-      h: 0,
+      h: 0
     };
     const { controlPanel } = this.refs;
     if (!controlPanel || !controlPanel.refs.control) {
@@ -138,7 +137,7 @@ class MediumEditor extends PureComponent {
       this.setState({
         showPanel: true,
         mousePos,
-        style: this.calculatePosition(mousePos),
+        style: this.calculatePosition(mousePos)
       });
     }
   }
@@ -273,5 +272,5 @@ const { element, object } = PropTypes;
 MediumEditor.propTypes = {
   children: element,
   delegate: object,
-  editorState: object,
+  editorState: object
 };

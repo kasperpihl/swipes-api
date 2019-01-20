@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { setupDelegate } from 'react-delegate';
-import { bindAll } from 'swipes-core-js/classes/utils';
 import randomString from 'swipes-core-js/utils/randomString';
 import Button from 'src/react/components/Button/Button';
 import TabBar from 'src/react/components/tab-bar/TabBar';
@@ -20,7 +19,6 @@ class TabMenu extends Component {
     if (typeof props.initialTabIndex === 'number') {
       this.state.tabIndex = props.initialTabIndex;
     }
-    bindAll(this, ['onChangeQuery', 'emptySearch', 'onKeyDown', 'handleClick']);
     setupDelegate(
       this,
       'onTabMenuLoad',
@@ -49,26 +47,26 @@ class TabMenu extends Component {
   componentWillUnmount() {
     this.qId = undefined;
   }
-  handleClick() {
+  handleClick = () => {
     const { hide } = this.props;
     this.onActionClick();
     hide();
-  }
-  onKeyDown(e) {
+  };
+  onKeyDown = e => {
     if (e.keyCode === 13) {
       const { results } = this.state;
       if (results.length) {
         this.onItemAction(results[0], 'enter', e);
       }
     }
-  }
-  onChangeQuery(e) {
+  };
+  onChangeQuery = e => {
     let { query } = this.state;
     if (query !== e.target.value) {
       query = e.target.value;
       this.setState({ query });
     }
-  }
+  };
   tabDidChange(index) {
     if (this.state.tabIndex !== index) {
       this.setState({ tabIndex: index });
@@ -111,13 +109,13 @@ class TabMenu extends Component {
       this.setState({ loading: false });
     }
   }
-  emptySearch() {
+  emptySearch = () => {
     const { query } = this.state;
 
     if (query.length) {
       this.setState({ query: '' });
     }
-  }
+  };
   renderSearchField() {
     const { search } = this.props;
     const { query } = this.state;

@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import { bindAll } from 'swipes-core-js/classes/utils';
 import Icon from 'src/react/icons/Icon';
 
 import PDFRender from './PDFRender';
@@ -17,23 +16,8 @@ class PDFViewer extends PureComponent {
       inputValue: 1,
       error: false,
       shown: true,
-      actionHover: false,
+      actionHover: false
     };
-
-    bindAll(this,
-      [
-        'nextPage',
-        'prevPage',
-        'onDocumentComplete',
-        'scaleUp', 'scaleDown',
-        'handleInputChange',
-        'handleInputClick',
-        'handleInputKeyUp',
-        'handleMouseMove',
-        'handleMouseEnter',
-        'handleMouseLeave',
-      ],
-    );
   }
   componentWillMount() {
     // const { page } = this.state;
@@ -45,7 +29,7 @@ class PDFViewer extends PureComponent {
   componentWillUnmount() {
     clearTimeout(this.timeout);
   }
-  onDocumentComplete({ pdfInfo }) {
+  onDocumentComplete = ({ pdfInfo }) => {
     console.log(pdfInfo);
     const { fileLoaded } = this.props;
     const { loaded } = this.state;
@@ -56,15 +40,15 @@ class PDFViewer extends PureComponent {
     if (fileLoaded) {
       fileLoaded(loaded);
     }
-  }
+  };
   handleInputClick(e) {
     e.target.select();
   }
-  handleInputChange(e) {
+  handleInputChange = e => {
     const value = e.target.value;
     this.setState({ inputValue: value });
-  }
-  handleInputKeyUp(e) {
+  };
+  handleInputKeyUp = e => {
     const { inputValue, pages, page } = this.state;
 
     if (e.keyCode === 13) {
@@ -81,8 +65,8 @@ class PDFViewer extends PureComponent {
         }, 1000);
       }
     }
-  }
-  handleMouseMove() {
+  };
+  handleMouseMove = () => {
     window.clearTimeout(this.timeout);
     this.setState({ shown: true });
 
@@ -91,19 +75,19 @@ class PDFViewer extends PureComponent {
     this.timeout = setTimeout(() => {
       this.setState({ shown: false });
     }, 2000);
-  }
-  handleMouseEnter() {
+  };
+  handleMouseEnter = () => {
     window.clearTimeout(this.timeout);
     this.setState({ actionHover: true });
-  }
-  handleMouseLeave() {
+  };
+  handleMouseLeave = () => {
     this.setState({ actionHover: false });
 
     this.timeout = setTimeout(() => {
       this.setState({ shown: false });
     }, 2000);
-  }
-  prevPage() {
+  };
+  prevPage = () => {
     const { page } = this.state;
     const newPage = page > 1 ? page - 1 : 1;
 
@@ -111,8 +95,8 @@ class PDFViewer extends PureComponent {
       this.setState({ page: newPage });
       this.setState({ inputValue: newPage });
     }
-  }
-  nextPage() {
+  };
+  nextPage = () => {
     const { page, pages } = this.state;
     const newPage = page < pages ? page + 1 : pages;
 
@@ -120,27 +104,27 @@ class PDFViewer extends PureComponent {
       this.setState({ page: newPage });
       this.setState({ inputValue: newPage });
     }
-  }
+  };
   hasNextPage() {
     const { page, pages } = this.state;
 
-    return (page < pages);
+    return page < pages;
   }
   hasPrevPage() {
     const { page } = this.state;
 
-    return (page > 1);
+    return page > 1;
   }
-  scaleUp() {
+  scaleUp = () => {
     const newScale = this.state.scale + 0.2;
 
     this.setState({ scale: newScale });
-  }
-  scaleDown() {
+  };
+  scaleDown = () => {
     const newScale = this.state.scale - 0.2;
 
     this.setState({ scale: newScale });
-  }
+  };
   renderPagination() {
     const { pages, inputValue, error } = this.state;
     const prev = this.hasPrevPage();
@@ -175,7 +159,10 @@ class PDFViewer extends PureComponent {
           onClick={this.handleInputClick}
           onKeyUp={this.handleInputKeyUp}
         />
-        <div className="sw-pdf-viewer__pages-value"><span>of </span>{` ${pages}`}</div>
+        <div className="sw-pdf-viewer__pages-value">
+          <span>of </span>
+          {` ${pages}`}
+        </div>
 
         <div className={arrowButtonRight} onClick={this.nextPage}>
           <Icon icon="ArrowRightLine" className="sw-pdf-viewer__icon" />
@@ -191,7 +178,9 @@ class PDFViewer extends PureComponent {
         <div className="sw-pdf-viewer__button" onClick={this.scaleDown}>
           <Icon icon="Minus" className="sw-pdf-viewer__icon" />
         </div>
-        <div className="sw-pdf-viewer__zoom-value">{`${Math.round(scale * 100)}%`}</div>
+        <div className="sw-pdf-viewer__zoom-value">{`${Math.round(
+          scale * 100
+        )}%`}</div>
         <div className="sw-pdf-viewer__button" onClick={this.scaleUp}>
           <Icon icon="Plus" className="sw-pdf-viewer__icon" />
         </div>
