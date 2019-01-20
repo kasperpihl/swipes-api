@@ -1,10 +1,15 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
 import { setupCachedCallback } from 'react-delegate';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 import SW from './Sidebar.swiss';
+import UserImage from 'src/react/components/UserImage/UserImage';
+
+const kNavItems = [
+  { id: 'Organize', svg: 'Milestones' },
+  { id: 'Discuss', svg: 'Messages' }
+];
 
 @connect(
   state => ({
@@ -20,9 +25,6 @@ import SW from './Sidebar.swiss';
 export default class Sidebar extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      isOpenNotifications: false
-    };
     this.onClickCached = setupCachedCallback(this.onClick, this);
     this.onRightClickCached = setupCachedCallback(this.onClick, this);
     this.onMouseDownCached = setupCachedCallback(this.onMouseDown, this);
@@ -41,20 +43,8 @@ export default class Sidebar extends PureComponent {
 
     navSet(target, {
       id,
-      title: this.getTitleForId(id)
+      title: id
     });
-  }
-  getNavItems() {
-    return [
-      { id: 'Organize', svg: 'Milestones' },
-      { id: 'Discuss', svg: 'Messages' }
-    ].filter(v => !!v);
-  }
-  getTitleForId(id) {
-    switch (id) {
-      default:
-        return id;
-    }
   }
 
   renderItem(item) {
@@ -69,10 +59,11 @@ export default class Sidebar extends PureComponent {
     }
 
     const active = item.id === navId;
-
+    console.log(item.id);
     return (
       <SW.ProvideContext active={active} key={item.id}>
         <SW.Item
+          round={item.id === 'Profile'}
           onClick={this.onClickCached(item.id, 'primary')}
           onContextMenu={this.onRightClickCached(item.id, 'secondary')}
           onMouseDown={this.onMouseDownCached(item.id)}
@@ -80,10 +71,10 @@ export default class Sidebar extends PureComponent {
           data-id={item.id}
           className="item"
         >
-          <SW.Description className="description">
-            {this.getTitleForId(item.id)}
-          </SW.Description>
-          {item.id === 'AccountList' ? null : ( //<HOCAssigning assignees={[item.personId]} size={30} />
+          <SW.Description className="description">{item.id}</SW.Description>
+          {item.id === 'Profile' ? (
+            <UserImage userId="me" />
+          ) : (
             <SW.Icon icon={item.svg} className="icon" />
           )}
           {count ? (
@@ -93,36 +84,18 @@ export default class Sidebar extends PureComponent {
       </SW.ProvideContext>
     );
   }
-
-  // render
-  renderMiddleSection() {
-    const navItems = this.getNavItems();
-
-    if (navItems) {
-      return navItems.map((o, i) => this.renderItem(o, i));
-    }
-
-    return undefined;
-  }
-  renderProfile() {
-    const { me } = this.props;
-    if (!me) {
-      return undefined;
-    }
-
-    return this.renderItem({ id: 'Profile', personId: me.get('id') });
-  }
-  renderStore() {
-    // For later
-  }
   render() {
     return (
       <SW.Wrapper>
         <SW.TopSection />
         <SW.MiddleSection>
-          <SW.Section>{this.renderMiddleSection()}</SW.Section>
+          <SW.Section>
+            {kNavItems.map((o, i) => this.renderItem(o, i))}
+          </SW.Section>
         </SW.MiddleSection>
-        <SW.BottomSection>{this.renderProfile()}</SW.BottomSection>
+        <SW.BottomSection>
+          {this.renderItem({ id: 'Profile' })}
+        </SW.BottomSection>
       </SW.Wrapper>
     );
   }

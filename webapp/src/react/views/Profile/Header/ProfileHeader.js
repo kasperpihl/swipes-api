@@ -64,14 +64,15 @@ export default class ProfileHeader extends PureComponent {
   };
 
   handleImageChange = e => {
+    const { loader } = this.props;
     const file = e.target.files[0];
     if (file) {
-      this.setLoading('uploadImage');
+      loader.set('uploadImage');
       request(
         { command: 'me.uploadPhoto', formData: true },
         { photo: file }
       ).then(res => {
-        this.clearLoading('uploadImage');
+        loader.clear('uploadImage');
         if (res.ok) {
           window.analytics.sendEvent('Profile photo updated', {});
         }

@@ -51,24 +51,6 @@ export default styleSheet('Sidebar', {
     _flex: ['column', 'center', 'center']
   },
 
-  Slider: {
-    _size: '54px',
-    backgroundColor: '$sw1',
-    position: 'absolute',
-    left: '0',
-    top: '0',
-    borderRadius: '50px',
-    zIndex: '1',
-    transition: '.3s ease',
-
-    hidden: {
-      left: '0',
-      top: 'calc(100% - 54px)',
-      opacity: '0',
-      transition: '.3s ease'
-    }
-  },
-
   Item: {
     _size: '54px',
     _flex: ['row', 'center', 'center'],
@@ -76,16 +58,22 @@ export default styleSheet('Sidebar', {
     backgroundColor: 'rgba(255, 255, 255, .3)',
     transition: '.2s ease',
 
-    '&:first-child': {
-      borderRadius: '4px 4px 0 0'
+    '!round': {
+      '&:first-child': {
+        borderRadius: '4px 4px 0 0'
+      },
+
+      '&:last-child': {
+        borderRadius: '0 0 4px 4px'
+      },
+      '&:not(:first-child)': {
+        marginTop: '1px'
+      }
     },
 
-    '&:last-child': {
-      borderRadius: '0 0 4px 4px'
-    },
-
-    '&:not(:first-child)': {
-      marginTop: '1px'
+    round: {
+      borderRadius: '27px',
+      padding: '3px'
     },
 
     '& > *': {

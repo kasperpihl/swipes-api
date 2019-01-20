@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import request from 'swipes-core-js/utils/request';
 import SW from './UserImage.swiss';
 
 @connect(state => ({

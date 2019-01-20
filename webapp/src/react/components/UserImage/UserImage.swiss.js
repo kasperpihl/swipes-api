@@ -8,7 +8,7 @@ export default styleSheet('UserImage', {
     borderRadius: '50%',
     flexShrink: '0',
 
-    'size!=undefined': {
+    size: {
       width: get => `${get('size')}px`,
       height: get => `${get('size')}px`
     }
