@@ -21,7 +21,7 @@ export default styleSheet('ProfileHeader', {
     flex: 'none',
     backgroundColor: 'grey',
     borderRadius: '50%',
-    marginRight: '30px',
+    marginRight: '18px',
     overflow: 'hidden',
     userSelect: 'none',
 

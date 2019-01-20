@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
 import withLoader from 'src/react/_hocs/withLoader';
 import ConfirmationModal from 'src/react/components/ConfirmationModal/ConfirmationModal';
+import NameChangeModal from 'src/react/components/OrganizationNameChange/OrganizationNameChange';
 import ListMenu from 'src/react/context-menus/ListMenu/ListMenu';
 import CardHeader from 'src/react/components/CardHeader/CardHeader';
 import SW from './OrganizationHeader.swiss';
@@ -15,6 +16,11 @@ const kDelete = {
 const kLeave = {
   title: 'Leave organization',
   subtitle: 'Transfer ownership before leaving'
+};
+const kRenameOrganization = {
+  title: 'Rename organization',
+  placeholder: 'Enter name of organization',
+  type: 'text'
 };
 
 @navWrapper
@@ -34,6 +40,21 @@ export default class OrganizationHeader extends PureComponent {
       title: 'Billing',
       props: {
         organizationId: organization.get('organization_id')
+      }
+    });
+  };
+
+  openRenameModal = () => {
+    const { openModal, organization, name } = this.props;
+
+    openModal({
+      component: NameChangeModal,
+      position: 'center',
+      props: {
+        input: kRenameOrganization,
+        callback: this.runRequest,
+        orgId: organization.get('organization_id'),
+        currentName: name
       }
     });
   };
@@ -103,6 +124,15 @@ export default class OrganizationHeader extends PureComponent {
     });
   };
 
+  handleRenameOrganization = name => {
+    const { organization } = this.props;
+
+    this.runRequest('organization.rename', {
+      organization_id: organization.get('organization_id'),
+      name
+    });
+  };
+
   openConfirmationModal = ({ ...props }) => {
     const { openModal } = this.props;
 
@@ -137,7 +167,7 @@ export default class OrganizationHeader extends PureComponent {
   render() {
     const { name, loader } = this.props;
     return (
-      <CardHeader title={name}>
+      <CardHeader title={name} onTitleClick={this.openRenameModal}>
         <SW.Button title="Billing" onClick={this.openBillingView} rounded />
         <SW.Button
           icon="ThreeDots"
