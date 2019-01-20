@@ -31,6 +31,12 @@ const useLoader = () => {
 
   function createUpdateHandler(loadingKey, defaultLabel) {
     return (loadingId, label = defaultLabel, duration, callback) => {
+      if (typeof duration === 'function') {
+        callback = duration;
+      }
+      if (typeof label === 'number') {
+        duration = label;
+      }
       if (!timers.current) return;
 
       const newState = Object.assign({}, loadingState, {

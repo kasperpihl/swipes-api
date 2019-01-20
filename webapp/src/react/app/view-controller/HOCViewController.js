@@ -4,7 +4,7 @@ import { Map } from 'immutable';
 import Button from 'src/react/components/Button/Button';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
-import * as views from 'src/react/views';
+import * as views from 'src/react/views/registerViews';
 import { setupCachedCallback } from 'react-delegate';
 import debounce from 'swipes-core-js/utils/debounce';
 import Breadcrumbs from 'src/react/components/Breadcrumbs/Breadcrumbs';

@@ -16,7 +16,7 @@ import navWrapper from 'src/react/app/view-controller/NavWrapper';
 @navWrapper
 @connect(
   state => ({
-    myId: state.me.get('id'),
+    myId: state.me.get('id')
   }),
   {
     inputMenu: menuActions.input,
@@ -25,14 +25,14 @@ import navWrapper from 'src/react/app/view-controller/NavWrapper';
     createNote: noteActions.create,
     createFile: fileActions.create,
     subscribeToDrop: mainActions.subscribeToDrop,
-    unsubscribeFromDrop: mainActions.unsubscribeFromDrop,
+    unsubscribeFromDrop: mainActions.unsubscribeFromDrop
   }
 )
 export default class extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      fileVal: '',
+      fileVal: ''
     };
 
     setupDelegate(this, 'onAddedAttachment', 'onAttachButtonCloseOverlay');
@@ -112,20 +112,20 @@ export default class extends PureComponent {
       service: {
         name: 'swipes',
         type,
-        id,
+        id
       },
       permission: {
-        account_id: myId,
+        account_id: myId
       },
       meta: {
-        title,
-      },
+        title
+      }
     };
   }
   getOptionsForE(e) {
     return {
       boundingRect: e.target.getBoundingClientRect(),
-      alignX: 'center',
+      alignX: 'center'
     };
   }
   createLinkFromTypeIdTitle(type, id, title) {

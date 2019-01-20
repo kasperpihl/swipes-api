@@ -1,148 +1,130 @@
 import React, { PureComponent } from 'react';
-import { setupDelegate } from 'react-delegate';
-import SWView from 'src/react/app/view-controller/SWView';
-import CardHeader from 'src/react/components/CardHeader/CardHeader';
-import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
-import Button from 'src/react/components/Button/Button';
-import TabBar from 'src/react/components/tab-bar/TabBar';
+import { connect } from 'react-redux';
+import OrganizationDelete from 'src/react/views/Organization/Delete/OrganizationDelete.js';
+import OrganizationHeader from 'src/react/views/Organization/Header/OrganizationHeader';
+import OrganizationUser from 'src/react/views/Organization/User/OrganizationUser';
+import OrganizationInviteInput from 'src/react/views/Organization/Invite/Input/OrganizationInviteInput';
+import OrganizationPendingInvites from 'src/react/views/Organization/Invite/PendingInvites/OrganizationPendingInvites';
 import SW from './Organization.swiss';
 
-class Organization extends PureComponent {
+import navWrapper from 'src/react/app/view-controller/NavWrapper';
+import propsOrPop from 'src/react/_hocs/propsOrPop';
+import SWView from 'src/react/app/view-controller/SWView';
+
+@navWrapper
+@connect((state, props) => ({
+  meInOrg: state.organization.getIn([
+    props.organizationId,
+    'users',
+    state.me.get('user_id')
+  ]),
+  organization: state.organization.get(props.organizationId)
+}))
+@propsOrPop('organization')
+export default class Organization extends PureComponent {
+  static sizes = () => [540];
   constructor(props) {
     super(props);
-    setupDelegate(
-      this,
-      'onInvite',
-      'onKeyDown',
-      'onContext',
-      'onChange',
-      'onThreeDots'
-    );
+
+    this.state = {
+      tabIndex: 0
+    };
   }
-  renderActionButton(u) {
-    const { isAdmin, getLoading } = this.props;
-    if (!isAdmin) {
-      return undefined;
+
+  openDeleteModal = () => {
+    const { openModal, organization } = this.props;
+
+    openModal({
+      component: OrganizationDelete,
+      position: 'center',
+      props: {
+        orgName: organization.get('name'),
+        orgId: organization.get('organization_id')
+      }
+    });
+  };
+
+  tabDidChange = index => {
+    if (this.state.tabIndex !== index) {
+      this.setState({ tabIndex: index });
     }
-    return (
-      <div className="organization__user-actions">
-        <Button
-          icon="ThreeDots"
-          onClick={this.onContextCached(u.get('id'))}
-          {...getLoading(u.get('id'))}
-        />
-      </div>
-    );
-  }
-  renderUsers() {
-    const { users, organization } = this.props;
+  };
 
-    const usersHTML = users
-      .map(u => {
-        let userLevel = 'USER';
-        if (
-          organization.get('admins') &&
-          organization.get('admins').indexOf(u.get('id')) !== -1
-        ) {
-          userLevel = 'ADMIN';
-        }
-        if (u.get('id') === organization.get('owner_id')) {
-          userLevel = 'OWNER';
-        }
-        if (u.get('disabled')) {
-          userLevel = 'DISABLED';
-        }
-
-        return (
-          <SW.User key={u.get('id')}>
-            <SW.UserImage>
-              <HOCAssigning assignees={[u.get('id')]} size={30} />
-            </SW.UserImage>
-            <SW.UserName>
-              {msgGen.users.getFullName(u)}
-              {u.get('pending') ? ' (pending)' : null}
-            </SW.UserName>
-            <SW.UserEmail>{msgGen.users.getEmail(u)}</SW.UserEmail>
-            <SW.UserType>{userLevel}</SW.UserType>
-            {this.renderActionButton(u)}
-          </SW.User>
-        );
-      })
-      .toArray();
-
-    return <div className="organization__user-list">{usersHTML}</div>;
-  }
-  renderInvite() {
+  renderHeader = () => {
     const {
-      getLoading,
-      isLoading,
-      firstNameVal,
-      emailVal,
-      tabIndex
+      organization,
+      activeSubscription,
+      trialExpired,
+      daysLeft,
+      meInOrg
     } = this.props;
-    if (tabIndex === 1) {
-      return undefined;
-    }
     return (
-      <SW.Form>
-        <SW.InputWrapper>
-          <SW.Input
-            type="text"
-            placeholder="First name"
-            onKeyDown={this.onKeyDown}
-            value={firstNameVal}
-            disabled={isLoading('invite')}
-            onChange={e => {
-              this.onChange('firstNameVal', e.target.value);
-            }}
-          />
-          <SW.Input
-            type="text"
-            placeholder="Email"
-            onKeyDown={this.onKeyDown}
-            value={emailVal}
-            disabled={isLoading('invite')}
-            onChange={e => {
-              this.onChange('emailVal', e.target.value);
-            }}
-          />
-        </SW.InputWrapper>
+      <OrganizationHeader
+        name={organization.get('name')}
+        organization={organization}
+        meInOrg={meInOrg}
+        admin={organization.getIn(['users', meInOrg.get('user_id'), 'admin'])}
+        activeSubscription={activeSubscription}
+        trialExpired={trialExpired}
+        daysLeft={daysLeft}
+      />
+    );
+  };
 
-        <SW.CTA
-          onClick={this.onInvite}
-          title="Invite"
-          {...getLoading('invite')}
+  renderTabBar = () => {
+    return (
+      <SW.TabBar
+        tabs={['Active Users', 'Inactive Users']}
+        activeTab={this.state.tabIndex}
+        delegate={this}
+      />
+    );
+  };
+
+  renderDeleteButton = () => {
+    const { organization, meInOrg } = this.props;
+
+    if (meInOrg.get('user_id') === organization.get('owner_id')) {
+      return (
+        <SW.Button
+          icon="Delete"
+          title="Delete"
+          onClick={this.openDeleteModal}
         />
-      </SW.Form>
-    );
-  }
-  renderHeader() {
-    const { tabIndex, delegate, tabs, getLoading } = this.props;
-    const title = `Team account`;
-
-    return (
-      <div className="orgnization__header">
-        <CardHeader title={title} subtitle="Invite your team and manage access">
-          <Button
-            icon="ThreeDots"
-            onClick={this.onThreeDots}
-            {...getLoading('threedots')}
-          />
-        </CardHeader>
-        <TabBar tabs={tabs} delegate={delegate} activeTab={tabIndex} />
-      </div>
-    );
-  }
+      );
+    }
+    return null;
+  };
   render() {
+    const { tabIndex } = this.state;
+    const { organization, meInOrg } = this.props;
+    const userStatus = tabIndex === 0 ? 'active' : 'disabled';
+
     return (
       <SWView header={this.renderHeader()}>
-        <div className="organization">
-          {this.renderInvite()}
-          {this.renderUsers()}
-        </div>
+        <SW.Wrapper>
+          <OrganizationInviteInput
+            organizationId={organization.get('organization_id')}
+          />
+          <OrganizationPendingInvites organization={organization} />
+          {this.renderTabBar()}
+          <SW.UsersWrapper>
+            {organization
+              .get('users')
+              .filter(u => u.get('status') === userStatus)
+              .map(u => (
+                <OrganizationUser
+                  key={u.get('user_id')}
+                  user={u}
+                  organizationId={organization.get('organization_id')}
+                  meInOrg={meInOrg}
+                />
+              ))
+              .toList()}
+          </SW.UsersWrapper>
+          {/* {this.renderDeleteButton()} */}
+        </SW.Wrapper>
       </SWView>
     );
   }
 }
-
-export default Organization;

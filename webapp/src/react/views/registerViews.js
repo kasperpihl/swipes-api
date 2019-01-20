@@ -5,7 +5,7 @@ export { default as Billing } from './Billing/Billing';
 // export { default as DiscussionComposer } from './Discussion/Composer/DiscussionComposer';
 // export { default as DiscussionOverview } from './Discussion/Overview/HOCDiscussionOverview';
 export { default as NotFound } from './NotFound/NotFound';
-export { default as Organization } from './Organization/OrganizationNew';
+export { default as Organization } from './Organization/Organization';
 export { default as Organize } from './Organize/Organize';
 export { default as Profile } from './Profile/Profile';
 export { default as ProjectOverview } from './Project/Overview/ProjectOverview';
