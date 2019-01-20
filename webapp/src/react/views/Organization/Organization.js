@@ -77,7 +77,6 @@ export default class Organization extends PureComponent {
       .get('users')
       .filter(u => u.get('status') === 'disabled').size;
 
-    // console.log(organization.get('users').toJS());
     let tabs = ['Active users'];
     if (disabledUsersAmount > 0) {
       tabs.push('Disabled users');
