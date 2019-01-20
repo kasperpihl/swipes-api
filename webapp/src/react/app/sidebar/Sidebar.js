@@ -59,7 +59,7 @@ export default class Sidebar extends PureComponent {
     }
 
     const active = item.id === navId;
-    console.log(item.id);
+
     return (
       <SW.ProvideContext active={active} key={item.id}>
         <SW.Item

@@ -16,33 +16,23 @@ export default styleSheet('DiscussionListItem', {
       marginRight: '0',
       paddingLeft: '25px',
       paddingRight: '25px',
-      borderBottom: '1px solid $sw4',
+      borderBottom: '1px solid $sw4'
     },
-    first: {
-      borderTop: 'none',
+    '&:first-child': {
+      borderTop: 'none'
     },
     siblingToSelectedItem: {
-      borderTop: 'none',
-    },
-  },
-  LeftWrapper: {
-    _flex: 'none',
-    compact: {
-      display: 'none',
-    },
+      borderTop: 'none'
+    }
   },
   MiddleWrapper: {
     _flex: ['column', 'left', 'top'],
     width: '100%',
-    paddingLeft: '10px',
-    paddingRight: '25px',
-    compact: {
-      paddingLeft: '0px',
-    },
+    paddingRight: '25px'
   },
   RightWrapper: {
     _flex: 'none',
-    whiteSpace: 'nowrap',
+    whiteSpace: 'nowrap'
   },
   Topic: {
     _truncateString: '',
@@ -51,17 +41,17 @@ export default styleSheet('DiscussionListItem', {
     maxWidth: '180px',
     paddingBottom: '1px',
     'viewWidth>=1080': {
-      maxWidth: '210px',
-    },
+      maxWidth: '210px'
+    }
   },
   Subtitle: {
     _el: LinesEllipsis,
     _textStyle: 'bodySubtitle',
-    width: '100%',
+    width: '100%'
   },
   Time: {
     _el: 'span',
-    _textStyle: 'caption',
+    _textStyle: 'caption'
   },
   UnreadCircle: {
     display: 'none',
@@ -73,10 +63,10 @@ export default styleSheet('DiscussionListItem', {
     borderRadius: '50%',
     backgroundColor: '$blue',
     unread: {
-      display: 'block',
-    },
+      display: 'block'
+    }
   },
   AttachmentWrapper: {
-    marginTop: '5px',
-  },
+    marginTop: '5px'
+  }
 });

@@ -3,11 +3,12 @@ import SW from './Discuss.swiss';
 import CardHeader from 'src/react/components/CardHeader/CardHeader';
 import DiscussionList from 'src/react/views/Discussion/List/DiscussionList';
 import HOCDiscussionOverview from 'src/react/views/Discussion/Overview/HOCDiscussionOverview';
-import ActionBar from 'src/react/views/Discussion/List/ActionBar';
 import TabBar from 'src/react/components/tab-bar/TabBar';
 import { withOptimist } from 'react-optimist';
 import SWView from 'src/react/app/view-controller/SWView';
+import DiscussionComposer from 'src/react/views/Discussion/Composer/DiscussionComposer';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
+import Button from 'src/react/components/Button/Button';
 
 @navWrapper
 @withOptimist
@@ -18,7 +19,7 @@ export default class Discuss extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      tabs: ['Following', 'All other', 'By me'],
+      tabs: ['Following', 'All other'],
       tabIndex: 0,
       selectedId: null
     };
@@ -31,17 +32,26 @@ export default class Discuss extends PureComponent {
       });
     }
   }
+  handleNewDiscussion = () => {
+    const { openModal } = this.props;
+    openModal({
+      component: DiscussionComposer,
+      title: 'Create Post',
+      position: 'center'
+    });
+  };
   onSelectItemId = (id, results) => {
     const { optimist } = this.props;
     const { selectedId } = this.state;
     let newId = id;
     if (
       selectedId &&
-      (!results || !results.filter(r => r.get('id') === selectedId).size)
+      (!results ||
+        !results.filter(r => r.get('discussion_id') === selectedId).size)
     ) {
       newId = null;
       if (results && results.size) {
-        newId = results.first().get('id');
+        newId = results.first().get('discussion_id');
       }
     } else if (results && selectedId) {
       return;
@@ -56,13 +66,16 @@ export default class Discuss extends PureComponent {
     const { tabs, tabIndex } = this.state;
     return (
       <SW.LeftHeaderWrapper>
-        <CardHeader title="Discussions" />
+        <CardHeader title="Discussions">
+          <Button
+            title="New discussion"
+            onClick={this.handleNewDiscussion}
+            rounded
+          />
+        </CardHeader>
         <TabBar tabs={tabs} delegate={this} activeTab={tabIndex} />
       </SW.LeftHeaderWrapper>
     );
-  }
-  renderLeftFooter() {
-    return <ActionBar />;
   }
   render() {
     const { tabIndex, selectedId } = this.state;
@@ -71,11 +84,7 @@ export default class Discuss extends PureComponent {
       <SW.ProvideContext viewWidth={viewWidth}>
         <SW.ParentWrapper>
           <SW.LeftSide>
-            <SWView
-              header={this.renderLeftHeader()}
-              footer={this.renderLeftFooter()}
-              noframe
-            >
+            <SWView header={this.renderLeftHeader()} noframe>
               <DiscussionList
                 tabIndex={tabIndex}
                 onSelectItemId={this.onSelectItemId}

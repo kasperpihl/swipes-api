@@ -1,8 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import AutoCompleteInput from 'src/react/components/auto-complete-input/AutoCompleteInput';
-import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
-import * as mainActions from 'src/redux/main/mainActions';
+import UserImage from 'src/react/components/UserImage/UserImage';
 import * as linkActions from 'src/redux/link/linkActions';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 import request from 'swipes-core-js/utils/request';
@@ -240,7 +239,7 @@ class DiscussionComposer extends PureComponent {
     return (
       <SW.Wrapper>
         <SW.ComposerWrapper>
-          <HOCAssigning assignees={[myId]} size={36} />
+          <UserImage userId="me" size={36} />
           <SW.InputWrapper>
             <SW.Input
               value={topicValue}

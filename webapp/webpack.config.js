@@ -22,18 +22,15 @@ module.exports = {
   resolve: {
     modules: [path.join(__dirname, 'node_modules')],
     alias: {
-      // 'swiss-react': path.resolve(
-      //   __dirname,
-      //   '../../opensource/swiss-react/dist/es'
-      // ),
+      // 'swiss-react': path.resolve(__dirname, '../../../swiss-react/dist/es'),
       // 'react-optimist': path.resolve(__dirname, '../../opensource/react-optimist/dist/es'),
       src: path.resolve(__dirname, 'src'),
       styles: path.resolve(__dirname, 'src/react/global-styles'),
       'swipes-core-js': '@swipesapp/core/dist',
-      // 'swipes-core-js': path.resolve(
-      //   __dirname,
-      //   '../../packages/swipes-core-js/dist'
-      // ),
+      'swipes-core-js': path.resolve(
+        __dirname,
+        '../../packages/swipes-core-js/dist'
+      ),
       icons: path.resolve(__dirname, 'src/react/icons')
     },
     extensions: ['.js', '.scss']

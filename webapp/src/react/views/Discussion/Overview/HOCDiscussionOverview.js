@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 
-import propsOrPop from 'swipes-core-js/utils/react/propsOrPop';
+import propsOrPop from 'src/react/_hocs/propsOrPop';
 import withRequests from 'swipes-core-js/components/withRequests';
 import PaginationProvider from 'swipes-core-js/components/pagination/PaginationProvider';
 import Loader from 'src/react/components/loaders/Loader';
@@ -26,13 +26,10 @@ import navWrapper from 'src/react/app/view-controller/NavWrapper';
 @connect(state => ({
   myId: state.me.get('id')
 }))
+@propsOrPop('discussion')
 export default class HOCDiscussionOverview extends PureComponent {
   static sizes() {
     return [654];
-  }
-  constructor(props) {
-    super(props);
-    propsOrPop(this, 'discussion');
   }
   onInitialLoad = () => {
     const { discussion, myId, request } = this.props;

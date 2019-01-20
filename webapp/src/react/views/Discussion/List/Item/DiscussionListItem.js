@@ -1,22 +1,18 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import {
-  setupLoading,
-  miniIconForId,
-  navForContext
-} from 'swipes-core-js/classes/utils';
+import { miniIconForId, navForContext } from 'swipes-core-js/classes/utils';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as menuActions from 'src/redux/menu/menuActions';
-import SplitImage from 'src/react/components/SplitImage/SplitImage';
 import Attachment from 'src/react/components/attachment/Attachment';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import timeGetDayOrTime from 'swipes-core-js/utils/time/timeGetDayOrTime';
 import SW from './DiscussionListItem.swiss';
+import userGetFirstName from 'swipes-core-js/utils/user/userGetFirstName';
 
 @navWrapper
 @connect(
   state => ({
-    myId: state.me.get('id')
+    myId: state.me.get('user_id')
   }),
   {
     contextMenu: mainActions.contextMenu,
@@ -27,8 +23,6 @@ export default class DiscussionListItem extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
-
-    setupLoading(this);
   }
   onClick = () => {
     const { onSelectItemId, item } = this.props;
@@ -48,22 +42,18 @@ export default class DiscussionListItem extends PureComponent {
       first,
       viewWidth
     } = this.props;
-    const subtitle = `${msgGen.users.getName(item.get('last_comment_by'), {
-      capitalize: true
-    })}: ${item.get('last_comment')}`;
+    const firstName = userGetFirstName(
+      item.get('last_comment_by'),
+      item.get('owned_by')
+    );
+    const subtitle = `${firstName}: ${item.get('last_comment')}`;
 
     let unread = false;
-    const subscriber = item
-      .get('followers')
-      .find(f => f.get('user_id') === myId);
-
-    if (
-      subscriber &&
-      (!subscriber.get('read_at') ||
-        subscriber.get('read_at') < item.get('last_comment_at'))
-    ) {
-      unread = true;
-    }
+    item.get('followers').forEach((ts, uId) => {
+      if (uId === myId) {
+        unread = ts === 'n' || ts < item.get('last_comment_at');
+      }
+    });
 
     return (
       <SW.ProvideContext
@@ -75,12 +65,6 @@ export default class DiscussionListItem extends PureComponent {
         viewWidth={viewWidth}
       >
         <SW.Wrapper onClick={this.onClick}>
-          <SW.LeftWrapper>
-            <SplitImage
-              size={44}
-              users={item.get('last_two_comments_by').toJS()}
-            />
-          </SW.LeftWrapper>
           <SW.MiddleWrapper>
             <SW.Topic>{item.get('topic')}</SW.Topic>
             <SW.Subtitle

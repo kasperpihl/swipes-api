@@ -5,9 +5,9 @@ import DiscussionListItem from './Item/DiscussionListItem';
 import PaginationScrollToMore from 'src/react/components/pagination/PaginationScrollToMore';
 import { withOptimist } from 'react-optimist';
 import PaginationProvider from 'swipes-core-js/components/pagination/PaginationProvider';
-import Button from 'src/react/components/Button/Button';
+
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-import DiscussionComposer from 'src/react/views/Discussion/Composer/DiscussionComposer';
+
 import SW from './DiscussionList.swiss';
 import request from 'swipes-core-js/utils/request';
 
@@ -15,25 +15,9 @@ import request from 'swipes-core-js/utils/request';
 @withOptimist
 @connect(state => ({
   counter: state.counter.get('discussion'),
-  myId: state.me.get('id')
+  myId: state.me.get('user_id')
 }))
 export default class DiscussionList extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.isPreviouslySelected = false;
-  }
-  onDiscuss = () => {
-    const { context, taggedUsers, openModal } = this.props;
-    openModal({
-      component: DiscussionComposer,
-      title: 'Create Post',
-      position: 'center',
-      props: {
-        context,
-        taggedUsers
-      }
-    });
-  };
   onInitialLoad = () => {
     const { tabIndex, counter } = this.props;
     if (tabIndex === 0 && counter && counter.size) {
@@ -44,63 +28,55 @@ export default class DiscussionList extends PureComponent {
     }
   };
   renderItems(pagination, type) {
-    const { onSelectItemId, optimist, compact, viewWidth } = this.props;
-    const { results } = pagination;
+    const { onSelectItemId, optimist, viewWidth } = this.props;
+    let { results } = pagination;
     let newSelectedId = null;
 
     if (!results || results.size === 0) {
       return (
         <SW.EmptyState>
           <SW.Label>There’s nothing here, yet.</SW.Label>
-          <Button title="Start a new discussion" onClick={this.onDiscuss} />
         </SW.EmptyState>
       );
     }
 
     if (results && results.size) {
-      newSelectedId = results.first().get('id');
+      results = results.toList();
+      newSelectedId = results.first().get('discussion_id');
     }
 
     setTimeout(() => {
-      onSelectItemId(newSelectedId, results);
+      // onSelectItemId(newSelectedId, results);
     }, 0);
 
-    return (results || fromJS([]))
-      .map(item => {
-        const selected = optimist.get('discussSelectedId') === item.get('id');
-        let siblingToSelectedItem = false;
+    return (results || fromJS([])).map(item => {
+      const siblingToSelectedItem = this.selectedRow || false;
+      this.selectedRow =
+        optimist.get('discussSelectedId') === item.get('discussion_id');
 
-        if (this.isPreviouslySelected) {
-          siblingToSelectedItem = true;
-        }
-
-        this.isPreviouslySelected = selected;
-
-        return (
-          <DiscussionListItem
-            onSelectItemId={onSelectItemId}
-            selected={selected}
-            compact={compact}
-            first={results.first().get('id') === item.get('id')}
-            siblingToSelectedItem={siblingToSelectedItem}
-            item={item}
-            key={item.get('id')}
-            viewWidth={viewWidth}
-          />
-        );
-      })
-      .toArray();
+      return (
+        <DiscussionListItem
+          onSelectItemId={onSelectItemId}
+          selected={this.selectedRow}
+          first={
+            results.first().get('discussion_id') === item.get('discussion_id')
+          }
+          siblingToSelectedItem={siblingToSelectedItem}
+          item={item}
+          key={item.get('discussion_id')}
+          viewWidth={viewWidth}
+        />
+      );
+    });
   }
   render() {
     const { tabIndex, myId } = this.props;
     let type = 'following';
-    let filter = d => d.get('followers').find(o => o.get('user_id') === myId);
+    let filter = d => d.get('followers').find((ts, uId) => uId === myId);
+
     if (tabIndex === 1) {
       type = 'all other';
-      filter = d => !d.get('followers').find(o => o.get('user_id') === myId);
-    } else if (tabIndex === 2) {
-      type = 'by me';
-      filter = d => d.get('created_by') === myId;
+      filter = d => !d.get('followers').find((ts, uId) => uId === myId);
     }
 
     return (
@@ -113,6 +89,7 @@ export default class DiscussionList extends PureComponent {
         onInitialLoad={this.onInitialLoad}
         cache={{
           path: 'discussion',
+          idAttribute: 'discussion_id',
           filter,
           orderBy: '-last_comment_at'
         }}

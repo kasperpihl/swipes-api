@@ -1,10 +1,9 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import * as ca from 'swipes-core-js/actions';
 import {
   Editor,
   getDefaultKeyBinding,
-  getVisibleSelectionRect,
+  getVisibleSelectionRect
 } from 'draft-js';
 import getTriggerIndexInSelection from 'src/utils/draft-js/getTriggerIndexInSelection';
 import insertMentionInSelection from 'src/utils/draft-js/insertMentionInSelection';
@@ -13,25 +12,17 @@ import getTextToSearchInSelection from 'src/utils/draft-js/getTextToSearchInSele
 import setupDraftExtensions from 'src/utils/draft-js/setupDraftExtensions';
 import Mention from './Mention';
 
-@connect(state => ({
-  results: state.autoComplete.get('results'),
-  string: state.autoComplete.get('string'),
-}), {
-  search: ca.autoComplete.search,
-  clear: ca.autoComplete.clear,
-})
+@connect()
 export default class extends PureComponent {
   constructor(props) {
     super(props);
 
     this.plugins = setupDraftExtensions(this, {
-      decorators: [
-        Mention,
-      ],
+      decorators: [Mention]
     });
 
     this.state = {
-      editorState: this.plugins.createEditorState(props.initialValue),
+      editorState: this.plugins.createEditorState(props.initialValue)
     };
     this.onChange = this.setEditorState;
 
@@ -40,9 +31,9 @@ export default class extends PureComponent {
     }
   }
   componentWillReceiveProps(nextProps) {
-    if(nextProps.reset && nextProps.reset !== this.props.reset) {
+    if (nextProps.reset && nextProps.reset !== this.props.reset) {
       this.setState({
-        editorState: this.plugins.createEditorState(nextProps.initialValue),
+        editorState: this.plugins.createEditorState(nextProps.initialValue)
       });
 
       // force autofocus on the input because otherwise is not working correctly
@@ -51,14 +42,14 @@ export default class extends PureComponent {
       this.shouldFocus = true;
     }
   }
-  componentDidMount() {
+  componentDidMount() {
     this.handleFocus();
   }
   componentDidUpdate() {
     this.handleFocus();
   }
-  handleFocus() {
-    if(this.shouldFocus) {
+  handleFocus() {
+    if (this.shouldFocus) {
       this.inputRef.blur();
       this.inputRef.focus();
       this.shouldFocus = false;
@@ -70,32 +61,32 @@ export default class extends PureComponent {
   setEditorState(editorState) {
     this.handleAutoComplete(editorState);
     this.setState({ editorState });
-    if(this.props.onChange) {
+    if (this.props.onChange) {
       this.props.onChange(editorState);
     }
   }
   onAutoCompleteSelect(item, i) {
     let { editorState } = this.state;
 
-    if(this.props.clearMentions) {
-      editorState = clearSearchInSelection(editorState, '@')
+    if (this.props.clearMentions) {
+      editorState = clearSearchInSelection(editorState, '@');
     } else {
       editorState = insertMentionInSelection(editorState, '@', item.id);
     }
 
     this.setEditorState(editorState);
 
-    if(this.props.onAutoCompleteSelect){
+    if (this.props.onAutoCompleteSelect) {
       this.props.onAutoCompleteSelect(item);
     }
   }
-  handleAutoComplete(editorState) {
-    const { search, clear, string } = this.props;
+  handleAutoComplete(editorState) {
+    const { search, clear, string } = this.props;
     const triggerIndex = getTriggerIndexInSelection(editorState, '@');
     let didSearch = false;
-    if(triggerIndex > -1) {
+    if (triggerIndex > -1) {
       const boundingRect = getVisibleSelectionRect(window);
-      if(boundingRect) {
+      if (boundingRect) {
         const wh = window.outerHeight;
         didSearch = true;
         const contentState = editorState.getCurrentContent();
@@ -105,17 +96,17 @@ export default class extends PureComponent {
           types: ['users'],
           boundingRect,
           identifier: `${sel.get('anchorKey')}-${triggerIndex}`,
-          showOnTop: (wh - boundingRect.bottom) < boundingRect.top,
+          showOnTop: wh - boundingRect.bottom < boundingRect.top
         });
       }
     }
-    if(!didSearch && string) {
+    if (!didSearch && string) {
       clear();
     }
   }
   handleReturn(e) {
-    const { results } = this.props;
-    if(results) {
+    const { results } = this.props;
+    if (results) {
       return 'handled';
     }
   }
@@ -129,15 +120,12 @@ export default class extends PureComponent {
     return getDefaultKeyBinding(e);
   }
   render() {
-    const {
-      innerRef,
-      placeholder,
-    } = this.props;
+    const { innerRef, placeholder } = this.props;
     return (
       <Editor
-        ref={(c) => {
+        ref={c => {
           this.inputRef = c;
-          if(typeof innerRef === 'function') innerRef(c);
+          if (typeof innerRef === 'function') innerRef(c);
         }}
         editorState={this.state.editorState}
         placeholder={placeholder}

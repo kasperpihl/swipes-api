@@ -3,11 +3,12 @@ import { styleSheet } from 'swiss-react';
 export default styleSheet('Discuss', {
   ParentWrapper: {
     _flex: ['row', 'left', 'top'],
-    _size: '100%',
+    _size: '100%'
   },
   LeftHeaderWrapper: {
-    paddingLeft: '25px',
-    borderBottom: '1px solid $sw4',
+    paddingLeft: '24px',
+    paddingRight: '24px',
+    borderBottom: '1px solid $sw4'
   },
   LeftSide: {
     height: '100%',
@@ -15,11 +16,11 @@ export default styleSheet('Discuss', {
     borderRight: '1px solid $sw4',
     width: '348px',
     'viewWidth=910': {
-      width: '378px',
+      width: '378px'
     },
     'viewWidth>=1080': {
-      width: '408px',
-    },
+      width: '408px'
+    }
   },
   RightSide: {
     _flex: ['center'],
@@ -27,19 +28,19 @@ export default styleSheet('Discuss', {
     fontSize: '24px',
     width: '452px',
     'viewWidth=910': {
-      width: '532px',
+      width: '532px'
     },
     'viewWidth=1080': {
-      width: '672px',
+      width: '672px'
     },
     'viewWidth=1200': {
-      width: '792px',
-    },
+      width: '792px'
+    }
   },
   Wrapper: {
     _flex: ['row', 'left', 'top'],
     _size: '100%',
     paddingLeft: '18px',
-    borderTop: '1px solid $sw3',
-  },
+    borderTop: '1px solid $sw3'
+  }
 });
