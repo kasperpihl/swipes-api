@@ -42,7 +42,7 @@ export default endpointCreate(
 
     const org = orgRes.rows[0];
     if (org.status === 'active') {
-      throw Error('alreay_part_of_org');
+      throw Error('already_part_of_org').toClient('Already in organization');
     }
 
     const lastSent = org.pending_users[target_email];
