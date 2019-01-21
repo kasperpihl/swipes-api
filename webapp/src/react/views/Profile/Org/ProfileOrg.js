@@ -2,13 +2,13 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-import SW from './ProfileOrgItem.swiss';
+import SW from './ProfileOrg.swiss';
 
 @navWrapper
 @connect(state => ({
   me: state.me
 }))
-export default class ProfileOrgItem extends PureComponent {
+export default class ProfileOrg extends PureComponent {
   handleOpenOrganization = () => {
     const { organization, navPush, me } = this.props;
 

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import ProfileHeader from 'src/react/views/Profile/Header/ProfileHeader';
-import ProfileOrgItem from 'src/react/views/Profile/Org/Item/ProfileOrgItem.js';
+import ProfileOrg from 'src/react/views/Profile/Org/ProfileOrg.js';
 import withLoader from 'src/react/_hocs/withLoader';
 import request from 'swipes-core-js/utils/request';
 import FormModal from 'src/react/components/FormModal/FormModal';
@@ -56,10 +56,7 @@ export default class Profile extends PureComponent {
           />
           {organization
             .map((org, i) => (
-              <ProfileOrgItem
-                key={org.get('organization_id')}
-                organization={org}
-              />
+              <ProfileOrg key={org.get('organization_id')} organization={org} />
             ))
             .toList()}
         </SW.Wrapper>
