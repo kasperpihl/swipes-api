@@ -25,20 +25,20 @@ module.exports = {
       // 'swiss-react': path.resolve(__dirname, '../../../swiss-react/dist/es'),
       // 'react-optimist': path.resolve(__dirname, '../../opensource/react-optimist/dist/es'),
       src: path.resolve(__dirname, 'src'),
-      styles: path.resolve(__dirname, 'src/react/global-styles'),
+      styles: path.resolve(__dirname, 'src/scss'),
       'swipes-core-js': '@swipesapp/core/dist',
       // 'swipes-core-js': path.resolve(
       //   __dirname,
       //   '../../packages/swipes-core-js/dist'
       // ),
-      icons: path.resolve(__dirname, 'src/react/icons')
+      icons: path.resolve(__dirname, 'src/react/_components')
     },
     extensions: ['.js', '.scss']
   },
   entry: {
-    app: './src/index',
-    note: './src/react/pages/external-note-view/ExternalNoteView',
-    reset: './src/react/pages/reset/Reset'
+    app: './src/index.app',
+    note: './src/index.note',
+    reset: './src/index.reset'
     // vendor: Object.keys(require("./package.json").dependencies),
   },
   output: {

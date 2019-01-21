@@ -1,0 +1,28 @@
+$FontPath: 'AktivGrotesk';
+$FontName: 'Aktiv-Grotesk';
+
+@mixin fontdef-woff($FontPath, $FontName, $FontType: 'Regular') {
+  src: url('../assets/fonts/#{$FontPath}/#{$FontType}/#{$FontName}-#{$FontType}.woff')
+    format('woff');
+}
+
+@font-face {
+  font-family: Aktiv-Grotesk;
+  @include fontdef-woff($FontPath, $FontName, 'Bold');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Aktiv-Grotesk;
+  @include fontdef-woff($FontPath, $FontName, 'Medium');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Aktiv-Grotesk;
+  @include fontdef-woff($FontPath, $FontName, 'Regular');
+  font-weight: 400;
+  font-style: normal;
+}

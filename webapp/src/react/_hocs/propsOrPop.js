@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import hoistNonReactStatics from 'hoist-non-react-statics';
-import navWrapper from 'src/react/app/view-controller/NavWrapper';
+import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
 
 export default (...propsToEnforce) => WrappedComponent => {
   @navWrapper

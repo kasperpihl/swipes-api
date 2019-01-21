@@ -43,7 +43,7 @@ export default class IpcListener {
         this.store.dispatch(
           navigationActions.set('primary', {
             id: 'Search',
-            title: 'Search',
+            title: 'Search'
           })
         );
       });
@@ -98,12 +98,12 @@ export default class IpcListener {
       this.sendNotification({
         id: comment.id,
         target: {
-          id: comment.discussion_id,
+          id: comment.discussion_id
         },
         title: discussion.topic,
         message: `${msgGen.users.getFirstName(
           comment.sent_by
-        )}: ${strippedMessage}`,
+        )}: ${strippedMessage}`
       });
     }
   }
@@ -114,7 +114,7 @@ export default class IpcListener {
 
     const desktopNotification = new Notification(notification.title, {
       body: notification.message,
-      icon: path.join(app.getAppPath(), 'icons/logo.png'),
+      icon: path.join(app.getAppPath(), 'icons/logo.png')
     });
 
     desktopNotification.onclick = () => {
