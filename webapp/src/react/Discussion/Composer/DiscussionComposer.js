@@ -69,7 +69,7 @@ export default class DiscussionComposer extends PureComponent {
         <SW.PostButton
           title="Post"
           onClick={this.handlePostSubmit}
-          {...loader.get('discussion')}
+          status={loader.get('discussion')}
         />
       </SW.ActionBar>
     );

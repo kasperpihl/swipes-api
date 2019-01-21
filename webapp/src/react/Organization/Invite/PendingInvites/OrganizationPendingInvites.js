@@ -67,12 +67,12 @@ export default class OrganizationPendingInvites extends PureComponent {
                 <SW.EmailButton
                   title="Resend"
                   onClick={() => this.handleSendInviteCached(email)}
-                  {...this.getLoading(`${email}sendInvite`)}
+                  status={this.getLoading(`${email}sendInvite`)}
                 />
                 <SW.EmailButton
                   title="Revoke"
                   onClick={() => this.handleRevokeInviteCached(email)}
-                  {...this.getLoading(`${email}revokeInvite`)}
+                  status={this.getLoading(`${email}revokeInvite`)}
                 />
               </SW.InviteItem>
             ))

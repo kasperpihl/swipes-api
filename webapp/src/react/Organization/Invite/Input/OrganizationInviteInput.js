@@ -46,7 +46,7 @@ export default function OrganizationInviteInput({ organizationId }) {
         <SW.SendButton
           title="Send Invite"
           onClick={handleSendInvite}
-          {...loader.get('sendInvite')}
+          status={loader.get('sendInvite')}
         />
       </SW.InputWrapper>
     </SW.Wrapper>
