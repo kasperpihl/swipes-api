@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react';
-import { setupLoading } from 'swipes-core-js/classes/utils';
+import withLoader from 'src/react/_hocs/withLoader';
 import request from 'swipes-core-js/utils/request';
 import SW from './OrganizationPendingInvites.swiss';
 
+@withLoader
 export default class OrganizationPendingInvites extends PureComponent {
   constructor(props) {
     super(props);
@@ -10,39 +11,37 @@ export default class OrganizationPendingInvites extends PureComponent {
     this.state = {
       showPendingInvites: false
     };
-
-    setupLoading(this);
   }
 
   handleSendInviteCached = email => {
-    const { organization } = this.props;
+    const { organization, loader } = this.props;
     const loadingKey = `${email}sendInvite`;
-    this.setLoading(loadingKey);
+    loader.set(loadingKey);
     request('organization.inviteUser', {
       organization_id: organization.get('organization_id'),
       target_email: email
     }).then(res => {
       if (res && res.ok) {
-        this.clearLoading(loadingKey, 'Invite sent', 1500);
+        loader.success(loadingKey, 'Invite sent', 1500);
       } else {
-        this.clearLoading(loadingKey, '!Something went wrong', 3000);
+        loader.error(loadingKey, res.error, 3000);
       }
     });
   };
 
   handleRevokeInviteCached = email => {
-    const { organization } = this.props;
+    const { organization, loader } = this.props;
     const loadingKey = `${email}revokeInvite`;
 
-    this.setLoading(loadingKey);
+    loader.set(loadingKey);
     request('organization.inviteRevoke', {
       organization_id: organization.get('organization_id'),
       target_email: email
     }).then(res => {
       if (res && res.ok) {
-        this.clearLoading(loadingKey);
+        loader.clear(loadingKey);
       } else {
-        this.clearLoading(loadingKey, '!Something went wrong', 3000);
+        loader.error(loadingKey, res.error, 3000);
       }
     });
   };
@@ -54,7 +53,7 @@ export default class OrganizationPendingInvites extends PureComponent {
 
   renderPendingInvites = () => {
     const { showPendingInvites } = this.state;
-    const { organization } = this.props;
+    const { organization, loader } = this.props;
 
     if (showPendingInvites) {
       return (
@@ -67,12 +66,12 @@ export default class OrganizationPendingInvites extends PureComponent {
                 <SW.EmailButton
                   title="Resend"
                   onClick={() => this.handleSendInviteCached(email)}
-                  status={this.getLoading(`${email}sendInvite`)}
+                  status={loader.get(`${email}sendInvite`)}
                 />
                 <SW.EmailButton
                   title="Revoke"
                   onClick={() => this.handleRevokeInviteCached(email)}
-                  status={this.getLoading(`${email}revokeInvite`)}
+                  status={loader.get(`${email}revokeInvite`)}
                 />
               </SW.InviteItem>
             ))
