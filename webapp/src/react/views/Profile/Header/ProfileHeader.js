@@ -5,7 +5,7 @@ import * as mainActions from 'src/redux/main/mainActions';
 import FormModal from 'src/react/components/FormModal/FormModal';
 import UserImage from 'src/react/components/UserImage/UserImage';
 import SW from './ProfileHeader.swiss';
-import ListMenu from 'src/react/context-menus/ListMenu/ListMenu';
+import ListMenu from 'src/react/components/ListMenu/ListMenu';
 import request from 'swipes-core-js/utils/request';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 

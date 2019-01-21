@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
 import { convertedUsers } from './testusers';
-import AssigneeContextMenu from 'src/react/context-menus/assignee-component/AssigneeContextMenu';
+import AssigneeContextMenu from 'src/react/components/AssigneeMenu/AssigneeContextMenu';
 import Button from 'src/react/components/Button/Button.js';
 
 @connect(

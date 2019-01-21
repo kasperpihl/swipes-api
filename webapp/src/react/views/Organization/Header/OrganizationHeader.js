@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
 import withLoader from 'src/react/_hocs/withLoader';
 import FormModal from 'src/react/components/FormModal/FormModal';
-import ListMenu from 'src/react/context-menus/ListMenu/ListMenu';
+import ListMenu from 'src/react/components/ListMenu/ListMenu';
 import CardHeader from 'src/react/components/CardHeader/CardHeader';
 import SW from './OrganizationHeader.swiss';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
