@@ -7,17 +7,41 @@ export default styleSheet('ButtonExtended', {
     _flex: ['row', 'center', 'center'],
     _textStyle: 'body',
     display: 'inline-flex',
-    userSelect: 'none'
+    userSelect: 'none',
+
+    'status=Standard': {
+      '&:hover': {
+        borderColor: '$blue'
+      }
+    },
+
+    'status=Success': {
+      borderColor: '$green'
+    },
+    'status=Error': {
+      borderColor: '$red'
+    }
   },
 
   InnerWrapper: {
     _size: '100%',
     _flex: ['row', 'flex-start', 'center'],
-    padding: '6px',
+    border: '1px solid $sw3',
+    borderRadius: '36px',
+    boxSizing: 'content-box',
 
-    '.Button_Wrapper &:hover': {
-      backgroundColor: '$sw3',
-      color: '$blue'
+    'status=Standard': {
+      '.ButtonExtended_Wrapper:hover &': {
+        borderColor: '$blue'
+      }
+    },
+
+    'status=Success': {
+      borderColor: '$green'
+    },
+
+    'status=Error': {
+      borderColor: '$red'
     }
   },
 
@@ -27,11 +51,32 @@ export default styleSheet('ButtonExtended', {
 
   BigTitle: {
     _el: 'p',
-    _size: '100%'
+    _textStyle: 'bodyMedium',
+    padding: '0 3px 0 6px',
+
+    'status=Standard': {
+      '.ButtonExtended_Wrapper:hover &': {
+        color: '$blue'
+      }
+    },
+    'status=Success': {
+      color: '$green'
+    },
+
+    'status=Error': {
+      color: '$red'
+    }
   },
 
   SmallTitle: {
     _el: 'p',
-    _size: '100%'
+    _textStyle: 'body',
+    paddingTop: '2px',
+
+    'status=Standard': {
+      '.ButtonExtended_Wrapper:hover &': {
+        color: '$blue'
+      }
+    }
   }
 });

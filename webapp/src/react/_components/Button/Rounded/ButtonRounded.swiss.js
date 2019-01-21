@@ -7,7 +7,6 @@ export default styleSheet('ButtonRounded', {
     _flex: ['row', 'center', 'center'],
     _textStyle: 'body',
     flex: 'none',
-    display: 'inline-flex',
     userSelect: 'none',
     border: '1px solid $sw3',
     borderRadius: '18px',

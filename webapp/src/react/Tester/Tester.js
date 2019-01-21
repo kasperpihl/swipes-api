@@ -32,53 +32,54 @@ export default class Tester extends PureComponent {
     const { loader } = this.props;
     return (
       <SW.Wrapper>
-        <Button.Standard
+        {/* <Button.Standard
           icon="Close"
           onClick={this.handleClickCached('StandardIcon')}
           onContextMenu={this.handleContextMenuCached('StandardIcon')}
           status={loader.get('StandardIcon')}
-        />
-        <Button.Standard
+        /> */}
+        {/* <Button.Standard
           title="Close"
           onClick={this.handleClickCached('StandardTitle')}
           onContextMenu={this.handleContextMenuCached('StandardTitle')}
           status={loader.get('StandardTitle')}
-        />
-        <Button.Standard
+        /> */}
+        {/* <Button.Standard
           icon="Close"
           onClick={this.handleClickCached('StandardIconTitle')}
           onContextMenu={this.handleContextMenuCached('StandardIconTitle')}
           status={loader.get('StandardIconTitle')}
           title="Close"
-        />
-        <Button.Rounded
+        /> */}
+        {/* <Button.Rounded
           icon="ThreeDots"
           onClick={this.handleClickCached('RoundedIcon')}
           onContextMenu={this.handleContextMenuCached('RoundedIcon')}
           status={loader.get('RoundedIcon')}
-        />
-        <Button.Rounded
+        /> */}
+        {/* <Button.Rounded
           title="Close"
           onClick={this.handleClick}
           onClick={this.handleClickCached('RoundedTitle')}
           onContextMenu={this.handleContextMenuCached('RoundedTitle')}
           status={loader.get('RoundedTitle')}
-        />
-        <Button.Rounded
+        /> */}
+        {/* <Button.Rounded
           icon="ThreeDots"
           title="Close"
           onClick={this.handleClick}
           onClick={this.handleClickCached('RoundedIconTitle')}
           onContextMenu={this.handleContextMenuCached('RoundedIconTitle')}
           status={loader.get('RoundedIconTitle')}
-        />
-        {/* <Button.Extended
+        /> */}
+        <Button.Extended
           icon="ThreeDots"
-          onClick={this.handleClick}
+          onClick={this.handleClickCached('ButtonExtended')}
+          onContextMenu={this.handleContextMenuCached('ButtonExtended')}
           bigTitle="12"
           smallTitle="People"
-          {...loader.get('button')}
-        /> */}
+          status={loader.get('ButtonExtended')}
+        />
       </SW.Wrapper>
     );
   }
