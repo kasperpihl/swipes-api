@@ -36,7 +36,6 @@ export default class HOCAssigning extends PureComponent {
       return;
     }
     const { assignees } = this.state;
-  
 
     let overrideAssignees;
     const options = {
@@ -54,7 +53,7 @@ export default class HOCAssigning extends PureComponent {
     e.stopPropagation();
   };
   render() {
-    const filteredUsers = 
+    return null;
 
     return (
       <Assigning

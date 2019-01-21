@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import UserImage from 'src/react/components/UserImage/UserImage';
-import { fromJS } from 'immutable';
 import request from 'swipes-core-js/utils/request';
 import withLoader from 'src/react/_hocs/withLoader';
 import SW from './DiscussionComposer.swiss';
