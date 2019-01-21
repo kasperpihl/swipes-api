@@ -16,12 +16,26 @@ export default class ButtonRounded extends PureComponent {
     })
   };
   render() {
-    const { icon, title, status, ...rest } = this.props;
+    const { icon, title, status, className, onClick, ...rest } = this.props;
+    const parsedStatus = buttonParseStatus(status);
     const parsedTitle = buttonParseTitle(title, status);
+    let parsedClassName = 'button-icon-js';
+    if (className) {
+      parsedClassName = `${parsedClassName} ${className}`;
+    }
+
     return (
-      <SW.ProvideContext rounded status={buttonParseStatus(status)}>
-        <SW.Wrapper {...rest}>
-          <ButtonIcon {...this.props} />
+      <SW.ProvideContext
+        rounded
+        hasIcon={!!(icon || parsedStatus !== 'Standard')}
+        status={buttonParseStatus(status)}
+      >
+        <SW.Wrapper
+          {...rest}
+          onClick={(parsedStatus === 'Standard' && onClick) || undefined}
+          className={parsedClassName}
+        >
+          <ButtonIcon icon={icon} status={parsedStatus} />
           {!!parsedTitle && <SW.Title>{parsedTitle}</SW.Title>}
         </SW.Wrapper>
       </SW.ProvideContext>

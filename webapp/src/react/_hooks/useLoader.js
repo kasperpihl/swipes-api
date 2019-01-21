@@ -33,18 +33,19 @@ const useLoader = () => {
     return (loadingId, label = defaultLabel, duration, callback) => {
       if (typeof duration === 'function') {
         callback = duration;
+        duration = undefined;
       }
       if (typeof label === 'number') {
         duration = label;
+        label = defaultLabel;
       }
       if (!timers.current) return;
 
       const newState = Object.assign({}, loadingState, {
         [loadingId]: { [loadingKey]: label }
       });
-      setLoadingState(newState);
-
       startTimerIfNeeded(loadingId, duration, callback);
+      setLoadingState(newState);
     };
   }
 

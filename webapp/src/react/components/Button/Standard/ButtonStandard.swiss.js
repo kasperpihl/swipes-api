@@ -6,15 +6,15 @@ export default styleSheet('ButtonStandard', {
     _size: ['auto', '36px'],
     _flex: ['row', 'center', 'center'],
     _textStyle: 'body',
-    display: 'inline-flex',
-    userSelect: 'none',
-    padding: '0 6px'
+    userSelect: 'none'
   },
 
   Title: {
     _el: 'p',
+    padding: '0 12px',
+
     'status=Standard': {
-      '.ButtonStandard_Wrapper:hover &': {
+      '.ButtonRounded_Wrapper:hover &': {
         color: '$blue'
       }
     },
@@ -27,7 +27,7 @@ export default styleSheet('ButtonStandard', {
     },
 
     hasIcon: {
-      marginLeft: '6px'
+      paddingLeft: '0'
     }
   }
 });

@@ -15,7 +15,7 @@ addGlobalStyles({
 
 export default styleSheet('ButtonIcon', {
   LoaderCircle: {
-    _size: '30px',
+    _size: '36px',
     backgroundColor: '$sw1',
     borderRadius: '100%',
     animation: 'button-loader 1.0s infinite ease-in-out'
@@ -23,7 +23,8 @@ export default styleSheet('ButtonIcon', {
 
   Icon: {
     _el: Icon,
-    _size: '24px',
+    _size: ['36px', '24px'],
+    padding: '0 6px',
 
     'status=Standard': {
       '.button-icon-js:hover &': {
