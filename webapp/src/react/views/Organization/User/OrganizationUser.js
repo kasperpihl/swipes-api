@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import Button from 'src/react/components/Button/Button';
 import * as mainActions from 'src/redux/main/mainActions';
 import withLoader from 'src/react/_hocs/withLoader';
 import UserImage from 'src/react/components/UserImage/UserImage';
@@ -194,7 +195,7 @@ export default class OrganizationUser extends PureComponent {
         </SW.UserDetails>
         {(isOwner && this.getUserTag(user) !== 'active') ||
         (meUser && this.getUserTag(user) !== 'active') ? null : (
-          <SW.OptionsButton
+          <Button.Rounded
             icon="ThreeDots"
             onClick={this.openListMenu}
             {...loader.get('buttonClicked')}

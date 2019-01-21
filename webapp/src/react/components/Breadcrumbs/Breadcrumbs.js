@@ -14,7 +14,7 @@ import SW from './Breadcrumbs.swiss';
 )
 export default class Breadcrumbs extends Component {
   static propTypes = {
-    target: PropTypes.oneOf('primary', 'secondary').isRequired
+    target: PropTypes.oneOf(['primary', 'secondary']).isRequired
   };
   handleClickCached = i => () => {
     const { target, pop } = this.props;

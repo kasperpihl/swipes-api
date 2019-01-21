@@ -1,85 +1,15 @@
 import React, { PureComponent } from 'react';
+import ButtonExtended from './Extended/ButtonExtended';
+import ButtonStandard from './Standard/ButtonStandard';
+import ButtonRounded from './Rounded/ButtonRounded';
 import SW from './Button.swiss';
 
 export default class Button extends PureComponent {
-  renderIcon(status) {
-    let { icon } = this.props;
-    if (!icon && status === '') {
-      return null;
-    }
-
-    if (status === 'error') icon = 'Close';
-    if (status === 'success') icon = 'ChecklistCheckmark';
-
-    let innerEl = <SW.IconComp icon={icon} />;
-
-    // Add loader/success/error icons if needed
-    if (status === 'loading') {
-      innerEl = <SW.LoaderCircle />;
-    }
-
-    return <SW.IconContainer>{innerEl}</SW.IconContainer>;
-  }
-  renderTitle() {
-    const { title, loading, error, success, sideLabel } = this.props;
-
-    if (sideLabel || (!title && !success && !error)) return null;
-
-    // Show loading/success/error if needed
-    const label = loading || error || success || title;
-
-    return <SW.Title>{label}</SW.Title>;
-  }
-  renderSideLabel(status) {
-    const { sideLabel } = this.props;
-    if (!sideLabel) return null;
-
-    return sideLabel && <SW.SideLabel>{status}</SW.SideLabel>;
-  }
+  static Rounded = ButtonRounded;
+  static Standard = ButtonStandard;
+  static Extended = ButtonExtended;
   render() {
-    const {
-      title,
-      sideLabel,
-      icon,
-      loading,
-      error,
-      success,
-      className,
-      size,
-      rounded,
-      textOutside,
-      selected,
-      showPopupText,
-      popupText,
-      numberOfLines,
-      ...rest
-    } = this.props;
-
-    let status = '';
-    if (loading) status = 'loading';
-    if (success) status = 'success';
-    if (error) status = 'error';
-
-    return (
-      <SW.ProvideContext
-        hasIcon={status !== '' || !!icon}
-        status={status}
-        rounded={rounded}
-        size={size}
-        selected={selected}
-      >
-        <SW.ATag className={`gl-button ${className || ''}`.trim()} {...rest}>
-          <SW.PopupBox show={showPopupText} numberOfLines={numberOfLines}>
-            <SW.PopupText>{popupText}</SW.PopupText>
-          </SW.PopupBox>
-          <SW.Background>
-            {this.renderIcon(status)}
-            {this.renderTitle()}
-          </SW.Background>
-          {this.renderSideLabel(status)}
-          <SW.Title textOutside={!!textOutside}>Text</SW.Title>
-        </SW.ATag>
-      </SW.ProvideContext>
-    );
+    console.warn('Button cannot be rendered. Use .Standard or .Rounded');
+    return null;
   }
 }
