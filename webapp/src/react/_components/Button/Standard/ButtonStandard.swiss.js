@@ -14,7 +14,7 @@ export default styleSheet('ButtonStandard', {
     padding: '0 12px',
 
     'status=Standard': {
-      '.ButtonRounded_Wrapper:hover &': {
+      '.ButtonStandard_Wrapper:hover &': {
         color: '$blue'
       }
     },
