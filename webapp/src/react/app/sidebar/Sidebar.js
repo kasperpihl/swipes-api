@@ -14,6 +14,7 @@ const kNavItems = [
 @connect(
   state => ({
     me: state.me,
+    auth: state.auth,
     navId: state.navigation.getIn(['primary', 'id']),
     counter: state.counter
   }),
@@ -48,7 +49,7 @@ export default class Sidebar extends PureComponent {
   }
 
   renderItem(item) {
-    const { navId, counter } = this.props;
+    const { navId, counter, auth } = this.props;
 
     let count = 0;
     if (item.id === 'Discuss') {
@@ -72,7 +73,7 @@ export default class Sidebar extends PureComponent {
           className="item"
         >
           <SW.Description className="description">{item.id}</SW.Description>
-          {item.id === 'Profile' ? (
+          {item.id === 'Profile' && auth.get('token') ? (
             <UserImage userId="me" />
           ) : (
             <SW.Icon icon={item.svg} className="icon" />

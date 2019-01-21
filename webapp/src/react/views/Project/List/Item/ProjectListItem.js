@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react';
 import SW from './ProjectListItem.swiss';
 import ProgressCircle from 'src/react/components/ProgressCircle/ProgressCircle';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
+import storeGet from 'swipes-core-js/utils/store/storeGet';
+import orgGetBelonging from 'swipes-core-js/utils/org/orgGetBelonging';
 
 @navWrapper
 export default class ProjectListItem extends PureComponent {
@@ -15,13 +17,6 @@ export default class ProjectListItem extends PureComponent {
       }
     });
   };
-  getSubtitleLabel() {
-    const { project, me } = this.props;
-    if (project.get('owned_by') === me.get('id')) {
-      return 'Personal';
-    }
-    return 'Unknown';
-  }
   render() {
     const { project } = this.props;
     return (
@@ -32,7 +27,7 @@ export default class ProjectListItem extends PureComponent {
         </SW.LeftSideWrapper>
         <SW.TextWrapper>
           <SW.Title>{project.get('name')}</SW.Title>
-          <SW.Subtitle>{this.getSubtitleLabel()}</SW.Subtitle>
+          <SW.Subtitle>{orgGetBelonging(project.get('owned_by'))}</SW.Subtitle>
         </SW.TextWrapper>
       </SW.Wrapper>
     );
