@@ -46,7 +46,13 @@ export default function main(state = initialState, action) {
       return state.setIn(['modals', payload.target], null);
     }
     case types.NAVIGATION_MODAL: {
-      return state.setIn(['modals', payload.target], payload.modal || null);
+      const modal = payload.component
+        ? {
+            component: payload.component,
+            props: payload.props || {}
+          }
+        : null;
+      return state.setIn(['modals', payload.target], modal);
     }
 
     // ======================================================

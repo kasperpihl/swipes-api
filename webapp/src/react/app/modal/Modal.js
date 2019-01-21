@@ -12,10 +12,6 @@ import SW from './Modal.swiss';
   }
 )
 export default class HOCModal extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
   hideModal = () => {
     const { clear, target } = this.props;
     clear(target);
@@ -31,19 +27,16 @@ export default class HOCModal extends PureComponent {
   render() {
     const { modal } = this.props;
 
-    const Comp = (modal && modal.component) || null;
-
-    const props = (modal && modal.props) || {};
-
     return (
       <SW.Container
         className="modal"
-        position={(modal && modal.position) || 'center'}
-        show={modal && !!modal.component}
+        show={!!modal}
         onClick={this.clickedBackground}
       >
-        <SW.Content position={(modal && modal.position) || 'center'}>
-          {Comp && <Comp hideModal={this.hideModal} {...props} />}
+        <SW.Content>
+          {modal && modal.component && (
+            <modal.component hideModal={this.hideModal} {...modal.props} />
+          )}
         </SW.Content>
       </SW.Container>
     );

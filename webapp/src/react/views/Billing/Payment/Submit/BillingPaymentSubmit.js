@@ -43,8 +43,7 @@ export default injectStripe(function BillingPaymentSubmit({
     <SW.Wrapper>
       <BillingPaymentInput label="Credit or debit card" />
       <SW.SubmitButton
-        {...loader.get('submit')}
-        rounded
+        status={loader.get('submit')}
         title="Submit Payment"
         onClick={handleSubmit}
       />

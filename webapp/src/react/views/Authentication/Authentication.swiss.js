@@ -1,6 +1,6 @@
 import { styleSheet } from 'swiss-react';
 import { Link } from 'react-router-dom';
-import TabBar from 'src/react/components/tab-bar/TabBar';
+import TabBar from 'src/react/components/TabBar/TabBar';
 
 export default styleSheet('Authentication', {
   Wrapper: {

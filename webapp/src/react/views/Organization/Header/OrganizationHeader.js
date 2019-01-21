@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
 import withLoader from 'src/react/_hocs/withLoader';
-import ConfirmationModal from 'src/react/components/ConfirmationModal/ConfirmationModal';
 import FormModal from 'src/react/components/FormModal/FormModal';
 import ListMenu from 'src/react/context-menus/ListMenu/ListMenu';
 import CardHeader from 'src/react/components/CardHeader/CardHeader';
@@ -42,23 +41,19 @@ export default class OrganizationHeader extends PureComponent {
   openRenameModal = () => {
     const { openModal, organization } = this.props;
 
-    openModal({
-      component: FormModal,
-      position: 'center',
-      props: {
-        title: 'Rename organization',
-        components: [
-          {
-            placeholder: 'Enter name of organization',
-            type: 'text',
-            label: 'test',
-            autoFocus: true,
-            initialValue: organization.get('name')
-          }
-        ],
-        confirmLabel: 'Rename',
-        onConfirm: this.handleRenameOrganization
-      }
+    openModal(FormModal, {
+      title: 'Rename organization',
+      inputs: [
+        {
+          placeholder: 'Enter name of organization',
+          type: 'text',
+          label: 'test',
+          autoFocus: true,
+          initialValue: organization.get('name')
+        }
+      ],
+      confirmLabel: 'Rename',
+      onConfirm: this.handleRenameOrganization
     });
   };
 
@@ -109,7 +104,7 @@ export default class OrganizationHeader extends PureComponent {
     });
   };
 
-  handleDeleteOrganization = password => {
+  handleDeleteOrganization = ([password]) => {
     const { organization } = this.props;
 
     this.runRequest('organization.delete', {
@@ -118,12 +113,13 @@ export default class OrganizationHeader extends PureComponent {
     });
   };
 
-  handleLeaveOrganization = () => {
+  handleLeaveOrganization = ([password]) => {
     const { organization, meInOrg } = this.props;
 
     this.runRequest('organization.disableUser', {
       organization_id: organization.get('organization_id'),
-      target_user_id: meInOrg.get('user_id')
+      target_user_id: meInOrg.get('user_id'),
+      password
     });
   };
 
@@ -136,42 +132,54 @@ export default class OrganizationHeader extends PureComponent {
     });
   };
 
-  openConfirmationModal = ({ ...props }) => {
+  openFormModal = ({ ...props }) => {
     const { openModal } = this.props;
 
-    openModal({
-      component: ConfirmationModal,
-      position: 'center',
-      props
-    });
+    openModal(FormModal, props);
   };
 
   handleListClick = (i, button) => {
+    const { organization } = this.props;
     if (button.title === kDelete.title) {
       const modalOptions = {
         title: 'Delete organization',
-        text:
+        subtitle:
           'Are you sure you want to delete this organization? Deleting it is permanent and cannot be reversed.',
-        callback: this.handleDeleteOrganization
+        inputs: [
+          {
+            type: 'password',
+            placeholder: 'Password',
+            autoFocus: true,
+            label: `Confirm deleting "${organization.get('name')}"`
+          }
+        ],
+        onConfirm: this.handleDeleteOrganization
       };
-      return this.openConfirmationModal(modalOptions);
+      return this.openFormModal(modalOptions);
     }
     if (button.title === kLeave.title) {
       const modalOptions = {
         title: 'Leave organization',
-        text: 'Are you sure that you want to leave this organization?',
-        callback: this.handleLeaveOrganization,
-        checkPassword: true
+        subtitle: 'Are you sure that you want to leave this organization?',
+        inputs: [
+          {
+            type: 'password',
+            placeholder: 'Password',
+            autoFocus: true,
+            label: `Confirm leaving "${organization.get('name')}"`
+          }
+        ],
+        onConfirm: this.handleLeaveOrganization
       };
 
-      return this.openConfirmationModal(modalOptions);
+      return this.openFormModal(modalOptions);
     }
   };
   render() {
     const { name, loader } = this.props;
     return (
       <CardHeader title={name} onTitleClick={this.openRenameModal}>
-        <SW.Button title="Billing" onClick={this.openBillingView} rounded />
+        <SW.Button title="Billing" onClick={this.openBillingView} />
         <SW.Button
           icon="ThreeDots"
           onClick={this.openContextMenu}

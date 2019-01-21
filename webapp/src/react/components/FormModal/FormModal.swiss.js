@@ -23,6 +23,7 @@ export default styleSheet('FormModal', {
   },
 
   InputContainer: {
+    _el: 'form',
     _size: ['100%', 'auto'],
     _flex: ['column', 'center', 'center']
   },

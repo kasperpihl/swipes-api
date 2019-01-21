@@ -3,7 +3,7 @@ import SW from './Discuss.swiss';
 import CardHeader from 'src/react/components/CardHeader/CardHeader';
 import DiscussionList from 'src/react/views/Discussion/List/DiscussionList';
 import HOCDiscussionOverview from 'src/react/views/Discussion/Overview/HOCDiscussionOverview';
-import TabBar from 'src/react/components/tab-bar/TabBar';
+import TabBar from 'src/react/components/TabBar/TabBar';
 import { withOptimist } from 'react-optimist';
 import SWView from 'src/react/app/view-controller/SWView';
 import DiscussionComposer from 'src/react/views/Discussion/Composer/DiscussionComposer';
@@ -34,11 +34,7 @@ export default class Discuss extends PureComponent {
   }
   handleNewDiscussion = () => {
     const { openModal } = this.props;
-    openModal({
-      component: DiscussionComposer,
-      title: 'Create Post',
-      position: 'center'
-    });
+    openModal(DiscussionComposer);
   };
   onSelectItemId = (id, results) => {
     const { optimist } = this.props;

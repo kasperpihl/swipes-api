@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import SW from './ProjectListItem.swiss';
 import ProgressCircle from 'src/react/components/ProgressCircle/ProgressCircle';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-import storeGet from 'swipes-core-js/utils/store/storeGet';
 import orgGetBelonging from 'swipes-core-js/utils/org/orgGetBelonging';
 
 @navWrapper

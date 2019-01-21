@@ -1,6 +1,6 @@
 import { styleSheet } from 'swiss-react';
 import Button from 'src/react/components/Button/Button';
-import TabBar from 'src/react/components/tab-bar/TabBar';
+import TabBar from 'src/react/components/TabBar/TabBar';
 
 export default styleSheet('Organization', {
   Wrapper: {

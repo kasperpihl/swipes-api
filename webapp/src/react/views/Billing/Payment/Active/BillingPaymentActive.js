@@ -5,13 +5,8 @@ import SW from './BillingPaymentActive.swiss';
 
 export default function BillingPaymentActive({ openModal, organization }) {
   const handleCardDetails = () => {
-    openModal({
-      component: BillingPaymentModal,
-      title: 'Change card details',
-      position: 'center',
-      props: {
-        organizationId: organization.get('organization_id')
-      }
+    openModal(BillingPaymentModal, {
+      organizationId: organization.get('organization_id')
     });
   };
   return (
@@ -24,7 +19,6 @@ export default function BillingPaymentActive({ openModal, organization }) {
       <SW.ChangeDetailsButton
         title="Change card details"
         onClick={handleCardDetails}
-        rounded
       />
     </SW.Wrapper>
   );

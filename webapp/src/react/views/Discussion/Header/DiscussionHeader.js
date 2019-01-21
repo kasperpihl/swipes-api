@@ -5,9 +5,8 @@ import {
   navForContext
 } from 'swipes-core-js/classes/utils';
 import { connect } from 'react-redux';
-import * as menuActions from 'src/redux/menu/menuActions';
 import * as mainActions from 'src/redux/main/mainActions';
-import * as navigationActions from 'src/redux/navigation/navigationActions';
+import FormModal from 'src/react/components/FormModal/FormModal';
 import SW from './DiscussionHeader.swiss';
 import Button from 'src/react/components/Button/Button';
 import Attachment from 'src/react/components/attachment/Attachment';
@@ -22,9 +21,7 @@ import request from 'swipes-core-js/utils/request';
     myId: state.me.get('id')
   }),
   {
-    tooltip: mainActions.tooltip,
-    inputMenu: menuActions.input,
-    confirm: menuActions.confirm
+    tooltip: mainActions.tooltip
   }
 )
 export default class DiscussionHeader extends PureComponent {
@@ -55,16 +52,17 @@ export default class DiscussionHeader extends PureComponent {
     tooltip(null);
   };
   onTitleClick = e => {
-    const { inputMenu, discussion } = this.props;
-
-    inputMenu(
-      {
-        boundingRect: e.target.getBoundingClientRect(),
-        alignX: 'right',
-        text: discussion.get('topic'),
-        buttonLabel: 'Rename'
-      },
-      text => {
+    const { openModal, discussion } = this.props;
+    openModal(FormModal, {
+      title: 'Rename discussion',
+      inputs: [
+        {
+          placeholder: 'Name of discussion',
+          initialValue: discussion.get('topic')
+        }
+      ],
+      confirmLabel: 'Rename',
+      onConfirm: ([text]) => {
         if (text !== discussion.get('topic') && text.length) {
           request('discussion.rename', {
             discussion_id: discussion.get('id'),
@@ -72,32 +70,28 @@ export default class DiscussionHeader extends PureComponent {
           });
         }
       }
-    );
+    });
   };
   onArchive(options) {
-    const { discussion, confirm } = this.props;
-    confirm(
-      Object.assign({}, options, {
-        title: 'Delete discussion',
-        message:
-          'This will delete the discussion permanently and cannot be undone.'
-      }),
-      i => {
-        if (i === 1) {
-          this.setLoading('dots');
-          request('discussion.archive', {
-            discussion_id: discussion.get('id')
-          }).then(res => {
-            if (res.ok) {
-              window.analytics.sendEvent('Discussion archived', {});
-            }
-            if (!res || !res.ok) {
-              this.clearLoading('dots', '!Something went wrong');
-            }
-          });
-        }
+    const { discussion, openModal } = this.props;
+    openModal(FormModal, {
+      title: 'Delete discussion',
+      subtitle:
+        'This will delete the discussion permanently and cannot be undone.',
+      onConfirm: () => {
+        this.setLoading('dots');
+        request('discussion.archive', {
+          discussion_id: discussion.get('id')
+        }).then(res => {
+          if (res.ok) {
+            window.analytics.sendEvent('Discussion archived', {});
+          }
+          if (!res || !res.ok) {
+            this.clearLoading('dots', '!Something went wrong');
+          }
+        });
       }
-    );
+    });
   }
   onContextClick = () => {
     const { openSecondary, discussion } = this.props;

@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import OrganizationDelete from 'src/react/views/Organization/Delete/OrganizationDelete.js';
 import OrganizationHeader from 'src/react/views/Organization/Header/OrganizationHeader';
 import OrganizationUser from 'src/react/views/Organization/User/OrganizationUser';
 import OrganizationInviteInput from 'src/react/views/Organization/Invite/Input/OrganizationInviteInput';
@@ -30,19 +29,6 @@ export default class Organization extends PureComponent {
       tabIndex: 0
     };
   }
-
-  openDeleteModal = () => {
-    const { openModal, organization } = this.props;
-
-    openModal({
-      component: OrganizationDelete,
-      position: 'center',
-      props: {
-        orgName: organization.get('name'),
-        orgId: organization.get('organization_id')
-      }
-    });
-  };
 
   tabDidChange = index => {
     if (this.state.tabIndex !== index) {
@@ -86,20 +72,6 @@ export default class Organization extends PureComponent {
     );
   };
 
-  renderDeleteButton = () => {
-    const { organization, meInOrg } = this.props;
-
-    if (meInOrg.get('user_id') === organization.get('owner_id')) {
-      return (
-        <SW.Button
-          icon="Delete"
-          title="Delete"
-          onClick={this.openDeleteModal}
-        />
-      );
-    }
-    return null;
-  };
   render() {
     const { tabIndex } = this.state;
     const { organization, meInOrg } = this.props;
@@ -127,7 +99,6 @@ export default class Organization extends PureComponent {
               ))
               .toList()}
           </SW.UsersWrapper>
-          {/* {this.renderDeleteButton()} */}
         </SW.Wrapper>
       </SWView>
     );

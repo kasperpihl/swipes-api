@@ -8,6 +8,7 @@ import { setupLoading } from 'swipes-core-js/classes/utils';
 import request from 'swipes-core-js/utils/request';
 import { setupDelegate } from 'react-delegate';
 import Button from 'src/react/components/Button/Button';
+import FormModal from 'src/react/components/FormModal/FormModal';
 import { fromJS } from 'immutable';
 import { EditorState, convertToRaw } from 'draft-js';
 import SW from './AttachButton.swiss';
@@ -19,7 +20,6 @@ import navWrapper from 'src/react/app/view-controller/NavWrapper';
     myId: state.me.get('id')
   }),
   {
-    inputMenu: menuActions.input,
     chooseAttachmentType: menuActions.chooseAttachmentType,
     // createLink: linkActions.create,
     createNote: noteActions.create,
@@ -72,7 +72,7 @@ export default class extends PureComponent {
     });
   }
   onChooseAttachment = e => {
-    const { chooseAttachmentType, inputMenu, createNote } = this.props;
+    const { chooseAttachmentType, openModal, createNote } = this.props;
     const options = this.getOptionsForE(e);
     options.onClose = this.onAttachButtonCloseOverlay;
     chooseAttachmentType(options).then(item => {
@@ -80,27 +80,31 @@ export default class extends PureComponent {
         this.hiddenInput.click();
         return;
       }
-      options.buttonLabel = 'Add';
-      if (item.id === 'note') {
-        options.placeholder = 'Title of the note';
-      } else if (item.id === 'url') {
-        options.placeholder = 'http://';
+      const confirmLabel = 'Add';
+      let placeholder = 'Title of the note';
+      if (item.id === 'url') {
+        placeholder = 'http://';
       }
-      inputMenu(options, title => {
-        if (title && title.length) {
-          this.setLoading('attach');
-          if (item.id === 'url') {
-            this.createLinkFromTypeIdTitle(item.id, title, title);
-          } else {
-            createNote(
-              convertToRaw(EditorState.createEmpty().getCurrentContent())
-            ).then(res => {
-              if (res && res.ok) {
-                this.createLinkFromTypeIdTitle(item.id, res.note.id, title);
-              } else {
-                this.clearLoading('attach');
-              }
-            });
+
+      openModal(FormModal, {
+        inputs: [{ type: 'text', placeholder }],
+        confirmLabel,
+        onConfirm: ([title]) => {
+          if (title && title.length) {
+            this.setLoading('attach');
+            if (item.id === 'url') {
+              this.createLinkFromTypeIdTitle(item.id, title, title);
+            } else {
+              createNote(
+                convertToRaw(EditorState.createEmpty().getCurrentContent())
+              ).then(res => {
+                if (res && res.ok) {
+                  this.createLinkFromTypeIdTitle(item.id, res.note.id, title);
+                } else {
+                  this.clearLoading('attach');
+                }
+              });
+            }
           }
         }
       });

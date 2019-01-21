@@ -6,7 +6,7 @@ import { attachmentIconForService } from 'swipes-core-js/classes/utils';
 import AutoCompleteInput from 'src/react/components/auto-complete-input/AutoCompleteInput';
 import * as linkActions from 'src/redux/link/linkActions';
 import HOCAssigning from 'src/react/components/assigning/HOCAssigning';
-import AttachButton from 'src/react/components/attach-button/AttachButton';
+import AttachButton from 'src/react/components/AttachButton/AttachButton';
 import editorStateToPlainMention from 'src/utils/draft-js/editorStateToPlainMention';
 import Attachment from 'src/react/components/attachment/Attachment';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';

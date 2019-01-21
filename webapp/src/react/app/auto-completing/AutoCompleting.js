@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { setupDelegate } from 'react-delegate';
-import ResultItem from 'src/react/components/result-item/ResultItem';
+// import ResultItem from 'src/react/components/result-item/ResultItem';
 import AutoCompleteItem from './AutoCompleteItem';
 import SW from './AutoCompleting.swiss';
 
@@ -27,9 +27,9 @@ class AutoCompleting extends PureComponent {
             {...r.resultItem}
           />
         </AutoCompleteItem>
-      )
+      );
     });
-    if(autoComplete.getIn(['options', 'showOnTop'])){
+    if (autoComplete.getIn(['options', 'showOnTop'])) {
       resultHtml = resultHtml.reverse();
     }
     return resultHtml;
@@ -38,7 +38,7 @@ class AutoCompleting extends PureComponent {
     const { autoComplete } = this.props;
     const boundingRect = autoComplete.getIn(['options', 'boundingRect']);
     const showOnTop = autoComplete.getIn(['options', 'showOnTop']);
-    const show = (autoComplete.get('results') && boundingRect);
+    const show = autoComplete.get('results') && boundingRect;
 
     return (
       <SW.Wrapper
@@ -49,8 +49,8 @@ class AutoCompleting extends PureComponent {
       >
         {show && this.renderResults()}
       </SW.Wrapper>
-    )
+    );
   }
 }
 
-export default AutoCompleting
+export default AutoCompleting;

@@ -8,7 +8,7 @@ import propsOrPop from 'src/react/_hocs/propsOrPop';
 import SWView from 'src/react/app/view-controller/SWView';
 
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
-import ConfirmationModal from 'src/react/components/ConfirmationModal/ConfirmationModal';
+import FormModal from 'src/react/components/FormModal/FormModal';
 import BillingHeader from './Header/BillingHeader';
 import BillingPaymentActive from './Payment/Active/BillingPaymentActive';
 import BillingPaymentSubmit from './Payment/Submit/BillingPaymentSubmit';
@@ -40,18 +40,14 @@ export default class Billing extends PureComponent {
     if (!organization.get('stripe_subscription_id')) {
       this.setState({ plan });
     } else {
-      openModal({
-        component: ConfirmationModal,
-        position: 'center',
-        props: {
-          title: 'Change billing plan',
-          text: `You are about to change your billing plan from ${organization.get(
-            'plan'
-          )} to ${plan}. Any unused time from the current subscription will be converted in credits that will be used for future payments.
+      openModal(FormModal, {
+        title: 'Change billing plan',
+        subtitle: `You are about to change your billing plan from ${organization.get(
+          'plan'
+        )} to ${plan}. Any unused time from the current subscription will be converted in credits that will be used for future payments.
     
           Click 'Confirm’ to change the plan.`,
-          callback: this.updatePlanRequest.bind(null, plan)
-        }
+        onConfirm: this.updatePlanRequest.bind(null, plan)
       });
     }
   };

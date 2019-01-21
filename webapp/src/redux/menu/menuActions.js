@@ -1,40 +1,10 @@
-import Confirmation from 'src/react/context-menus/confirmation/Confirmation';
-import InputMenu from 'src/react/context-menus/input-menu/InputMenu';
 import * as mainActions from '../main/mainActions';
 import * as navigationActions from '../navigation/navigationActions';
-import { fromJS } from 'immutable';
-import * as cacheActions from 'swipes-core-js/redux/cache/cacheActions';
-// import * as cs from 'swipes-core-js/selectors';
 
 export const selectAssignees = (options, assignees, callback) => (
   d,
   getState
 ) => {};
-
-export const confirm = (options, callback) => (d, getState) => {
-  const isBrowserSupported = getState().global.get('isBrowserSupported');
-  if (!isBrowserSupported) {
-    const res = window.confirm(options.message || options.title);
-    return callback(res ? 1 : 0);
-  }
-  d(
-    mainActions.contextMenu({
-      options,
-      component: Confirmation,
-      props: {
-        title: options.title,
-        message: options.message,
-        actions: options.actions,
-        onClick: i => {
-          d(mainActions.contextMenu(null));
-          if (callback) {
-            callback(i);
-          }
-        }
-      }
-    })
-  );
-};
 
 export const alert = (options, callback) => (d, getState) => {
   const isBrowserSupported = getState().global.get('isBrowserSupported');
@@ -53,29 +23,6 @@ export const alert = (options, callback) => (d, getState) => {
           d(mainActions.contextMenu(null));
           if (callback) {
             callback(i);
-          }
-        }
-      }
-    })
-  );
-};
-
-export const input = (options, callback) => (d, getState) => {
-  const isBrowserSupported = getState().global.get('isBrowserSupported');
-  if (!isBrowserSupported) {
-    const res = window.prompt(options.placeholder, options.text);
-    return callback(res);
-  }
-  d(
-    mainActions.contextMenu({
-      options,
-      component: InputMenu,
-      props: {
-        ...options,
-        onResult: title => {
-          d(mainActions.contextMenu(null));
-          if (callback) {
-            callback(title);
           }
         }
       }

@@ -4,7 +4,7 @@ import Button from 'src/react/components/Button/Button';
 import * as mainActions from 'src/redux/main/mainActions';
 import withLoader from 'src/react/_hocs/withLoader';
 import UserImage from 'src/react/components/UserImage/UserImage';
-import ConfirmationModal from 'src/react/components/ConfirmationModal/ConfirmationModal';
+import FormModal from 'src/react/components/FormModal/FormModal';
 import ListMenu from 'src/react/context-menus/ListMenu/ListMenu';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import request from 'swipes-core-js/utils/request';
@@ -38,17 +38,20 @@ export default class OrganizationUser extends PureComponent {
     };
   };
   openTransferModal() {
-    const { openModal } = this.props;
-    openModal({
-      component: ConfirmationModal,
-      position: 'center',
-      props: {
-        title: 'Transfer ownership of organization',
-        text:
-          'Warrning: Transferring the ownership is permanent and it cannot be reversed!',
-        callback: this.handleTransferOwnership,
-        checkPassword: true
-      }
+    const { openModal, user } = this.props;
+    openModal(FormModal, {
+      title: 'Transfer ownership of organization',
+      subtitle:
+        'Warrning: Transferring the ownership is permanent and it cannot be reversed!',
+      inputs: [
+        {
+          type: 'password',
+          placeholder: 'Password',
+          autoFocus: true,
+          label: `Confirm transferring ownership to "${user.get('first_name')}"`
+        }
+      ],
+      onConfirm: this.handleTransferOwnership
     });
   }
   handleTransferOwnership = password => {

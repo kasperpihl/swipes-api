@@ -1,8 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { miniIconForId, navForContext } from 'swipes-core-js/classes/utils';
-import * as mainActions from 'src/redux/main/mainActions';
-import * as menuActions from 'src/redux/menu/menuActions';
 import Attachment from 'src/react/components/attachment/Attachment';
 import navWrapper from 'src/react/app/view-controller/NavWrapper';
 import timeGetDayOrTime from 'swipes-core-js/utils/time/timeGetDayOrTime';
@@ -10,15 +8,9 @@ import SW from './DiscussionListItem.swiss';
 import userGetFirstName from 'swipes-core-js/utils/user/userGetFirstName';
 
 @navWrapper
-@connect(
-  state => ({
-    myId: state.me.get('user_id')
-  }),
-  {
-    contextMenu: mainActions.contextMenu,
-    confirm: menuActions.confirm
-  }
-)
+@connect(state => ({
+  myId: state.me.get('user_id')
+}))
 export default class DiscussionListItem extends PureComponent {
   constructor(props) {
     super(props);

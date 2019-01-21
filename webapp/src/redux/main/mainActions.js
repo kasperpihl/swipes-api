@@ -18,8 +18,11 @@ export const tooltip = payload => ({ type: types.TOOLTIP, payload });
 // ======================================================
 // Modal
 // ======================================================
-export function modal(target, modal) {
-  return { type: types.NAVIGATION_MODAL, payload: { modal, target } };
+export function modal(target, component, props) {
+  return {
+    type: types.NAVIGATION_MODAL,
+    payload: { target, component, props }
+  };
 }
 // ======================================================
 // DragAndDrop

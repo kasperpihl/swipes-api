@@ -2,8 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import withLoader from 'src/react/_hocs/withLoader';
 import * as mainActions from 'src/redux/main/mainActions';
-import ProfileNameChange from 'src/react/views/Profile/NameChange/ProfileNameChange';
-import ConfirmationModal from 'src/react/components/ConfirmationModal/ConfirmationModal';
+import FormModal from 'src/react/components/FormModal/FormModal';
 import UserImage from 'src/react/components/UserImage/UserImage';
 import SW from './ProfileHeader.swiss';
 import ListMenu from 'src/react/context-menus/ListMenu/ListMenu';
@@ -23,20 +22,16 @@ import navWrapper from 'src/react/app/view-controller/NavWrapper';
 export default class ProfileHeader extends PureComponent {
   logout() {
     const { openModal, loader } = this.props;
-    openModal({
-      component: ConfirmationModal,
-      position: 'center',
-      props: {
-        title: 'Log out',
-        text: 'Do you want to log out?',
-        callback: () => {
-          loader.set('ThreeDots');
-          request('user.signout').then(res => {
-            if (res.error) {
-              loader.error('ThreeDots', res.error, 3000);
-            }
-          });
-        }
+    openModal(FormModal, {
+      title: 'Log out',
+      subtitle: 'Do you want to log out?',
+      onConfirm: () => {
+        loader.set('ThreeDots');
+        request('user.signout').then(res => {
+          if (res.error) {
+            loader.error('ThreeDots', res.error, 3000);
+          }
+        });
       }
     });
   }
@@ -79,12 +74,41 @@ export default class ProfileHeader extends PureComponent {
       });
     }
   };
+  callbackProfileUpdate = ([first_name, last_name]) => {
+    const { me, loader } = this.props;
+    if (
+      first_name !== me.get('first_name') ||
+      last_name !== me.get('last_name')
+    ) {
+      loader.set('ThreeDots');
+      request('me.updateProfile', {
+        first_name,
+        last_name
+      }).then(res => {
+        if (res && res.ok) {
+          loader.success('ThreeDots', 'Updated', 1500);
+        } else {
+          loader.error('ThreeDots', res.error, 2000);
+        }
+      });
+    }
+  };
+  handleOpenProfileUpdate = () => {
+    const { openModal, me } = this.props;
 
-  handleOpenModal = () => {
-    const { openModal } = this.props;
-    openModal({
-      component: ProfileNameChange,
-      position: 'center'
+    openModal(FormModal, {
+      title: 'Update Profile',
+      inputs: [
+        {
+          type: 'text',
+          label: 'First name',
+          autoFocus: true,
+          initialValue: me.get('first_name')
+        },
+        { type: 'text', label: 'Last name', initialValue: me.get('last_name') }
+      ],
+      onConfirm: this.callbackProfileUpdate,
+      confirmLabel: 'Update'
     });
   };
 
@@ -113,12 +137,13 @@ export default class ProfileHeader extends PureComponent {
     return (
       <SW.Wrapper>
         {this.renderProfileImage()}
-        <SW.NameField onClick={this.handleOpenModal}>{fullName}</SW.NameField>
+        <SW.NameField onClick={this.handleOpenProfileUpdate}>
+          {fullName}
+        </SW.NameField>
         <SW.OptionsButton
           icon="ThreeDots"
           onClick={this.handleThreeDots}
-          {...loader.get('ThreeDots')}
-          rounded
+          status={loader.get('ThreeDots')}
         />
       </SW.Wrapper>
     );

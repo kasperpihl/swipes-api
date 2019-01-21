@@ -7,8 +7,8 @@ export default class FormModal extends PureComponent {
   constructor(props) {
     super(props);
     const initialState = {};
-    props.components &&
-      props.components.forEach((comp, i) => {
+    props.inputs &&
+      props.inputs.forEach((comp, i) => {
         initialState[i] = comp.initialValue || '';
       });
     this.state = initialState;
@@ -18,28 +18,29 @@ export default class FormModal extends PureComponent {
   };
 
   handleConfirm = e => {
-    const { hideModal, components, onConfirm } = this.props;
+    const { hideModal, inputs, onConfirm } = this.props;
 
     if (!e || !e.keyCode || e.keyCode === 13) {
-      onConfirm(components && components.map((comp, i) => this.state[i]));
+      onConfirm(inputs && inputs.map((comp, i) => this.state[i]));
       hideModal();
     }
   };
 
-  handleKeyUpCached = i => e => {
-    const { components } = this.props;
-    if (e.keyCode === 13 && i === components.length - 1) {
+  handleKeyDownCached = i => e => {
+    const { inputs } = this.props;
+    if (e.keyCode === 13 && i === inputs.length - 1) {
       this.handleConfirm();
+      e.preventDefault();
     }
   };
 
   renderInputs = () => {
-    const { components } = this.props;
+    const { inputs } = this.props;
 
-    if (!components) {
+    if (!inputs) {
       return null;
     }
-    return components.map((comp, i) => {
+    return inputs.map((comp, i) => {
       const { label, initialValue, ...rest } = comp;
       return (
         <SW.InputWrapper key={i}>
@@ -47,7 +48,7 @@ export default class FormModal extends PureComponent {
           <SW.Input
             {...rest}
             onChange={this.handleInputCached(i)}
-            onKeyUp={this.handleKeyUpCached(i)}
+            onKeyDown={this.handleKeyDownCached(i)}
             value={this.state[i]}
           />
         </SW.InputWrapper>
@@ -67,7 +68,6 @@ export default class FormModal extends PureComponent {
           <SW.Button title="Cancel" rounded onClick={hideModal} />
           <SW.Button
             title={confirmLabel || 'Confirm'}
-            rounded
             onClick={this.handleConfirm}
           />
         </SW.ButtonWrapper>
