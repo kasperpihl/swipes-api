@@ -57,12 +57,12 @@ addMixin('textStyle', (style = 'item') => {
       };
     case 'labelLight':
       return {
-        _font: ['11px', '18px', 500],
+        _font: ['12px', '18px', 500],
         color: '$sw2'
       };
     case 'labelDark':
       return {
-        _font: ['11px', '18px', 500],
+        _font: ['12px', '18px', 500],
         color: '$sw1'
       };
     default:

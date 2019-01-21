@@ -6,7 +6,24 @@ export default styleSheet('ButtonStandard', {
     _size: ['auto', '36px'],
     _flex: ['row', 'center', 'center'],
     _textStyle: 'body',
-    userSelect: 'none'
+    userSelect: 'none',
+
+    rounded: {
+      border: '1px solid $sw3',
+      borderRadius: '18px',
+      'status=Standard': {
+        '&:hover': {
+          borderColor: '$blue'
+        }
+      },
+
+      'status=Success': {
+        borderColor: '$green'
+      },
+      'status=Error': {
+        borderColor: '$red'
+      }
+    }
   },
 
   Title: {
@@ -14,7 +31,7 @@ export default styleSheet('ButtonStandard', {
     padding: '0 12px',
 
     'status=Standard': {
-      '.ButtonRounded_Wrapper:hover &': {
+      '.ButtonStandard_Wrapper:hover &': {
         color: '$blue'
       }
     },

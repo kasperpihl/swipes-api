@@ -51,20 +51,23 @@ export default class Tester extends PureComponent {
           status={loader.get('StandardIconTitle')}
           title="Close"
         />
-        <Button.Rounded
+        <Button.Standard
+          rounded
           icon="ThreeDots"
           onClick={this.handleClickCached('RoundedIcon')}
           onContextMenu={this.handleContextMenuCached('RoundedIcon')}
           status={loader.get('RoundedIcon')}
         />
-        <Button.Rounded
+        <Button.Standard
+          rounded
           title="Close"
           onClick={this.handleClick}
           onClick={this.handleClickCached('RoundedTitle')}
           onContextMenu={this.handleContextMenuCached('RoundedTitle')}
           status={loader.get('RoundedTitle')}
         />
-        <Button.Rounded
+        <Button.Standard
+          rounded
           icon="ThreeDots"
           title="Close"
           onClick={this.handleClick}
@@ -72,13 +75,14 @@ export default class Tester extends PureComponent {
           onContextMenu={this.handleContextMenuCached('RoundedIconTitle')}
           status={loader.get('RoundedIconTitle')}
         />
-        {/* <Button.Extended
+        <Button.Extended
           icon="ThreeDots"
-          onClick={this.handleClick}
+          onClick={this.handleClickCached('ButtonExtended')}
+          onContextMenu={this.handleContextMenuCached('ButtonExtended')}
           bigTitle="12"
           smallTitle="People"
-          {...loader.get('button')}
-        /> */}
+          status={loader.get('ButtonExtended')}
+        />
       </SW.Wrapper>
     );
   }
