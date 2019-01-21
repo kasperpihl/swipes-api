@@ -16,7 +16,15 @@ export default class ButtonStandard extends PureComponent {
     })
   };
   render() {
-    const { icon, title, status, className, onClick, ...rest } = this.props;
+    const {
+      icon,
+      title,
+      status,
+      className,
+      onClick,
+      rounded,
+      ...rest
+    } = this.props;
     const parsedStatus = buttonParseStatus(status);
     const parsedTitle = buttonParseTitle(title, status);
     let parsedClassName = 'button-icon-js';
@@ -26,6 +34,7 @@ export default class ButtonStandard extends PureComponent {
     return (
       <SW.ProvideContext
         hasIcon={!!(icon || parsedStatus !== 'Standard')}
+        rounded={rounded}
         status={parsedStatus}
       >
         <SW.Wrapper

@@ -6,7 +6,6 @@ export default styleSheet('ButtonExtended', {
     _size: ['auto', '36px'],
     _flex: ['row', 'center', 'center'],
     _textStyle: 'body',
-    display: 'inline-flex',
     userSelect: 'none',
 
     'status=Standard': {
