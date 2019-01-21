@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { setupCachedCallback } from 'react-delegate';
+import PropTypes from 'prop-types';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 import SW from './Breadcrumbs.swiss';
 
@@ -13,15 +13,13 @@ import SW from './Breadcrumbs.swiss';
   }
 )
 export default class Breadcrumbs extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-    this.onClickCached = setupCachedCallback(this.onClick, this);
-  }
-  onClick(i) {
+  static propTypes = {
+    target: PropTypes.oneOf('primary', 'secondary').isRequired
+  };
+  handleClickCached = i => () => {
     const { target, pop } = this.props;
     pop(target, i);
-  }
+  };
   renderBreadcrumbs() {
     const { history } = this.props;
 
@@ -43,7 +41,7 @@ export default class Breadcrumbs extends Component {
             key={i}
             className="crumb"
             disableClick={disableClick}
-            onClick={this.onClickCached(i)}
+            onClick={this.handleClickCached(i)}
           >
             {i > 0 && (
               <SW.Seperator>

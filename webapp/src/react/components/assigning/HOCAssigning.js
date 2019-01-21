@@ -3,15 +3,13 @@ import { connect } from 'react-redux';
 import { List } from 'immutable';
 import * as mainActions from 'src/redux/main/mainActions';
 import * as menuActions from 'src/redux/menu/menuActions';
-import { setupDelegate } from 'react-delegate';
-import getParentByClass from 'swipes-core-js/utils/getParentByClass';
 
 import Assigning from './Assigning';
 
 @connect(
   state => ({
-    myId: state.me.get('id'),
-    users: state.users
+    myId: state.me.get('user_id'),
+    organization: state.organization
   }),
   {
     tooltip: mainActions.tooltip,
@@ -19,22 +17,6 @@ import Assigning from './Assigning';
   }
 )
 export default class HOCAssigning extends PureComponent {
-  constructor(props) {
-    super(props);
-    const assignees = List(props.assignees);
-    this.state = {
-      assignees,
-      filteredUsers: this.getUsersFromAssignees(props.users, assignees)
-    };
-    setupDelegate(this, 'onAssigningClose');
-  }
-  componentWillReceiveProps(nextProps) {
-    const assignees = List(nextProps.assignees);
-    this.setState({
-      assignees,
-      filteredUsers: this.getUsersFromAssignees(nextProps.users, assignees)
-    });
-  }
   getUsersFromAssignees(users, assignees) {
     const { myId } = this.props;
     let filteredUsers = assignees;
@@ -72,7 +54,7 @@ export default class HOCAssigning extends PureComponent {
     e.stopPropagation();
   };
   render() {
-    const { filteredUsers } = this.state;
+    const filteredUsers = 
 
     return (
       <Assigning
