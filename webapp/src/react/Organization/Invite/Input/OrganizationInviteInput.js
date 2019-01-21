@@ -27,7 +27,7 @@ export default function OrganizationInviteInput({ organizationId }) {
   const handleKeyUp = e => {
     if (e.keyCode === 13) {
       e.preventDefault();
-      this.handleSendInvite();
+      handleSendInvite();
     }
   };
 
