@@ -1,9 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
-import {
-  setupLoading,
-  miniIconForId,
-  navForContext
-} from 'swipes-core-js/classes/utils';
+import { miniIconForId, navForContext } from 'swipes-core-js/classes/utils';
+import withLoader from 'src/react/_hocs/withLoader';
 import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
 import FormModal from 'src/react/_components/FormModal/FormModal';
@@ -16,6 +13,7 @@ import AssigneeTooltip from 'src/react/_components/assigning/AssigneeTooltip';
 import request from 'swipes-core-js/utils/request';
 
 @navWrapper
+@withLoader
 @connect(
   state => ({
     myId: state.me.get('id')
@@ -25,11 +23,6 @@ import request from 'swipes-core-js/utils/request';
   }
 )
 export default class DiscussionHeader extends PureComponent {
-  constructor(props) {
-    super(props);
-
-    setupLoading(this);
-  }
   onMouseEnter = e => {
     const { tooltip, discussion } = this.props;
     if (!discussion.get('followers').size) return;
@@ -73,13 +66,13 @@ export default class DiscussionHeader extends PureComponent {
     });
   };
   onArchive(options) {
-    const { discussion, openModal } = this.props;
+    const { discussion, openModal, loader } = this.props;
     openModal(FormModal, {
       title: 'Delete discussion',
       subtitle:
         'This will delete the discussion permanently and cannot be undone.',
       onConfirm: () => {
-        this.setLoading('dots');
+        loader.set('dots');
         request('discussion.archive', {
           discussion_id: discussion.get('id')
         }).then(res => {
@@ -87,7 +80,7 @@ export default class DiscussionHeader extends PureComponent {
             window.analytics.sendEvent('Discussion archived', {});
           }
           if (!res || !res.ok) {
-            this.clearLoading('dots', '!Something went wrong');
+            loader.clear('dots', res.error);
           }
         });
       }
@@ -98,9 +91,9 @@ export default class DiscussionHeader extends PureComponent {
     openSecondary(navForContext(discussion.get('context')));
   };
   onFollowClick = () => {
-    const { myId, discussion } = this.props;
+    const { myId, discussion, loader } = this.props;
 
-    this.setLoading('following');
+    loader.set('following');
     let endpoint = 'discussion.follow';
     if (discussion.get('followers').find(o => o.get('user_id') === myId)) {
       endpoint = 'discussion.unfollow';
@@ -108,11 +101,11 @@ export default class DiscussionHeader extends PureComponent {
     request(endpoint, {
       discussion_id: discussion.get('id')
     }).then(res => {
-      this.clearLoading('following');
+      loader.clear('following');
     });
   };
   render() {
-    const { discussion, myId } = this.props;
+    const { discussion, myId, loader } = this.props;
     const followers = discussion.get('followers').map(o => o.get('user_id'));
     const topic = discussion.get('topic');
     const privacy = discussion.get('privacy');
@@ -123,7 +116,7 @@ export default class DiscussionHeader extends PureComponent {
           <Button.Rounded
             title={followers.includes(myId) ? 'Unfollow' : 'Follow'}
             onClick={this.onFollowClick}
-            status={this.getLoading('following')}
+            status={loader.get('following')}
           />
         </CardHeader>
 

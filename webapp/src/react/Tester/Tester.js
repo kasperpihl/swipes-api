@@ -51,23 +51,20 @@ export default class Tester extends PureComponent {
           status={loader.get('StandardIconTitle')}
           title="Close"
         />
-        <Button.Standard
-          rounded
+        <Button.Rounded
           icon="ThreeDots"
           onClick={this.handleClickCached('RoundedIcon')}
           onContextMenu={this.handleContextMenuCached('RoundedIcon')}
           status={loader.get('RoundedIcon')}
         />
-        <Button.Standard
-          rounded
+        <Button.Rounded
           title="Close"
           onClick={this.handleClick}
           onClick={this.handleClickCached('RoundedTitle')}
           onContextMenu={this.handleContextMenuCached('RoundedTitle')}
           status={loader.get('RoundedTitle')}
         />
-        <Button.Standard
-          rounded
+        <Button.Rounded
           icon="ThreeDots"
           title="Close"
           onClick={this.handleClick}
