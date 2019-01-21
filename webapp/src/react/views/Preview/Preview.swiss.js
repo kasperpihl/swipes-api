@@ -10,7 +10,7 @@ export default styleSheet('Preview', {
     padding: '0 30px'
   },
   FooterButton: {
-    _el: Button,
+    _el: Button.Rounded,
     marginLeft: '15px'
   },
   LoaderWrapper: {

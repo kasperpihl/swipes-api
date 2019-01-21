@@ -13,7 +13,7 @@ export default styleSheet('OrganizationHeader', {
   },
 
   Button: {
-    _el: Button,
+    _el: Button.Rounded,
     marginLeft: 'auto'
   }
 });

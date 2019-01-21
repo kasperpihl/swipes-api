@@ -45,9 +45,9 @@ class InputMenu extends Component {
           autoFocus
           innerRef={c => (this.input = c)}
         />
-        <Button
+        <Button.Rounded
           title={buttonLabel}
-          disabled={allowEmpty ? false : !text.length}
+          // disabled={allowEmpty ? false : !text.length}
           icon={buttonIcon}
           onClick={this.onAdd}
         />

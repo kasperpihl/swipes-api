@@ -47,13 +47,7 @@ class AssigneeComponent extends Component {
     this.setState({ selectedIds });
   };
   render() {
-    return (
-      <Button
-        icon="Assign"
-        sideLabel={`${this.state.selectedIds.length} Assigned People`}
-        onClick={this.handleClick}
-      />
-    );
+    return <Button.Rounded icon="Assign" onClick={this.handleClick} />;
   }
 }
 

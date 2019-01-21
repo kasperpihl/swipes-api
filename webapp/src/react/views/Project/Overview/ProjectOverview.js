@@ -154,15 +154,13 @@ export default class ProjectOverview extends PureComponent {
               increase={this.increaseSlider}
               decrease={this.decreaseSlider}
             />
-            <Button
+            <Button.Rounded
               onMouseEnter={this.showPopupText}
               onMouseLeave={this.hidePopupText}
               icon="Trash"
               title="Start new plan"
-              popupText="Testing popup"
-              size="large"
-              rounded={true}
-              showPopupText={showPopupText}
+              // popupText="Testing popup"
+              // showPopupText={showPopupText}
             />
             <Dropdown rounded={false} />
           </SW.Div>

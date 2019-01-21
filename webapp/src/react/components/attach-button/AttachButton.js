@@ -155,9 +155,9 @@ export default class extends PureComponent {
 
     return (
       <Fragment>
-        <Button
+        <Button.Standard
           onClick={this.onChooseAttachment}
-          {...this.getLoading('attach')}
+          status={this.getLoading('attach')}
           icon="Attach"
           {...buttonProps}
           className={className}

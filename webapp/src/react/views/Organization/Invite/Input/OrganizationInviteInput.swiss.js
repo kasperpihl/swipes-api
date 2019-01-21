@@ -25,7 +25,7 @@ export default styleSheet('OrganizationInviteInput', {
   },
 
   SendButton: {
-    _el: Button,
+    _el: Button.Rounded,
     border: '1px solid $sw3',
     borderRadius: '300px',
     overflow: 'hidden',

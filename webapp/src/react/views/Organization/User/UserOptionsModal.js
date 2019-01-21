@@ -26,8 +26,8 @@ export default class UserOptionsModal extends PureComponent {
           value={this.state.passwordInput}
           onChange={this.handleInputChange}
         />
-        <Button title="No" rounded />
-        <Button title="Yes" onClick={userAction} rounded />
+        <Button.Rounded title="No" />
+        <Button.Rounded title="Yes" onClick={userAction} />
       </SW.Wrapper>
     );
   }

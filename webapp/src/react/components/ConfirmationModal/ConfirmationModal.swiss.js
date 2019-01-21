@@ -38,7 +38,7 @@ export default styleSheet('ConfirmationModal', {
   },
 
   Button: {
-    _el: Button,
+    _el: Button.Rounded,
     _flex: 'center',
     border: '1px solid $sw3',
     borderRadius: '300px',

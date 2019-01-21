@@ -60,7 +60,7 @@ export default styleSheet('OrganizationPendingInvites', {
   },
 
   EmailButton: {
-    _el: Button,
+    _el: Button.Rounded,
     margin: '0 6px'
   }
 });

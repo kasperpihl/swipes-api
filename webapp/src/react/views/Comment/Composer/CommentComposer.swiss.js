@@ -49,7 +49,7 @@ export default styleSheet('CommentComposer', {
     },
   },
   SubmitButton: {
-    _el: Button,
+    _el: Button.Rounded,
     marginTop: '6px',
     display: 'none !important',
     shown: {

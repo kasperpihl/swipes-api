@@ -198,7 +198,7 @@ export default class OrganizationUser extends PureComponent {
           <Button.Rounded
             icon="ThreeDots"
             onClick={this.openListMenu}
-            {...loader.get('buttonClicked')}
+            status={loader.get('buttonClicked')}
           />
         )}
         <SW.UserType>{this.getUserTag(user)}</SW.UserType>

@@ -47,10 +47,10 @@ export default class BillingPaymentModal extends PureComponent {
           <BillingPaymentInput label="Change card details" />
         </SW.ComposerWrapper>
         <SW.ActionBar>
-          <Button
+          <Button.Rounded
             title="Change"
             onClick={this.handleSubmit}
-            {...loader.get('changeCardNumber')}
+            status={loader.get('changeCardNumber')}
           />
         </SW.ActionBar>
       </SW.Wrapper>

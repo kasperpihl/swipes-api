@@ -113,13 +113,13 @@ export default class Topbar extends PureComponent {
     );
   }
   renderDownloadBtn() {
-    return <Button title="download" onClick={this.onDownload} />;
+    return <Button.Rounded title="download" onClick={this.onDownload} />;
   }
   renderRetryBtn() {
-    return <Button title="Retry now" onClick={this.onRetry} />;
+    return <Button.Rounded title="Retry now" onClick={this.onRetry} />;
   }
   renderReloadBtn() {
-    return <Button title="Reload" onClick={this.onReload} />;
+    return <Button.Rounded title="Reload" onClick={this.onReload} />;
   }
   renderWindowsActions() {
     const { isMaximized, isFullscreen, isElectron } = this.props;

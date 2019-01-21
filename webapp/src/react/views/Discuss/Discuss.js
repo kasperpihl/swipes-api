@@ -67,10 +67,9 @@ export default class Discuss extends PureComponent {
     return (
       <SW.LeftHeaderWrapper>
         <CardHeader title="Discussions">
-          <Button
+          <Button.Rounded
             title="New discussion"
             onClick={this.handleNewDiscussion}
-            rounded
           />
         </CardHeader>
         <TabBar tabs={tabs} delegate={this} activeTab={tabIndex} />

@@ -1,4 +1,4 @@
-import {styleSheet} from 'swiss-react';
+import { styleSheet } from 'swiss-react';
 import Button from 'src/react/components/Button/Button';
 
 export default styleSheet('TabMenu', {
@@ -16,43 +16,43 @@ export default styleSheet('TabMenu', {
       _size: ['360px', 'auto'],
       maxHeight: '450px',
       paddingBottom: '10px',
-      paddingTop: '10px',
+      paddingTop: '10px'
     },
 
     searching: {
       '& > .tabBar': {
         maxHeigth: '0px',
-        transition: '.5s ease',
+        transition: '.5s ease'
       },
 
       '& > .close': {
         opacity: '1',
         pointerEvents: 'all',
-        transition: '.15s ease',
-      },
-    },
+        transition: '.15s ease'
+      }
+    }
   },
 
   Header: {
-    _size: ['100%', 'auto'],
+    _size: ['100%', 'auto']
   },
 
   Footer: {
     _size: ['100%', '60px'],
     _flex: ['row', 'left', 'center'],
     borderTop: '1px solid $sw3',
-    padding: '0 15px',
+    padding: '0 15px'
   },
 
   Status: {
     _size: ['100%', 'auto'],
     _font: ['12px', '18px', '500'],
-    color: '$sw2',
+    color: '$sw2'
   },
 
   Search: {
     _size: ['100%', 'auto'],
-    borderBottom: '1px solid $sw3',
+    borderBottom: '1px solid $sw3'
   },
 
   Input: {
@@ -64,30 +64,30 @@ export default styleSheet('TabMenu', {
     paddingTop: '12px',
 
     '&::-webkit-input-placeholder': {
-      color: '$sw2',
+      color: '$sw2'
     },
 
     '&:focus': {
-      outline: 'none',
-    },
+      outline: 'none'
+    }
   },
 
   Close: {
-    _el: Button,
+    _el: Button.Rounded,
     position: 'absolute',
     right: '0',
     top: 'calc(50% - 18px)',
     opacity: '0',
     pointerEvents: 'none',
-    transition: '.15s ease',
+    transition: '.15s ease'
   },
 
   Section: {
-    transition: '.25s ease',
+    transition: '.25s ease'
   },
 
   Actions: {
-    paddingLeft: '15px',
+    paddingLeft: '15px'
   },
 
   List: {
@@ -100,10 +100,10 @@ export default styleSheet('TabMenu', {
     padding: '0 16px 0 16px',
     transition: '.25s ease-in-out',
     zIndex: '12',
-    overflowX: 'hidden',
+    overflowX: 'hidden'
   },
 
   Button: {
-    _el: Button,
-  },
-})
+    _el: Button.Rounded
+  }
+});

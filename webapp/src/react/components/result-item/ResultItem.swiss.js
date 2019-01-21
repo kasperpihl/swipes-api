@@ -97,7 +97,7 @@ export default styleSheet('ResultItem', {
   },
 
   Button: {
-    _el: Button,
+    _el: Button.Rounded,
     _size: '30px',
     borderRadius: '50%',
 

@@ -199,11 +199,10 @@ export default class Authentication extends PureComponent {
               <SW.ErrorLabel>{loader.get('authButton').error}</SW.ErrorLabel>
             )}
             <SW.SubmitWrapper>
-              <Button
-                rounded
+              <Button.Rounded
                 title={this.isLogin() ? 'Sign in' : 'Create account'}
                 onClick={this.handleAuthentication}
-                {...loader.get('authButton')}
+                status={loader.get('authButton')}
               />
               {this.renderSwitch()}
             </SW.SubmitWrapper>

@@ -202,8 +202,8 @@ export default class SideNote extends PureComponent {
     if (latestRev < (note.get('rev') || 1)) {
       subtitle[0] = `CONFLICT. Updated by ${name} `;
       buttonHtml = (
-        <Button
-          {...this.getLoading('conflict')}
+        <Button.Rounded
+          status={this.getLoading('conflict')}
           title="Resolve now"
           onClick={this.onResolveConflict}
         />

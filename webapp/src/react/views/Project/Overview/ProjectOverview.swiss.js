@@ -7,21 +7,21 @@ export default styleSheet('ProjectOverview', {
   },
   Header: {
     _flex: ['row', 'between', 'center'],
-    padding: '12px 24px',
+    padding: '12px 24px'
   },
   AddButton: {
-    _el: Button,
-    marginLeft: '22px',
+    _el: Button.Rounded,
+    marginLeft: '22px'
   },
   HeaderTitle: {
-    _el: 'h1',
+    _el: 'h1'
   },
   Div: {
     _size: ['500px', 'auto'],
     _flex: ['column', 'center', 'between'],
-    position: 'absolute', 
+    position: 'absolute',
     top: '10%',
     left: '20%',
-    marginBottom: '50px',
+    marginBottom: '50px'
   }
 });

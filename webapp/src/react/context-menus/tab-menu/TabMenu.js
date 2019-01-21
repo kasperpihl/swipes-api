@@ -206,7 +206,7 @@ class TabMenu extends Component {
       <SW.Footer>
         <SW.Status>{actionStatus}</SW.Status>
         <SW.Actions>
-          <Button title={actionLabel} onClick={this.handleClick} />
+          <Button.Rounded title={actionLabel} onClick={this.handleClick} />
         </SW.Actions>
       </SW.Footer>
     );

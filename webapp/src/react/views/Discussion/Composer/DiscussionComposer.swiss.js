@@ -84,7 +84,7 @@ export default styleSheet('DiscussionComposer', {
     },
   },
   PostButton: {
-    _el: Button,
+    _el: Button.Rounded,
     marginLeft: 'auto',
   },
 });

@@ -175,8 +175,7 @@ export default class OrganizationHeader extends PureComponent {
         <SW.Button
           icon="ThreeDots"
           onClick={this.openContextMenu}
-          rounded
-          {...loader.get('ThreeDots')}
+          status={loader.get('ThreeDots')}
         />
       </CardHeader>
     );

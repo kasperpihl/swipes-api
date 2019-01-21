@@ -7,8 +7,8 @@ export default styleSheet('trial', {
     userSelect: 'none',
     position: 'absolute',
     show: {
-      _size: '100%',
-    },
+      _size: '100%'
+    }
   },
 
   Popup: {
@@ -27,8 +27,8 @@ export default styleSheet('trial', {
 
     displayActions: {
       paddingBottom: '0',
-      _flex: ['column', 'center', 'center'],
-    },
+      _flex: ['column', 'center', 'center']
+    }
   },
 
   Indicator: {
@@ -38,7 +38,7 @@ export default styleSheet('trial', {
     position: 'absolute',
     left: '0',
     top: '0',
-    pointerEvents: 'none',
+    pointerEvents: 'none'
   },
 
   Label: {
@@ -48,15 +48,15 @@ export default styleSheet('trial', {
     color: '$sw5',
 
     '&:hover': {
-      textDecoration: 'underline',
-    },
+      textDecoration: 'underline'
+    }
   },
 
   PopupWrapper: {
     _size: '100%',
     backgroundColor: 'rgba($sw1, .5)',
     position: 'absolute',
-    zIndex: '999999',
+    zIndex: '999999'
   },
 
   PreTitle: {
@@ -64,7 +64,7 @@ export default styleSheet('trial', {
     _font: ['17px', '20px', '500'],
     color: '$sw3',
     padding: '15px 0',
-    paddingTop: '30px',
+    paddingTop: '30px'
   },
 
   Title: {
@@ -76,14 +76,14 @@ export default styleSheet('trial', {
     paddingTop: '45px',
 
     displayActions: {
-      paddingTop: '0',
-    },
+      paddingTop: '0'
+    }
   },
 
   Paragraph: {
     _font: ['15px', '18px'],
     color: '$sw1',
-    paddingBottom: '15px',
+    paddingBottom: '15px'
   },
 
   Actions: {
@@ -91,15 +91,15 @@ export default styleSheet('trial', {
     _flex: ['row', 'right', 'center'],
 
     displayActions: {
-      display: 'none',
-    },
+      display: 'none'
+    }
   },
 
   Button: {
-    _el: Button,
+    _el: Button.Rounded,
 
     '&:not(:last-child)': {
-      marginRight: '20px',
-    },
-  },
+      marginRight: '20px'
+    }
+  }
 });

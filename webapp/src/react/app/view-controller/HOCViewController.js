@@ -209,8 +209,7 @@ export default class extends PureComponent {
     const { navigation } = this.props;
     const closeButton =
       target !== 'primary' && !navigation.get('locked') ? (
-        <Button
-          compact
+        <Button.Standard
           onClick={this.onClose}
           icon="CloseThick"
           key="close-button"
@@ -220,8 +219,7 @@ export default class extends PureComponent {
       );
     const lockButton =
       target !== 'primary' ? (
-        <Button
-          compact
+        <Button.Standard
           onClick={this.onToggleLock}
           icon={navigation.get('locked') ? 'WindowLock' : 'WindowUnlock'}
           key="lock-button"
@@ -230,8 +228,7 @@ export default class extends PureComponent {
         undefined
       );
     const fullscreenButton = canFullscreen ? (
-      <Button
-        compact
+      <Button.Standard
         onClick={this.onFullscreenCached(target)}
         icon={fullscreen === target ? 'FromFullscreen' : 'ToFullscreen'}
         key="fullscreen-button"

@@ -22,7 +22,7 @@ export default styleSheet('BillingPaymentActive', {
     _size: ['160px', 'auto']
   },
   ChangeDetailsButton: {
-    _el: Button,
+    _el: Button.Rounded,
     marginTop: '20px'
   },
 

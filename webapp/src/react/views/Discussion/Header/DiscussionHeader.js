@@ -126,10 +126,10 @@ export default class DiscussionHeader extends PureComponent {
     return (
       <Fragment>
         <CardHeader title={topic} delegate={this}>
-          <Button
+          <Button.Rounded
             title={followers.includes(myId) ? 'Unfollow' : 'Follow'}
             onClick={this.onFollowClick}
-            {...this.getLoading('following')}
+            status={this.getLoading('following')}
           />
         </CardHeader>
 
