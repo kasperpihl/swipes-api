@@ -6,6 +6,7 @@ export default styleSheet('ButtonStandard', {
     _size: ['auto', '36px'],
     _flex: ['row', 'center', 'center'],
     _textStyle: 'body',
+    flex: 'none',
     userSelect: 'none',
 
     rounded: {
