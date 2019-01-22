@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import request from 'swipes-core-js/utils/request';
 import withLoader from 'src/react/_hocs/withLoader';
 import OrgPicker from 'src/react/_components/OrgPicker/OrgPicker';
+import cachedCallback from 'src/utils/cachedCallback';
 import Assignees from 'src/react/_components/Assignees/Assignees';
 import Button from 'src/react/_components/Button/Button';
 import SW from './DiscussionComposer.swiss';
@@ -19,8 +20,8 @@ export default class DiscussionComposer extends PureComponent {
     super(props);
     this.state = {
       topic: '',
-      publicChecked: true,
-      orgValue: props.myId,
+      privacy: 'public',
+      ownedBy: props.myId,
       followers: fromJS([])
     };
   }
@@ -31,35 +32,33 @@ export default class DiscussionComposer extends PureComponent {
     }
   }
 
-  handlePostSubmit = () => {
-    const { organizationId, hideModal, loader } = this.props;
-    const { followers, topic } = this.state;
-
+  handleCreate = () => {
+    const { hideModal, loader, myId } = this.props;
+    const { followers, topic, privacy, ownedBy } = this.state;
+    console.log(ownedBy);
     loader.set('discussion', 'Creating');
     request('discussion.add', {
-      organization_id: organizationId,
       topic: topic,
-      privacy: 'public',
+      owned_by: ownedBy,
+      privacy,
       followers: followers.toJS()
     }).then(res => {
       if (res.ok) {
         hideModal();
         window.analytics.sendEvent('Discussion created', {
-          'Tagged people': discussion.get('followers').size
+          Privacy: privacy,
+          'Owned By': ownedBy === myId ? 'Personal' : 'Company',
+          'Tagged people': followers.size
         });
       } else {
         loader.error('discussion', res.error, 3000);
       }
     });
   };
-  handlePrivacyChange = e => {
+  handlePrivacyCached = cachedCallback(privacy => this.setState({ privacy }));
+  handleOrgChange = ownedBy => {
     this.setState({
-      publicChecked: !this.state.publicChecked
-    });
-  };
-  handleOrgChange = orgValue => {
-    this.setState({
-      orgValue,
+      ownedBy,
       followers: fromJS([])
     });
   };
@@ -68,20 +67,28 @@ export default class DiscussionComposer extends PureComponent {
       topic: e.target.value
     });
   };
-  renderActionBar() {
-    const { followers } = this.state;
-    const { loader } = this.props;
+
+  renderPrivacyCheckbox(iAmPrivacy) {
+    const { privacy } = this.state;
+    let label = 'Public - anyone in the organization can join';
+    if (iAmPrivacy !== 'public') {
+      label = 'Private - only tagged people can join';
+    }
 
     return (
-      <SW.ActionBar>
-        <SW.AssignSection />
-        <SW.Seperator />
-        <SW.PostButton />
-      </SW.ActionBar>
+      <SW.CheckboxWrapper onClick={this.handlePrivacyCached(iAmPrivacy)}>
+        <input
+          onChange={this.handlePrivacyCached(iAmPrivacy)}
+          type="radio"
+          name="privacy"
+          checked={privacy === iAmPrivacy}
+        />
+        <SW.CheckboxValue>{label}</SW.CheckboxValue>
+      </SW.CheckboxWrapper>
     );
   }
   render() {
-    const { topic, orgValue, followers, publicChecked } = this.state;
+    const { topic, ownedBy, followers } = this.state;
     const { myId, loader } = this.props;
     const topicPlaceholder = 'Topic';
 
@@ -96,31 +103,24 @@ export default class DiscussionComposer extends PureComponent {
               onChange={this.handleTopicChange}
               placeholder={topicPlaceholder}
               type="text"
+              style={{ paddingLeft: '6px' }}
               autoFocus
             />
           </FMSW.InputWrapper>
           <FMSW.InputWrapper>
             <FMSW.Label>2. Choose belonging</FMSW.Label>
-            <OrgPicker value={orgValue} onChange={this.handleOrgChange} />
+            <OrgPicker value={ownedBy} onChange={this.handleOrgChange} />
           </FMSW.InputWrapper>
-          {orgValue !== myId && (
+          {ownedBy !== myId && (
             <>
               <FMSW.InputWrapper>
                 <FMSW.Label>3. Choose privacy</FMSW.Label>
-                <SW.CheckboxWrapper onClick={this.handlePrivacyChange}>
-                  <input
-                    onChange={this.handlePrivacyChange}
-                    type="checkbox"
-                    checked={publicChecked}
-                  />
-                  <SW.CheckboxValue>
-                    Public - anyone in the organization join the discussion
-                  </SW.CheckboxValue>
-                </SW.CheckboxWrapper>
+                {this.renderPrivacyCheckbox('public')}
+                {this.renderPrivacyCheckbox('private')}
               </FMSW.InputWrapper>
               <FMSW.InputWrapper>
                 <FMSW.Label>4. Tag people</FMSW.Label>
-                <Assignees users={followers} size={24} maxImages={9}>
+                <Assignees users={followers} size={36} maxImages={9}>
                   <Button.Standard title="Assign People" />
                 </Assignees>
               </FMSW.InputWrapper>
@@ -130,7 +130,7 @@ export default class DiscussionComposer extends PureComponent {
         <FMSW.ButtonWrapper>
           <Button.Rounded
             title="Create discussion"
-            onClick={this.handlePostSubmit}
+            onClick={this.handleCreate}
             status={loader.get('discussion')}
           />
         </FMSW.ButtonWrapper>
