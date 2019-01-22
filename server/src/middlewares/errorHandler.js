@@ -50,10 +50,6 @@ export default (error, req, res, next) => {
     code = error.errorCode;
   }
 
-  if (error.showToClient) {
-    error.showToClient = '[TO_CLIENT]' + error.showToClient;
-  }
-
   if (env === 'dev' || error.showToClient) {
     result.error = error.showToClient || error.message || 'Unknown error';
 
