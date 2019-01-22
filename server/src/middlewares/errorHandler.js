@@ -51,7 +51,7 @@ export default (error, req, res, next) => {
   }
 
   if (error.showToClient) {
-    result.errorShowToClient = true;
+    error.showToClient = '[TO_CLIENT]' + error.showToClient;
   }
 
   if (env === 'dev' || error.showToClient) {
