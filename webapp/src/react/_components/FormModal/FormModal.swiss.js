@@ -3,8 +3,8 @@ import Button from 'src/react/_components/Button/Button';
 
 export default styleSheet('FormModal', {
   Wrapper: {
-    _size: ['90%', 'auto'],
     _flex: ['column', 'flex-start', 'flex-start'],
+    maxWidth: '450px',
     margin: '0 auto',
     boxShadow: '0 1px 20px 3px rgba(00,37,82, .1)',
     padding: '24px',
