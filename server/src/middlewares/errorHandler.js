@@ -1,18 +1,23 @@
 import config from 'config';
 import logger from 'src/utils/logger';
 import randomstring from 'randomstring';
+
 const env = config.get('env');
 
 export default (error, req, res, next) => {
   const localsCopy = Object.assign({}, res.locals);
   delete localsCopy.config;
+
   if (localsCopy.password) {
     localsCopy.password = '___PROTECTED___';
   }
+
   if (localsCopy.token) {
     localsCopy.token = '___PROTECTED___';
   }
+
   const logId = randomstring.generate(50);
+
   if (env === 'dev') {
     console.log(`--- ERROR ${req.originalUrl} ---`);
     console.log('--- res.locals ---');
@@ -25,6 +30,7 @@ export default (error, req, res, next) => {
   }
 
   const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+
   logger.log('error', {
     ip,
     request_id: logId,
@@ -39,12 +45,18 @@ export default (error, req, res, next) => {
 
   const result = { ok: false, error: 'hidden_error', log_id: logId };
   let code = 400;
+
   if (error.errorCode) {
     code = error.errorCode;
   }
 
+  if (error.showToClient) {
+    result.errorShowToClient = true;
+  }
+
   if (env === 'dev' || error.showToClient) {
     result.error = error.showToClient || error.message || 'Unknown error';
+
     if (env === 'dev' && error.errorInfo) {
       result.errorInfo = error.errorInfo;
     }
