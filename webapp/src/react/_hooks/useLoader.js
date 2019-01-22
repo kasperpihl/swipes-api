@@ -41,11 +41,12 @@ const useLoader = () => {
       }
       if (!timers.current) return;
 
-      const newState = Object.assign({}, loadingState, {
+      setLoadingState(oldState => ({
+        ...oldState,
         [loadingId]: { [loadingKey]: label }
-      });
+      }));
+
       startTimerIfNeeded(loadingId, duration, callback);
-      setLoadingState(newState);
     };
   }
 
@@ -69,9 +70,12 @@ const useLoader = () => {
     if (!timers.current) return;
 
     clearTimeout(timers.current[loadingId]);
-    const newState = { ...loadingState };
-    delete newState[loadingId];
-    setLoadingState(newState);
+
+    setLoadingState(oldState => {
+      const newState = { ...oldState };
+      delete newState[loadingId];
+      return newState;
+    });
   }
 
   return loader;
