@@ -11,7 +11,7 @@ import SW from './Modal.swiss';
     clear: mainActions.modal
   }
 )
-export default class HOCModal extends PureComponent {
+export default class Modal extends PureComponent {
   hideModal = () => {
     const { clear, target } = this.props;
     clear(target);
