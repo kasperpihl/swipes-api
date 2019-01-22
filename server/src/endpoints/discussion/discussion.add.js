@@ -18,7 +18,12 @@ export default endpointCreate(
   async (req, res) => {
     // Get inputs
     const { user_id } = res.locals;
-    const { topic, followers = [], owned_by } = res.locals.input;
+    const {
+      topic,
+      followers = [],
+      owned_by,
+      privacy = 'public'
+    } = res.locals.input;
     const discussionId = idGenerate('D', 15);
 
     const uniqueFollowers = [...new Set(followers).add(user_id)];
@@ -28,6 +33,20 @@ export default endpointCreate(
         .map(uId => `'${uId}', ${uId === user_id ? 'now()' : 'n'}`)
         .join(', ')}
     )`;
+
+    const permissionQuery = {
+      text: `INSERT into permissions (permission_id, owned_by, granted_to) VALUES `,
+      values: [discussionId, owned_by]
+    };
+    if (privacy === 'private') {
+      permissionQuery.text += uniqueFollowers
+        .map((uId, i) => `($1, $2, $${i + 1 + permissionQuery.values.length})`)
+        .join(', ');
+      permissionQuery.values = permissionQuery.values.concat(uniqueFollowers);
+    } else {
+      permissionQuery.text += '($1, $2, $3)';
+      permissionQuery.values.push(owned_by);
+    }
 
     const [discussionRes] = await transaction([
       sqlInsertQuery(
@@ -46,14 +65,11 @@ export default endpointCreate(
           dontPrepare: { followers: true }
         }
       ),
-      {
-        text: `INSERT into permissions (permission_id, granted_to) VALUES ($1, $2)`,
-        values: [discussionId, owned_by]
-      }
+      permissionQuery
     ]);
 
     res.locals.output = {
-      updates: [{ type: 'discussion', data: discussionRes.rows[0] }]
+      // updates: [{ type: 'discussion', data: discussionRes.rows[0] }]
     };
   }
 );
