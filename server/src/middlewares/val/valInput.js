@@ -17,9 +17,11 @@ export default function valInput(schema) {
     }
 
     if (error) {
-      throw Error(`${req.route.path} valBody: ${error}`).info({
-        expectedInput: object.as(schema).toString()
-      });
+      throw Error(`Validation error`)
+        .info({
+          validationError: error
+        })
+        .toClient();
     }
 
     res.locals.input = params;

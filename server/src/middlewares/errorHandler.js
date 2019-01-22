@@ -43,21 +43,18 @@ export default (error, req, res, next) => {
     info: error.errorInfo
   });
 
-  const result = { ok: false, error: 'hidden_error', log_id: logId };
+  const result = { ok: false, error: 'Something went wrong', log_id: logId };
   let code = 400;
 
   if (error.errorCode) {
     code = error.errorCode;
   }
 
-  if (error.showToClient) {
-    error.showToClient = '[TO_CLIENT]' + error.showToClient;
-  }
-
   if (env === 'dev' || error.showToClient) {
-    result.error = error.showToClient || error.message || 'Unknown error';
+    result.error =
+      error.showToClient || error.message || 'Something went wrong';
 
-    if (env === 'dev' && error.errorInfo) {
+    if (error.errorInfo) {
       result.errorInfo = error.errorInfo;
     }
   }
