@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import userGetInitials from 'swipes-core-js/utils/user/userGetInitials';
+import userGetFullName from 'swipes-core-js/utils/user/userGetFullName';
 
 import SW from './UserImage.swiss';
 
@@ -12,7 +14,7 @@ export default class UserImage extends PureComponent {
   static propTypes = {
     userId: PropTypes.string.isRequired,
     organizationId: PropTypes.string,
-    blackAndWhite: PropTypes.bool,
+    grayscale: PropTypes.bool,
     size: PropTypes.number
   };
   getUser = () => {
@@ -31,11 +33,12 @@ export default class UserImage extends PureComponent {
   render() {
     const { grayscale, size } = this.props;
     const user = this.getUser();
+    const test = true;
+
     const photo = user.get('photo');
-    const fullName = `${user.get('first_name')} ${user.get('last_name')}`;
-    const initials = `${user.get('first_name').charAt(0)}${user
-      .get('last_name')
-      .charAt(0)}`;
+
+    const fullName = userGetFullName(user);
+    const initials = userGetInitials(user);
 
     if (photo)
       return (
