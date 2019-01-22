@@ -1,42 +1,26 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { setupDelegate } from 'react-delegate';
+import cachedCallback from 'src/utils/cachedCallback';
 import SW from './TabBar.swiss';
 
-class TabBar extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      activeTab: props.activeTab || 0
-    };
-    setupDelegate(this, 'tabDidChange');
-  }
-
-  render() {
-    const { tabs, activeTab, className } = this.props;
-
-    return (
-      <SW.Wrapper className={className}>
-        {tabs.map((tab, i) => (
-          <SW.Item
-            active={i === activeTab}
-            key={`tab-${i}`}
-            onClick={this.tabDidChangeCached(i)}
-          >
-            {tab}
-          </SW.Item>
-        ))}
-      </SW.Wrapper>
-    );
-  }
+export default function TabBar(props) {
+  const { tabs, value, onChange, ...rest } = props;
+  const handleClick = cachedCallback(onChange);
+  return (
+    <SW.Wrapper {...rest}>
+      {tabs.map((tab, i) => (
+        <SW.Item active={i === value} key={`tab-${i}`} onClick={handleClick(i)}>
+          {tab}
+        </SW.Item>
+      ))}
+    </SW.Wrapper>
+  );
 }
 
-export default TabBar;
-
-const { string, arrayOf, number, object } = PropTypes;
+const { string, arrayOf, number, func } = PropTypes;
 
 TabBar.propTypes = {
-  tabs: arrayOf(string),
-  activeTab: number,
-  delegate: object
+  tabs: arrayOf(string).isRequired,
+  value: number.isRequired,
+  onChange: func.isRequired
 };

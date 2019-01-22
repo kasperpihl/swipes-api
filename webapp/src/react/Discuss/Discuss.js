@@ -24,14 +24,14 @@ export default class Discuss extends PureComponent {
       selectedId: null
     };
   }
-  tabDidChange(i) {
+  handleTabChange = i => {
     const { optimist } = this.props;
     if (i !== this.state.tabIndex) {
       this.setState({ tabIndex: i, selectedId: null }, () => {
         optimist.set('discussSelectedId', null);
       });
     }
-  }
+  };
   handleNewDiscussion = () => {
     const { openModal } = this.props;
     openModal(DiscussionComposer);
@@ -68,7 +68,7 @@ export default class Discuss extends PureComponent {
             onClick={this.handleNewDiscussion}
           />
         </CardHeader>
-        <TabBar tabs={tabs} delegate={this} activeTab={tabIndex} />
+        <TabBar tabs={tabs} onChange={this.handleTabChange} value={tabIndex} />
       </SW.LeftHeaderWrapper>
     );
   }

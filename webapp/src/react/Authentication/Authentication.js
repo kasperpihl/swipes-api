@@ -101,14 +101,14 @@ export default class Authentication extends PureComponent {
   isLogin() {
     return this.props.location.pathname === '/login';
   }
-  tabDidChange(i) {
+  handleTabChange = i => {
     const { setUrl } = this.props;
     if (this.isLogin() && i === 0) {
       setUrl('/register');
     } else if (!this.isLogin() && i === 1) {
       setUrl('/login');
     }
-  }
+  };
   getSubtitle() {
     const { invitedToOrg } = this.props;
 
@@ -189,9 +189,9 @@ export default class Authentication extends PureComponent {
         <SW.Wrapper>
           <CardHeader title="Swipes Workspace" subtitle={this.getSubtitle()} />
           <SW.StyledTabBar
-            delegate={this}
+            onChange={this.handleTabChange}
             tabs={['Create account', 'Sign in']}
-            activeTab={this.isLogin() ? 1 : 0}
+            value={this.isLogin() ? 1 : 0}
           />
           <SW.Form>
             {this.renderInputs()}

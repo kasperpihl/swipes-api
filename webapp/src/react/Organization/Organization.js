@@ -30,7 +30,7 @@ export default class Organization extends PureComponent {
     };
   }
 
-  tabDidChange = index => {
+  handleTabChange = index => {
     if (this.state.tabIndex !== index) {
       this.setState({ tabIndex: index });
     }
@@ -68,7 +68,11 @@ export default class Organization extends PureComponent {
       tabs.push('Disabled users');
     }
     return (
-      <SW.TabBar tabs={tabs} activeTab={this.state.tabIndex} delegate={this} />
+      <SW.TabBar
+        tabs={tabs}
+        value={this.state.tabIndex}
+        onChange={this.handleTabChange}
+      />
     );
   };
 
