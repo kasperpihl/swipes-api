@@ -2,7 +2,6 @@
 export { default as Billing } from './Billing/Billing';
 // export { default as Browser } from './Browser/Browser';
 export { default as Discuss } from './Discuss/Discuss';
-// export { default as DiscussionComposer } from './Discussion/Composer/DiscussionComposer';
 // export { default as DiscussionOverview } from './Discussion/Overview/HOCDiscussionOverview';
 export { default as NotFound } from './NotFound/NotFound';
 export { default as Organization } from './Organization/Organization';

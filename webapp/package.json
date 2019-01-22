@@ -67,7 +67,7 @@
     "ncp": "2.0.0",
     "node-sass": "^4.10.0",
     "postcss-loader": "^2.1.6",
-    "react-hot-loader": "^4.3.12",
+    "react-hot-loader": "^4.6.3",
     "react-svg-loader": "2.1.0",
     "rimraf": "2.6.2",
     "sass-loader": "^7.1.0",
