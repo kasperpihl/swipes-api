@@ -1,7 +1,6 @@
 import { styleSheet } from 'swiss-react';
-import FMSW from 'src/react/_components/FormModal/FormModal';
 
-export default styleSheet('DiscussionComposer', {
+export default styleSheet('ChatCreate', {
   CheckboxWrapper: {
     _flex: ['row', 'left', 'center'],
     paddingTop: '6px',

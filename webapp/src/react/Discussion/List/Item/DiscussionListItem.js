@@ -5,6 +5,7 @@ import Attachment from 'src/react/_components/attachment/Attachment';
 import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
 import timeGetDayOrTime from 'swipes-core-js/utils/time/timeGetDayOrTime';
 import SW from './DiscussionListItem.swiss';
+import orgGetBelonging from 'swipes-core-js/utils/org/orgGetBelonging';
 import userGetFirstName from 'swipes-core-js/utils/user/userGetFirstName';
 
 @navWrapper
@@ -79,7 +80,8 @@ export default class DiscussionListItem extends PureComponent {
           <SW.RightWrapper>
             <SW.Time>
               <SW.UnreadCircle />
-              {timeGetDayOrTime(item.get('last_comment_at'))}
+              {orgGetBelonging(item.get('owned_by'))}
+              {/* {timeGetDayOrTime(item.get('last_comment_at'))} */}
             </SW.Time>
           </SW.RightWrapper>
         </SW.Wrapper>

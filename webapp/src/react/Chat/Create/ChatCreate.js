@@ -6,7 +6,7 @@ import OrgPicker from 'src/react/_components/OrgPicker/OrgPicker';
 import cachedCallback from 'src/utils/cachedCallback';
 import Assignees from 'src/react/_components/Assignees/Assignees';
 import Button from 'src/react/_components/Button/Button';
-import SW from './DiscussionComposer.swiss';
+import SW from './ChatCreate.swiss';
 import FMSW from 'src/react/_components/FormModal/FormModal.swiss';
 import { fromJS } from 'immutable';
 
@@ -15,7 +15,7 @@ import { fromJS } from 'immutable';
   myId: state.me.get('user_id'),
   organization: state.organization
 }))
-export default class DiscussionComposer extends PureComponent {
+export default class ChatCreate extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -26,7 +26,13 @@ export default class DiscussionComposer extends PureComponent {
     };
   }
 
-  onAssigningClose(followers) {
+  handleAssignClick = e => {
+    const { contextMenu } = this.props;
+    contextMenu(AssignMenu, {
+      selectedIds: followers
+    });
+  };
+  handleAssignSelect(followers) {
     if (followers) {
       this.setState({ followers });
     }
@@ -121,7 +127,10 @@ export default class DiscussionComposer extends PureComponent {
               <FMSW.InputWrapper>
                 <FMSW.Label>4. Tag people</FMSW.Label>
                 <Assignees users={followers} size={36} maxImages={9}>
-                  <Button.Standard title="Assign People" />
+                  <Button.Standard
+                    title="Assign People"
+                    onClick={this.handleAssignClick}
+                  />
                 </Assignees>
               </FMSW.InputWrapper>
             </>

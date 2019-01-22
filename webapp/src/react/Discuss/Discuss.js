@@ -6,7 +6,7 @@ import HOCDiscussionOverview from 'src/react/Discussion/Overview/HOCDiscussionOv
 import TabBar from 'src/react/_components/TabBar/TabBar';
 import { withOptimist } from 'react-optimist';
 import SWView from 'src/react/_Layout/view-controller/SWView';
-import DiscussionComposer from 'src/react/Discussion/Composer/DiscussionComposer';
+import ChatCreate from 'src/react/Chat/Create/ChatCreate';
 import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
 import Button from 'src/react/_components/Button/Button';
 
@@ -34,7 +34,7 @@ export default class Discuss extends PureComponent {
   };
   handleNewDiscussion = () => {
     const { openModal } = this.props;
-    openModal(DiscussionComposer);
+    openModal(ChatCreate);
   };
   onSelectItemId = (id, results) => {
     const { optimist } = this.props;
