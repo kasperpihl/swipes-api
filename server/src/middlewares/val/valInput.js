@@ -19,7 +19,8 @@ export default function valInput(schema) {
     if (error) {
       throw Error(`Validation error`)
         .info({
-          validationError: error
+          validationError: error,
+          expectedInput: object.as(schema).toString()
         })
         .toClient();
     }
