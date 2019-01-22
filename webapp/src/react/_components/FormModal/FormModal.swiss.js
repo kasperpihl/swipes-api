@@ -46,7 +46,7 @@ export default styleSheet('FormModal', {
   Label: {
     _el: 'h3',
     _textStyle: 'body',
-    margin: '0 0 6px 6px',
+    margin: '0 0 6px 0',
     color: '$sw2'
   },
 
