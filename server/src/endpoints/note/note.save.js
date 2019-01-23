@@ -1,5 +1,5 @@
 import { string, number } from 'valjs';
-import { query } from 'src/utils/db/db';
+import { transaction } from 'src/utils/db/db';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 
 const expectedInput = {
@@ -50,7 +50,6 @@ export default endpointCreate(
 
     queryText += `
       WHERE note_id = ${insertVariable(note_id)}
-      AND rev = ${insertVariable(rev)}
       AND owned_by
       IN (
         SELECT permission_to
@@ -60,7 +59,22 @@ export default endpointCreate(
       RETURNING ${returning.join(', ')}
     `;
 
-    const noteRes = await query(queryText, values);
+    const [noteRes] = await transaction([
+      {
+        text: queryText,
+        values,
+        onSuccess: res => {
+          if (res.rows.length && res.rows[0].rev > rev + 1) {
+            throw Error('out_of_sync')
+              .code(400)
+              .info(
+                `rev did not match current revision (${result.rows[0].rev - 1})`
+              );
+          }
+        }
+      }
+    ]);
+
     if (!noteRes.rows.length) {
       throw Error('Not found')
         .code(404)

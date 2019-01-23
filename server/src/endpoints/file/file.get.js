@@ -3,7 +3,7 @@ import { query } from 'src/utils/db/db';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 
 const expectedInput = {
-  note_id: string.require()
+  file_id: string.require()
 };
 
 export default endpointCreate(
@@ -13,13 +13,13 @@ export default endpointCreate(
   async (req, res) => {
     // Get inputs
     const { user_id, input } = res.locals;
-    const { note_id } = input;
+    const { file_id } = input;
 
-    const noteRes = await query(
+    const fileRes = await query(
       `
-        SELECT note_id, owned_by, title, text, rev, updated_at, updated_by
-        FROM notes
-        WHERE note_id = $1
+        SELECT file_id, owned_by, title, file_name, s3_url, content_type
+        FROM files
+        WHERE file_id = $1
         AND owned_by
         IN (
           SELECT permission_to
@@ -27,10 +27,10 @@ export default endpointCreate(
           WHERE user_id = $2
         )
       `,
-      [note_id, user_id]
+      [file_id, user_id]
     );
 
-    if (!noteRes.rows.length) {
+    if (!fileRes.rows.length) {
       throw Error('Not found')
         .code(404)
         .toClient();
@@ -38,7 +38,7 @@ export default endpointCreate(
 
     // Create response data.
     res.locals.output = {
-      note: noteRes.rows[0]
+      file: fileRes.rows[0]
     };
   }
 );
