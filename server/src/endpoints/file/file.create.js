@@ -17,7 +17,7 @@ const expectedInput = {
 export default endpointCreate(
   {
     expectedInput,
-    expectedOutput,
+    // expectedOutput,
     permissionCreateKey: 'owned_by'
   },
   async (req, res) => {
