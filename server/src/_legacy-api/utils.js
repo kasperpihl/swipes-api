@@ -4,16 +4,6 @@ import valjs, { string, func, object } from 'valjs';
 import jwt from 'jwt-simple';
 import SwipesError from 'src/utils/SwipesError';
 
-const getDownloadLinks = () => {
-  // if (config.get('env') === 'staging') {
-  // }
-  return {
-    darwin: 'https://swipesapp.com/download-mac',
-    win32: 'https://swipesapp.com/download-win',
-    linux: 'https://swipesapp.com/download-linux',
-  };
-};
-
 const generateSlackLikeId = (type = '', number = 8) => {
   const id = randomstring.generate(number).toUpperCase();
 
@@ -40,20 +30,20 @@ const getSwipesLinkObj = ({ type, id, title, account_id }) => {
     service: {
       id,
       name: 'swipes',
-      type,
+      type
     },
     permission: {
-      account_id,
+      account_id
     },
     meta: {
-      title,
-    },
+      title
+    }
   };
 };
 
 const createTokens = tokenContent => {
   const content = Object.assign({}, tokenContent, {
-    r: generateSlackLikeId('', 3),
+    r: generateSlackLikeId('', 3)
   });
   const token = jwt.encode(content, config.get('jwtTokenSecret'));
   const shortToken = token
@@ -64,7 +54,7 @@ const createTokens = tokenContent => {
 
   return {
     token: `${prefix}${token}`,
-    shortToken: `${prefix}${shortToken}`,
+    shortToken: `${prefix}${shortToken}`
   };
 };
 const parseToken = token => {
@@ -83,7 +73,7 @@ const parseToken = token => {
     return {
       constructedToken,
       dbToken,
-      content,
+      content
     };
   } catch (err) {
     return null;
@@ -94,7 +84,7 @@ const sendResponse = (req, res) => {
     reload_available,
     update_available,
     update_url,
-    returnObj = {},
+    returnObj = {}
   } = res.locals;
 
   if (reload_available) {
@@ -151,7 +141,7 @@ const mapLocals = handler => (req, res, next) => {
   const error = valjs(
     { handler },
     object.as({
-      handler: func.require(),
+      handler: func.require()
     })
   );
 
@@ -172,7 +162,7 @@ const valLocals = (name, schema, middleware) => (req, res, next) => {
     object.as({
       name: string.require(),
       schema: object.require(),
-      middleware: func,
+      middleware: func
     })
   );
 
@@ -197,7 +187,7 @@ const valBody = (schema, middleware) => (req, res, next) => {
     { schema, middleware },
     object.as({
       schema: object.require(),
-      middleware: func,
+      middleware: func
     }),
     true
   );
@@ -231,5 +221,5 @@ export {
   getClientIp,
   getSwipesLinkObj,
   createTokens,
-  parseToken,
+  parseToken
 };

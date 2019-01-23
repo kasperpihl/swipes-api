@@ -1,5 +1,10 @@
-import { getDownloadLinks } from 'src/_legacy-api/utils';
 import newerVersionExist from 'src/utils/newerVersionExist';
+
+const downloadLinks = {
+  darwin: 'https://swipesapp.com/download-mac',
+  win32: 'https://swipesapp.com/download-win',
+  linux: 'https://swipesapp.com/download-linux'
+};
 
 const makeUpdateHandler = (res, next) => {
   let didRun = false;
@@ -82,7 +87,7 @@ export default (req, res, next) => {
     case 'darwin':
     case 'linux':
     case 'win32': {
-      testUpdate(getDownloadLinks()[platform], 'electron-version');
+      testUpdate(downloadLinks[platform], 'electron-version');
       testReload(null, 'web-version');
       break;
     }
