@@ -90,7 +90,8 @@ export default endpointCreate(
               .code(400)
               .info(
                 `rev did not match current revision (${result.rows[0].rev - 1})`
-              );
+              )
+              .toClient();
           }
         }
       }

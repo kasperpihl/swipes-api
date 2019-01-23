@@ -50,12 +50,19 @@ export default (error, req, res, next) => {
     code = error.errorCode;
   }
 
-  if (env === 'dev' || error.showToClient) {
+  if (error.showToClient) {
     result.error =
       error.showToClient || error.message || 'Something went wrong';
 
     if (error.errorInfo) {
       result.errorInfo = error.errorInfo;
+    }
+  } else if (env === 'dev') {
+    result.dev_only_error =
+      error.showToClient || error.message || 'Something went wrong';
+
+    if (error.errorInfo) {
+      result.dev_only_errorInfo = error.errorInfo;
     }
   }
 
