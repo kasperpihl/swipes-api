@@ -1,4 +1,4 @@
-import { object, array, string } from 'valjs';
+import { object, array, string, any } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import idGenerate from 'src/utils/idGenerate';
 import { transaction } from 'src/utils/db/db';
@@ -12,7 +12,16 @@ import pushSend from 'src/utils/push/pushSend';
 const expectedInput = {
   discussion_id: string.require(),
   message: string.require(),
-  attachments: array.of(object)
+  attachments: array.of(
+    object
+      .as({
+        type: any.of('file', 'note', 'url'),
+        id: string.require(),
+        title: string.require(),
+        meta: object
+      })
+      .require()
+  )
 };
 
 export default endpointCreate(
