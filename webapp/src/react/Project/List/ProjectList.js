@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import SW from './ProjectList.swiss';
 import withRequests from 'swipes-core-js/components/withRequests';
 import ProjectListItem from './Item/ProjectListItem';
-import AssigneeComponent from 'src/react/_components/assignee-component/AssigneeComponent';
 
 const testUsers = ['alex', 'petar', 'test', 'kasper'];
 
@@ -38,7 +37,6 @@ export default class ProjectList extends PureComponent {
             me={me}
           />
         ))}
-        <AssigneeComponent />
       </SW.Wrapper>
     );
   }
