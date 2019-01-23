@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import cachedCallback from 'src/utils/cachedCallback';
-import SW from './AssigneeContextMenu.swiss';
+import SW from './AssignMenu.swiss';
 import UserImage from 'src/react/_components/UserImage/UserImage';
 import userGetFullName from 'swipes-core-js/utils/user/userGetFullName';
 
@@ -11,10 +12,11 @@ import userGetFullName from 'swipes-core-js/utils/user/userGetFullName';
 export default class AssignMenu extends PureComponent {
   constructor(props) {
     super(props);
-
-    this.state = {
-      selectedIds: props.selectedIds || []
-    };
+    let selectedIds = props.selectedIds || [];
+    if (typeof selectedIds.toJS === 'function') {
+      selectedIds = selectedIds.toJS();
+    }
+    this.state = { selectedIds };
   }
 
   componentWillUnmount() {
@@ -32,19 +34,23 @@ export default class AssignMenu extends PureComponent {
     } else {
       arr.push(id);
     }
-    this.setState({ selectedIds: arr });
+    this.setState({ selectedIds: [...arr] });
   });
 
   render() {
     const { selectedIds } = this.state;
-    const { organization, me } = this.props;
+    const { excludeMe, organization, me, organizationId } = this.props;
     const teamName = organization ? organization.get('name') : 'Personal';
-    const users = organization ? organization.get('users').toList() : [me];
+    let users = organization ? organization.get('users').toList() : [me];
+    if (excludeMe) {
+      users = users.filter(u => u.get('user_id') !== me.get('user_id'));
+    }
+    console.log(selectedIds);
     return (
       <SW.Wrapper>
         <SW.Row menu>
-          <SW.TeamName>{teamName}</SW.TeamName>
-          {selectedIds && (
+          <SW.TeamName>Choose from: {teamName}</SW.TeamName>
+          {!!selectedIds.length && (
             <SW.SelectedAmount>({selectedIds.length})</SW.SelectedAmount>
           )}
         </SW.Row>
@@ -57,6 +63,7 @@ export default class AssignMenu extends PureComponent {
             >
               <UserImage
                 userId={u.get('user_id')}
+                size={36}
                 organizationId={organizationId}
               />
               <SW.UserName>{userGetFullName(u, organizationId)}</SW.UserName>

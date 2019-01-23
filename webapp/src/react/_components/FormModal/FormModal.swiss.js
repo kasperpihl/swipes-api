@@ -6,7 +6,7 @@ export default styleSheet('FormModal', {
     _flex: ['column', 'flex-start', 'flex-start'],
     maxWidth: '450px',
     margin: '0 auto',
-    boxShadow: '0 1px 20px 3px rgba(00,37,82, .1)',
+    boxShadow: '0 1px 20px 3px rgba(0, 37, 82, .3)',
     padding: '24px',
     backgroundColor: '$sw5'
   },

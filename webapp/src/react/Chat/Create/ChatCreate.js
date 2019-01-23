@@ -5,9 +5,11 @@ import withLoader from 'src/react/_hocs/withLoader';
 import OrgPicker from 'src/react/_components/OrgPicker/OrgPicker';
 import cachedCallback from 'src/utils/cachedCallback';
 import Assignees from 'src/react/_components/Assignees/Assignees';
+import AssignMenu from 'src/react/_components/AssignMenu/AssignMenu';
 import Button from 'src/react/_components/Button/Button';
 import SW from './ChatCreate.swiss';
 import FMSW from 'src/react/_components/FormModal/FormModal.swiss';
+import contextMenu from 'src/utils/contextMenu';
 import { fromJS } from 'immutable';
 
 @withLoader
@@ -27,16 +29,17 @@ export default class ChatCreate extends PureComponent {
   }
 
   handleAssignClick = e => {
-    const { contextMenu } = this.props;
-    contextMenu(AssignMenu, {
-      selectedIds: followers
+    const { followers, ownedBy } = this.state;
+    contextMenu(AssignMenu, e, {
+      excludeMe: true,
+      selectedIds: followers,
+      organizationId: ownedBy,
+      onSelect: this.handleAssignSelect
     });
   };
-  handleAssignSelect(followers) {
-    if (followers) {
-      this.setState({ followers });
-    }
-  }
+  handleAssignSelect = followers => {
+    this.setState({ followers: fromJS(followers) });
+  };
 
   handleCreate = () => {
     const { hideModal, loader, myId } = this.props;
@@ -76,9 +79,9 @@ export default class ChatCreate extends PureComponent {
 
   renderPrivacyCheckbox(iAmPrivacy) {
     const { privacy } = this.state;
-    let label = 'Public - anyone in the organization can join';
+    let label = 'Public - anyone in organization can find this';
     if (iAmPrivacy !== 'public') {
-      label = 'Private - only tagged people can join';
+      label = 'Private - only chosen people have access';
     }
 
     return (
@@ -125,10 +128,16 @@ export default class ChatCreate extends PureComponent {
                 {this.renderPrivacyCheckbox('private')}
               </FMSW.InputWrapper>
               <FMSW.InputWrapper>
-                <FMSW.Label>4. Tag people</FMSW.Label>
-                <Assignees users={followers} size={36} maxImages={9}>
-                  <Button.Standard
-                    title="Assign People"
+                <FMSW.Label>4. Choose people</FMSW.Label>
+                <Assignees
+                  users={followers}
+                  organizationId={ownedBy}
+                  size={36}
+                  maxImages={9}
+                  onClick={this.handleAssignClick}
+                >
+                  <Button.Rounded
+                    title="Tag people"
                     onClick={this.handleAssignClick}
                   />
                 </Assignees>

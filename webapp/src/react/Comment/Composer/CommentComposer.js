@@ -134,12 +134,7 @@ export default class CommentComposer extends PureComponent {
               reset={this.state.resetDate}
               autoFocus
             />
-            <AttachButton
-              delegate={this}
-              buttonProps={{ compact: true }}
-              dropTitle={'New Comment'}
-              noDragDrop
-            />
+            <AttachButton buttonProps={{ compact: true }} />
             <SW.SubmitButton
               onClick={this.onAddComment}
               icon="Enter"

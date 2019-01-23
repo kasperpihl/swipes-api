@@ -21,6 +21,9 @@ export default styleSheet('ContextMenu', {
   Content: {
     _size: 'auto',
     position: 'absolute',
+    overflow: 'hidden',
+    borderRadius: '3px',
+    boxShadow: '0 1px 20px 3px rgba(0, 37, 82, .4)',
     top: get => get('top'),
     bottom: get => get('bottom'),
     left: get => get('left'),

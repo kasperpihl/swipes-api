@@ -4,7 +4,7 @@ export default styleSheet('AssignMenu', {
   Wrapper: {
     _size: ['300px', '240px'],
     _flex: ['column', 'column', 'flex-start'],
-    boxShadow: '0 1px 20px 3px rgba(00,37,82, .1)',
+    backgroundColor: '$sw5',
     overflowY: 'scroll',
     minWidth: '200px'
   },
@@ -61,6 +61,7 @@ export default styleSheet('AssignMenu', {
     _size: '100%',
     _font: ['12px', '18px', '400'],
     _flex: ['column', 'flex-start', 'center'],
+    paddingLeft: '6px',
     userSelect: 'none'
   },
 

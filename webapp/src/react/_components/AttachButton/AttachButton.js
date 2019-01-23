@@ -39,18 +39,6 @@ export default class extends PureComponent {
     setupLoading(this);
   }
 
-  componentDidMount() {
-    const { subscribeToDrop, target, dropTitle, noDragDrop } = this.props;
-    if (!noDragDrop) {
-      subscribeToDrop(target, this.onDropFiles, dropTitle);
-    }
-  }
-
-  componentWillUnmount() {
-    const { unsubscribeFromDrop, target } = this.props;
-    unsubscribeFromDrop(target, this.onDropFiles);
-  }
-
   onChangeFiles = e => {
     this.setState({ fileVal: e.target.value });
     this.onUploadFiles(e.target.files);
@@ -155,7 +143,6 @@ export default class extends PureComponent {
 
   render() {
     const { fileVal } = this.state;
-    const { buttonProps, className } = this.props;
 
     return (
       <Fragment>
@@ -163,8 +150,6 @@ export default class extends PureComponent {
           onClick={this.onChooseAttachment}
           status={this.getLoading('attach')}
           icon="Attach"
-          {...buttonProps}
-          className={className}
         />
         <SW.HiddenInput
           value={fileVal}
