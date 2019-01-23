@@ -86,7 +86,7 @@ export default endpointCreate(
         values,
         onSuccess: result => {
           if (result.rows[0].rev !== rev + 1) {
-            throw Error('out_of_sync')
+            throw Error('Out of sync')
               .code(400)
               .info(
                 `rev did not match current revision (${result.rows[0].rev - 1})`
