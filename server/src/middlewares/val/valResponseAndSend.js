@@ -1,26 +1,21 @@
-import valjs, {
-  object,
-} from 'valjs';
+import valjs, { object } from 'valjs';
 
-export default schema => (req, res, next) => {
-  if(res.locals.__skipValResponse) {
-    return next();
-  }
-  const output = res.locals.output;
-  if(typeof output !== 'object') {
-    return next(new Error(`${req.route.path} valResponseAndSend: expects res.locals.output to be set. (and an object)`));
+export default schema => async (req, res, next) => {
+  let output = res.locals.output;
+  if (typeof output !== 'object') {
+    output = {};
   }
 
   if (schema) {
-    const error = valjs(output, object.as(schema));
+    const validationError = valjs(output, object.as(schema));
 
-    if (error) {
-      return next(Error(`${req.route.path} valResponseAndSend: ${error}`).info({
-        expectedOutput: schema.toString(),
-      }));
+    if (validationError) {
+      throw Error('Validation error')
+        .info({ expectedOutput: schema.toString(), validationError })
+        .toClient();
     }
   }
-  
+
   // Merge in update_available, reload_available and update_url if any...
   Object.assign(output, res.locals.__updatesAvailable);
 

@@ -12,13 +12,13 @@ const {
   s3Url,
   s3Region,
   secretAccessKey,
-  accessKeyId,
+  accessKeyId
 } = config.get('aws');
 
 slug.defaults.mode = 'rfc3986';
 aws.config.update({
   accessKeyId,
-  secretAccessKey,
+  secretAccessKey
 });
 
 const filesCreateS3Path = valLocals(
@@ -26,7 +26,7 @@ const filesCreateS3Path = valLocals(
   {
     user_id: string.require(),
     organization_id: string.require(),
-    file_name: string.require(),
+    file_name: string.require()
   },
   (req, res, next, setLocals) => {
     const { user_id, organization_id, file_name } = res.locals;
@@ -35,7 +35,7 @@ const filesCreateS3Path = valLocals(
     const s3Path = `uploads/${organization_id}/${seconds}-${user_id}/${slug_file_name}`;
 
     setLocals({
-      s3Path,
+      s3Path
     });
 
     return next();
@@ -45,18 +45,18 @@ const filesGetSignedUrl = valLocals(
   'filesGetSignedUrl',
   {
     s3Path: string.require(),
-    file_type: string.require(),
+    file_type: string.require()
   },
   (req, res, next, setLocals) => {
     const { s3Path, file_type } = res.locals;
     const s3 = new aws.S3({
-      region: s3Region,
+      region: s3Region
     });
     const params = {
       Bucket: s3BucketName,
       Key: s3Path,
       Expires: 60,
-      ContentType: file_type,
+      ContentType: file_type
     };
 
     s3.getSignedUrl('putObject', params, (err, data) => {
@@ -66,7 +66,7 @@ const filesGetSignedUrl = valLocals(
 
       setLocals({
         s3_url: `${s3Url}${s3Path}`,
-        signed_url: data,
+        signed_url: data
       });
 
       return next();
@@ -79,7 +79,7 @@ const filesAddToFilesTable = valLocals(
     user_id: string.require(),
     organization_id: string.require(),
     file_name: string.require(),
-    s3_url: string.require(),
+    s3_url: string.require()
   },
   (req, res, next, setLocals) => {
     const { user_id, organization_id, file_name, s3_url } = res.locals;
@@ -95,7 +95,7 @@ const filesAddToFilesTable = valLocals(
       slug_file_name,
       s3_url,
       fileId,
-      contentType,
+      contentType
     })
       .then(results => {
         const changes = results.changes[0];
@@ -106,20 +106,20 @@ const filesAddToFilesTable = valLocals(
             service: {
               id: fileId,
               name: 'swipes',
-              type: 'file',
+              type: 'file'
             },
             permission: {
-              account_id: user_id,
+              account_id: user_id
             },
             meta: {
-              title: file_name,
-            },
+              title: file_name
+            }
           },
           file: {
             id: fileId,
             title: slug_file_name,
-            original_title: file_name,
-          },
+            original_title: file_name
+          }
         });
 
         return next();

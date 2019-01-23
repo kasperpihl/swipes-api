@@ -4,7 +4,7 @@ import randomstring from 'randomstring';
 import request from 'request';
 
 const env = config.get('env');
-const { accessKeyId, secretAccessKey, region, queueUrl } = config.get('aws');
+const { region, queueUrl } = config.get('aws');
 
 export default (options, payload, messageGroupId = null) => {
   return new Promise((resolve, reject) => {
@@ -17,12 +17,10 @@ export default (options, payload, messageGroupId = null) => {
       );
     }
     if (env !== 'dev') {
-      AWS.config.update({ accessKeyId, secretAccessKey });
-
       const sqs = new AWS.SQS({ region });
       const MessageBody = JSON.stringify({
         eventName: options.eventName,
-        payload,
+        payload
       });
       const sqsParams = {
         MessageBody,
@@ -32,7 +30,7 @@ export default (options, payload, messageGroupId = null) => {
         // That's a hack right now. We should review all the event and see which one are really for FIFO
         // and which one are for regular queue and split them.
         // Which one should be deduplicated and which one should not in interval of 5 minutes
-        MessageDeduplicationId: randomstring.generate(),
+        MessageDeduplicationId: randomstring.generate()
       };
 
       sqs.sendMessage(sqsParams, (err, data) => {
@@ -48,8 +46,8 @@ export default (options, payload, messageGroupId = null) => {
         method: 'POST',
         json: {
           eventName: options.eventName,
-          payload,
-        },
+          payload
+        }
       });
     }
   });
