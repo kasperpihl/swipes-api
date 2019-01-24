@@ -1,5 +1,7 @@
 import { any, number } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
+import sqlCheckPermissions from 'src/utils/sql/sqlCheckPermissions';
+
 import { query } from 'src/utils/db/db';
 
 const expectedInput = {
@@ -26,12 +28,7 @@ export default endpointCreate(
         FROM permissions as per
         INNER JOIN discussions as d
         ON d.discussion_id = per.permission_id
-        WHERE per.granted_to
-        IN (
-          SELECT permission_to
-          FROM user_permissions
-          WHERE user_id = $1
-        )
+        WHERE ${sqlCheckPermissions('per.granted_to', user_id)}
         AND d.followers->>$1 IS ${type === 'all other' ? 'NULL' : 'NOT NULL'}
         AND d.deleted=FALSE
         ORDER BY d.last_comment_at DESC

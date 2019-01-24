@@ -1,5 +1,6 @@
 import { object, array, string, number } from 'valjs';
 import { query } from 'src/utils/db/db';
+import sqlCheckPermissions from 'src/utils/sql/sqlCheckPermissions';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 
 const expectedInput = {
@@ -32,17 +33,13 @@ export default endpointCreate(
           SELECT permission_id
           FROM permissions
           WHERE permission_id = $1
-          AND granted_to = (
-            SELECT permission_to
-            FROM user_permissions
-            WHERE user_id = $2
-          )
+          AND ${sqlCheckPermissions('granted_to', user_id)}
         )
         ORDER BY sent_at DESC
-        LIMIT $3
-        OFFSET $4
+        LIMIT $2
+        OFFSET $3
       `,
-      [discussion_id, user_id, limit + 1, skip]
+      [discussion_id, limit + 1, skip]
     );
     let comments = commentsRes.rows;
 

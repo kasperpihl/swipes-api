@@ -1,4 +1,5 @@
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
+import sqlCheckPermissions from 'src/utils/sql/sqlCheckPermissions';
 import { query } from 'src/utils/db/db';
 
 const expectedInput = {};
@@ -17,12 +18,7 @@ export default endpointCreate(
         ON p.project_id = per.permission_id
         LEFT OUTER JOIN project_opens as po
         ON p.project_id = po.project_id AND po.user_id = $1
-        WHERE per.granted_to
-        IN (
-          SELECT permission_to
-          FROM user_permissions
-          WHERE user_id = $1
-        )
+        WHERE ${sqlCheckPermissions('per.granted_to', user_id)}
         AND p.deleted=FALSE
         ORDER BY po.opened_at DESC
       `,

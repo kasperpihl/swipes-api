@@ -1,5 +1,7 @@
 import { string, number } from 'valjs';
 import { transaction } from 'src/utils/db/db';
+import sqlCheckPermissions from 'src/utils/sql/sqlCheckPermissions';
+
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 
 const expectedInput = {
@@ -50,12 +52,7 @@ export default endpointCreate(
 
     queryText += `
       WHERE note_id = ${insertVariable(note_id)}
-      AND owned_by
-      IN (
-        SELECT permission_to
-        FROM user_permissions
-        WHERE user_id = $1
-      )
+      AND ${sqlCheckPermissions('owned_by', user_id)}
       RETURNING ${returning.join(', ')}
     `;
 

@@ -67,13 +67,6 @@ export default endpointCreate(
           WHERE owned_by = $1
         `,
         values: [organization_id]
-      },
-      {
-        text: `
-          DELETE FROM user_permissions
-          WHERE permission_to = $1
-        `,
-        values: [organization_id]
       }
     ]);
 

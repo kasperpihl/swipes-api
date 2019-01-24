@@ -61,10 +61,6 @@ export default endpointCreate(
           platform: req.header('sw-platform') || 'browser',
           ip: getClientIp(req)
         }
-      }),
-      sqlInsertQuery('user_permissions', {
-        user_id: userId,
-        permission_to: userId
       })
     ]);
 

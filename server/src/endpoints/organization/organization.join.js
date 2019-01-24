@@ -64,11 +64,7 @@ export default endpointCreate(
           WHERE organization_id = $1
         `,
         values: [organization_id]
-      },
-      sqlInsertQuery('user_permissions', {
-        user_id,
-        permission_to: organization_id
-      })
+      }
     ]);
 
     res.locals.backgroundInput = {

@@ -46,14 +46,6 @@ export default endpointCreate(
       },
       {
         text: `
-          DELETE FROM user_permissions
-          WHERE permission_to = $1
-          AND user_id = $2
-        `,
-        values: [organization_id, target_user_id]
-      },
-      {
-        text: `
           DELETE FROM permissions
           WHERE owned_by = $1
           AND granted_to = $2
