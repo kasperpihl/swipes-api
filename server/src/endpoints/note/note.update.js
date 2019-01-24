@@ -62,11 +62,12 @@ export default endpointCreate(
         values,
         onSuccess: res => {
           if (res.rows.length && res.rows[0].rev > rev + 1) {
-            throw Error('out_of_sync')
+            throw Error('Out of sync')
               .code(400)
               .info(
-                `rev did not match current revision (${result.rows[0].rev - 1})`
-              );
+                `rev did not match current revision (${res.rows[0].rev - 1})`
+              )
+              .toClient();
           }
         }
       }
@@ -79,6 +80,8 @@ export default endpointCreate(
     }
 
     // Create response data.
-    res.locals.output = {};
+    res.locals.output = {
+      note: noteRes.rows[0]
+    };
   }
 );

@@ -24,7 +24,7 @@
     "draft-js-prism": "^1.0.6",
     "exif-js": "2.3.0",
     "hoist-non-react-statics": "^3.2.1",
-    "immutable": "^4.0.0-rc.12",
+    "immutable": "^3.8.2",
     "inline-style-prefixer": "4.0.2",
     "memoize-one": "^4.0.3",
     "mixpanel-browser": "^2.24.0",

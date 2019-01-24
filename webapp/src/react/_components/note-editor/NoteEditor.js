@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
-import {
-  Editor,
-  getDefaultKeyBinding,
-  convertFromRaw,
-} from 'draft-js';
+import { Editor, getDefaultKeyBinding, convertFromRaw } from 'draft-js';
 import { setupDelegate } from 'react-delegate';
 
 import NoteLink from './decorators/link/NoteLink';
@@ -18,13 +14,8 @@ class NoteEditor extends Component {
 
     setupDelegate(this, 'onLinkClick', 'setEditorState');
     this.plugins = setupDraftExtensions(this, {
-      decorators: [
-        NoteLink,
-      ],
-      blocks: [
-        ChecklistBlock,
-        DefaultBlocks,
-      ],
+      decorators: [NoteLink],
+      blocks: [ChecklistBlock, DefaultBlocks]
     });
 
     this.onChange = this.setEditorState;
@@ -44,7 +35,7 @@ class NoteEditor extends Component {
   }
   componentDidCatch(error, info) {
     // Display fallback UI
-    console.log(error, info);    
+    console.log(error, info);
   }
   getEditorState() {
     return this.props.editorState;
@@ -56,10 +47,7 @@ class NoteEditor extends Component {
     this.refs.editor.focus();
   }
   renderEditor() {
-    const {
-      editorState,
-      readOnly,
-    } = this.props;
+    const { editorState, readOnly } = this.props;
 
     const contentState = editorState.getCurrentContent();
     const hasText = contentState.hasText();
@@ -68,11 +56,7 @@ class NoteEditor extends Component {
     if (showPlaceholder && firstBlock && firstBlock.getType() !== 'unstyled') {
       showPlaceholder = false;
     }
-    const placeHolder = (
-      <div>
-        Write down anything - text, lists or tasks.
-      </div>
-    );
+    const placeHolder = <div>Write down anything - text, lists or tasks.</div>;
 
     return (
       <Editor
@@ -83,28 +67,22 @@ class NoteEditor extends Component {
         {...this.plugins.bind}
         onBlur={this.props.onBlur}
         placeholder={showPlaceholder ? placeHolder : undefined}
-
       />
-    )
+    );
   }
   render() {
-    const {
-      editorState,
-      mediumEditor,
-    } = this.props;
+    const { editorState, mediumEditor } = this.props;
     if (!editorState) {
       return <div ref="editor" />;
     }
 
-
     return mediumEditor ? (
-      <MediumEditor
-        editorState={editorState}
-        delegate={this}
-      >
+      <MediumEditor editorState={editorState} delegate={this}>
         {this.renderEditor()}
       </MediumEditor>
-    ) : this.renderEditor();
+    ) : (
+      this.renderEditor()
+    );
   }
 }
 

@@ -18,8 +18,6 @@ import * as ca from 'swipes-core-js/actions';
 import SW from './SideNote.swiss';
 
 const emptyState = convertToRaw(EditorState.createEmpty().getCurrentContent());
-const maxWidth = 820;
-/* global msgGen */
 
 const mapStateToProps = (state, props) => {
   let cachedText = state.notes.getIn(['cache', props.id, 'text']);
@@ -53,9 +51,6 @@ const mapStateToProps = (state, props) => {
 export default class SideNote extends PureComponent {
   static sizes() {
     return [600, 900];
-  }
-  static maxWidth() {
-    return maxWidth;
   }
   static fullscreen() {
     return true;
