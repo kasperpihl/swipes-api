@@ -1,5 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
-import { miniIconForId, navForContext } from 'swipes-core-js/classes/utils';
+import { miniIconForId } from 'swipes-core-js/classes/utils';
 import withLoader from 'src/react/_hocs/withLoader';
 import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
@@ -16,7 +16,7 @@ import request from 'swipes-core-js/utils/request';
 @withLoader
 @connect(
   state => ({
-    myId: state.me.get('id')
+    myId: state.me.get('user_id')
   }),
   {
     tooltip: mainActions.tooltip
@@ -58,7 +58,7 @@ export default class DiscussionHeader extends PureComponent {
       onConfirm: ([text]) => {
         if (text !== discussion.get('topic') && text.length) {
           request('discussion.rename', {
-            discussion_id: discussion.get('id'),
+            discussion_id: discussion.get('discussion_id'),
             topic: text
           });
         }
@@ -74,7 +74,7 @@ export default class DiscussionHeader extends PureComponent {
       onConfirm: () => {
         loader.set('dots');
         request('discussion.archive', {
-          discussion_id: discussion.get('id')
+          discussion_id: discussion.get('user_id')
         }).then(res => {
           if (res.ok) {
             window.analytics.sendEvent('Discussion archived', {});
@@ -88,33 +88,33 @@ export default class DiscussionHeader extends PureComponent {
   }
   onContextClick = () => {
     const { openSecondary, discussion } = this.props;
-    openSecondary(navForContext(discussion.get('context')));
+    // openSecondary(navForContext(discussion.get('context')));
   };
   onFollowClick = () => {
     const { myId, discussion, loader } = this.props;
 
     loader.set('following');
     let endpoint = 'discussion.follow';
-    if (discussion.get('followers').find(o => o.get('user_id') === myId)) {
+    if (discussion.get('followers').find((ts, uId) => uId === myId)) {
       endpoint = 'discussion.unfollow';
     }
     request(endpoint, {
-      discussion_id: discussion.get('id')
+      discussion_id: discussion.get('discussion_id')
     }).then(res => {
       loader.clear('following');
     });
   };
   render() {
     const { discussion, myId, loader } = this.props;
-    const followers = discussion.get('followers').map(o => o.get('user_id'));
     const topic = discussion.get('topic');
     const privacy = discussion.get('privacy');
+    const followers = discussion.get('followers');
 
     return (
       <Fragment>
         <CardHeader title={topic} delegate={this}>
           <Button.Rounded
-            title={followers.includes(myId) ? 'Unfollow' : 'Follow'}
+            title={followers.get(myId) ? 'Unfollow' : 'Follow'}
             onClick={this.onFollowClick}
             status={loader.get('following')}
           />

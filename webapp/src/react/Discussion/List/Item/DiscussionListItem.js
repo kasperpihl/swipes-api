@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { miniIconForId, navForContext } from 'swipes-core-js/classes/utils';
+import { miniIconForId } from 'swipes-core-js/classes/utils';
 import Attachment from 'src/react/_components/attachment/Attachment';
 import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
 import timeGetDayOrTime from 'swipes-core-js/utils/time/timeGetDayOrTime';
@@ -19,11 +19,11 @@ export default class DiscussionListItem extends PureComponent {
   }
   onClick = () => {
     const { onSelectItemId, item } = this.props;
-    onSelectItemId(item.get('id'));
+    onSelectItemId(item.get('discussion_id'));
   };
   onContextClick = () => {
     const { openSecondary, item } = this.props;
-    openSecondary(navForContext(item.get('context')));
+    // openSecondary(navForContext(item.get('context')));
   };
   render() {
     const {

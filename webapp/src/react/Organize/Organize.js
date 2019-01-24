@@ -5,6 +5,7 @@ import SWView from 'src/react/_Layout/view-controller/SWView';
 import Button from 'src/react/_components/Button/Button';
 
 export default class Organize extends PureComponent {
+  static sizes = () => [600];
   render() {
     return (
       <SWView

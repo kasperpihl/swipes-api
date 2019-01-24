@@ -32,7 +32,7 @@ export default endpointCreate(
   async (req, res, next) => {
     // Get inputs
     const { input, user_id } = res.locals;
-    const { discussion_id, message, attachments, organization_id } = input;
+    const { discussion_id, message, attachments } = input;
     // Inserting the comment object.
     const [commentRes, discussionRes] = await transaction([
       sqlInsertQuery('discussion_comments', {
@@ -40,7 +40,7 @@ export default endpointCreate(
         message,
         comment_id: idGenerate('C', 7),
         sent_at: 'now()',
-        attachments: attachments || [],
+        attachments: (attachments && JSON.stringify(attachments)) || null,
         sent_by: user_id,
         reactions: {}
       }),

@@ -2,7 +2,6 @@ import * as mainActions from 'src/redux/main/mainActions';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 import { fromJS } from 'immutable';
 // import * as ca from 'swipes-core-js/actions';
-import { navForContext } from 'swipes-core-js/classes/utils';
 /* global nodeRequire*/
 const isElectron = window.process && window.process.versions.electron;
 let ipcRenderer;
@@ -67,7 +66,7 @@ export default class IpcListener {
     }
   }
   handleDesktopNotifications(payload) {
-    const myId = this.store.getState().me.get('id');
+    const myId = this.store.getState().me.get('user_id');
     let discussion;
     let comment;
     payload.updates.forEach(({ type, data }) => {
@@ -117,16 +116,16 @@ export default class IpcListener {
       icon: path.join(app.getAppPath(), 'icons/logo.png')
     });
 
-    desktopNotification.onclick = () => {
-      this.store.dispatch(
-        navigationActions.openSecondary(
-          'primary',
-          navForContext(fromJS(notification.target))
-        )
-      );
-      const remWin = remote.getCurrentWindow();
-      remWin.focus();
-    };
+    // desktopNotification.onclick = () => {
+    //   this.store.dispatch(
+    //     navigationActions.openSecondary(
+    //       'primary',
+    //       navForContext(fromJS(notification.target))
+    //     )
+    //   );
+    //   const remWin = remote.getCurrentWindow();
+    //   remWin.focus();
+    // };
   }
   storeChange() {
     const state = this.store.getState();

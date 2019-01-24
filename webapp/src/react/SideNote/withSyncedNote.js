@@ -18,10 +18,11 @@ export default WrappedComponent => {
       request('note.get', {
         note_id: noteId
       }).then(res => {
-        this.setState({ note: fromJS(res.note) });
+        !this._unmounted && this.setState({ note: fromJS(res.note) });
       });
     }
     componentWillUnmount() {
+      this._unmounted = true;
       this.bouncedSaveToServer.clear();
       this.saveToServer();
       window.removeEventListener('beforeunload', this.handleBeforeUnload);
@@ -31,6 +32,9 @@ export default WrappedComponent => {
       request('note.get', {
         note_id: this.props.noteId
       });
+    updateNoteState = note => {
+      !this._unmounted && this.setState({ note });
+    };
     updateNote = editorState => {
       if (!this.state.editorState) {
         this.lastSentToServer = editorState.getCurrentContent();
@@ -47,7 +51,7 @@ export default WrappedComponent => {
       }
 
       const rawState = forcedRawState || convertToRaw(contentState);
-      const rev = forcedRev || note.get('rev') - 1;
+      const rev = forcedRev || note.get('rev');
 
       request('note.update', {
         note_id: noteId,
@@ -56,17 +60,15 @@ export default WrappedComponent => {
       }).then(res => {
         if (res.ok) {
           this.lastSentToServer = contentState;
-          this.setState(({ note }) => ({
-            note: note.merge(fromJS(res.note))
-          }));
+          this.updateNoteState(this.state.note.merge(fromJS(res.note)));
         } else if (res.error === 'Out of sync') {
           this.fixConflict();
         }
       });
     };
     fixConflict = async () => {
-      this.setState({ noteDisabled: true });
-      const { note } = this.state;
+      !this._unmounted && this.setState({ noteDisabled: true });
+      const { note, editorState } = this.state;
       const noteRes = await this.fetchNote();
       if (!noteRes.ok) {
         throw Error('Could not fetch newest note');

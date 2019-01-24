@@ -6,8 +6,7 @@ import idGenerate from 'src/utils/idGenerate';
 
 const expectedInput = {
   owned_by: string.require(),
-  title: string.require(),
-  text: string.require()
+  title: string.require()
 };
 
 export default endpointCreate(
@@ -18,7 +17,7 @@ export default endpointCreate(
   async (req, res) => {
     // Get inputs
     const { user_id, input } = res.locals;
-    const { owned_by, title, text } = input;
+    const { owned_by, title } = input;
 
     const noteId = idGenerate('N', 20);
 
@@ -27,7 +26,6 @@ export default endpointCreate(
         note_id: noteId,
         owned_by,
         title,
-        text,
         created_by: user_id,
         updated_by: user_id
       })

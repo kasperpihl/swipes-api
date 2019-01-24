@@ -148,7 +148,10 @@ export default class SideNote extends PureComponent {
     }
 
     if (editorState && (this._needSave || force)) {
-      cacheNote(note.get('id'), convertToRaw(editorState.getCurrentContent()));
+      cacheNote(
+        note.get('note_id'),
+        convertToRaw(editorState.getCurrentContent())
+      );
     }
 
     if (editorState && this._needSave) {

@@ -39,8 +39,8 @@ export default class DiscussionOverview extends PureComponent {
         // Check if the first item has changed, then the new items is above
         // and we should compensate for the scroll.
         const first = props.pagination.results.last();
-        if (first && first.get('id') !== this.oldestElementId) {
-          this.oldestElementId = first.get('id');
+        if (first && first.get('comment_id') !== this.oldestElementId) {
+          this.oldestElementId = first.get('comment_id');
           this.lastHeight = scrollHeight;
           this.lastScrollTop = scrollTop;
         }
@@ -63,18 +63,23 @@ export default class DiscussionOverview extends PureComponent {
     const { discussion } = this.props;
     return (
       <SW.FooterWrapper>
-        <CommentComposer discussionId={discussion.get('id')} />
+        <CommentComposer discussion={discussion} />
       </SW.FooterWrapper>
     );
   }
   renderComments() {
-    const { pagination } = this.props;
+    const { pagination, discussion } = this.props;
     const results = (pagination.results || fromJS([])).reverse().toArray();
     return (
       <SW.CommentWrapper>
         <PaginationScrollToMore errorLabel="Couldn't get discussions." />
         {results.map((comment, i) => (
-          <CommentItem key={i} comment={comment} />
+          <CommentItem
+            key={i}
+            comment={comment}
+            discussionId={discussion.get('discussion_id')}
+            ownedBy={discussion.get('owned_by')}
+          />
         ))}
         {pagination.results && !pagination.results.size && (
           <EmptyState

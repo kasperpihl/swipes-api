@@ -46,7 +46,7 @@ export default class DiscussionList extends PureComponent {
     }
 
     setTimeout(() => {
-      // onSelectItemId(newSelectedId, results);
+      onSelectItemId(newSelectedId, results);
     }, 0);
 
     return (results || fromJS([])).map(item => {

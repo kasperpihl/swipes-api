@@ -27,16 +27,16 @@ export default class ExternalNoteView extends PureComponent {
     }
   }
   loadNote() {
-    const serData = {
+    fetch(`${location.origin}/v1/note.get`, {
       method: 'POST',
-      headers: new Headers({ 'Content-Type': 'application/json' }),
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${urlGetParameter('auth_token')}`
+      }),
       body: JSON.stringify({
-        token: urlGetParameter('token'),
-        note_id: urlGetParameter('note_id'),
-        organization_id: urlGetParameter('organization_id')
+        note_id: urlGetParameter('note_id')
       })
-    };
-    fetch(`${location.origin}/v1/notes.get`, serData)
+    })
       .then(r => {
         if (r && r.ok) return r.json();
         return Promise.reject({ message: r.statusText, code: r.status });

@@ -1,154 +1,131 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'react-redux';
-import * as menuActions from 'src/redux/menu/menuActions';
-import * as mainActions from 'src/redux/main/mainActions';
 import * as fileActions from 'swipes-core-js/redux/file/fileActions';
-import * as noteActions from 'swipes-core-js/redux/note/noteActions';
-import { setupLoading } from 'swipes-core-js/classes/utils';
 import request from 'swipes-core-js/utils/request';
-import { setupDelegate } from 'react-delegate';
+import withLoader from 'src/react/_hocs/withLoader';
+import contextMenu from 'src/utils/contextMenu';
 import Button from 'src/react/_components/Button/Button';
 import FormModal from 'src/react/_components/FormModal/FormModal';
-import { fromJS } from 'immutable';
-import { EditorState, convertToRaw } from 'draft-js';
+import ListMenu from 'src/react/_components/ListMenu/ListMenu';
 import SW from './AttachButton.swiss';
 import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
 
+const kFile = 0;
+const kUrl = 1;
+const kNote = 2;
+
+@withLoader
 @navWrapper
 @connect(
   state => ({
-    myId: state.me.get('id')
+    myId: state.me.get('user_id')
   }),
   {
-    chooseAttachmentType: menuActions.chooseAttachmentType,
-    // createLink: linkActions.create,
-    createNote: noteActions.create,
-    createFile: fileActions.create,
-    subscribeToDrop: mainActions.subscribeToDrop,
-    unsubscribeFromDrop: mainActions.unsubscribeFromDrop
+    createFile: fileActions.create
   }
 )
 export default class extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      fileVal: ''
-    };
-
-    setupDelegate(this, 'onAddedAttachment', 'onAttachButtonCloseOverlay');
-    setupLoading(this);
-  }
+  state = {
+    fileVal: ''
+  };
 
   onChangeFiles = e => {
     this.setState({ fileVal: e.target.value });
     this.onUploadFiles(e.target.files);
   };
   onUploadFiles(files) {
-    const { createFile } = this.props;
-    this.setLoading('attach');
+    const { createFile, loader } = this.props;
+    loader.set('attach');
     createFile(files).then(res => {
       if (res.ok) {
-        this.createLinkFromTypeIdTitle(
-          'file',
-          res.file.id,
-          res.file.original_title
-        );
+        loader.clear('attach');
+        this.addAttachment('file', res.file.id, res.file.original_title);
         this.setState({ fileVal: '' });
       } else {
-        this.clearLoading('attach', '!Something went wrong');
+        loader.error('attach', 'Something went wrong');
       }
     });
   }
-  onChooseAttachment = e => {
-    const { chooseAttachmentType, openModal, createNote } = this.props;
-    const options = this.getOptionsForE(e);
-    options.onClose = this.onAttachButtonCloseOverlay;
-    chooseAttachmentType(options).then(item => {
-      if (item.id === 'upload') {
+  addAttachment(type, id, title) {
+    const { onAttach } = this.props;
+    onAttach &&
+      onAttach({
+        type,
+        id,
+        title
+      });
+  }
+  createNote(title) {
+    const { loader, ownedBy } = this.props;
+    loader.set('attach');
+    request('note.add', {
+      title,
+      owned_by: ownedBy
+    }).then(res => {
+      if (res.ok) {
+        loader.clear('attach');
+        this.addAttachment('note', res.note.note_id, title);
+      } else {
+        loader.error('attach', res.error, 3000);
+      }
+    });
+  }
+  callbackChoseAttachmentType = (i, chosen) => {
+    const { openModal } = this.props;
+    switch (i) {
+      case kFile: {
         this.hiddenInput.click();
         return;
       }
-      const confirmLabel = 'Add';
-      let placeholder = 'Title of the note';
-      if (item.id === 'url') {
-        placeholder = 'http://';
-      }
-
-      openModal(FormModal, {
-        inputs: [{ type: 'text', placeholder }],
-        confirmLabel,
-        onConfirm: ([title]) => {
-          if (title && title.length) {
-            this.setLoading('attach');
-            if (item.id === 'url') {
-              this.createLinkFromTypeIdTitle(item.id, title, title);
-            } else {
-              createNote(
-                convertToRaw(EditorState.createEmpty().getCurrentContent())
-              ).then(res => {
-                if (res && res.ok) {
-                  this.createLinkFromTypeIdTitle(item.id, res.note.id, title);
+      default: {
+        const confirmLabel = 'Add';
+        let placeholder = 'Title of the note';
+        if (i === kUrl) {
+          placeholder = 'http://';
+        }
+        openModal(FormModal, {
+          inputs: [{ type: 'text', placeholder, autoFocus: true }],
+          confirmLabel,
+          onConfirm: ([title]) => {
+            if (title && title.length) {
+              if (i === kUrl) {
+                let id = title;
+                if (title.indexOf('://') > -1) {
+                  title = title.substr(title.indexOf('://') + 3);
                 } else {
-                  this.clearLoading('attach');
+                  id = `https://${title}`;
                 }
-              });
+
+                this.addAttachment('url', id, title);
+              } else {
+                this.createNote(title);
+              }
             }
           }
-        }
-      });
-    });
+        });
+      }
+    }
   };
-  getSwipesLinkObj(type, id, title) {
-    const { myId } = this.props;
-    return {
-      service: {
-        name: 'swipes',
-        type,
-        id
-      },
-      permission: {
-        account_id: myId
-      },
-      meta: {
-        title
-      }
-    };
-  }
-  getOptionsForE(e) {
-    return {
-      boundingRect: e.target.getBoundingClientRect(),
-      alignX: 'center'
-    };
-  }
-  createLinkFromTypeIdTitle(type, id, title) {
-    const link = this.getSwipesLinkObj(type, id, title);
-    request('links.create', { link }).then(res => {
-      let clear = undefined;
-      if (res.ok) {
-        const att = fromJS({ link: res.link, title });
-        clear = this.onAddedAttachment(
-          att,
-          this.clearLoading.bind(null, 'attach')
-        );
-      }
-      if (clear === undefined) {
-        this.clearLoading('attach');
-      }
+  handleChooseType = e => {
+    contextMenu(ListMenu, e, {
+      onClick: this.callbackChoseAttachmentType,
+      buttons: [
+        { title: 'Upload a file', icon: 'File' },
+        { title: 'Add URL', icon: 'Hyperlink' },
+        { title: 'New note', icon: 'Note' }
+      ]
     });
-  }
-
-  onDropFiles = files => {
-    this.onUploadFiles(files);
   };
 
   render() {
+    const { loader } = this.props;
     const { fileVal } = this.state;
 
     return (
       <Fragment>
         <Button.Standard
-          onClick={this.onChooseAttachment}
-          status={this.getLoading('attach')}
+          onClick={this.handleChooseType}
+          status={loader.get('attach')}
           icon="Attach"
         />
         <SW.HiddenInput

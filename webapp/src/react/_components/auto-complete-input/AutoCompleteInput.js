@@ -114,7 +114,7 @@ export default class extends PureComponent {
     this.inputRef.blur();
   }
   onBlur() {
-    this.props.clear();
+    // this.props.clear();
   }
   keyBindingFn(e) {
     return getDefaultKeyBinding(e);

@@ -4,12 +4,12 @@ import Button from 'src/react/_components/Button/Button';
 export default styleSheet('CommentComposer', {
   Container: {
     _flex: ['row', 'left', 'top'],
-    width: '100%',
+    width: '100%'
   },
   Picture: {
     flex: 'none',
-    marginTop: '6px',
-    _size: '42px',
+    marginTop: '9px',
+    _size: '36px'
   },
   Content: {
     _flex: ['column', 'left', 'top'],
@@ -17,15 +17,15 @@ export default styleSheet('CommentComposer', {
     '& .public-DraftEditor-content, & .public-DraftEditorPlaceholder-root': {
       _font: ['13px', '18px', 400],
       color: '$sw1',
-      padding: '18px 12px',
+      padding: '18px 12px'
     },
     '& .public-DraftEditorPlaceholder-root': {
       color: '$sw2',
-      _font: ['13px', '18px'],
-    },
+      _font: ['13px', '18px']
+    }
   },
   Actions: {
-    _flex: ['column', 'center', 'top'],
+    _flex: ['column', 'center', 'top']
   },
   Attachments: {
     _flex: ['row', 'left', 'top'],
@@ -33,27 +33,26 @@ export default styleSheet('CommentComposer', {
     padding: '6px 12px',
     paddingTop: '0px',
     '& > *:not(:last-child)': {
-      marginRight: '6px',
-    },
+      marginRight: '6px'
+    }
   },
   InputWrapper: {
     _flex: ['row', 'center', 'center'],
-    width: '100%',
+    width: '100%'
   },
   TypingRow: {
-    _flex: ['row', 'left', 'top'],
+    _flex: ['row', 'left', 'center'],
     paddingRight: '3px',
     width: '100%',
     '& .gl-button': {
-      marginTop: '12px',
-    },
+      marginTop: '12px'
+    }
   },
   SubmitButton: {
     _el: Button.Rounded,
-    marginTop: '6px',
-    display: 'none !important',
+    display: 'none',
     shown: {
-      display: 'block !important',
-    },
-  },
+      display: 'inline-flex'
+    }
+  }
 });

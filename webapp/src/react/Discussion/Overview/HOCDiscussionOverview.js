@@ -6,6 +6,7 @@ import withRequests from 'swipes-core-js/components/withRequests';
 import PaginationProvider from 'swipes-core-js/components/pagination/PaginationProvider';
 import Loader from 'src/react/_components/loaders/Loader';
 import DiscussionOverview from './DiscussionOverview';
+import request from 'swipes-core-js/utils/request';
 import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
 
 @navWrapper
@@ -24,7 +25,7 @@ import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
   }
 })
 @connect(state => ({
-  myId: state.me.get('id')
+  myId: state.me.get('user_id')
 }))
 @propsOrPop('discussion')
 export default class HOCDiscussionOverview extends PureComponent {
@@ -32,18 +33,12 @@ export default class HOCDiscussionOverview extends PureComponent {
     return [654];
   }
   onInitialLoad = () => {
-    const { discussion, myId, request } = this.props;
-    const sub = discussion
-      .get('followers')
-      .find(f => f.get('user_id') === myId);
-    if (
-      sub &&
-      (!sub.get('read_at') ||
-        sub.get('read_at') < discussion.get('last_comment_at'))
-    ) {
+    const { discussion, myId } = this.props;
+    const ts = discussion.getIn(['followers', myId]);
+    if (ts === 'n' || ts < discussion.get('last_comment_at')) {
       request('discussion.markAsRead', {
         read_at: discussion.get('last_comment_at'),
-        discussion_id: discussion.get('id')
+        discussion_id: discussion.get('discussion_id')
       });
     }
   };
@@ -62,7 +57,7 @@ export default class HOCDiscussionOverview extends PureComponent {
       <PaginationProvider
         request={{
           body: {
-            discussion_id: discussion.get('id')
+            discussion_id: discussion.get('discussion_id')
           },
           url: 'comment.list',
           resPath: 'comments'
@@ -70,8 +65,9 @@ export default class HOCDiscussionOverview extends PureComponent {
         limit={40}
         onInitialLoad={this.onInitialLoad}
         cache={{
-          path: ['comment', discussion.get('id')],
-          orderBy: '-sent_at'
+          path: ['comment', discussion.get('discussion_id')],
+          orderBy: '-sent_at',
+          idAttribute: 'comment_id'
         }}
       >
         <DiscussionOverview discussion={discussion} />

@@ -114,7 +114,7 @@ export default class Browser extends PureComponent {
       <SWView noframe>
         <BrowserWebview
           url={url}
-          persistId={`browser${me.get('id')}`}
+          persistId={`browser${me.get('user_id')}`}
           onLoad={this.onLoad}
         />
         <BrowserNavBar

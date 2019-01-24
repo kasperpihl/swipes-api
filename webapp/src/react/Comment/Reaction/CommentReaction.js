@@ -9,7 +9,7 @@ import SW from './CommentReaction.swiss';
 @withOptimist
 @connect(
   state => ({
-    myId: state.me.get('id')
+    myId: state.me.get('user_id')
   }),
   {
     successGradient: mainActions.successGradient,
@@ -38,7 +38,7 @@ export default class CommentReaction extends PureComponent {
     return optimist.get('like', !!reactions.get(myId));
   };
   onReaction = () => {
-    const { optimist, commentId, successGradient } = this.props;
+    const { optimist, commentId, successGradient, discussionId } = this.props;
 
     successGradient('red');
     optimist.set({
@@ -47,6 +47,7 @@ export default class CommentReaction extends PureComponent {
       handler: next => {
         request('comment.react', {
           reaction: this.doILike() ? 'like' : null,
+          discussion_id: discussionId,
           comment_id: commentId
         }).then(res => {
           next();

@@ -1,11 +1,8 @@
 import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
-import { setupCachedCallback } from 'react-delegate';
-import { attachmentIconForService } from 'swipes-core-js/classes/utils';
+import cachedCallback from 'src/utils/cachedCallback';
 import AutoCompleteInput from 'src/react/_components/auto-complete-input/AutoCompleteInput';
-import * as linkActions from 'src/redux/link/linkActions';
-import HOCAssigning from 'src/react/_components/assigning/HOCAssigning';
+import UserImage from 'src/react/_components/UserImage/UserImage';
 import AttachButton from 'src/react/_components/AttachButton/AttachButton';
 import editorStateToPlainMention from 'src/utils/draft-js/editorStateToPlainMention';
 import Attachment from 'src/react/_components/attachment/Attachment';
@@ -15,14 +12,6 @@ import request from 'swipes-core-js/utils/request';
 import SW from './CommentComposer.swiss';
 
 @navWrapper
-@connect(
-  state => ({
-    myId: state.me.get('id')
-  }),
-  {
-    preview: linkActions.preview
-  }
-)
 export default class CommentComposer extends PureComponent {
   constructor(props) {
     super(props);
@@ -30,12 +19,10 @@ export default class CommentComposer extends PureComponent {
       attachments: fromJS([]),
       resetDate: new Date()
     };
-    this.onAttachmentCloseCached = setupCachedCallback(this.onAttachmentClose);
-    this.onAttachmentClickCached = setupCachedCallback(this.onAttachmentClick);
   }
   onReturn = e => {
     if (e.shiftKey) {
-      this.onAddComment();
+      this.handleAddComment();
       return 'handled';
     }
   };
@@ -48,9 +35,9 @@ export default class CommentComposer extends PureComponent {
       });
     }
   };
-  onAddComment = () => {
+  handleAddComment = () => {
     const { attachments } = this.state;
-    const { addComment, discussionId } = this.props;
+    const { discussion } = this.props;
     const message = editorStateToPlainMention(this.editorState);
     if (!message.length) {
       return;
@@ -62,7 +49,7 @@ export default class CommentComposer extends PureComponent {
     });
 
     request('comment.add', {
-      discussion_id: discussionId,
+      discussion_id: discussion.get('discussion_id'),
       attachments,
       message
     }).then(res => {
@@ -71,22 +58,16 @@ export default class CommentComposer extends PureComponent {
       }
     });
   };
-  onAttachmentClick = i => {
-    const { preview, target } = this.props;
-    const { attachments } = this.state;
-    preview(target, attachments.get(i));
-  };
-  onAttachmentClose = i => {
-    this.onAttachButtonCloseOverlay();
+  handleCloseAttachmentCached = cachedCallback(i => {
     this.setState({
       attachments: this.state.attachments.delete(i)
     });
-  };
-  onAddedAttachment(att) {
+  });
+  handleAttach = att => {
     let { attachments } = this.state;
-    attachments = attachments.push(att);
+    attachments = attachments.push(fromJS(att));
     this.setState({ attachments });
-  }
+  };
   onAttachButtonCloseOverlay() {
     this.textarea.focus();
   }
@@ -99,30 +80,26 @@ export default class CommentComposer extends PureComponent {
 
     return (
       <SW.Attachments>
-        {attachments
-          .map((att, i) => (
-            <Attachment
-              title={att.get('title')}
-              key={i}
-              onClick={this.onAttachmentClickCached(i)}
-              onClose={this.onAttachmentCloseCached(i)}
-              icon={attachmentIconForService(att.getIn(['link', 'service']))}
-            />
-          ))
-          .toArray()}
+        {attachments.map((att, i) => (
+          <Attachment
+            attachment={att}
+            key={i}
+            onClose={this.handleCloseAttachmentCached(i)}
+          />
+        ))}
       </SW.Attachments>
     );
   }
 
   render() {
     const { hasContent } = this.state;
-    const { myId } = this.props;
+    const { discussion } = this.props;
     const placeholder = 'Write a comment';
 
     return (
       <SW.Container>
         <SW.Picture>
-          <HOCAssigning assignees={[myId]} size={42} />
+          <UserImage userId="me" size={36} />
         </SW.Picture>
         <SW.Content>
           <SW.TypingRow>
@@ -134,11 +111,13 @@ export default class CommentComposer extends PureComponent {
               reset={this.state.resetDate}
               autoFocus
             />
-            <AttachButton buttonProps={{ compact: true }} />
+            <AttachButton
+              onAttach={this.handleAttach}
+              ownedBy={discussion.get('owned_by')}
+            />
             <SW.SubmitButton
-              onClick={this.onAddComment}
+              onClick={this.handleAddComment}
               icon="Enter"
-              compact
               shown={hasContent}
             />
           </SW.TypingRow>

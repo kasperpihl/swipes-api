@@ -1,33 +1,21 @@
 import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
 
 import { attachmentIconForService } from 'swipes-core-js/classes/utils';
 import timeGetTimeString from 'swipes-core-js/utils/time/timeGetTimeString';
-import HOCAssigning from 'src/react/_components/assigning/HOCAssigning';
+import UserImage from 'src/react/_components/UserImage/UserImage';
 import Attachment from 'src/react/_components/attachment/Attachment';
-import * as linkActions from 'src/redux/link/linkActions';
 
 import chain from 'src/utils/chain';
 import parseNewLines from 'src/utils/parseNewLines';
 import parseLinks from 'src/utils/parseLinks';
 import parseMentions from 'src/utils/parseMentions';
-import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
+
+import userGetFullName from 'swipes-core-js/utils/user/userGetFullName';
 
 import CommentReaction from '../Reaction/CommentReaction';
 import SW from './CommentItem.swiss';
 
-@navWrapper
-@connect(
-  null,
-  {
-    preview: linkActions.preview
-  }
-)
 export default class CommentItem extends PureComponent {
-  onAttachmentClick = att => e => {
-    const { preview, target } = this.props;
-    preview(target, att);
-  };
   renderAttachments() {
     const { comment } = this.props;
 
@@ -37,27 +25,27 @@ export default class CommentItem extends PureComponent {
     return (
       <SW.Attachments>
         {comment.get('attachments').map((att, i) => (
-          <Attachment
-            title={att.get('title')}
-            key={i}
-            onClick={this.onAttachmentClick(att)}
-            icon={attachmentIconForService(att.getIn(['link', 'service']))}
-          />
+          <Attachment attachment={att} key={i} />
         ))}
       </SW.Attachments>
     );
   }
   render() {
-    const { comment, postId } = this.props;
-    const name = msgGen.users.getFullName(comment.get('sent_by'));
+    const { comment, postId, discussionId, ownedBy } = this.props;
+    const fullName = userGetFullName(comment.get('sent_by'), ownedBy);
+    // const name = msgGen.users.getFullName(comment.get('sent_by'));
 
     return (
       <SW.Container>
         <SW.Picture>
-          <HOCAssigning assignees={[comment.get('sent_by')]} size={36} />
+          <UserImage
+            userId={comment.get('sent_by')}
+            organizationId={ownedBy}
+            size={36}
+          />
         </SW.Picture>
         <SW.Content>
-          <SW.Name>{`${name} - ${timeGetTimeString(
+          <SW.Name>{`${fullName} - ${timeGetTimeString(
             comment.get('sent_at')
           )}`}</SW.Name>
           <SW.Message>
@@ -70,9 +58,10 @@ export default class CommentItem extends PureComponent {
         <SW.Actions>
           <CommentReaction
             alignRight
+            discussionId={discussionId}
             reactions={comment.get('reactions')}
             postId={postId}
-            commentId={comment.get('id')}
+            commentId={comment.get('comment_id')}
           />
         </SW.Actions>
       </SW.Container>
