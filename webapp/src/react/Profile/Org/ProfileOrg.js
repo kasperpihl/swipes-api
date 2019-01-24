@@ -47,6 +47,9 @@ export default class ProfileOrg extends PureComponent {
   };
   render() {
     const { organization, first } = this.props;
+    const activeCount = organization
+      .get('users')
+      .filter(u => u.get('status') === 'active').size;
 
     return (
       <SW.Wrapper onClick={this.handleOpenOrganization} first={first}>
@@ -54,8 +57,7 @@ export default class ProfileOrg extends PureComponent {
         <SW.Options>
           {this.renderSubscriptionStatus()}
           <SW.OrganizationInfo right>
-            {organization.get('users').size}{' '}
-            {organization.get('users').size === 1 ? 'user' : 'users'}
+            {activeCount} {activeCount === 1 ? 'user' : 'users'}
           </SW.OrganizationInfo>
         </SW.Options>
       </SW.Wrapper>

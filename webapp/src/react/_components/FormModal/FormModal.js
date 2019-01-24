@@ -25,7 +25,7 @@ export default class FormModal extends PureComponent {
   };
 
   handleKeyDownCached = i => e => {
-    const { inputs } = this.props;
+    const { inputs, hideModal } = this.props;
     if (e.keyCode === 13 && i === inputs.length - 1) {
       e.preventDefault();
       this.handleConfirm();

@@ -9,7 +9,7 @@ import Button from 'src/react/_components/Button/Button';
 import Attachment from 'src/react/_components/attachment/Attachment';
 import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
-import AssigneeTooltip from 'src/react/_components/assigning/AssigneeTooltip';
+import TooltipUsers from 'src/react/_components/TooltipUsers/TooltipUsers';
 import request from 'swipes-core-js/utils/request';
 
 @navWrapper
@@ -28,9 +28,9 @@ export default class DiscussionHeader extends PureComponent {
     if (!discussion.get('followers').size) return;
     console.log(discussion.get('followers').toJS());
     tooltip({
-      component: AssigneeTooltip,
+      component: TooltipUsers,
       props: {
-        assignees: discussion.get('followers').map(f => f.get('user_id')),
+        userIds: discussion.get('followers')..map(f => f.get('user_id')),
         size: 24
       },
       options: {
