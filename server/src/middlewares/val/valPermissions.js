@@ -17,7 +17,7 @@ export default function valPermissions({ permissionKey, permissionCreateKey }) {
             SELECT organization_id
             FROM organization_users 
             WHERE user_id = $1
-            AND organization_id = $1
+            AND organization_id = $2
             AND status = 'active'
           `,
           [user_id, res.locals.input[permissionCreateKey]]
