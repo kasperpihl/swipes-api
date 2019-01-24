@@ -30,7 +30,7 @@ export default endpointCreate(
         project_id: projectId
       }),
       {
-        text: `INSERT into permissions (permission_id, granted_to, owned_by) VALUES ($1, $2, $3)`,
+        text: `INSERT into permissions (permission_from, granted_to, owned_by) VALUES ($1, $2, $3)`,
         values: [projectId, user_id, owned_by]
       }
     ]);

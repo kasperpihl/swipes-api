@@ -29,9 +29,9 @@ export default function valPermissions({ permissionKey, permissionCreateKey }) {
     } else {
       const permissionRes = await query(
         `
-          SELECT permission_id
+          SELECT permission_from
           FROM permissions
-          WHERE permission_id = $1
+          WHERE permission_from = $1
           AND ${sqlCheckPermissions('granted_to', user_id)}
         `,
         [res.locals.input[permissionKey]]

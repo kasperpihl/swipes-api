@@ -35,7 +35,7 @@ export default endpointCreate(
     )`;
 
     const permissionQuery = {
-      text: `INSERT into permissions (permission_id, owned_by, granted_to) VALUES `,
+      text: `INSERT into permissions (permission_from, owned_by, granted_to) VALUES `,
       values: [discussionId, owned_by]
     };
     if (privacy === 'private') {

@@ -1,12 +1,13 @@
 import { object, string } from 'valjs';
 import { query } from 'src/utils/db/db';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
+import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
 import idGenerate from 'src/utils/idGenerate';
 
 const expectedInput = {
   owned_by: string.require(),
   title: string.require(),
-  text: object.require()
+  text: string.require()
 };
 
 export default endpointCreate(

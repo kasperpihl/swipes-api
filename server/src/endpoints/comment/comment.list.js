@@ -30,9 +30,9 @@ export default endpointCreate(
         SELECT discussion_id, comment_id, reactions, message, attachments, sent_by, sent_at
         FROM discussion_comments
         WHERE discussion_id = (
-          SELECT permission_id
+          SELECT permission_from
           FROM permissions
-          WHERE permission_id = $1
+          WHERE permission_from = $1
           AND ${sqlCheckPermissions('granted_to', user_id)}
         )
         ORDER BY sent_at DESC
