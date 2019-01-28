@@ -30,7 +30,7 @@ export default class DiscussionHeader extends PureComponent {
     tooltip({
       component: TooltipUsers,
       props: {
-        userIds: discussion.get('followers')..map(f => f.get('user_id')),
+        userIds: discussion.get('followers').map(f => f.get('user_id')),
         size: 24
       },
       options: {

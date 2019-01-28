@@ -32,9 +32,10 @@ export default styleSheet('OrganizationUser', {
 
   UserType: {
     _el: 'p',
-    _size: ['50px', 'auto'],
+    _size: ['40px', 'auto'],
     _flex: ['row', 'flex-end', 'center'],
     _textStyle: 'body',
+    marginLeft: '12px',
     flexShrink: '0',
     color: '$sw2'
   },

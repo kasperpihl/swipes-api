@@ -176,10 +176,13 @@ export default class OrganizationHeader extends PureComponent {
     }
   };
   render() {
-    const { name, loader } = this.props;
+    const { name, loader, meInOrg } = this.props;
+    const isAdmin = meInOrg.get('admin');
     return (
       <CardHeader title={name} onTitleClick={this.openRenameModal}>
-        <SW.Button title="Billing" onClick={this.openBillingView} />
+        {isAdmin && (
+          <SW.Button title="Billing" onClick={this.openBillingView} />
+        )}
         <SW.Button
           icon="ThreeDots"
           onClick={this.openContextMenu}
