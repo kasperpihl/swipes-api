@@ -1,7 +1,7 @@
 import { styleSheet } from 'swiss-react';
 import Button from 'src/react/_components/Button/Button';
 
-export default styleSheet('Preview', {
+export default styleSheet('File', {
   Footer: {
     _size: ['100%', '60px'],
     _flex: ['row', 'right', 'center'],

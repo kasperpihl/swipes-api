@@ -1,33 +1,29 @@
 import React, { Component } from 'react';
 
-import SW from './Audio.swiss';
+import SW from './FileVideo.swiss';
 
-class Audio extends Component {
+export default class FileVideo extends Component {
   static supportContentType(contentType) {
-    return ([
-      'audio/webm',
-      'audio/ogg',
-      'audio/wave',
-      'audio/wav',
-      'audio/mpeg',
-
-    ].indexOf(contentType) !== -1);
+    return (
+      ['video/mp4', 'video/quicktime', 'video/webm', 'video/ogg'].indexOf(
+        contentType
+      ) !== -1
+    );
   }
   render() {
     const { file } = this.props;
+    const className = 'preview-video';
 
     return (
       <SW.Wrapper>
-        <audio
+        <SW.Player
           autoPlay
           onLoadedData={this.props.onLoad}
           onError={this.props.onError}
-          src={file.url}
+          src={file.s3_url}
           controls
         />
       </SW.Wrapper>
     );
   }
 }
-
-export default Audio;

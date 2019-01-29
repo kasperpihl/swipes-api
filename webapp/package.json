@@ -15,7 +15,7 @@
     "start:server": "cd ../server && npm run start"
   },
   "dependencies": {
-    "@swipesapp/core": "^2.0.0-beta.12",
+    "@swipesapp/core": "^2.0.0-beta.18",
     "babel-polyfill": "6.26.0",
     "blueimp-load-image": "^2.20.1",
     "deep-equal": "1.0.1",
@@ -26,7 +26,7 @@
     "hoist-non-react-statics": "^3.2.1",
     "immutable": "^3.8.2",
     "inline-style-prefixer": "4.0.2",
-    "memoize-one": "^4.0.3",
+    "memoize-one": "^5.0.0",
     "mixpanel-browser": "^2.24.0",
     "moment": "^2.22.2",
     "prop-types": "^15.6.2",

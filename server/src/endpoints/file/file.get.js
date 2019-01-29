@@ -18,7 +18,7 @@ export default endpointCreate(
 
     const fileRes = await query(
       `
-        SELECT file_id, owned_by, title, file_name, s3_url, content_type
+        SELECT file_id, owned_by, file_name, s3_url, content_type
         FROM files
         WHERE file_id = $1
         AND ${sqlCheckPermissions('owned_by', user_id)}

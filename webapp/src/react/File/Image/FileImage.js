@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import SW from './Image.swiss';
+import SW from './FileImage.swiss';
 
-class Image extends Component {
+export default class FileImage extends Component {
   static supportContentType(contentType) {
     return ['image/png', 'image/gif'].indexOf(contentType) !== -1;
   }
@@ -27,7 +27,7 @@ class Image extends Component {
             onLoad={this.props.onLoad}
             onError={this.props.onError}
             onClick={this.onToggle}
-            src={file.url}
+            src={file.s3_url}
             role="presentation"
           />
         </SW.Wrapper>
@@ -35,5 +35,3 @@ class Image extends Component {
     );
   }
 }
-
-export default Image;
