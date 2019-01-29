@@ -1,5 +1,6 @@
 import { string } from 'valjs';
 import aws from 'aws-sdk';
+import slug from 'slug';
 import config from 'config';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 

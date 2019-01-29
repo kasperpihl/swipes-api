@@ -1,5 +1,6 @@
 import { styleSheet } from 'swiss-react';
 import Button from 'src/react/_components/Button/Button';
+import Textarea from 'react-textarea-autosize';
 
 export default styleSheet('CommentComposer', {
   Container: {
@@ -36,12 +37,30 @@ export default styleSheet('CommentComposer', {
       marginRight: '6px'
     }
   },
+  ButtonWrapper: {
+    _flex: ['row', 'left', 'center'],
+    width: 'auto',
+    flex: 'none',
+    height: '55px'
+  },
+  Textarea: {
+    _el: Textarea,
+    border: 'none',
+    width: '100%',
+    margin: '6px 0',
+    padding: '12px',
+    resize: 'none',
+    _textStyle: 'body',
+    '&:focus': {
+      outline: 'none'
+    }
+  },
   InputWrapper: {
     _flex: ['row', 'center', 'center'],
     width: '100%'
   },
   TypingRow: {
-    _flex: ['row', 'left', 'center'],
+    _flex: ['row', 'left', 'top'],
     paddingRight: '3px',
     width: '100%',
     '& .gl-button': {

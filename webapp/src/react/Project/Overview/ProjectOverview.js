@@ -145,7 +145,7 @@ export default class ProjectOverview extends PureComponent {
             <SW.HeaderTitle>{clientState.get('name')}</SW.HeaderTitle>
           </SW.Header>
           {this.renderItems()}
-          <SW.Div>
+          {/* <SW.Div>
             <StepSlider
               min={0}
               max={4}
@@ -163,7 +163,7 @@ export default class ProjectOverview extends PureComponent {
               // showPopupText={showPopupText}
             />
             <Dropdown rounded={false} />
-          </SW.Div>
+          </SW.Div> */}
         </SW.Wrapper>
       </ProjectProvider>
     );

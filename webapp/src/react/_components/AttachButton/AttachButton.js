@@ -1,6 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
-import { connect } from 'react-redux';
-import * as fileActions from 'swipes-core-js/redux/file/fileActions';
+import fileUpload from 'swipes-core-js/utils/fileUpload';
 import request from 'swipes-core-js/utils/request';
 import withLoader from 'src/react/_hocs/withLoader';
 import contextMenu from 'src/utils/contextMenu';
@@ -16,14 +15,6 @@ const kNote = 2;
 
 @withLoader
 @navWrapper
-@connect(
-  state => ({
-    myId: state.me.get('user_id')
-  }),
-  {
-    createFile: fileActions.create
-  }
-)
 export default class extends PureComponent {
   state = {
     fileVal: ''
@@ -33,18 +24,17 @@ export default class extends PureComponent {
     this.setState({ fileVal: e.target.value });
     this.onUploadFiles(e.target.files);
   };
-  onUploadFiles(files) {
-    const { createFile, loader } = this.props;
+  async onUploadFiles(files) {
+    const { loader, ownedBy } = this.props;
     loader.set('attach');
-    createFile(files).then(res => {
-      if (res.ok) {
-        loader.clear('attach');
-        this.addAttachment('file', res.file.id, res.file.original_title);
-        this.setState({ fileVal: '' });
-      } else {
-        loader.error('attach', 'Something went wrong');
-      }
-    });
+    const res = await fileUpload(files, ownedBy);
+    if (res.ok) {
+      loader.clear('attach');
+      this.addAttachment('file', res.file.file_id, res.file.file_name);
+      this.setState({ fileVal: '' });
+    } else {
+      loader.error('attach', 'Something went wrong');
+    }
   }
   addAttachment(type, id, title) {
     const { onAttach } = this.props;

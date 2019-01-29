@@ -1,10 +1,8 @@
 import React, { PureComponent } from 'react';
 import { fromJS } from 'immutable';
 import cachedCallback from 'src/utils/cachedCallback';
-import AutoCompleteInput from 'src/react/_components/auto-complete-input/AutoCompleteInput';
 import UserImage from 'src/react/_components/UserImage/UserImage';
 import AttachButton from 'src/react/_components/AttachButton/AttachButton';
-import editorStateToPlainMention from 'src/utils/draft-js/editorStateToPlainMention';
 import Attachment from 'src/react/_components/attachment/Attachment';
 import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
 import request from 'swipes-core-js/utils/request';
@@ -17,46 +15,38 @@ export default class CommentComposer extends PureComponent {
     super(props);
     this.state = {
       attachments: fromJS([]),
-      resetDate: new Date()
+      commentVal: ''
     };
   }
-  onReturn = e => {
-    if (e.shiftKey) {
-      this.handleAddComment();
-      return 'handled';
-    }
-  };
-  onChange = editorState => {
-    this.editorState = editorState;
-    const hasContent = !!editorState.getCurrentContent().getPlainText().length;
-    if (hasContent !== this.state.hasContent) {
-      this.setState({
-        hasContent
-      });
-    }
+  onChange = e => {
+    this.setState({ commentVal: e.target.value });
   };
   handleAddComment = () => {
-    const { attachments } = this.state;
+    const { attachments, commentVal } = this.state;
     const { discussion } = this.props;
-    const message = editorStateToPlainMention(this.editorState);
-    if (!message.length) {
+    if (!commentVal.length) {
       return;
     }
     this.setState({
-      resetDate: new Date(),
       attachments: fromJS([]),
-      hasContent: false
+      commentVal: ''
     });
 
     request('comment.add', {
       discussion_id: discussion.get('discussion_id'),
       attachments,
-      message
+      message: commentVal
     }).then(res => {
       if (res.ok) {
         window.analytics.sendEvent('Comment added', {});
       }
     });
+  };
+  handleKeyDown = e => {
+    if (e.keyCode === 13 && !e.shiftKey) {
+      e.preventDefault();
+      this.handleAddComment();
+    }
   };
   handleCloseAttachmentCached = cachedCallback(i => {
     this.setState({
@@ -68,9 +58,6 @@ export default class CommentComposer extends PureComponent {
     attachments = attachments.push(fromJS(att));
     this.setState({ attachments });
   };
-  onAttachButtonCloseOverlay() {
-    this.textarea.focus();
-  }
 
   renderAttachments() {
     const { attachments } = this.state;
@@ -92,7 +79,7 @@ export default class CommentComposer extends PureComponent {
   }
 
   render() {
-    const { hasContent } = this.state;
+    const { commentVal } = this.state;
     const { discussion } = this.props;
     const placeholder = 'Write a comment';
 
@@ -103,23 +90,26 @@ export default class CommentComposer extends PureComponent {
         </SW.Picture>
         <SW.Content>
           <SW.TypingRow>
-            <AutoCompleteInput
-              innerRef={c => (this.textarea = c)}
+            <SW.Textarea
+              inputRef={c => (this.textarea = c)}
               placeholder={placeholder}
-              handleReturn={this.onReturn}
-              onChange={this.onChange}
-              reset={this.state.resetDate}
+              onKeyDown={this.handleKeyDown}
+              maxRows={8}
+              value={commentVal}
               autoFocus
+              onChange={e => this.setState({ commentVal: e.target.value })}
             />
-            <AttachButton
-              onAttach={this.handleAttach}
-              ownedBy={discussion.get('owned_by')}
-            />
-            <SW.SubmitButton
-              onClick={this.handleAddComment}
-              icon="Enter"
-              shown={hasContent}
-            />
+            <SW.ButtonWrapper>
+              <AttachButton
+                onAttach={this.handleAttach}
+                ownedBy={discussion.get('owned_by')}
+              />
+              <SW.SubmitButton
+                onClick={this.handleAddComment}
+                icon="Enter"
+                shown={!!commentVal}
+              />
+            </SW.ButtonWrapper>
           </SW.TypingRow>
           {this.renderAttachments()}
         </SW.Content>
