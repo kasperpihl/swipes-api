@@ -12,7 +12,7 @@ import SWView from 'src/react/_Layout/view-controller/SWView';
 @navWrapper
 @withLoader
 @connect(state => ({
-  organization: state.organization
+  organizations: state.organizations
 }))
 export default class Profile extends PureComponent {
   static sizes = () => [540];
@@ -44,7 +44,7 @@ export default class Profile extends PureComponent {
   };
   renderHeader = () => <ProfileHeader />;
   render() {
-    const { organization, loader } = this.props;
+    const { organizations, loader } = this.props;
     return (
       <SWView header={this.renderHeader()}>
         <SW.Wrapper>
@@ -54,7 +54,7 @@ export default class Profile extends PureComponent {
             onClick={this.handleCreateOrganization}
             status={loader.get('createOrg')}
           />
-          {organization
+          {organizations
             .map((org, i) => (
               <ProfileOrg key={org.get('organization_id')} organization={org} />
             ))

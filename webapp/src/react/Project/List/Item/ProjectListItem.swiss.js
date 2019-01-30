@@ -6,7 +6,8 @@ export default styleSheet('ProjectListItem', {
     '&:hover': {
       background: '$sw4'
     },
-    borderRadius: '6px'
+    borderRadius: '6px',
+    margin: '0 12px'
   },
   TextWrapper: {
     _flex: ['column', 'left', 'top']

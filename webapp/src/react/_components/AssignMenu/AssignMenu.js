@@ -6,7 +6,7 @@ import UserImage from 'src/react/_components/UserImage/UserImage';
 import userGetFullName from 'swipes-core-js/utils/user/userGetFullName';
 
 @connect((state, props) => ({
-  organization: state.organization.get(props.organizationId),
+  organization: state.organizations.get(props.organizationId),
   me: state.me
 }))
 export default class AssignMenu extends PureComponent {

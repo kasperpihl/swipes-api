@@ -3,6 +3,7 @@ import SW from './CardHeader.swiss';
 
 const CardHeader = ({
   children,
+  padding,
   title,
   onTitleClick,
   subtitle,
@@ -12,7 +13,7 @@ const CardHeader = ({
 }) => {
   const isInput = !!rest.onChange;
   return (
-    <SW.Wrapper className={className} noSubtitle={!subtitle ? true : undefined}>
+    <SW.Wrapper className={className} padding={padding} subtitle={!!subtitle}>
       <SW.Title key="header-title" onClick={onTitleClick}>
         {isInput ? <SW.Input type="text" ref={inputRef} {...rest} /> : title}
         {subtitle && <SW.Subtitle>{subtitle}</SW.Subtitle>}

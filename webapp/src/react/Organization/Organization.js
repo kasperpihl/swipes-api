@@ -12,12 +12,12 @@ import SWView from 'src/react/_Layout/view-controller/SWView';
 
 @navWrapper
 @connect((state, props) => ({
-  meInOrg: state.organization.getIn([
+  meInOrg: state.organizations.getIn([
     props.organizationId,
     'users',
     state.me.get('user_id')
   ]),
-  organization: state.organization.get(props.organizationId)
+  organization: state.organizations.get(props.organizationId)
 }))
 @propsOrPop('organization')
 export default class Organization extends PureComponent {

@@ -19,7 +19,7 @@ const kInvite = 'Invite user';
 @withLoader
 @connect(
   (state, props) => ({
-    organization: state.organization.get(props.organizationId)
+    organization: state.organizations.get(props.organizationId)
   }),
   {
     contextMenu: mainActions.contextMenu

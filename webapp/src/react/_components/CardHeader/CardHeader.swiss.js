@@ -5,9 +5,10 @@ export default styleSheet('CardHeader', {
     _size: ['100%', '99px'],
     _flex: ['row', 'between', 'top'],
 
-    noSubtitle: {
+    '!subtitle': {
       height: '75px'
-    }
+    },
+    padding: get => `0 ${get('padding', 0)}px`
   },
 
   Title: {

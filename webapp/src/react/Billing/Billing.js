@@ -20,7 +20,7 @@ import SW from './Billing.swiss';
 @navWrapper
 @withLoader
 @connect((state, props) => ({
-  organization: state.organization.get(props.organizationId)
+  organization: state.organizations.get(props.organizationId)
 }))
 @propsOrPop('organization')
 export default class Billing extends PureComponent {

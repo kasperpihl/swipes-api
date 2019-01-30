@@ -18,8 +18,13 @@ export default class Organize extends PureComponent {
   render() {
     return (
       <SWView
+        noframe
         header={
-          <CardHeader title="Projects" subtitle="Store all your projects here">
+          <CardHeader
+            padding={30}
+            title="Projects"
+            subtitle="Store all your projects here"
+          >
             <Button.Rounded
               title="New project"
               icon="Plus"

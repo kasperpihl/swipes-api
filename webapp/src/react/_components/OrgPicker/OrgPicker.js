@@ -5,7 +5,7 @@ import SW from './OrgPicker.swiss';
 
 @connect(state => ({
   myId: state.me.get('user_id'),
-  organization: state.organization
+  organizations: state.organizations
 }))
 export default class OrgPicker extends PureComponent {
   handleClickCached = cachedCallback((value, e) => {
@@ -28,12 +28,12 @@ export default class OrgPicker extends PureComponent {
     );
   }
   render() {
-    const { organization, myId } = this.props;
+    const { organizations, myId } = this.props;
 
     return (
       <SW.Wrapper>
         {this.renderInput(myId, 'Personal')}
-        {organization
+        {organizations
           .toList()
           .map(org =>
             this.renderInput(org.get('organization_id'), org.get('name'))

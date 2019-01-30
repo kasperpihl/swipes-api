@@ -4,17 +4,11 @@ import Button from 'src/react/_components/Button/Button';
 export default styleSheet('ProjectOverview', {
   Wrapper: {
     // overflowY: 'scroll',
-  },
-  Header: {
-    _flex: ['row', 'between', 'center'],
-    padding: '12px 24px'
+    padding: '0 6px'
   },
   AddButton: {
     _el: Button.Rounded,
     marginLeft: '22px'
-  },
-  HeaderTitle: {
-    _el: 'h1'
   },
   Div: {
     _size: ['500px', 'auto'],

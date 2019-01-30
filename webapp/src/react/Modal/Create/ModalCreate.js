@@ -14,8 +14,7 @@ import { fromJS } from 'immutable';
 
 @withLoader
 @connect(state => ({
-  myId: state.me.get('user_id'),
-  organization: state.organization
+  myId: state.me.get('user_id')
 }))
 export default class ModalCreate extends PureComponent {
   constructor(props) {

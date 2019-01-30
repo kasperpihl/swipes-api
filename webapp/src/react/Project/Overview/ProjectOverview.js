@@ -4,6 +4,8 @@ import withRequests from 'swipes-core-js/components/withRequests';
 import ProjectProvider from 'swipes-core-js/components/project/ProjectProvider';
 import ProjectStateManager from 'swipes-core-js/classes/ProjectStateManager';
 import ProjectTask from 'src/react/Project/Task/ProjectTask';
+import SWView from 'src/react/_Layout/view-controller/SWView';
+import CardHeader from 'src/react/_components/CardHeader/CardHeader';
 import StepSlider from 'src/react/_components/StepSlider/StepSlider';
 import Button from 'src/react/_components/Button/Button';
 import Dropdown from 'src/react/_components/dropdown/Dropdown';
@@ -133,19 +135,19 @@ export default class ProjectOverview extends PureComponent {
     clearTimeout(this.timeout);
     this.setState({ showPopupText: false });
   };
-
   render() {
     const { sliderTestValue, showPopupText } = this.state;
     const clientState = this.stateManager.getClientState();
 
     return (
-      <ProjectProvider stateManager={this.stateManager}>
-        <SW.Wrapper>
-          <SW.Header>
-            <SW.HeaderTitle>{clientState.get('name')}</SW.HeaderTitle>
-          </SW.Header>
-          {this.renderItems()}
-          {/* <SW.Div>
+      <SWView
+        noframe
+        header={<CardHeader padding={30} title={clientState.get('name')} />}
+      >
+        <ProjectProvider stateManager={this.stateManager}>
+          <SW.Wrapper>
+            {this.renderItems()}
+            {/* <SW.Div>
             <StepSlider
               min={0}
               max={4}
@@ -164,8 +166,9 @@ export default class ProjectOverview extends PureComponent {
             />
             <Dropdown rounded={false} />
           </SW.Div> */}
-        </SW.Wrapper>
-      </ProjectProvider>
+          </SW.Wrapper>
+        </ProjectProvider>
+      </SWView>
     );
   }
 }
