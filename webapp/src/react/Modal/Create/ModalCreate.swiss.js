@@ -1,6 +1,6 @@
 import { styleSheet } from 'swiss-react';
 
-export default styleSheet('ChatCreate', {
+export default styleSheet('ModalCreate', {
   CheckboxWrapper: {
     _flex: ['row', 'left', 'center'],
     paddingTop: '6px',

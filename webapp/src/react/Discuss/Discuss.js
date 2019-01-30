@@ -6,7 +6,7 @@ import HOCDiscussionOverview from 'src/react/Discussion/Overview/HOCDiscussionOv
 import TabBar from 'src/react/_components/TabBar/TabBar';
 import { withOptimist } from 'react-optimist';
 import SWView from 'src/react/_Layout/view-controller/SWView';
-import ChatCreate from 'src/react/Chat/Create/ChatCreate';
+import ModalCreate from 'src/react/Modal/Create/ModalCreate';
 import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
 import Button from 'src/react/_components/Button/Button';
 
@@ -34,7 +34,9 @@ export default class Discuss extends PureComponent {
   };
   handleNewDiscussion = () => {
     const { openModal } = this.props;
-    openModal(ChatCreate);
+    openModal(ModalCreate, {
+      type: 'discussion'
+    });
   };
   onSelectItemId = (id, results) => {
     const { optimist } = this.props;
@@ -63,7 +65,11 @@ export default class Discuss extends PureComponent {
     return (
       <SW.LeftHeaderWrapper>
         <CardHeader title="Chat">
-          <Button.Rounded title="New chat" onClick={this.handleNewDiscussion} />
+          <Button.Rounded
+            title="New chat"
+            onClick={this.handleNewDiscussion}
+            icon="Plus"
+          />
         </CardHeader>
         <TabBar tabs={tabs} onChange={this.handleTabChange} value={tabIndex} />
       </SW.LeftHeaderWrapper>

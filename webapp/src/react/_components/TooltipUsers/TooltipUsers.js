@@ -11,7 +11,7 @@ export default class TooltipUsers extends PureComponent {
     return (
       <SW.Wrapper>
         {userIds.map(uId => (
-          <SW.UserWrapper>
+          <SW.UserWrapper key={uId}>
             <SW.ImageWrapper>
               <UserImage userId={uId} organizationId={organizationId} />
             </SW.ImageWrapper>

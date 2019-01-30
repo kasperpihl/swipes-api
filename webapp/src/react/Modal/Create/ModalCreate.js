@@ -7,7 +7,7 @@ import cachedCallback from 'src/utils/cachedCallback';
 import Assignees from 'src/react/_components/Assignees/Assignees';
 import AssignMenu from 'src/react/_components/AssignMenu/AssignMenu';
 import Button from 'src/react/_components/Button/Button';
-import SW from './ChatCreate.swiss';
+import SW from './ModalCreate.swiss';
 import FMSW from 'src/react/_components/FormModal/FormModal.swiss';
 import contextMenu from 'src/utils/contextMenu';
 import { fromJS } from 'immutable';
@@ -17,11 +17,11 @@ import { fromJS } from 'immutable';
   myId: state.me.get('user_id'),
   organization: state.organization
 }))
-export default class ChatCreate extends PureComponent {
+export default class ModalCreate extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      topic: '',
+      titleVal: '',
       privacy: 'public',
       ownedBy: props.myId,
       followers: fromJS([])
@@ -42,25 +42,36 @@ export default class ChatCreate extends PureComponent {
   };
 
   handleCreate = () => {
-    const { hideModal, loader, myId } = this.props;
-    const { followers, topic, privacy, ownedBy } = this.state;
-    console.log(ownedBy);
-    loader.set('discussion', 'Creating');
-    request('discussion.add', {
-      topic: topic,
+    const { hideModal, loader, myId, type } = this.props;
+    const { followers, titleVal, privacy, ownedBy } = this.state;
+
+    let endpoint = 'discussion.add';
+    let analyticsEvent = 'Discussion created';
+
+    const options = {
+      topic: titleVal,
       owned_by: ownedBy,
       privacy,
       followers: followers.toJS()
-    }).then(res => {
+    };
+
+    if (type === 'project') {
+      endpoint = 'project.add';
+      options.name = titleVal;
+      delete options.topic;
+    }
+
+    loader.set('creating', 'Creating');
+    request(endpoint, options).then(res => {
       if (res.ok) {
         hideModal();
-        window.analytics.sendEvent('Discussion created', {
+        window.analytics.sendEvent(analyticsEvent, {
           Privacy: privacy,
           'Owned By': ownedBy === myId ? 'Personal' : 'Company',
           'Tagged people': followers.size
         });
       } else {
-        loader.error('discussion', res.error, 3000);
+        loader.error('creating', res.error, 3000);
       }
     });
   };
@@ -71,9 +82,9 @@ export default class ChatCreate extends PureComponent {
       followers: fromJS([])
     });
   };
-  handleTopicChange = e => {
+  handleTitleChange = e => {
     this.setState({
-      topic: e.target.value
+      titleVal: e.target.value
     });
   };
 
@@ -97,20 +108,30 @@ export default class ChatCreate extends PureComponent {
     );
   }
   render() {
-    const { topic, ownedBy, followers } = this.state;
-    const { myId, loader } = this.props;
-    const topicPlaceholder = 'Topic';
+    const { titleVal, ownedBy, followers } = this.state;
+    const { myId, loader, type } = this.props;
+
+    let title = 'New Discussion';
+    let titlePlaceholder = 'Topic';
+    let titleLabel = '1. Set the topic';
+    let createLabel = 'Create discussion';
+    if (type === 'project') {
+      title = 'New Project';
+      titlePlaceholder = 'Name';
+      titleLabel = '1. Choose a name for the project';
+      createLabel = 'Create project';
+    }
 
     return (
       <FMSW.Wrapper>
-        <FMSW.Title>New Discussion</FMSW.Title>
+        <FMSW.Title>{title}</FMSW.Title>
         <FMSW.InputContainer>
           <FMSW.InputWrapper>
-            <FMSW.Label>1. Set the topic</FMSW.Label>
+            <FMSW.Label>{titleLabel}</FMSW.Label>
             <FMSW.Input
-              value={topic}
-              onChange={this.handleTopicChange}
-              placeholder={topicPlaceholder}
+              value={titleVal}
+              onChange={this.handleTitleChange}
+              placeholder={titlePlaceholder}
               type="text"
               style={{ paddingLeft: '6px' }}
               autoFocus
@@ -147,9 +168,9 @@ export default class ChatCreate extends PureComponent {
         </FMSW.InputContainer>
         <FMSW.ButtonWrapper>
           <Button.Rounded
-            title="Create discussion"
+            title={createLabel}
             onClick={this.handleCreate}
-            status={loader.get('discussion')}
+            status={loader.get('creating')}
           />
         </FMSW.ButtonWrapper>
       </FMSW.Wrapper>

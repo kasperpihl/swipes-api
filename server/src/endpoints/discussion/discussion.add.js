@@ -5,9 +5,9 @@ import { transaction } from 'src/utils/db/db';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
 const expectedInput = {
   topic: string.min(1).require(),
+  owned_by: string.require(),
   privacy: any.of('public', 'private'),
-  followers: array.of(string),
-  owned_by: string.require()
+  followers: array.of(string)
 };
 
 export default endpointCreate(

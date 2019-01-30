@@ -7,10 +7,8 @@ export default styleSheet('OrgPicker', {
   },
   InputWrapper: {
     _flex: ['row', 'left', 'center'],
-    padding: '6px',
-    '&:first-child': {
-      paddingLeft: 0
-    }
+    padding: '6px 0',
+    marginRight: '12px'
   },
   Label: {
     _el: 'span',

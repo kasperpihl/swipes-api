@@ -6,6 +6,7 @@ import * as mainActions from 'src/redux/main/mainActions';
 import FormModal from 'src/react/_components/FormModal/FormModal';
 import SW from './DiscussionHeader.swiss';
 import Button from 'src/react/_components/Button/Button';
+import debounce from 'swipes-core-js/utils/debounce';
 import Attachment from 'src/react/_components/attachment/Attachment';
 import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
@@ -26,11 +27,10 @@ export default class DiscussionHeader extends PureComponent {
   onMouseEnter = e => {
     const { tooltip, discussion } = this.props;
     if (!discussion.get('followers').size) return;
-    console.log(discussion.get('followers').toJS());
     tooltip({
       component: TooltipUsers,
       props: {
-        userIds: discussion.get('followers').map(f => f.get('user_id')),
+        userIds: discussion.get('followers').keySeq(),
         size: 24
       },
       options: {

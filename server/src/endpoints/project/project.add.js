@@ -2,11 +2,13 @@ import { transaction } from 'src/utils/db/db';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import idGenerate from 'src/utils/idGenerate';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
-import { string } from 'valjs';
+import { string, array, any } from 'valjs';
 
 const expectedInput = {
+  name: string.min(1).require(),
   owned_by: string.require(),
-  name: string.min(1).require()
+  privacy: any.of('public', 'private'),
+  followers: array.of(string)
 };
 
 export default endpointCreate(
