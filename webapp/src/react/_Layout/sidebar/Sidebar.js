@@ -7,8 +7,8 @@ import SW from './Sidebar.swiss';
 import UserImage from 'src/react/_components/UserImage/UserImage';
 
 const kNavItems = [
-  { id: 'Organize', svg: 'Milestones' },
-  { id: 'Discuss', svg: 'Messages' }
+  { id: 'Projects', svg: 'Milestones' },
+  { id: 'Chat', svg: 'Messages' }
 ];
 
 @connect(

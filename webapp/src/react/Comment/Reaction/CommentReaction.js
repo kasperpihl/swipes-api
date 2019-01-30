@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
 import { withOptimist } from 'react-optimist';
 import request from 'swipes-core-js/utils/request';
-import AssigneeTooltip from 'src/react/_components/assigning/AssigneeTooltip';
+import TooltipUsers from 'src/react/_components/TooltipUsers/TooltipUsers';
 import SW from './CommentReaction.swiss';
 
 @withOptimist
@@ -72,9 +72,9 @@ export default class CommentReaction extends PureComponent {
       const userIds = reactions.keySeq().toArray();
 
       const data = {
-        component: AssigneeTooltip,
+        component: TooltipUsers,
         props: {
-          assignees: userIds
+          userIds
         },
         options: {
           boundingRect: target,

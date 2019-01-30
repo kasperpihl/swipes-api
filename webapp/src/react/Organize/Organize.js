@@ -10,8 +10,8 @@ export default class Organize extends PureComponent {
     return (
       <SWView
         header={
-          <CardHeader title="Organize" subtitle="Store all your projects here">
-            <Button.Rounded title="Add project" icon="Plus" />
+          <CardHeader title="Projects" subtitle="Store all your projects here">
+            <Button.Rounded title="New project" icon="Plus" />
             <Button.Rounded icon="ThreeDots" />
           </CardHeader>
         }

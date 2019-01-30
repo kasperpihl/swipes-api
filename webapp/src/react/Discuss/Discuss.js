@@ -62,11 +62,8 @@ export default class Discuss extends PureComponent {
     const { tabs, tabIndex } = this.state;
     return (
       <SW.LeftHeaderWrapper>
-        <CardHeader title="Discussions">
-          <Button.Rounded
-            title="New discussion"
-            onClick={this.handleNewDiscussion}
-          />
+        <CardHeader title="Chat">
+          <Button.Rounded title="New chat" onClick={this.handleNewDiscussion} />
         </CardHeader>
         <TabBar tabs={tabs} onChange={this.handleTabChange} value={tabIndex} />
       </SW.LeftHeaderWrapper>
