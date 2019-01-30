@@ -1,6 +1,6 @@
 import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
-import dbSendUpdates from 'src/utils/db/dbSendUpdates';
+// import dbSendUpdates from 'src/utils/db/dbSendUpdates';
 import mentionsClean from 'src/utils/mentions/mentionsClean';
 import pushSend from 'src/utils/push/pushSend';
 import { query, transaction } from 'src/utils/db/db';
@@ -78,7 +78,7 @@ export default endpointCreate(
     };
   }
 ).background(async (req, res) => {
-  dbSendUpdates(res.locals);
+  // dbSendUpdates(res.locals);
   const { user_id } = res.locals;
   const { updates, reaction } = res.locals.output;
 

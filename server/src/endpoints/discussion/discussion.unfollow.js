@@ -2,7 +2,7 @@ import { string } from 'valjs';
 import { query } from 'src/utils/db/db';
 
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
-import dbSendUpdates from 'src/utils/db/dbSendUpdates';
+// import dbSendUpdates from 'src/utils/db/dbSendUpdates';
 
 const expectedInput = {
   discussion_id: string.require()
@@ -38,5 +38,5 @@ export default endpointCreate(
     };
   }
 ).background(async (req, res) => {
-  dbSendUpdates(res.locals);
+  // dbSendUpdates(res.locals);
 });

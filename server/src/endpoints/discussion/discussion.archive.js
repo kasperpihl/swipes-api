@@ -1,6 +1,6 @@
 import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
-import dbSendUpdates from 'src/utils/db/dbSendUpdates';
+// import dbSendUpdates from 'src/utils/db/dbSendUpdates';
 import { query } from 'src/utils/db/db';
 
 const expectedInput = {
@@ -39,5 +39,5 @@ export default endpointCreate(
     res.locals.messageGroupId = discussion_id;
   }
 ).background(async (req, res) => {
-  dbSendUpdates(res.locals);
+  // dbSendUpdates(res.locals);
 });

@@ -4,7 +4,7 @@ import idGenerate from 'src/utils/idGenerate';
 import { transaction } from 'src/utils/db/db';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
 
-import dbSendUpdates from 'src/utils/db/dbSendUpdates';
+// import dbSendUpdates from 'src/utils/db/dbSendUpdates';
 import mentionsGetArray from 'src/utils/mentions/mentionsGetArray';
 import mentionsClean from 'src/utils/mentions/mentionsClean';
 import pushSend from 'src/utils/push/pushSend';
@@ -73,7 +73,7 @@ export default endpointCreate(
     };
   }
 ).background(async (req, res) => {
-  dbSendUpdates(res.locals);
+  // dbSendUpdates(res.locals);
   const { user_id } = res.locals;
   const { updates } = res.locals.output;
 
