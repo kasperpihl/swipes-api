@@ -1,9 +1,11 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import { fromJS } from 'immutable';
 import cachedCallback from 'src/utils/cachedCallback';
 import SW from './AssignMenu.swiss';
 import UserImage from 'src/react/_components/UserImage/UserImage';
 import userGetFullName from 'swipes-core-js/utils/user/userGetFullName';
+import Button from 'src/react/_components/Button/Button';
 
 @connect((state, props) => ({
   organization: state.organizations.get(props.organizationId),
@@ -37,23 +39,33 @@ export default class AssignMenu extends PureComponent {
     this.setState({ selectedIds: [...arr] });
   });
 
+  toggleSelectAllCached = (users, allAreSelected) => {
+    let arr = [];
+    if (!allAreSelected) {
+      arr = users.map(u => u.get('user_id')).toArray();
+    }
+    this.setState({ selectedIds: arr });
+  };
+
   render() {
     const { selectedIds } = this.state;
-    const { excludeMe, organization, me, organizationId } = this.props;
+    const { excludeMe, organization, me, organizationId, hide } = this.props;
     const teamName = organization ? organization.get('name') : 'Personal';
-    let users = organization ? organization.get('users').toList() : [me];
+    let users = organization
+      ? organization.get('users').toList()
+      : fromJS([me]);
     if (excludeMe) {
       users = users.filter(u => u.get('user_id') !== me.get('user_id'));
     }
-    console.log(selectedIds);
+    const allAreSelected = users.size === selectedIds.length;
     return (
       <SW.Wrapper>
-        <SW.Row menu>
+        <SW.OptionsRow>
           <SW.TeamName>Choose from: {teamName}</SW.TeamName>
           {!!selectedIds.length && (
             <SW.SelectedAmount>({selectedIds.length})</SW.SelectedAmount>
           )}
-        </SW.Row>
+        </SW.OptionsRow>
         <SW.Dropdown>
           {users.map(u => (
             <SW.Row
@@ -70,6 +82,13 @@ export default class AssignMenu extends PureComponent {
             </SW.Row>
           ))}
         </SW.Dropdown>
+        <SW.OptionsRow>
+          <Button.Rounded
+            title={allAreSelected ? 'Deselect All' : 'Select All'}
+            onClick={() => this.toggleSelectAllCached(users, allAreSelected)}
+          />
+          <Button.Rounded title="Done" onClick={hide} />
+        </SW.OptionsRow>
       </SW.Wrapper>
     );
   }
