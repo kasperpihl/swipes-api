@@ -85,9 +85,9 @@ export default endpointCreate(
         text,
         values,
         onSuccess: result => {
-          console.log(project_id);
-          console.log(result.rows);
-          console.log(result);
+          if (!result.rows.length) {
+            throw Error('Not found').code(404);
+          }
           if (result.rows[0].rev !== rev + 1) {
             throw Error('Out of sync')
               .code(400)

@@ -3,6 +3,8 @@ import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import idGenerate from 'src/utils/idGenerate';
 import { transaction } from 'src/utils/db/db';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
+import sqlPermissionInsertQuery from 'src/utils/sql/sqlPermissionInsertQuery';
+
 const expectedInput = {
   topic: string.min(1).require(),
   owned_by: string.require(),
@@ -34,20 +36,6 @@ export default endpointCreate(
         .join(', ')}
     )`;
 
-    const permissionQuery = {
-      text: `INSERT into permissions (permission_from, owned_by, granted_to) VALUES `,
-      values: [discussionId, owned_by]
-    };
-    if (privacy === 'private') {
-      permissionQuery.text += uniqueFollowers
-        .map((uId, i) => `($1, $2, $${i + 1 + permissionQuery.values.length})`)
-        .join(', ');
-      permissionQuery.values = permissionQuery.values.concat(uniqueFollowers);
-    } else {
-      permissionQuery.text += '($1, $2, $3)';
-      permissionQuery.values.push(owned_by);
-    }
-
     const [discussionRes] = await transaction([
       sqlInsertQuery(
         'discussions',
@@ -65,7 +53,7 @@ export default endpointCreate(
           dontPrepare: { followers: true }
         }
       ),
-      permissionQuery
+      sqlPermissionInsertQuery(discussionId, privacy, owned_by, uniqueFollowers)
     ]);
 
     res.locals.output = {

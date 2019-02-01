@@ -2,6 +2,7 @@ import { transaction } from 'src/utils/db/db';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import idGenerate from 'src/utils/idGenerate';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
+import sqlPermissionInsertQuery from 'src/utils/sql/sqlPermissionInsertQuery';
 import { string, array, any } from 'valjs';
 
 const expectedInput = {
@@ -17,10 +18,18 @@ export default endpointCreate(
     permissionCreateKey: 'owned_by'
   },
   async (req, res) => {
-    const { user_id, input } = res.locals;
-    const { name, owned_by } = input;
+    const { user_id } = res.locals;
+    const {
+      name,
+      owned_by,
+      followers = [],
+      privacy = 'public'
+    } = res.locals.input;
 
     const projectId = idGenerate('P', 15);
+
+    const userIds = [...new Set(followers).add(user_id)];
+
     const [projectRes] = await transaction([
       sqlInsertQuery('projects', {
         owned_by,
@@ -31,10 +40,7 @@ export default endpointCreate(
       sqlInsertQuery('project_tasks', {
         project_id: projectId
       }),
-      {
-        text: `INSERT into permissions (permission_from, granted_to, owned_by) VALUES ($1, $2, $3)`,
-        values: [projectId, user_id, owned_by]
-      }
+      sqlPermissionInsertQuery(projectId, privacy, owned_by, userIds)
     ]);
 
     res.locals.output = {

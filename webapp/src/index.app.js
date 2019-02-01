@@ -65,9 +65,9 @@ render(
       <SwissProvider>
         <BrowserRouter>
           <OptimistProvider>
-            {/* <StripeProvider apiKey={token}> */}
-            <Root />
-            {/* </StripeProvider> */}
+            <StripeProvider apiKey={token}>
+              <Root />
+            </StripeProvider>
           </OptimistProvider>
         </BrowserRouter>
       </SwissProvider>
