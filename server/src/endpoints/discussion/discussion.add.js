@@ -3,6 +3,7 @@ import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import idGenerate from 'src/utils/idGenerate';
 import { transaction } from 'src/utils/db/db';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
+import sqlToIsoString from 'src/utils/sql/sqlToIsoString';
 import sqlPermissionInsertQuery from 'src/utils/sql/sqlPermissionInsertQuery';
 
 const expectedInput = {
@@ -32,7 +33,9 @@ export default endpointCreate(
 
     const followerString = `jsonb_build_object(
       ${uniqueFollowers
-        .map(uId => `'${uId}', ${uId === user_id ? 'now()' : 'n'}`)
+        .map(
+          uId => `'${uId}', ${uId === user_id ? sqlToIsoString('now()') : 'n'}`
+        )
         .join(', ')}
     )`;
 

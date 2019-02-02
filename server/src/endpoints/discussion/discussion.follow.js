@@ -1,5 +1,6 @@
 import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
+import sqlToIsoString from 'src/utils/sql/sqlToIsoString';
 import { query } from 'src/utils/db/db';
 
 const expectedInput = {
@@ -21,7 +22,9 @@ export default endpointCreate(
         UPDATE discussions
         SET
           updated_at = now(),
-          followers = followers || jsonb_build_object('${user_id}', last_comment_at)
+          followers = followers || jsonb_build_object('${user_id}', ${sqlToIsoString(
+        'last_comment_at'
+      )})
         WHERE discussion_id = $1
         RETURNING followers, discussion_id
       `,
