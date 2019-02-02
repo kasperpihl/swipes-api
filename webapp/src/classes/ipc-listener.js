@@ -129,8 +129,7 @@ export default class IpcListener {
   }
   storeChange() {
     const state = this.store.getState();
-    let counter = state.connection.get('notificationCounter') || 0;
-    counter = counter + state.counter.get('discussion').size;
+    let counter = state.counter.size;
     if (typeof this.badgeCount === 'undefined' || counter !== this.badgeCount) {
       this.badgeCount = counter;
       this.setBadgeCount(`${counter || ''}`);
