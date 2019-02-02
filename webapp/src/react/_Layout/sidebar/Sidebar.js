@@ -51,10 +51,7 @@ export default class Sidebar extends PureComponent {
   renderItem(item) {
     const { navId, counter, auth } = this.props;
 
-    let count = 0;
-    if (item.id === 'Discuss') {
-      count = (counter && counter.get('discussion').size) || 0;
-    }
+    let count = item.id === 'Chat' ? counter.size : 0;
     if (count > 9) {
       count = '9+';
     }
