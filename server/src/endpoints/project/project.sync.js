@@ -104,6 +104,9 @@ export default endpointCreate(
       for (let task_id in tasks_by_id) {
         let keys = tasks_by_id[task_id];
         if (!keys) keys = { deleted: true };
+        if (keys.assignees) {
+          keys.assignees = JSON.stringify(keys.assignees);
+        }
         queries.push(
           sqlInsertQuery(
             'project_tasks',
