@@ -41,7 +41,7 @@ export default class ModalCreate extends PureComponent {
     this.setState({ followers: fromJS(followers) });
   };
 
-  handleCreate = () => {
+  handleCreate = async () => {
     const { hideModal, loader, myId, type } = this.props;
     const { followers, titleVal, privacy, ownedBy } = this.state;
 
@@ -55,13 +55,20 @@ export default class ModalCreate extends PureComponent {
       followers: followers.toJS()
     };
 
+    loader.set('creating', 'Creating');
+
     if (type === 'project') {
+      const discussionRes = await request(endpoint, options);
+      if (!discussionRes.ok) {
+        console.log('something went wrong with creating discussions');
+        return;
+      }
       endpoint = 'project.add';
       options.name = titleVal;
+      options.discussion_id = discussionRes.discussion_id;
       delete options.topic;
     }
 
-    loader.set('creating', 'Creating');
     request(endpoint, options).then(res => {
       if (res.ok) {
         hideModal();
