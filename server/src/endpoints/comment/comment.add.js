@@ -40,7 +40,9 @@ export default endpointCreate(
         message,
         comment_id: idGenerate('C', 7),
         sent_at: 'now()',
-        attachments: (attachments && JSON.stringify(attachments)) || null,
+        attachments:
+          (attachments && attachments.length && JSON.stringify(attachments)) ||
+          null,
         sent_by: user_id,
         reactions: {}
       }),
