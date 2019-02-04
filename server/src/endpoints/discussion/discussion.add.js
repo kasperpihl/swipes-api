@@ -63,6 +63,7 @@ export default endpointCreate(
     ]);
 
     res.locals.output = {
+      discussion_id: discussionId,
       updates: [{ type: 'discussion', data: discussionRes.rows[0] }]
     };
   }
