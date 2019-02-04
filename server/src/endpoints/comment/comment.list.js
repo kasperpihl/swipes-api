@@ -1,10 +1,11 @@
-import { object, array, string, number } from 'valjs';
+import { object, array, string, number, bool } from 'valjs';
 import { query } from 'src/utils/db/db';
 import sqlCheckPermissions from 'src/utils/sql/sqlCheckPermissions';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 
 const expectedInput = {
   discussion_id: string.require(),
+  attachments_only: bool,
   skip: number.gte(0),
   limit: number.gte(1).lte(100)
 };
@@ -20,7 +21,7 @@ export default endpointCreate(
   async (req, res) => {
     // Get inputs
     const { input, user_id } = res.locals;
-    const { discussion_id } = input;
+    const { discussion_id, attachments_only } = input;
 
     const skip = input.skip || 0;
     const limit = input.limit || 20;
@@ -35,6 +36,7 @@ export default endpointCreate(
           WHERE permission_from = $1
           AND ${sqlCheckPermissions('granted_to', user_id)}
         )
+        ${attachments_only ? 'AND attachments IS NOT NULL' : ''}
         ORDER BY sent_at DESC
         LIMIT $2
         OFFSET $3
