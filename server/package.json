@@ -5,6 +5,7 @@
   "author": "Tihomir Valkanov <tihomir@swipesapp.com>",
   "dependencies": {
     "aws-sdk": "^2.373.0",
+    "babel-runtime": "^6.26.0",
     "body-parser": "1.x",
     "config": "^3.0.0",
     "cors": "^2.8.5",
