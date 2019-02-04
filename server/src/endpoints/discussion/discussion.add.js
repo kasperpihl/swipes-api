@@ -5,6 +5,8 @@ import { transaction } from 'src/utils/db/db';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
 import sqlToIsoString from 'src/utils/sql/sqlToIsoString';
 import sqlPermissionInsertQuery from 'src/utils/sql/sqlPermissionInsertQuery';
+import redisSendUpdates from 'src/utils/redis/redisSendUpdates';
+import dbReceiversForPermissionId from 'src/utils/db/dbReceiversForPermissionId';
 
 const expectedInput = {
   topic: string.min(1).require(),
@@ -34,7 +36,8 @@ export default endpointCreate(
     const followerString = `jsonb_build_object(
       ${uniqueFollowers
         .map(
-          uId => `'${uId}', ${uId === user_id ? sqlToIsoString('now()') : 'n'}`
+          uId =>
+            `'${uId}', ${uId === user_id ? sqlToIsoString('now()') : "'n'"}`
         )
         .join(', ')}
     )`;
@@ -60,7 +63,14 @@ export default endpointCreate(
     ]);
 
     res.locals.output = {
-      // updates: [{ type: 'discussion', data: discussionRes.rows[0] }]
+      updates: [{ type: 'discussion', data: discussionRes.rows[0] }]
     };
   }
-);
+).background(async (req, res) => {
+  const { updates } = res.locals.output;
+
+  const discussion = updates[0].data;
+
+  const receivers = await dbReceiversForPermissionId(discussion.discussion_id);
+  redisSendUpdates(receivers, updates);
+});

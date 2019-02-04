@@ -1,11 +1,10 @@
-import { object, array, string } from 'valjs';
+import { object, any } from 'valjs';
 import redisPubClient from './redisPubClient';
-import { query } from 'src/utils/db/db';
 
 const updateSchema = object.as({
   type: any
     .of(
-      'discussion_comment',
+      'comment',
       'discussion',
       'me',
       'note',
@@ -14,13 +13,10 @@ const updateSchema = object.as({
       'project'
     )
     .require(),
-  parentId: string.require(),
-  itemId: string,
-  receivers: array.of(string).require(),
   data: object
 });
 
-export default async function redisSendUpdates(updates) {
+export default function redisSendUpdates(receivers, updates) {
   if (!Array.isArray(updates)) {
     updates = [updates];
   }
@@ -31,9 +27,11 @@ export default async function redisSendUpdates(updates) {
         validationError
       });
     }
-    const { receivers, ...rest } = update;
-    receivers.forEach(rec => {
-      redisPubClient.publish(rec, JSON.stringify(rest));
-    });
+  });
+  receivers.forEach(rec => {
+    redisPubClient.publish(
+      rec,
+      JSON.stringify({ type: 'update', payload: { updates } })
+    );
   });
 }

@@ -1,6 +1,7 @@
 import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
-// import dbSendUpdates from 'src/utils/db/dbSendUpdates';
+import redisSendUpdates from 'src/utils/redis/redisSendUpdates';
+import dbReceiversForPermissionId from 'src/utils/db/dbReceiversForPermissionId';
 import { query } from 'src/utils/db/db';
 
 const expectedInput = {
@@ -40,5 +41,10 @@ export default endpointCreate(
     };
   }
 ).background(async (req, res) => {
-  // dbSendUpdates(res.locals);
+  const { updates } = res.locals.output;
+
+  const discussion = updates[0].data;
+
+  const receivers = await dbReceiversForPermissionId(discussion.discussion_id);
+  redisSendUpdates(receivers, updates);
 });

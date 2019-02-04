@@ -1,10 +1,10 @@
 import { object, array, string, any } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import idGenerate from 'src/utils/idGenerate';
-import { transaction } from 'src/utils/db/db';
+import { transaction, query } from 'src/utils/db/db';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
-
-// import dbSendUpdates from 'src/utils/db/dbSendUpdates';
+import redisSendUpdates from 'src/utils/redis/redisSendUpdates';
+import dbReceiversForPermissionId from 'src/utils/db/dbReceiversForPermissionId';
 import mentionsGetArray from 'src/utils/mentions/mentionsGetArray';
 import mentionsClean from 'src/utils/mentions/mentionsClean';
 import pushSend from 'src/utils/push/pushSend';
@@ -75,12 +75,14 @@ export default endpointCreate(
     };
   }
 ).background(async (req, res) => {
-  // red(res.locals);
   const { user_id } = res.locals;
   const { updates } = res.locals.output;
 
   const discussion = updates[0].data;
   const comment = updates[1].data;
+
+  const recs = await dbReceiversForPermissionId(discussion.discussion_id);
+  redisSendUpdates(recs, updates);
 
   // Fetch sender (to have the name)
   const senderRes = await query(

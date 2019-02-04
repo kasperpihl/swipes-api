@@ -27,7 +27,7 @@ export default endpointCreate(
             followers || jsonb_build_object('${user_id}', null)
           ) 
         WHERE discussion_id = $1
-        RETURNING followers, discussion_id
+        RETURNING followers, discussion_id, last_comment_at
       `,
       [discussion_id]
     );

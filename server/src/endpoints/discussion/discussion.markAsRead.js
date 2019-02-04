@@ -2,6 +2,8 @@ import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import sqlToIsoString from 'src/utils/sql/sqlToIsoString';
 import { query } from 'src/utils/db/db';
+import redisSendUpdates from 'src/utils/redis/redisSendUpdates';
+import dbReceiversForPermissionId from 'src/utils/db/dbReceiversForPermissionId';
 
 const expectedInput = {
   discussion_id: string.require()
@@ -25,7 +27,7 @@ export default endpointCreate(
         'last_comment_at'
       )})
         WHERE discussion_id = $1
-        RETURNING followers, discussion_id
+        RETURNING followers, discussion_id, last_comment_at
       `,
       [discussion_id]
     );
@@ -35,4 +37,11 @@ export default endpointCreate(
       updates: [{ type: 'discussion', data: discussionRes.rows[0] }]
     };
   }
-);
+).background(async (req, res) => {
+  const { updates } = res.locals.output;
+
+  const discussion = updates[0].data;
+
+  const receivers = await dbReceiversForPermissionId(discussion.discussion_id);
+  redisSendUpdates(receivers, updates);
+});

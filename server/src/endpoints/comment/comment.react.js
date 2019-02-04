@@ -1,6 +1,8 @@
 import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 // import dbSendUpdates from 'src/utils/db/dbSendUpdates';
+import redisSendUpdates from 'src/utils/redis/redisSendUpdates';
+import dbReceiversForPermissionId from 'src/utils/db/dbReceiversForPermissionId';
 import mentionsClean from 'src/utils/mentions/mentionsClean';
 import pushSend from 'src/utils/push/pushSend';
 import { query, transaction } from 'src/utils/db/db';
@@ -49,7 +51,7 @@ export default endpointCreate(
             last_comment = $3,
             followers = followers || jsonb_build_object('${user_id}', '${results[0].rows[0].updated_at.toISOString()}')
           WHERE discussion_id = $4
-          RETURNING last_comment_at, last_comment_by, last_comment, followers, discussion_id, updated_at
+          RETURNING last_comment_at, last_comment_by, last_comment, followers, discussion_id, updated_at, topic
         `,
         values: [
           results[0].rows[0].updated_at,
@@ -67,13 +69,10 @@ export default endpointCreate(
       updates: [
         {
           type: 'discussion',
-          itemId: discussion_id,
           data: discussionRes.rows[0]
         },
         {
           type: 'comment',
-          itemId: comment_id,
-          parentId: discussion_id,
           data: commentRes.rows[0]
         }
       ],
@@ -81,14 +80,17 @@ export default endpointCreate(
     };
   }
 ).background(async (req, res) => {
-  // dbSendUpdates(res.locals);
   const { user_id } = res.locals;
   const { updates, reaction } = res.locals.output;
 
-  // Fire push to all the commenter.
+  const discussion = updates[0].data;
+  const comment = updates[1].data;
+
+  const receivers = await dbReceiversForPermissionId(discussion.discussion_id);
+  redisSendUpdates(receivers, updates);
+
+  // Fire push to the commenter.
   if (reaction) {
-    const discussion = updates[0].data;
-    const comment = updates[1].data;
     if (comment.created_by === user_id) {
       return;
     }
