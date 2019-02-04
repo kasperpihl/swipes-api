@@ -73,7 +73,7 @@ export default endpointCreate(
     };
   }
 ).background(async (req, res) => {
-  // dbSendUpdates(res.locals);
+  // red(res.locals);
   const { user_id } = res.locals;
   const { updates } = res.locals.output;
 
@@ -88,21 +88,6 @@ export default endpointCreate(
   const sender = senderRes.rows[0];
 
   const mentions = mentionsGetArray(comment.message);
-  // await dbSendNotifications(
-  //   mentions.map(m => ({
-  //     id: `${m}-${comment.id}-mention`,
-  //     user_id: m,
-  //     organization_id,
-  //     title: `<!${sender.id}> mentioned you in a comment: ${mentionsClean(
-  //       comment.message
-  //     ).slice(0, 60)}...`,
-  //     done_by: [user_id],
-  //     target: {
-  //       id: comment.discussion_id,
-  //       item_id: comment.comment_id
-  //     }
-  //   }))
-  // );
 
   const followers = [
     ...new Set(Object.keys(discussion.followers).concat(mentions))

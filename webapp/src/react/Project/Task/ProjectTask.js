@@ -23,7 +23,10 @@ export default class ProjectTask extends PureComponent {
   componentWillUnmount() {
     this._unmounted = true;
   }
-
+  handleAssigneeSelect = followers => {
+    const { stateManager } = this.props;
+    stateManager.editHandler.updateAssignees(taskId, followers);
+  };
   onFocus = () => {
     const { taskId, stateManager } = this.props;
     stateManager.selectHandler.select(taskId);
@@ -76,11 +79,13 @@ export default class ProjectTask extends PureComponent {
   render() {
     const {
       title,
+      assignees,
       completion,
       indention,
       hasChildren,
       expanded
     } = this.props.task;
+    console.log(this.props.task);
     const { isFocused } = this.state;
 
     return (

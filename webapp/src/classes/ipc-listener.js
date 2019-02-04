@@ -1,7 +1,6 @@
 import * as mainActions from 'src/redux/main/mainActions';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 import { fromJS } from 'immutable';
-// import * as ca from 'swipes-core-js/actions';
 /* global nodeRequire*/
 const isElectron = window.process && window.process.versions.electron;
 let ipcRenderer;
@@ -129,7 +128,7 @@ export default class IpcListener {
   }
   storeChange() {
     const state = this.store.getState();
-    let counter = state.counter.size;
+    const counter = state.connection.get('unread').size;
     if (typeof this.badgeCount === 'undefined' || counter !== this.badgeCount) {
       this.badgeCount = counter;
       this.setBadgeCount(`${counter || ''}`);

@@ -67,10 +67,13 @@ export default endpointCreate(
       updates: [
         {
           type: 'discussion',
+          itemId: discussion_id,
           data: discussionRes.rows[0]
         },
         {
           type: 'comment',
+          itemId: comment_id,
+          parentId: discussion_id,
           data: commentRes.rows[0]
         }
       ],
@@ -95,7 +98,7 @@ export default endpointCreate(
       'SELECT first_name, user_id FROM users WHERE user_id = $1',
       [user_id]
     );
-    const sender = renderRes.rows[0];
+    const sender = senderRes.rows[0];
 
     await pushSend(
       {

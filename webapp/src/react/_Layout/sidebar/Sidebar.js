@@ -16,7 +16,7 @@ const kNavItems = [
     me: state.me,
     auth: state.auth,
     navId: state.navigation.getIn(['primary', 'id']),
-    counter: state.counter
+    unreadCounter: state.connection.get('unread').size
   }),
   {
     navSet: navigationActions.set,
@@ -49,9 +49,9 @@ export default class Sidebar extends PureComponent {
   }
 
   renderItem(item) {
-    const { navId, counter, auth } = this.props;
+    const { navId, unreadCounter, auth } = this.props;
 
-    let count = item.id === 'Chat' ? counter.size : 0;
+    let count = item.id === 'Chat' ? unreadCounter : 0;
     if (count > 9) {
       count = '9+';
     }

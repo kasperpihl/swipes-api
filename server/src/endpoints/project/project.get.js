@@ -29,7 +29,7 @@ export default endpointCreate(
 
     const tasksRes = await query(
       `
-        SELECT "task_id", "title", "due_date"
+        SELECT task_id, title, due_date, assignees
         FROM project_tasks
         WHERE "project_id" = $1 
         AND deleted = FALSE
