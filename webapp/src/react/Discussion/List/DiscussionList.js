@@ -9,24 +9,13 @@ import PaginationProvider from 'swipes-core-js/components/pagination/PaginationP
 import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
 
 import SW from './DiscussionList.swiss';
-import request from 'swipes-core-js/utils/request';
 
 @navWrapper
 @withOptimist
 @connect(state => ({
-  counter: state.counter.get('discussion'),
   myId: state.me.get('user_id')
 }))
 export default class DiscussionList extends PureComponent {
-  onInitialLoad = () => {
-    const { tabIndex, counter } = this.props;
-    if (tabIndex === 0 && counter && counter.size) {
-      request('me.clearCounter', {
-        type: 'discussion',
-        cleared_at: counter.first().get('ts')
-      });
-    }
-  };
   renderItems(pagination, type) {
     const { onSelectItemId, optimist, viewWidth } = this.props;
     let { results } = pagination;
@@ -86,7 +75,6 @@ export default class DiscussionList extends PureComponent {
           url: 'discussion.list',
           resPath: 'discussions'
         }}
-        onInitialLoad={this.onInitialLoad}
         cache={{
           path: 'discussion',
           idAttribute: 'discussion_id',
