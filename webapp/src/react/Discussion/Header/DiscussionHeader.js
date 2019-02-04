@@ -27,6 +27,7 @@ export default class DiscussionHeader extends PureComponent {
     tooltip({
       component: TooltipUsers,
       props: {
+        organizationId: discussion.get('owned_by'),
         userIds: discussion.get('followers').keySeq(),
         size: 24
       },
