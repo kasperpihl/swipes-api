@@ -1,11 +1,4 @@
 import redis from 'redis';
+import config from 'config';
 
-export default () => {
-  const redisOptions = {};
-  if (process.env.REDIS_URL) {
-    // Allow EB envs to include elasticache urls :)
-    redisOptions.url = process.env.REDIS_URL;
-  }
-
-  return redis.createClient(redisOptions);
-};
+export default () => redis.createClient(config.get('redis'));

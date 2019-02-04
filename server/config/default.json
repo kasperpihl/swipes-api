@@ -1,10 +1,13 @@
 {
   "database": {
-    "host": "rethinkdb-staging6110.cloudapp.net",
-    "port": 28015,
-    "db": "swipes",
-    "user": "swipes",
-    "password": "sw1py@staging"
+    "host": "workspace.cuaunhcnlbha.us-east-1.rds.amazonaws.com",
+    "port": 5432,
+    "database": "workspace",
+    "user": "postgres",
+    "password": "GAze0UGQyj@staging"
+  },
+  "redis": {
+    "url": null
   },
   "mandrillKey": "HUs9tnqPhIvJgEXDFAXgrw",
   "mailchimpKey": "ecf74584af1de945beeb71c8918ed5a7-us7",

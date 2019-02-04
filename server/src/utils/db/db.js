@@ -1,14 +1,7 @@
+import config from 'config';
 import { Pool } from 'pg';
 
-const pool = new Pool({
-  host: 'workspace.cuaunhcnlbha.us-east-1.rds.amazonaws.com',
-  // host: 'localhost',
-  port: 5432,
-  user: 'postgres',
-  // password: '',
-  password: 'GAze0UGQyj',
-  database: 'workspace'
-});
+const pool = new Pool(config.get('database'));
 
 export const query = (text, params) => {
   if (typeof text === 'object' && text.text && text.values) {

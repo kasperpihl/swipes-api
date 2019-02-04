@@ -1,9 +1,12 @@
 {
   "database": {
     "host": "DATABASE_HOST",
-    "db": "DATABASE_NAME",
+    "database": "DATABASE_NAME",
     "user": "DATABASE_USER",
     "password": "DATABASE_PASSWORD"
+  },
+  "redis": {
+    "url": "REDIS_URL"
   },
   "mailchimpKey": "MAILCHIMP_KEY",
   "mandrillKey": "MANDRILL_KEY",
