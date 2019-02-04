@@ -4,7 +4,7 @@
     "port": 5432,
     "database": "workspace",
     "user": "postgres",
-    "password": "GAze0UGQyj@staging"
+    "password": "GAze0UGQyj"
   },
   "redis": {
     "url": null
