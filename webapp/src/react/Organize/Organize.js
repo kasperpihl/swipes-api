@@ -30,7 +30,6 @@ export default class Organize extends PureComponent {
               icon="Plus"
               onClick={this.handleNewProject}
             />
-            <Button.Rounded icon="ThreeDots" />
           </CardHeader>
         }
       >
