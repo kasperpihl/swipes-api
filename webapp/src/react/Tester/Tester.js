@@ -5,10 +5,6 @@ import SideNote from 'src/react/SideNote/SideNote2';
 export default class Tester extends PureComponent {
   static sizes = () => [698];
   render() {
-    return (
-      <div>
-        <AssignMenu organizationId="O9BDCMVPC" />
-      </div>
-    );
+    return <div>This is the tester.</div>;
   }
 }
