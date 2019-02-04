@@ -56,6 +56,10 @@ export default class AssignMenu extends PureComponent {
       : fromJS([me]);
     if (excludeMe) {
       users = users.filter(u => u.get('user_id') !== me.get('user_id'));
+    } else {
+      users = users
+        .filter(u => u.get('user_id') !== me.get('user_id'))
+        .insert(0, me);
     }
     const allAreSelected = users.size === selectedIds.length;
     return (

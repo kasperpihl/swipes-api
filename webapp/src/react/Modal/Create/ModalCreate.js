@@ -151,7 +151,7 @@ export default class ModalCreate extends PureComponent {
               <FMSW.InputWrapper>
                 <FMSW.Label>4. Choose people</FMSW.Label>
                 <Assignees
-                  users={followers}
+                  userIds={followers}
                   organizationId={ownedBy}
                   size={36}
                   maxImages={9}

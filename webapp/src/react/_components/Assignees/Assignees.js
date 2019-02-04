@@ -3,12 +3,12 @@ import UserImage from 'src/react/_components/UserImage/UserImage';
 import SW from './Assignees.swiss';
 
 export default function Assignees(props) {
-  let { organizationId, users, maxImages, size, onClick, children } = props;
+  let { organizationId, userIds, maxImages, size, onClick, children } = props;
 
   maxImages = maxImages || 3;
   size = size || 24;
 
-  const userCount = users.size || users.length || 0;
+  const userCount = userIds.size || userIds.length || 0;
   const imageCount = Math.min(userCount, maxImages);
   const extraNumber = Math.max(userCount - maxImages, 0);
 
@@ -20,7 +20,7 @@ export default function Assignees(props) {
     <SW.ProvideContext size={size} imageCount={imageCount}>
       <SW.Wrapper onClick={onClick}>
         <SW.AbsoluteWrapper>
-          {users.map((userId, i) =>
+          {userIds.map((userId, i) =>
             i < maxImages ? (
               <Fragment key={i}>
                 <SW.WhiteBackground index={i} />
