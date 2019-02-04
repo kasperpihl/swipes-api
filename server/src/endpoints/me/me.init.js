@@ -101,7 +101,8 @@ export default endpointCreate(
       users: usersRes.rows,
       sofi: sofiCreate(),
       full_fetch,
-      timestamp: now
+      timestamp: now,
+      unread: 0
     };
   }
 );
