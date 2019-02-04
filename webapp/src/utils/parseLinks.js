@@ -1,5 +1,4 @@
 import React from 'react';
-// import { URL_REGEX } from 'swipes-core-js/classes/utils';
 const URL_REGEX = /(https?:\/\/|www\.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/g;
 import Link from 'src/react/_components/Link/Link';
 

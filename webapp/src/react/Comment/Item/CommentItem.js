@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 
-import { attachmentIconForService } from 'swipes-core-js/classes/utils';
 import timeGetTimeString from 'swipes-core-js/utils/time/timeGetTimeString';
 import UserImage from 'src/react/_components/UserImage/UserImage';
 import Attachment from 'src/react/_components/attachment/Attachment';

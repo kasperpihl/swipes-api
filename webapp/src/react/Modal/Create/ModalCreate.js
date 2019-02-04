@@ -29,7 +29,7 @@ export default class ModalCreate extends PureComponent {
 
   handleAssignClick = e => {
     const { followers, ownedBy } = this.state;
-    const { hideModal } = this.props;
+
     contextMenu(AssignMenu, e, {
       excludeMe: true,
       selectedIds: followers,

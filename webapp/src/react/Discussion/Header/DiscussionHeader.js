@@ -1,13 +1,10 @@
 import React, { PureComponent, Fragment } from 'react';
-import { miniIconForId } from 'swipes-core-js/classes/utils';
 import withLoader from 'src/react/_hocs/withLoader';
 import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
 import FormModal from 'src/react/_components/FormModal/FormModal';
 import SW from './DiscussionHeader.swiss';
 import Button from 'src/react/_components/Button/Button';
-import debounce from 'swipes-core-js/utils/debounce';
-import Attachment from 'src/react/_components/attachment/Attachment';
 import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
 import TooltipUsers from 'src/react/_components/TooltipUsers/TooltipUsers';
@@ -127,14 +124,6 @@ export default class DiscussionHeader extends PureComponent {
           >
             {`${followers.size} follower${followers.size === 1 ? '' : 's'}`}
           </SW.FollowerLabel>
-          {discussion.get('context') && (
-            <Attachment
-              icon={miniIconForId(discussion.getIn(['context', 'id']))}
-              title={discussion.getIn(['context', 'title'])}
-              onClick={this.onContextClick}
-              isContext
-            />
-          )}
         </SW.ContextWrapper>
       </Fragment>
     );

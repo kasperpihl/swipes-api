@@ -1,7 +1,5 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { miniIconForId } from 'swipes-core-js/classes/utils';
-import Attachment from 'src/react/_components/attachment/Attachment';
 import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
 import timeGetDayOrTime from 'swipes-core-js/utils/time/timeGetDayOrTime';
 import SW from './DiscussionListItem.swiss';
@@ -66,16 +64,6 @@ export default class DiscussionListItem extends PureComponent {
               ellipsis="..."
               basedOn="letters"
             />
-            {item.get('context') && (
-              <SW.AttachmentWrapper>
-                <Attachment
-                  icon={miniIconForId(item.getIn(['context', 'id']))}
-                  title={item.getIn(['context', 'title'])}
-                  onClick={this.onContextClick}
-                  isContext
-                />
-              </SW.AttachmentWrapper>
-            )}
           </SW.MiddleWrapper>
           <SW.RightWrapper>
             <SW.Time>
