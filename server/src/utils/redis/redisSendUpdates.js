@@ -29,9 +29,10 @@ export default async function redisSendUpdates(receivers, updates) {
     }
   });
   for (let i = 0; i < receivers.length; i++) {
-    await redisPublish(
+    const res = await redisPublish(
       receivers[i],
       JSON.stringify({ type: 'update', payload: { updates } })
     );
+    console.log('sent update', receivers[i], res);
   }
 }
