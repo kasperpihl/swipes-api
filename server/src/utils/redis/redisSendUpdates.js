@@ -1,5 +1,5 @@
 import { object, any } from 'valjs';
-import redisPubClient from './redisPubClient';
+import redisPublish from './redisPublish';
 
 const updateSchema = object.as({
   type: any
@@ -16,7 +16,7 @@ const updateSchema = object.as({
   data: object
 });
 
-export default function redisSendUpdates(receivers, updates) {
+export default async function redisSendUpdates(receivers, updates) {
   if (!Array.isArray(updates)) {
     updates = [updates];
   }
@@ -28,8 +28,8 @@ export default function redisSendUpdates(receivers, updates) {
       });
     }
   });
-  receivers.forEach(rec => {
-    redisPubClient.publish(
+  receivers.forEach(async rec => {
+    await redisPublish(
       rec,
       JSON.stringify({ type: 'update', payload: { updates } })
     );
