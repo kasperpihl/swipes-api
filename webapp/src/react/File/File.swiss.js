@@ -1,5 +1,4 @@
 import { styleSheet } from 'swiss-react';
-import Button from 'src/react/_components/Button/Button';
 
 export default styleSheet('File', {
   Footer: {
@@ -8,10 +7,6 @@ export default styleSheet('File', {
     backgroundColor: '$sw5',
     borderTop: '1px solid $sw3',
     padding: '0 30px'
-  },
-  FooterButton: {
-    _el: Button.Rounded,
-    marginLeft: '15px'
   },
   LoaderWrapper: {
     _size: '100%'

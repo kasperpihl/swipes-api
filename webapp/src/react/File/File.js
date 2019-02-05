@@ -4,6 +4,7 @@ import Loader from 'src/react/_components/loaders/Loader';
 import SWView from 'src/react/_Layout/view-controller/SWView';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
 import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
+import Button from 'src/react/_components/Button/Button';
 import * as Files from './registerFileTypes';
 import SW from './File.swiss';
 import request from 'swipes-core-js/utils/request';
@@ -42,19 +43,20 @@ export default class File extends PureComponent {
     loader.clear('file');
   };
   getComponentForFile(file) {
-    const Comp = Object.entries(Files).find(([k, f]) => {
-      if (typeof f.supportContentType !== 'function') {
-        console.warn(`Preview file ${k} missing static supportContentType`);
-        return null;
-      }
-      return !!f.supportContentType(file.content_type);
-    });
-
-    if (!Comp) {
-      console.warn(`Unsupported preview file type: ${file.content_type}`);
-      return undefined;
+    let Comp = () => null;
+    if (file) {
+      Object.entries(Files).find(([k, f]) => {
+        if (typeof f.supportContentType !== 'function') {
+          console.warn(`Preview file ${k} missing static supportContentType`);
+          return null;
+        }
+        if (!!f.supportContentType(file.content_type)) {
+          Comp = f;
+          return true;
+        }
+      });
     }
-    return Comp[1];
+    return Comp;
   }
   async fetchFile() {
     const { fileId, loader } = this.props;
@@ -101,43 +103,32 @@ export default class File extends PureComponent {
       return;
     }
 
-    return <CardHeader title={file.file_name} />;
-  }
-
-  renderFooter() {
-    const { file } = this.state;
-
-    if (!file) {
-      return undefined;
-    }
-
     return (
-      <SW.Footer>
-        <SW.FooterButton
+      <CardHeader title={file.file_name}>
+        <Button.Rounded
           title="Open in browser"
           onClick={this.handleOpenInBrowser}
         />
-        <SW.FooterButton
+        <Button.Rounded
           download
           title="Download"
           target="_blank"
           href={file.s3_url}
         />
-      </SW.Footer>
+      </CardHeader>
     );
   }
+
   render() {
     const { loader } = this.props;
     const { file } = this.state;
-    let Comp = () => null;
-    if (file) {
-      Comp = this.getComponentForFile(file) || Comp;
-    }
+    let Comp = this.getComponentForFile(file);
+
     const isLoading = loader.check('fetch') || loader.check('file');
     const error = loader.get('fetch').error || loader.get('file').error;
 
     return (
-      <SWView header={this.renderHeader()} footer={this.renderFooter()}>
+      <SWView header={this.renderHeader()}>
         {error && this.renderError(error)}
         {isLoading && (
           <SW.LoaderWrapper>
