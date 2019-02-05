@@ -29,7 +29,7 @@ export default endpointCreate(
     );
 
     if (!discussionRes || !discussionRes.rows.length) {
-      throw Error('discussion_not_found').code(404);
+      throw Error('Not found').code(404);
     }
 
     // Create response data.

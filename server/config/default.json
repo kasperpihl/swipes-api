@@ -16,8 +16,8 @@
     "restKey": "ZmE3NTUwNzQtMzI3Zi00YzI2LTg3Y2QtNWI5NWNlNzU1NGIy"
   },
   "aws": {
-    "accessKeyId": "AKIAJ7OR4Q4MA5VBPTKA",
-    "secretAccessKey": "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",
+    "accessKeyId": "AKIAJJ3CI7GNA5NUVZNA",
+    "secretAccessKey": "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",
     "region": "us-east-1",
     "s3Region": "us-west-2",
     "s3BucketName": "staging.swipesapp.com",

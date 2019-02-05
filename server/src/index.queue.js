@@ -1,6 +1,7 @@
 import 'src/polyfills/asyncSupport';
 import 'src/polyfills/uncaughtException';
 import 'src/polyfills/errorPrototypes';
+import 'src/utils/aws/awsSetup';
 
 import bodyParser from 'body-parser';
 import http from 'http';

@@ -1,49 +1,26 @@
 import config from 'config';
 import logger from 'src/utils/logger';
-import randomstring from 'randomstring';
+import logGetObject from 'src/utils/log/logGetObject';
 
 const env = config.get('env');
 
 export default (error, req, res, next) => {
-  const localsCopy = Object.assign({}, res.locals);
-  delete localsCopy.config;
-
-  if (localsCopy.password) {
-    localsCopy.password = '___PROTECTED___';
-  }
-
-  if (localsCopy.token) {
-    localsCopy.token = '___PROTECTED___';
-  }
-
-  const logId = randomstring.generate(50);
+  const logObject = logGetObject(req, res);
+  logObject.stack = error.stack.split('\n');
+  logObject.message = error.message;
+  logObject.info = error.errorInfo;
 
   if (env === 'dev') {
-    console.log(`--- ERROR ${req.originalUrl} ---`);
-    console.log('--- res.locals ---');
-    console.error(JSON.stringify(localsCopy, null, 2));
-    console.log('--- trace ---');
-    console.error(error);
-    error.errorInfo && console.log('--- info ---');
-    error.errorInfo && console.log(error.errorInfo);
-    console.log(`--- ERROR END ---`);
+    console.error(JSON.stringify(logObject, null, 2));
   }
 
-  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  logger.log('error', logObject);
 
-  logger.log('error', {
-    ip,
-    request_id: logId,
-    user_id: res.locals.user_id,
-    headers: req.headers,
-    endpoint: req.originalUrl,
-    locals: localsCopy,
-    stack: error.stack.split('\n'),
-    message: error.message,
-    info: error.errorInfo
-  });
-
-  const result = { ok: false, error: 'Something went wrong', log_id: logId };
+  const result = {
+    ok: false,
+    error: 'Something went wrong',
+    log_id: logObject.request_id
+  };
   let code = 400;
 
   if (error.errorCode) {

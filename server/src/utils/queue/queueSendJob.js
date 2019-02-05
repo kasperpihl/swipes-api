@@ -25,7 +25,7 @@ export default (options, payload, messageGroupId = null) => {
       const sqsParams = {
         MessageBody,
         QueueUrl: queueUrl,
-        MessageGroupId: messageGroupId,
+        MessageGroupId: messageGroupId || randomstring.generate(),
         // T
         // That's a hack right now. We should review all the event and see which one are really for FIFO
         // and which one are for regular queue and split them.
@@ -35,7 +35,7 @@ export default (options, payload, messageGroupId = null) => {
 
       sqs.sendMessage(sqsParams, (err, data) => {
         if (err) {
-          console.log('AMAZON QUEUE ERR', err);
+          throw err;
         }
         resolve();
       });
