@@ -67,14 +67,15 @@ export default class CommentReaction extends PureComponent {
 
     const target = e.target.getBoundingClientRect();
     this.tooltipDelay = setTimeout(() => {
-      const { tooltip, reactions } = this.props;
+      const { tooltip, reactions, ownedBy } = this.props;
       const position = 'top';
       const userIds = reactions.keySeq().toArray();
 
       const data = {
         component: TooltipUsers,
         props: {
-          userIds
+          userIds,
+          organizationId: ownedBy
         },
         options: {
           boundingRect: target,

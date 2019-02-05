@@ -57,6 +57,7 @@ export default class CommentItem extends PureComponent {
         <SW.Actions>
           <CommentReaction
             alignRight
+            ownedBy={ownedBy}
             discussionId={discussionId}
             reactions={comment.get('reactions')}
             postId={postId}
