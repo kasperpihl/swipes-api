@@ -44,9 +44,6 @@ export default styleSheet('ProjectTask', {
     pointerEvents: 'none',
     expanded: {
       transform: 'rotate(90deg)'
-    },
-    selected: {
-      _svgColor: '$sw5'
     }
   },
   AttachmentIcon: {
@@ -64,14 +61,14 @@ export default styleSheet('ProjectTask', {
     cursor: 'pointer'
   },
   Checkbox: {
-    _size: '18px',
+    _size: '20px',
     _flex: ['column', 'center', 'center'],
-    border: '2px solid $sw3',
+    border: '1px solid $sw3',
     pointerEvents: 'none',
-    borderRadius: '9px',
+    borderRadius: '10px',
     '!checked': {
       '.js-checkbox-wrapper:hover &': {
-        border: '2px solid #05A851'
+        border: '1px solid #05A851'
       }
     },
     checked: {
