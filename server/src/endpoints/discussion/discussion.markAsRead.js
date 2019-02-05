@@ -43,5 +43,5 @@ export default endpointCreate(
   const discussion = updates[0].data;
 
   const receivers = await dbReceiversForPermissionId(discussion.discussion_id);
-  redisSendUpdates(receivers, updates);
+  await redisSendUpdates(receivers, updates);
 });

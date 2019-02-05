@@ -87,7 +87,7 @@ export default endpointCreate(
   const comment = updates[1].data;
 
   const receivers = await dbReceiversForPermissionId(discussion.discussion_id);
-  redisSendUpdates(receivers, updates);
+  await redisSendUpdates(receivers, updates);
 
   // Fire push to the commenter.
   if (reaction) {

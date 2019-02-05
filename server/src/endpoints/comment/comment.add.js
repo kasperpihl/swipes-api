@@ -82,7 +82,7 @@ export default endpointCreate(
   const comment = updates[1].data;
 
   const recs = await dbReceiversForPermissionId(discussion.discussion_id);
-  redisSendUpdates(recs, updates);
+  await redisSendUpdates(recs, updates);
 
   // Fetch sender (to have the name)
   const senderRes = await query(
