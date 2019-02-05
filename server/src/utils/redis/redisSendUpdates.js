@@ -28,10 +28,10 @@ export default async function redisSendUpdates(receivers, updates) {
       });
     }
   });
-  receivers.forEach(async rec => {
+  for (let i = 0; i < receivers.length; i++) {
     await redisPublish(
-      rec,
+      receivers[i],
       JSON.stringify({ type: 'update', payload: { updates } })
     );
-  });
+  }
 }
