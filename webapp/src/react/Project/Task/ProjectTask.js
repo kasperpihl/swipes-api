@@ -1,14 +1,18 @@
 import React, { PureComponent } from 'react';
 import Icon from 'src/react/_components/Icon/Icon';
-
+import Assignees from 'src/react/_components/Assignees/Assignees';
+import AssignMenu from 'src/react/_components/AssignMenu/AssignMenu';
+import Button from 'src/react/_components/Button/Button';
 import SW from './ProjectTask.swiss';
 import withProjectTask from 'swipes-core-js/components/project/withProjectTask';
+import contextMenu from 'src/utils/contextMenu';
 
 @withProjectTask
 export default class ProjectTask extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
+      followers: [],
       isFocused: false
     };
   }
@@ -24,8 +28,17 @@ export default class ProjectTask extends PureComponent {
     this._unmounted = true;
   }
   handleAssigneeSelect = followers => {
-    const { stateManager } = this.props;
+    const { stateManager, taskId } = this.props;
     stateManager.editHandler.updateAssignees(taskId, followers);
+  };
+  handleAssignClick = e => {
+    const { stateManager, task } = this.props;
+    contextMenu(AssignMenu, e, {
+      excludeMe: false,
+      selectedIds: task.assignees,
+      organizationId: stateManager.getClientState().get('owned_by'),
+      onSelect: this.handleAssigneeSelect
+    });
   };
   onFocus = () => {
     const { taskId, stateManager } = this.props;
@@ -85,8 +98,9 @@ export default class ProjectTask extends PureComponent {
       hasChildren,
       expanded
     } = this.props.task;
-    console.log(this.props.task);
     const { isFocused } = this.state;
+    const { stateManager } = this.props;
+    const ownedBy = stateManager.getClientState().get('owned_by');
 
     return (
       <SW.ProvideContext selected={isFocused} done={completion}>
@@ -116,6 +130,17 @@ export default class ProjectTask extends PureComponent {
               this.inputRef = c;
             }}
           />
+          <SW.AssigneesWrapper hide={assignees.size === 0 && !isFocused}>
+            <Assignees
+              userIds={assignees}
+              organizationId={ownedBy}
+              size={24}
+              maxImages={4}
+              onClick={this.handleAssignClick}
+            >
+              <Button.Standard icon="Person" onClick={this.handleAssignClick} />
+            </Assignees>
+          </SW.AssigneesWrapper>
         </SW.Wrapper>
       </SW.ProvideContext>
     );

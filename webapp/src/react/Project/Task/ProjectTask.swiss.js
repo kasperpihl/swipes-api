@@ -7,8 +7,9 @@ export default styleSheet('ProjectTask', {
     paddingLeft: get => `${get('indention') * 24}px`,
     paddingRight: '6px',
     selected: {
-      background: '$blue'
-    }
+      backgroundColor: '$blue80'
+    },
+    borderRadius: '4px'
   },
   Input: {
     _el: 'input',
@@ -79,15 +80,16 @@ export default styleSheet('ProjectTask', {
       }
     }
   },
-  AssigneeWrapper: {
-    height: '30px',
-    overflow: 'hidden',
-    _flex: 'center',
-    flex: 'none',
+  AssigneesWrapper: {
+    _flex: ['row', 'center', 'center'],
+    height: '24px',
+
     hide: {
-      visibility: 'hidden',
+      opacity: '0',
+      visbility: 'hidden',
       '.js-item-class:hover &': {
-        visibility: 'visible'
+        opacity: '1',
+        visbility: 'visible'
       }
     }
   }
