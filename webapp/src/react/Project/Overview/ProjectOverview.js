@@ -29,7 +29,7 @@ import Dropdown from 'src/react/_components/dropdown/Dropdown';
 )
 export default class ProjectOverview extends PureComponent {
   static sizes() {
-    return [654];
+    return [750];
   }
   constructor(props) {
     super(props);

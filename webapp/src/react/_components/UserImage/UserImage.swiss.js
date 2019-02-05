@@ -28,6 +28,7 @@ export default styleSheet('UserImage', {
     textTransform: 'uppercase',
     color: '$sw5',
     backgroundColor: '$sw1',
+    flexShrink: '0',
 
     'size>=30': {
       _font: ['12px', '18px', 500]
