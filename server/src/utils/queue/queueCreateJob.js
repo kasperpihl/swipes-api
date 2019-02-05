@@ -22,9 +22,12 @@ export default (options, middleware) => {
 
       res.locals = {
         ...res.locals,
+        eventName: req.body.eventName,
         ...req.body.payload
       };
+
       await middleware(req, res, next);
+
       const logObject = logGetObject(req, res);
       logger.log('info', logObject);
 

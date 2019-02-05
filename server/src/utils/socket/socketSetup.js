@@ -29,13 +29,17 @@ export default server => {
     });
 
     redisClient.on('message', (channel, actionString) => {
-      const action = JSON.parse(actionString);
-      if (channel === 'global') {
-        if (action.type === 'forceDisconnect') {
-          socket.terminate();
+      try {
+        const action = JSON.parse(actionString);
+        if (channel === 'global') {
+          if (action.type === 'forceDisconnect') {
+            socket.terminate();
+          }
+        } else {
+          socket.send(JSON.stringify(action), e => e && socket.terminate());
         }
-      } else {
-        socket.send(JSON.stringify(action), e => e && socket.terminate());
+      } catch (e) {
+        console.log('invalid payload', actionString);
       }
     });
     socket.send(

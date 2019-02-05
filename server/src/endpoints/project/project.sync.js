@@ -4,7 +4,6 @@ import { string, object, array, number, bool } from 'valjs';
 import idGenerate from 'src/utils/idGenerate';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
 import randomstring from 'randomstring';
-import redisPubClient from 'src/utils/redis/redisPubClient';
 
 const expectedInput = {
   project_id: string,
@@ -143,9 +142,7 @@ export default endpointCreate(
       updates[0].data.tasks_by_id[item.id] = item;
     });
 
-    await redisPubClient.publish(user_id, JSON.stringify(updates));
-
     // Create response data.
-    res.locals.output = { update_identifier, updates2: updates };
+    res.locals.output = { update_identifier, updates };
   }
 );

@@ -22,6 +22,7 @@ export default function logGetObject(req, res) {
     user_id: res.locals.user_id,
     headers: req.headers,
     endpoint: req.originalUrl,
+    message: req.originalUrl, // Making default message to be the endpoint.
     locals: localsCopy
   };
 }

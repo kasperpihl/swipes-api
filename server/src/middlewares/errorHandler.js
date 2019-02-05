@@ -6,7 +6,7 @@ const env = config.get('env');
 
 export default (error, req, res, next) => {
   const logObject = logGetObject(req, res);
-  logObject.stack = error.stack.split('\n');
+  logObject.stack = error.stack && error.stack.split('\n');
   logObject.message = error.message;
   logObject.info = error.errorInfo;
 
