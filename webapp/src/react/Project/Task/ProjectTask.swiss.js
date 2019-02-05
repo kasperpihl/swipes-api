@@ -4,6 +4,7 @@ import Button from 'src/react/_components/Button/Button';
 
 export default styleSheet('ProjectTask', {
   Wrapper: {
+    _size: '100%',
     _flex: ['row', 'left', 'center'],
     paddingLeft: get => `${get('indention') * 24}px`,
     paddingRight: '6px',

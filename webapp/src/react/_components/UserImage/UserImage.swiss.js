@@ -37,8 +37,11 @@ export default styleSheet('UserImage', {
 
   Text: {
     _el: 'span',
-    _textStyle: 'bodyMedium',
-    fontWeight: 'bold',
-    color: '$sw5'
+    _textStyle: 'caption',
+    color: '$sw5',
+
+    'size>=30': {
+      _textStyle: 'bodyMedium'
+    }
   }
 });

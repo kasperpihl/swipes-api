@@ -6,6 +6,7 @@ import ProjectStateManager from 'swipes-core-js/classes/ProjectStateManager';
 import ProjectTask from 'src/react/Project/Task/ProjectTask';
 import SWView from 'src/react/_Layout/view-controller/SWView';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
+import ProjectSidebar from 'src/react/Project/Sidebar/ProjectSidebar';
 import StepSlider from 'src/react/_components/StepSlider/StepSlider';
 import Button from 'src/react/_components/Button/Button';
 import Dropdown from 'src/react/_components/dropdown/Dropdown';
@@ -146,7 +147,8 @@ export default class ProjectOverview extends PureComponent {
       >
         <ProjectProvider stateManager={this.stateManager}>
           <SW.Wrapper>
-            {this.renderItems()}
+            <ProjectSidebar />
+            <SW.TasksWrapper>{this.renderItems()}</SW.TasksWrapper>
             {/* <SW.Div>
             <StepSlider
               min={0}

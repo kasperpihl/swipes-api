@@ -3,8 +3,12 @@ import Button from 'src/react/_components/Button/Button';
 
 export default styleSheet('ProjectOverview', {
   Wrapper: {
-    // overflowY: 'scroll',
-    padding: '0 6px'
+    _flex: ['row', 'flex-start', 'flex-start'],
+    padding: '0 30px'
+  },
+  TasksWrapper: {
+    _size: ['100%', 'auto'],
+    _flex: ['column', 'flex-start', 'flex-start']
   },
   AddButton: {
     _el: Button.Rounded,
