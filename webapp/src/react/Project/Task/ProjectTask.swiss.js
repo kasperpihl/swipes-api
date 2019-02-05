@@ -1,5 +1,6 @@
 import { styleSheet } from 'swiss-react';
 import Icon from 'src/react/_components/Icon/Icon';
+import Button from 'src/react/_components/Button/Button';
 
 export default styleSheet('ProjectTask', {
   Wrapper: {
@@ -7,7 +8,7 @@ export default styleSheet('ProjectTask', {
     paddingLeft: get => `${get('indention') * 24}px`,
     paddingRight: '6px',
     selected: {
-      backgroundColor: '$blue80'
+      backgroundColor: '$sw4'
     },
     borderRadius: '4px'
   },
@@ -20,10 +21,10 @@ export default styleSheet('ProjectTask', {
     paddingLeft: '6px',
     '&:focus': {
       // border: '1px solid $sw2',
-    },
-    selected: {
-      color: '$sw5'
     }
+    // selected: {
+    //   color: '$sw5'
+    // }
   },
   ExpandWrapper: {
     _size: ['24px', '30px'],
@@ -92,5 +93,12 @@ export default styleSheet('ProjectTask', {
         visbility: 'visible'
       }
     }
+  },
+
+  Button: {
+    _el: Button.Standard
+    // selected: {
+    //   _svgColor: '$sw5'
+    // }
   }
 });

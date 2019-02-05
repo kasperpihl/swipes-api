@@ -1,10 +1,9 @@
 import React, { PureComponent } from 'react';
 import Icon from 'src/react/_components/Icon/Icon';
-import Assignees from 'src/react/_components/Assignees/Assignees';
 import AssignMenu from 'src/react/_components/AssignMenu/AssignMenu';
-import Button from 'src/react/_components/Button/Button';
 import SW from './ProjectTask.swiss';
 import withProjectTask from 'swipes-core-js/components/project/withProjectTask';
+import Assignees from 'src/react/_components/Assignees/Assignees';
 import contextMenu from 'src/utils/contextMenu';
 
 @withProjectTask
@@ -138,7 +137,11 @@ export default class ProjectTask extends PureComponent {
               maxImages={4}
               onClick={this.handleAssignClick}
             >
-              <Button.Standard icon="Person" onClick={this.handleAssignClick} />
+              <SW.Button
+                icon="Person"
+                onClick={this.handleAssignClick}
+                selected={isFocused}
+              />
             </Assignees>
           </SW.AssigneesWrapper>
         </SW.Wrapper>
