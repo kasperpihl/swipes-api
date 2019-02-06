@@ -32,23 +32,23 @@ export default class ProjectOverview extends PureComponent {
   constructor(props) {
     super(props);
     this.stateManager = new ProjectStateManager(props.project);
+
     this.state = {
       sliderValue: 0,
-      maxIndention: this.stateManager.getLocalState().get('maxIndention'),
-      showPopupText: false,
-      visibleOrder: this.stateManager.getLocalState().get('visibleOrder')
+      ...this.getStateFromManager(this.stateManager)
     };
   }
+
   componentDidMount() {
     this.unsubscribe = this.stateManager.subscribe(stateManager => {
-      const localState = stateManager.getLocalState();
-      const visibleOrder = localState.get('visibleOrder');
-      if (visibleOrder !== this.state.visibleOrder) {
-        this.setState({ visibleOrder });
+      const newState = this.getStateFromManager(stateManager);
+      for (let key in newState) {
+        if (newState[key] === this.state[key]) {
+          delete newState[key];
+        }
       }
-      const maxIndention = localState.get('maxIndention');
-      if (maxIndention !== this.state.maxIndention) {
-        this.setState({ maxIndention });
+      if (Object.keys(newState).length) {
+        this.setState(newState);
       }
     });
     window.addEventListener('keydown', this.handleKeyDown);
@@ -57,6 +57,17 @@ export default class ProjectOverview extends PureComponent {
     this.unsubscribe();
     this.stateManager.syncHandler.syncIfNeeded();
     window.removeEventListener('keydown', this.handleKeyDown);
+  }
+  getStateFromManager(stateManager) {
+    const clientState = stateManager.getClientState();
+    const localState = stateManager.getLocalState();
+    return {
+      totalAmountOfTasks: clientState.get('sortedOrder').size,
+      completionPercentage: clientState.get('completion_percentage'),
+      maxIndention: localState.get('maxIndention'),
+      visibleOrder: localState.get('visibleOrder'),
+      projectName: clientState.get('name')
+    };
   }
   onStateChange = state => this.setState(state);
   onSliderChange = e => {
@@ -122,29 +133,14 @@ export default class ProjectOverview extends PureComponent {
     this.stateManager.expandHandler.setDepth(sliderValue - 1);
     this.setState({ sliderValue: sliderValue - 1 });
   };
-  renderItems() {
-    const { visibleOrder } = this.state;
-
-    return visibleOrder.map((taskId, i) => (
-      <ProjectTask key={taskId} taskId={taskId} />
-    ));
-  }
-
-  showPopupText = e => {
-    this.timeout = setTimeout(() => {
-      this.setState({ showPopupText: true });
-    }, 700);
-  };
-  hidePopupText = e => {
-    clearTimeout(this.timeout);
-    this.setState({ showPopupText: false });
-  };
 
   renderSidebar = () => {
-    const { maxIndention, sliderValue } = this.state;
-    const clientState = this.stateManager.getClientState();
-    const totalAmountOfTasks = clientState.get('sortedOrder').size;
-    const completionPercentage = clientState.get('completion_percentage');
+    const {
+      maxIndention,
+      sliderValue,
+      totalAmountOfTasks,
+      completionPercentage
+    } = this.state;
     const completedTasksAmount = Math.round(
       (completionPercentage / 100) * totalAmountOfTasks
     );
@@ -176,17 +172,18 @@ export default class ProjectOverview extends PureComponent {
   };
 
   render() {
-    const clientState = this.stateManager.getClientState();
+    const { visibleOrder, projectName } = this.state;
 
     return (
-      <SWView
-        noframe
-        header={<CardHeader padding={30} title={clientState.get('name')} />}
-      >
+      <SWView noframe header={<CardHeader padding={30} title={projectName} />}>
         <ProjectProvider stateManager={this.stateManager}>
           <SW.Wrapper>
             {this.renderSidebar()}
-            <SW.TasksWrapper>{this.renderItems()}</SW.TasksWrapper>
+            <SW.TasksWrapper>
+              {visibleOrder.map(taskId => (
+                <ProjectTask key={taskId} taskId={taskId} />
+              ))}
+            </SW.TasksWrapper>
           </SW.Wrapper>
         </ProjectProvider>
       </SWView>
