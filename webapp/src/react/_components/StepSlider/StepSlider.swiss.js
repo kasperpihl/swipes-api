@@ -2,9 +2,9 @@ import { styleSheet } from 'swiss-react';
 
 export default styleSheet('StepSlider', {
   InputPackage: {
-    _size: ['120px', '24px'],
+    _size: ['calc(100% - 48px)', '24px'],
     _flex: ['row', 'center', 'center'],
-    position: 'relative',
+    position: 'relative'
   },
 
   InputButton: {
@@ -23,7 +23,7 @@ export default styleSheet('StepSlider', {
       transform: 'translateX(-50%) translateY(-50%)',
       width: '9px',
       height: '1px',
-      backgroundColor: '#2E2E2D',
+      backgroundColor: '#2E2E2D'
     },
 
     right: {
@@ -41,7 +41,7 @@ export default styleSheet('StepSlider', {
         transform: 'translateX(-50%) translateY(-50%)',
         width: '9px',
         height: '1px',
-        backgroundColor: '#2E2E2D',
+        backgroundColor: '#2E2E2D'
       },
 
       '&:after': {
@@ -52,31 +52,31 @@ export default styleSheet('StepSlider', {
         transform: 'translateX(-50%) translateY(-50%)',
         height: '9px',
         width: '1px',
-        backgroundColor: '#2E2E2D',
+        backgroundColor: '#2E2E2D'
       },
 
       deactivated: {
         '&:before': {
-          opacity: '0.5',
+          opacity: '0.5'
         },
 
         '&:after': {
-          opacity: '0.5',
+          opacity: '0.5'
         }
       }
     },
 
     deactivated: {
       '&:before': {
-        opacity: '0.5',
-      },
+        opacity: '0.5'
+      }
     }
   },
 
   Input: {
     _el: 'input',
     height: '1px',
-    width: '120px',
+    width: '100%',
     '-webkit-appearance': 'none',
     '-moz-appearance': 'none',
     backgroundColor: '#C7C6C5',
@@ -86,48 +86,48 @@ export default styleSheet('StepSlider', {
     cursor: 'pointer',
 
     '&:focus': {
-      outline: 'none',
+      outline: 'none'
     },
 
     '&::-webkit-slider-container': {
       '-webkit-appearance': 'none',
-      backgroundColor: '#C7C6C5',
+      backgroundColor: '#C7C6C5'
     },
 
     '&::-webkit-slider-runnable-track': {
-      '-webkit-appearance': 'none',
+      '-webkit-appearance': 'none'
     },
 
     '&::-webkit-slider-thumb': {
       '-webkit-appearance': 'none',
       backgroundColor: '#121317',
       width: '3px',
-      height: '15px',
+      height: '15px'
     },
 
     '&::-moz-range-track': {
-      width: '120px',
-      backgroundColor: '#C7C6C5',
+      width: '100%',
+      backgroundColor: '#C7C6C5'
     },
 
     '&::-moz-range-track:before': {
-      content:'',
+      content: '',
       position: 'absolute',
-      top:'7px',
-      left:'7px',
-      right:'7px',
-      bottom:'7px',
+      top: '7px',
+      left: '7px',
+      right: '7px',
+      bottom: '7px'
     },
 
     '&::-moz-range-thumb': {
       backgroundColor: '#121317',
       width: '3px',
       height: '15px',
-      borderRadius: '0px',
+      borderRadius: '0px'
     },
 
     '&::-moz-focus-outer': {
-      border: '0',
+      border: '0'
     }
   }
-})
+});

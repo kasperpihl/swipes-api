@@ -6,7 +6,6 @@ import ProjectStateManager from 'swipes-core-js/classes/ProjectStateManager';
 import ProjectTask from 'src/react/Project/Task/ProjectTask';
 import SWView from 'src/react/_Layout/view-controller/SWView';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
-import StepSlider from 'src/react/_components/StepSlider/StepSlider';
 import Button from 'src/react/_components/Button/Button';
 import Dropdown from 'src/react/_components/dropdown/Dropdown';
 
@@ -163,7 +162,7 @@ export default class ProjectOverview extends PureComponent {
           </SW.ProgressBarOuter>
         </SW.ProgressBarWrapper>
         <SW.SliderWrapper>
-          <StepSlider
+          <SW.StepSlider
             min={0}
             max={maxIndention}
             sliderValue={sliderValue}
@@ -172,6 +171,7 @@ export default class ProjectOverview extends PureComponent {
             decrease={this.decreaseSlider}
           />
         </SW.SliderWrapper>
+        <Button.Standard title="Project discussion" icon="Comment" />
       </SW.SidebarWrapper>
     );
   };

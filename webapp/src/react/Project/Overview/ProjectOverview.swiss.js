@@ -1,5 +1,6 @@
 import { styleSheet } from 'swiss-react';
 import Button from 'src/react/_components/Button/Button';
+import StepSlider from 'src/react/_components/StepSlider/StepSlider';
 
 export default styleSheet('ProjectOverview', {
   Wrapper: {
@@ -76,5 +77,10 @@ export default styleSheet('ProjectOverview', {
     padding: '12px 0',
     borderTop: '1px solid $sw3',
     borderBottom: '1px solid $sw3'
+  },
+
+  StepSlider: {
+    _el: StepSlider,
+    width: '100%'
   }
 });
