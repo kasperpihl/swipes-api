@@ -36,7 +36,7 @@ export default class ProjectOverview extends PureComponent {
     super(props);
     this.stateManager = new ProjectStateManager(props.project);
     this.state = {
-      sliderTestValue: 0,
+      sliderValue: 0,
       maxIndention: this.stateManager.getLocalState().get('maxIndention'),
       showPopupText: false,
       visibleOrder: this.stateManager.getLocalState().get('visibleOrder')
@@ -116,18 +116,18 @@ export default class ProjectOverview extends PureComponent {
     }
   };
   increaseSlider = () => {
-    const { sliderTestValue } = this.state;
-    this.stateManager.expandHandler.setDepth(sliderTestValue + 1);
-    this.setState({ sliderTestValue: sliderTestValue + 1 });
+    const { sliderValue } = this.state;
+    this.stateManager.expandHandler.setDepth(sliderValue + 1);
+    this.setState({ sliderValue: sliderValue + 1 });
   };
   decreaseSlider = () => {
-    const { sliderTestValue } = this.state;
-    this.stateManager.expandHandler.setDepth(sliderTestValue - 1);
-    this.setState({ sliderTestValue: sliderTestValue - 1 });
+    const { sliderValue } = this.state;
+    this.stateManager.expandHandler.setDepth(sliderValue - 1);
+    this.setState({ sliderValue: sliderValue - 1 });
   };
   renderItems() {
     const { visibleOrder } = this.state;
-
+    console.log(this.stateManager.getClientState().toJS());
     return visibleOrder.map((taskId, i) => (
       <ProjectTask key={taskId} taskId={taskId} />
     ));
@@ -142,8 +142,42 @@ export default class ProjectOverview extends PureComponent {
     clearTimeout(this.timeout);
     this.setState({ showPopupText: false });
   };
+
+  renderSidebar = () => {
+    const { maxIndention, sliderValue } = this.state;
+    const clientState = this.stateManager.getClientState();
+    const totalAmountOfTasks = clientState.get('sortedOrder').size;
+    const completionPercentage = clientState.get('completion_percentage');
+    const completedTasksAmount = Math.round(
+      (completionPercentage / 100) * totalAmountOfTasks
+    );
+    return (
+      <SW.SidebarWrapper>
+        <SW.TasksTracker>
+          <SW.CompletedTasks>{completedTasksAmount}</SW.CompletedTasks>
+          <SW.TotalTasks>/{totalAmountOfTasks}</SW.TotalTasks>
+        </SW.TasksTracker>
+        <SW.Text>Tasks Completed</SW.Text>
+        <SW.ProgressBarWrapper>
+          <SW.ProgressBarOuter>
+            <SW.ProgressBarInner width={completionPercentage} />
+          </SW.ProgressBarOuter>
+        </SW.ProgressBarWrapper>
+        <SW.SliderWrapper>
+          <StepSlider
+            min={0}
+            max={maxIndention}
+            sliderValue={sliderValue}
+            onSliderChange={this.onSliderChange}
+            increase={this.increaseSlider}
+            decrease={this.decreaseSlider}
+          />
+        </SW.SliderWrapper>
+      </SW.SidebarWrapper>
+    );
+  };
+
   render() {
-    const { sliderTestValue, showPopupText, maxIndention } = this.state;
     const clientState = this.stateManager.getClientState();
 
     return (
@@ -153,18 +187,10 @@ export default class ProjectOverview extends PureComponent {
       >
         <ProjectProvider stateManager={this.stateManager}>
           <SW.Wrapper>
-            <ProjectSidebar />
+            {this.renderSidebar()}
             <SW.TasksWrapper>{this.renderItems()}</SW.TasksWrapper>
-            {/* <SW.Div>
-            <StepSlider
-              min={0}
-              max={4}
-              sliderValue={sliderTestValue}
-              onSliderChange={this.onSliderChange}
-              increase={this.increaseSlider}
-              decrease={this.decreaseSlider}
-            />
-            <Button.Rounded
+            {/* <SW.Div> */}
+            {/* <Button.Rounded
               onMouseEnter={this.showPopupText}
               onMouseLeave={this.hidePopupText}
               icon="Trash"
