@@ -37,15 +37,21 @@ export default class ProjectOverview extends PureComponent {
     this.stateManager = new ProjectStateManager(props.project);
     this.state = {
       sliderTestValue: 0,
+      maxIndention: this.stateManager.getLocalState().get('maxIndention'),
       showPopupText: false,
       visibleOrder: this.stateManager.getLocalState().get('visibleOrder')
     };
   }
   componentDidMount() {
     this.unsubscribe = this.stateManager.subscribe(stateManager => {
-      const visibleOrder = stateManager.getLocalState().get('visibleOrder');
+      const localState = stateManager.getLocalState();
+      const visibleOrder = localState.get('visibleOrder');
       if (visibleOrder !== this.state.visibleOrder) {
         this.setState({ visibleOrder });
+      }
+      const maxIndention = localState.get('maxIndention');
+      if (maxIndention !== this.state.maxIndention) {
+        this.setState({ maxIndention });
       }
     });
     window.addEventListener('keydown', this.handleKeyDown);
@@ -137,8 +143,9 @@ export default class ProjectOverview extends PureComponent {
     this.setState({ showPopupText: false });
   };
   render() {
-    const { sliderTestValue, showPopupText } = this.state;
+    const { sliderTestValue, showPopupText, maxIndention } = this.state;
     const clientState = this.stateManager.getClientState();
+    console.log(maxIndention);
 
     return (
       <SWView
