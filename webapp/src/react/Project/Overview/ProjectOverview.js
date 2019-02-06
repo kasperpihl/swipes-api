@@ -145,7 +145,6 @@ export default class ProjectOverview extends PureComponent {
   render() {
     const { sliderTestValue, showPopupText, maxIndention } = this.state;
     const clientState = this.stateManager.getClientState();
-    console.log(maxIndention);
 
     return (
       <SWView
