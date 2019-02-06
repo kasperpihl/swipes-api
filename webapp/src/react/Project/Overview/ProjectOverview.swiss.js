@@ -9,7 +9,7 @@ export default styleSheet('ProjectOverview', {
   TasksWrapper: {
     _size: ['100%', 'auto'],
     _flex: ['column', 'flex-start', 'flex-start'],
-    marginLeft: '50px'
+    marginLeft: '48px'
   },
   AddButton: {
     _el: Button.Rounded,
