@@ -84,6 +84,7 @@ export default styleSheet('StepSlider', {
     fontSize: '5px',
     border: 'none',
     cursor: 'pointer',
+    pointerEvents: 'none',
 
     '&:focus': {
       outline: 'none'
