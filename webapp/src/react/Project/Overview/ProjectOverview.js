@@ -127,7 +127,7 @@ export default class ProjectOverview extends PureComponent {
   };
   renderItems() {
     const { visibleOrder } = this.state;
-    console.log(this.stateManager.getClientState().toJS());
+
     return visibleOrder.map((taskId, i) => (
       <ProjectTask key={taskId} taskId={taskId} />
     ));
