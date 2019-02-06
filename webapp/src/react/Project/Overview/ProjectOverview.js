@@ -42,6 +42,11 @@ export default class ProjectOverview extends PureComponent {
   componentDidMount() {
     this.unsubscribe = this.stateManager.subscribe(stateManager => {
       const newState = this.getStateFromManager(stateManager);
+      // Ensure no dangling slider.
+      newState.sliderValue = Math.min(
+        this.state.sliderValue,
+        newState.maxIndention
+      );
       for (let key in newState) {
         if (newState[key] === this.state[key]) {
           delete newState[key];
