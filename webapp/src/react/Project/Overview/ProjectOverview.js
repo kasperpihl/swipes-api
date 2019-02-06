@@ -62,7 +62,7 @@ export default class ProjectOverview extends PureComponent {
   onSliderChange = e => {
     const depth = parseInt(e.target.value, 10);
     this.stateManager.expandHandler.setDepth(depth);
-    this.setState({ sliderTestValue: depth });
+    this.setState({ sliderValue: depth });
   };
   handleKeyDown = e => {
     const localState = this.stateManager.getLocalState();
