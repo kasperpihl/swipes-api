@@ -1,11 +1,19 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import Icon from 'src/react/_components/Icon/Icon';
 import AssignMenu from 'src/react/_components/AssignMenu/AssignMenu';
 import SW from './ProjectTask.swiss';
 import withProjectTask from 'swipes-core-js/components/project/withProjectTask';
 import Assignees from 'src/react/_components/Assignees/Assignees';
 import contextMenu from 'src/utils/contextMenu';
+import * as mainActions from 'src/redux/main/mainActions';
 
+@connect(
+  null,
+  {
+    successGradient: mainActions.successGradient
+  }
+)
 @withProjectTask
 export default class ProjectTask extends PureComponent {
   constructor(props) {
@@ -50,12 +58,13 @@ export default class ProjectTask extends PureComponent {
     this.setState({ isFocused: false });
   };
   onComplete = e => {
-    const { taskId, stateManager, task } = this.props;
+    const { taskId, stateManager, task, successGradient } = this.props;
     const { completion } = task;
     if (completion) {
       stateManager.completeHandler.incomplete(taskId);
     } else {
       stateManager.completeHandler.complete(taskId);
+      successGradient('green');
     }
   };
   onChange = e => {
