@@ -7,7 +7,6 @@ import ProjectTask from 'src/react/Project/Task/ProjectTask';
 import SWView from 'src/react/_Layout/view-controller/SWView';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
 import Button from 'src/react/_components/Button/Button';
-import Dropdown from 'src/react/_components/dropdown/Dropdown';
 
 @withRequests(
   {
@@ -188,17 +187,6 @@ export default class ProjectOverview extends PureComponent {
           <SW.Wrapper>
             {this.renderSidebar()}
             <SW.TasksWrapper>{this.renderItems()}</SW.TasksWrapper>
-            {/* <SW.Div> */}
-            {/* <Button.Rounded
-              onMouseEnter={this.showPopupText}
-              onMouseLeave={this.hidePopupText}
-              icon="Trash"
-              title="Start new plan"
-              // popupText="Testing popup"
-              // showPopupText={showPopupText}
-            />
-            <Dropdown rounded={false} />
-          </SW.Div> */}
           </SW.Wrapper>
         </ProjectProvider>
       </SWView>
