@@ -60,7 +60,7 @@ export default styleSheet('ProjectOverview', {
     _size: ['100%', '16px'],
     _flex: ['column', 'flex-start', 'center'],
     borderRadius: '8px',
-    padding: '1px',
+    padding: '2px',
     border: '2px solid $green'
   },
 
