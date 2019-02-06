@@ -39,9 +39,7 @@ export default class Topbar extends PureComponent {
   }
   onDownload = () => {
     const { versionInfo } = this.props;
-    window.open(
-      versionInfo.get('updateUrl') || 'https://workspace.swipesapp.com/download'
-    );
+    window.open(versionInfo.get('updateUrl'));
   };
   onReload() {
     window.ipcListener.reload();
@@ -66,7 +64,7 @@ export default class Topbar extends PureComponent {
   }
 
   renderStatusIndicator() {
-    const { status, versionInfo, ready, token, reconnectAttempt } = this.props;
+    const { status, versionInfo, token, reconnectAttempt } = this.props;
     if (!token) {
       return undefined;
     }
@@ -92,8 +90,8 @@ export default class Topbar extends PureComponent {
     } else if (versionInfo && versionInfo.get('reloadAvailable')) {
       statusMessage = 'New version available';
       btn = this.renderReloadBtn();
-    } else if (status === 'offline' && ready) {
-      if (reconnectAttempt > 4) {
+    } else if (status === 'offline') {
+      if (reconnectAttempt > 0) {
         statusMessage = `Offline - retrying in ${secondsLeft} seconds`;
         btn = this.renderRetryBtn();
       }
@@ -113,13 +111,13 @@ export default class Topbar extends PureComponent {
     );
   }
   renderDownloadBtn() {
-    return <Button.Rounded title="download" onClick={this.onDownload} />;
+    return <Button.Standard title="Download" onClick={this.onDownload} />;
   }
   renderRetryBtn() {
-    return <Button.Rounded title="Retry now" onClick={this.onRetry} />;
+    return <Button.Standard title="Retry now" onClick={this.onRetry} />;
   }
   renderReloadBtn() {
-    return <Button.Rounded title="Reload" onClick={this.onReload} />;
+    return <Button.Standard title="Reload" onClick={this.onReload} />;
   }
   renderWindowsActions() {
     const { isMaximized, isFullscreen, isElectron } = this.props;

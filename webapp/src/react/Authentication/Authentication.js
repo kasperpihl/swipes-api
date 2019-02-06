@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
-import * as menuActions from 'src/redux/menu/menuActions';
 import { Map } from 'immutable';
 import withLoader from 'src/react/_hocs/withLoader';
 import request from 'swipes-core-js/utils/request';
@@ -18,9 +17,7 @@ import SW from './Authentication.swiss';
     invitedToOrg: state.invitation.get('invitedToOrg')
   }),
   {
-    setUrl: navigationActions.url,
-    inputMenu: menuActions.input,
-    alert: menuActions.alert
+    setUrl: navigationActions.url
   }
 )
 export default class Authentication extends PureComponent {

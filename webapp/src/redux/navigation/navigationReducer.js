@@ -4,21 +4,21 @@ import * as types from '../constants';
 
 const initialState = fromJS({
   primary: {
-    id: 'PlanList',
+    id: 'Projects',
     stack: [
       {
-        id: 'PlanList',
-        title: 'Plan',
-      },
-    ],
+        id: 'Projects',
+        title: 'Projects'
+      }
+    ]
   },
   secondary: {
     id: null,
-    stack: [],
+    stack: []
   },
   counters: {},
   locked: false,
-  url: null,
+  url: null
 });
 // Add support for Tester View
 const testerState = initialState.set(
@@ -28,9 +28,9 @@ const testerState = initialState.set(
     stack: [
       {
         id: 'Tester',
-        title: 'Tester',
-      },
-    ],
+        title: 'Tester'
+      }
+    ]
   })
 );
 
@@ -42,7 +42,7 @@ export default function history(state = initialState, action) {
       if (payload.url) {
         val = {
           to: payload.url,
-          ...payload.options,
+          ...payload.options
         };
       }
       return state.set('url', val);
@@ -58,7 +58,7 @@ export default function history(state = initialState, action) {
         [
           payload.target,
           'stack',
-          state.getIn([payload.target, 'stack']).size - 1,
+          state.getIn([payload.target, 'stack']).size - 1
         ],
         s => s.setIn(['props', 'savedState'], fromJS(payload.savedState))
       );

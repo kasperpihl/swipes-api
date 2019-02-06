@@ -3,7 +3,6 @@ import randomString from 'swipes-core-js/utils/randomString';
 
 export const url = (url, options) => (d, getState) => {
   if (getState().navigation.get('url') === url) return;
-  console.log(url, getState().navigation.get('url'));
   d({ type: types.NAVIGATION_URL, payload: { url, options } });
 };
 
@@ -14,7 +13,7 @@ export function set(target, obj) {
     const payload = {
       id: target === 'primary' ? obj.id : randomString(5),
       target,
-      stack: obj ? [obj] : [],
+      stack: obj ? [obj] : []
     };
     dispatch({ type: types.NAVIGATION_SET, payload });
   };

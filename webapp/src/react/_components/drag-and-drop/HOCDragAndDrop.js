@@ -1,23 +1,13 @@
 import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
-import * as menuActions from 'src/redux/menu/menuActions';
 import DragAndDrop from 'src/react/_components/drag-and-drop/DragAndDrop';
 
-@connect(
-  state => ({
-    navigation: state.navigation,
-  }),
-  {
-    chooseDragAndDrop: menuActions.chooseDragAndDrop,
-  }
-)
 class HOCDragAndDrop extends PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {
       hoverActive: false,
-      showMenu: false,
+      showMenu: false
     };
   }
 
@@ -59,7 +49,7 @@ class HOCDragAndDrop extends PureComponent {
     const options = {
       boundingRect: e.target.getBoundingClientRect(),
       alignX: 'center',
-      alignY: 'center',
+      alignY: 'center'
     };
     chooseDragAndDrop(e.dataTransfer.files, options);
     this.setState({ hoverActive: false });

@@ -24,29 +24,7 @@ export function modal(target, component, props) {
     payload: { target, component, props }
   };
 }
-// ======================================================
-// DragAndDrop
-// ======================================================
-export function subscribeToDrop(target, handler, title) {
-  return {
-    type: types.SUBSCRIBE_TO_DROP,
-    payload: {
-      handler,
-      target,
-      title
-    }
-  };
-}
 
-export function unsubscribeFromDrop(target, handler) {
-  return {
-    type: types.UNSUBSCRIBE_FROM_DROP,
-    payload: {
-      target,
-      handler
-    }
-  };
-}
 // ======================================================
 // Context Menu
 // ======================================================
