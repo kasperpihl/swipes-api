@@ -9,8 +9,7 @@ addMixin('textStyle', (style = 'item') => {
       };
     case 'bodyMedium':
       return {
-        _font: ['15px', '24px', 400],
-        color: '$sw1'
+        _font: ['15px', '24px', 400]
       };
     case 'bodyLarge':
       return {

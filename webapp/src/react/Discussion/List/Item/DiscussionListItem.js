@@ -56,8 +56,12 @@ export default class DiscussionListItem extends PureComponent {
         viewWidth={viewWidth}
       >
         <SW.Wrapper onClick={this.onClick}>
+          <SW.UnreadCircle />
           <SW.MiddleWrapper>
             <SW.Topic>{item.get('topic')}</SW.Topic>
+            <SW.OrganizationName>
+              {orgGetBelonging(item.get('owned_by'))}
+            </SW.OrganizationName>
             <SW.Subtitle
               text={subtitle}
               maxLine="2"
@@ -66,11 +70,7 @@ export default class DiscussionListItem extends PureComponent {
             />
           </SW.MiddleWrapper>
           <SW.RightWrapper>
-            <SW.Time>
-              <SW.UnreadCircle />
-              {orgGetBelonging(item.get('owned_by'))}
-              {/* {timeGetDayOrTime(item.get('last_comment_at'))} */}
-            </SW.Time>
+            <SW.Time>{timeGetDayOrTime(item.get('last_comment_at'))}</SW.Time>
           </SW.RightWrapper>
         </SW.Wrapper>
       </SW.ProvideContext>

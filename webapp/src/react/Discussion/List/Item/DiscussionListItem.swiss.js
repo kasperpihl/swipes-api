@@ -14,8 +14,8 @@ export default styleSheet('DiscussionListItem', {
       background: '$sw4',
       marginLeft: '0',
       marginRight: '0',
-      paddingLeft: '25px',
-      paddingRight: '25px',
+      paddingLeft: '30px',
+      paddingRight: '30px',
       borderBottom: '1px solid $sw4'
     },
     '&:first-child': {
@@ -53,13 +53,17 @@ export default styleSheet('DiscussionListItem', {
     _el: 'span',
     _textStyle: 'caption'
   },
+  OrganizationName: {
+    _textStyle: 'body',
+    color: '$sw2',
+    fontWeight: '500'
+  },
   UnreadCircle: {
+    _size: '10px',
     display: 'none',
     position: 'absolute',
-    top: '6px',
-    left: '-12px',
-    width: '6px',
-    height: '6px',
+    top: '14px',
+    left: '12px',
     borderRadius: '50%',
     backgroundColor: '$blue',
     unread: {

@@ -3,7 +3,7 @@ import { styleSheet } from 'swiss-react';
 export default styleSheet('TabBar', {
   Wrapper: {
     _size: ['100%', 'auto'],
-    _flex: ['row', 'left', 'top'],
+    _flex: ['row', 'left', 'top']
   },
   Item: {
     _flex: 'center',
@@ -17,7 +17,7 @@ export default styleSheet('TabBar', {
       _textStyle: 'tabActive'
     },
     '&:not(:last-child)': {
-      marginRight: '24px',
-    },
-  },
+      marginRight: '24px'
+    }
+  }
 });

@@ -1,4 +1,6 @@
 import { styleSheet } from 'swiss-react';
+import Icon from 'src/react/_components/Icon/Icon';
+import Button from 'src/react/_components/Button/Button';
 
 export default styleSheet('DiscussionHeader', {
   Wrapper: {
@@ -25,15 +27,16 @@ export default styleSheet('DiscussionHeader', {
     }
   },
   ContextWrapper: {
-    _flex: ['row', 'left', 'center'],
+    _flex: ['row', 'right', 'center'],
     borderBottom: '1px solid $sw3',
     padding: '6px 0',
     width: '100%'
   },
   FollowerLabel: {
+    _flex: ['row', 'flex-start', 'center'],
     _textStyle: 'item',
     lineHeight: '24px',
-    paddingRight: '12px'
+    color: '$sw2'
   },
   Label: {
     _font: ['12px', '12px', 500],
@@ -41,5 +44,24 @@ export default styleSheet('DiscussionHeader', {
     paddingLeft: '6px',
     paddingRight: '12px',
     flex: 'none'
+  },
+  Icon: {
+    _el: Icon,
+    _size: '14px',
+    _svgColor: '$sw2',
+    margin: '0 2px'
+  },
+
+  OrganizationName: {
+    _textStyle: 'item',
+    lineHeight: '24px',
+    color: '$sw2'
+  },
+
+  Button: {
+    _el: Button.Standard,
+    leftAlign: {
+      marginRight: 'auto'
+    }
   }
 });

@@ -27,6 +27,7 @@ export default styleSheet('CardHeader', {
     _truncateString: '',
     _size: ['100%', 'auto'],
     _font: ['12px', '18px'],
+    _flex: ['row', 'left', 'center'],
     color: '$sw1',
     letterSpacing: '.1px',
     marginTop: '6px'

@@ -25,6 +25,10 @@ export default styleSheet('ButtonStandard', {
       'status=Error': {
         borderColor: '$red'
       }
+    },
+
+    border: {
+      border: '1px solid $sw3'
     }
   },
 
