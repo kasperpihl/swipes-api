@@ -31,6 +31,13 @@ export default class HOCDiscussionOverview extends PureComponent {
   static sizes() {
     return [654];
   }
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      viewAttachments: false
+    };
+  }
   onInitialLoad = () => {
     const { discussion, myId } = this.props;
     const ts = discussion.getIn(['followers', myId]);
@@ -40,6 +47,9 @@ export default class HOCDiscussionOverview extends PureComponent {
         discussion_id: discussion.get('discussion_id')
       });
     }
+  };
+  onClickAttachments = () => {
+    this.setState({ viewAttachments: !this.state.viewAttachments });
   };
   render() {
     const { requestReady, requestError, discussion } = this.props;
@@ -51,7 +61,6 @@ export default class HOCDiscussionOverview extends PureComponent {
     if (!discussion) {
       return null;
     }
-
     return (
       <PaginationProvider
         request={{
@@ -69,7 +78,11 @@ export default class HOCDiscussionOverview extends PureComponent {
           idAttribute: 'comment_id'
         }}
       >
-        <DiscussionOverview discussion={discussion} />
+        <DiscussionOverview
+          discussion={discussion}
+          onClickAttachments={this.onClickAttachments}
+          viewAttachments={this.state.viewAttachments}
+        />
       </PaginationProvider>
     );
   }

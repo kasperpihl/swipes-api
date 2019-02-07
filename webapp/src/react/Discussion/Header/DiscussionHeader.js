@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
 import FormModal from 'src/react/_components/FormModal/FormModal';
 import SW from './DiscussionHeader.swiss';
-import Button from 'src/react/_components/Button/Button';
+import contextMenu from 'src/utils/contextMenu';
+import ListMenu from 'src/react/_components/ListMenu/ListMenu';
 import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
 import TooltipUsers from 'src/react/_components/TooltipUsers/TooltipUsers';
@@ -89,6 +90,14 @@ export default class DiscussionHeader extends PureComponent {
     const { openSecondary, discussion } = this.props;
     // openSecondary(navForContext(discussion.get('context')));
   };
+  openDiscussionOptions = e => {
+    const { discussion, myId } = this.props;
+    const followers = discussion.get('followers');
+    contextMenu(ListMenu, e, {
+      onClick: this.onFollowClick,
+      buttons: [{ title: followers.get(myId) ? 'Unfollow' : 'Follow' }]
+    });
+  };
   onFollowClick = () => {
     const { myId, discussion, loader } = this.props;
 
@@ -122,7 +131,13 @@ export default class DiscussionHeader extends PureComponent {
     );
   };
   render() {
-    const { discussion, myId, loader } = this.props;
+    const {
+      discussion,
+      myId,
+      loader,
+      onClickAttachments,
+      viewAttachments
+    } = this.props;
     const topic = discussion.get('topic');
     const followers = discussion.get('followers');
 
@@ -132,13 +147,7 @@ export default class DiscussionHeader extends PureComponent {
           title={topic}
           delegate={this}
           subtitle={this.renderSubtitle()}
-        >
-          <Button.Rounded
-            title={followers.get(myId) ? 'Unfollow' : 'Follow'}
-            onClick={this.onFollowClick}
-            status={loader.get('following')}
-          />
-        </CardHeader>
+        />
         <SW.ContextWrapper>
           <SW.Button
             title="Put name of project here"
@@ -146,8 +155,17 @@ export default class DiscussionHeader extends PureComponent {
             border
             leftAlign
           />
-          <SW.Button title="See attachments" />
-          <SW.Button icon="ThreeDots" />
+          <SW.Button
+            title={'See attachments'}
+            onClick={onClickAttachments}
+            icon={viewAttachments ? 'Eye' : undefined}
+            viewAttachments={viewAttachments}
+          />
+          <SW.Button
+            icon="ThreeDots"
+            onClick={this.openDiscussionOptions}
+            status={loader.get('following')}
+          />
         </SW.ContextWrapper>
       </Fragment>
     );

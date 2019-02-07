@@ -92,11 +92,17 @@ export default class DiscussionOverview extends PureComponent {
     );
   }
   render() {
-    const { discussion } = this.props;
+    const { discussion, onClickAttachments, viewAttachments } = this.props;
 
     return (
       <SWView
-        header={<DiscussionHeader discussion={discussion} />}
+        header={
+          <DiscussionHeader
+            discussion={discussion}
+            onClickAttachments={onClickAttachments}
+            viewAttachments={viewAttachments}
+          />
+        }
         footer={this.renderFooter()}
         scrollRef={c => {
           this.scroller = c;
