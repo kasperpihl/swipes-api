@@ -46,7 +46,7 @@ export default function navigationReducer(state = initialState, action) {
         payload.side = 'left';
       }
       if (payload.side === 'left') {
-        state = state.set('sideMenuId', payload.sideMenuId);
+        state = state.set('sideMenuId', payload.screen.screenId);
       }
       state = state.set('onTopSide', payload.side);
       return state.set(
