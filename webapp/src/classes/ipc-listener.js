@@ -1,6 +1,7 @@
 import * as mainActions from 'src/redux/main/mainActions';
-import * as navigationActions from 'src/redux/navigation/navigationActions';
-import { fromJS } from 'immutable';
+
+import userGetFirstName from 'swipes-core-js/utils/user/userGetFirstName';
+
 /* global nodeRequire*/
 const isElectron = window.process && window.process.versions.electron;
 let ipcRenderer;
@@ -36,14 +37,6 @@ export default class IpcListener {
       store.dispatch(mainActions.setMaximized(remWin.isMaximized()));
       remWin.on('maximize', () => {
         store.dispatch(mainActions.setMaximized(true));
-      });
-      remWin.on('toggle-find', () => {
-        this.store.dispatch(
-          navigationActions.set('primary', {
-            id: 'Search',
-            title: 'Search'
-          })
-        );
       });
       remWin.on('clear', () => {
         localStorage.clear();
@@ -81,7 +74,11 @@ export default class IpcListener {
       }
     });
     // Make sure discussion and comment belong together
-    if (discussion && comment && discussion.id === comment.discussion_id) {
+    if (
+      discussion &&
+      comment &&
+      discussion.discussion_id === comment.discussion_id
+    ) {
       // Ensure I'm following the discussion.
       if (
         !discussion.followers.filter(({ user_id }) => user_id === myId).length
@@ -99,9 +96,7 @@ export default class IpcListener {
           id: comment.discussion_id
         },
         title: discussion.topic,
-        message: `${msgGen.users.getFirstName(
-          comment.sent_by
-        )}: ${strippedMessage}`
+        message: `${userGetFirstName(comment.sent_by)}: ${strippedMessage}`
       });
     }
   }
