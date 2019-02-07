@@ -21,8 +21,8 @@ export default styleSheet('StepSlider', {
       top: '50%',
       left: '50%',
       transform: 'translateX(-50%) translateY(-50%)',
-      width: '9px',
-      height: '1px',
+      width: '12px',
+      height: '2px',
       backgroundColor: '#2E2E2D'
     },
 
@@ -39,8 +39,8 @@ export default styleSheet('StepSlider', {
         top: '50%',
         left: '50%',
         transform: 'translateX(-50%) translateY(-50%)',
-        width: '9px',
-        height: '1px',
+        width: '12px',
+        height: '2px',
         backgroundColor: '#2E2E2D'
       },
 
@@ -50,8 +50,8 @@ export default styleSheet('StepSlider', {
         top: '50%',
         left: '50%',
         transform: 'translateX(-50%) translateY(-50%)',
-        height: '9px',
-        width: '1px',
+        height: '12px',
+        width: '2px',
         backgroundColor: '#2E2E2D'
       },
 
@@ -75,11 +75,11 @@ export default styleSheet('StepSlider', {
 
   Input: {
     _el: 'input',
-    height: '1px',
+    height: '2px',
     width: '100%',
     '-webkit-appearance': 'none',
     '-moz-appearance': 'none',
-    backgroundColor: '#C7C6C5',
+    backgroundColor: '$sw3',
     boxSizing: 'border-box',
     fontSize: '5px',
     border: 'none',
@@ -91,7 +91,7 @@ export default styleSheet('StepSlider', {
 
     '&::-webkit-slider-container': {
       '-webkit-appearance': 'none',
-      backgroundColor: '#C7C6C5'
+      backgroundColor: '$sw3'
     },
 
     '&::-webkit-slider-runnable-track': {
@@ -100,9 +100,9 @@ export default styleSheet('StepSlider', {
 
     '&::-webkit-slider-thumb': {
       '-webkit-appearance': 'none',
-      backgroundColor: '#121317',
-      width: '3px',
-      height: '15px'
+      backgroundColor: '$sw1',
+      width: '5px',
+      height: '14px'
     },
 
     '&::-moz-range-track': {
