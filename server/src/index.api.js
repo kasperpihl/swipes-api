@@ -42,7 +42,7 @@ app.use(corsHandler);
 
 // If Content-Type is application/json, parse as json
 app.use('/v1', (req, res, next) => {
-  if (req.header('Content-Type') === 'application/json') {
+  if (/application\/json/g.test(req.header('Content-Type'))) {
     bodyParser.json()(req, res, next);
   } else {
     next();
