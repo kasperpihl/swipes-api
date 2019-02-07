@@ -32,7 +32,6 @@ export default class CommentItem extends PureComponent {
   render() {
     const { comment, postId, discussionId, ownedBy } = this.props;
     const fullName = userGetFullName(comment.get('sent_by'), ownedBy);
-    // const name = msgGen.users.getFullName(comment.get('sent_by'));
 
     return (
       <SW.Container>

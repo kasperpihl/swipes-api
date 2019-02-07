@@ -7,7 +7,9 @@ import ProjectTask from 'src/react/Project/Task/ProjectTask';
 import SWView from 'src/react/_Layout/view-controller/SWView';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
 import Button from 'src/react/_components/Button/Button';
+import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
 
+@navWrapper
 @withRequests(
   {
     project: {
@@ -80,6 +82,16 @@ export default class ProjectOverview extends PureComponent {
     this.stateManager.expandHandler.setDepth(depth);
     this.setState({ sliderValue: depth });
   };
+  handleProjectChat = () => {
+    const { project, openSecondary } = this.props;
+    openSecondary({
+      id: 'DiscussionOverview',
+      title: 'Chat',
+      props: {
+        discussionId: project.get('discussion_id')
+      }
+    });
+  };
   handleKeyDown = e => {
     const localState = this.stateManager.getLocalState();
 
@@ -146,6 +158,7 @@ export default class ProjectOverview extends PureComponent {
       totalAmountOfTasks,
       completionPercentage
     } = this.state;
+    const { project } = this.props;
     const completedTasksAmount = Math.round(
       (completionPercentage / 100) * totalAmountOfTasks
     );
@@ -171,7 +184,13 @@ export default class ProjectOverview extends PureComponent {
             decrease={this.decreaseSlider}
           />
         </SW.SliderWrapper>
-        <Button.Standard title="Project discussion" icon="Comment" />
+        {project.get('discussion_id') && (
+          <Button.Standard
+            title="Project chat"
+            icon="Comment"
+            onClick={this.handleProjectChat}
+          />
+        )}
       </SW.SidebarWrapper>
     );
   };
