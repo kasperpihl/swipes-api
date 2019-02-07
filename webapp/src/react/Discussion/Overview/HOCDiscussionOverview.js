@@ -27,7 +27,6 @@ import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
 @connect(state => ({
   myId: state.me.get('user_id')
 }))
-@propsOrPop('discussion')
 export default class HOCDiscussionOverview extends PureComponent {
   static sizes() {
     return [654];
