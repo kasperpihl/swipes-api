@@ -6,6 +6,7 @@ export default styleSheet('OrganizationUser', {
     _size: ['100%', 'auto'],
     _flex: ['row', 'flex-start', 'center'],
     _textStyle: 'bodyMedium',
+    color: '$sw1',
     borderBottom: '1px solid $sw3',
     padding: '12px 0',
 

@@ -53,6 +53,7 @@ export default styleSheet('ButtonExtended', {
   BigTitle: {
     _el: 'p',
     _textStyle: 'bodyMedium',
+    color: '$sw1',
     padding: '0 3px 0 6px',
 
     'status=Standard': {

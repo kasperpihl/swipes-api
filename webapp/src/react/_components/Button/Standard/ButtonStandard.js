@@ -23,6 +23,7 @@ export default class ButtonStandard extends PureComponent {
       className,
       onClick,
       rounded,
+      border,
       ...rest
     } = this.props;
     const parsedStatus = buttonParseStatus(status);
@@ -36,6 +37,7 @@ export default class ButtonStandard extends PureComponent {
         hasIcon={!!(icon || parsedStatus !== 'Standard')}
         rounded={rounded}
         status={parsedStatus}
+        border={border}
       >
         <SW.Wrapper
           {...rest}

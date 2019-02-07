@@ -13,8 +13,9 @@ import request from 'swipes-core-js/utils/request';
 @navWrapper
 @withLoader
 @connect(
-  state => ({
-    myId: state.me.get('user_id')
+  (state, props) => ({
+    myId: state.me.get('user_id'),
+    organization: state.organizations.get(props.discussion.get('owned_by'))
   }),
   {
     tooltip: mainActions.tooltip
@@ -102,29 +103,51 @@ export default class DiscussionHeader extends PureComponent {
       loader.clear('following');
     });
   };
+  renderSubtitle = () => {
+    const { discussion, organization } = this.props;
+    const followers = discussion.get('followers');
+    const privacy = discussion.get('privacy');
+    return (
+      <>
+        <SW.OrganizationName>{organization.get('name')} / </SW.OrganizationName>
+        <SW.FollowerLabel
+          onMouseEnter={this.onMouseEnter}
+          onMouseLeave={this.onMouseLeave}
+        >
+          <SW.Icon icon={privacy ? 'ThreeDots' : 'Earth'} />
+          {/* TODO: Change icon once privacy is wired up */}
+          {`${followers.size} follower${followers.size === 1 ? '' : 's'}`}
+        </SW.FollowerLabel>
+      </>
+    );
+  };
   render() {
     const { discussion, myId, loader } = this.props;
     const topic = discussion.get('topic');
-    const privacy = discussion.get('privacy');
     const followers = discussion.get('followers');
 
     return (
       <Fragment>
-        <CardHeader title={topic} delegate={this}>
+        <CardHeader
+          title={topic}
+          delegate={this}
+          subtitle={this.renderSubtitle()}
+        >
           <Button.Rounded
             title={followers.get(myId) ? 'Unfollow' : 'Follow'}
             onClick={this.onFollowClick}
             status={loader.get('following')}
           />
         </CardHeader>
-
         <SW.ContextWrapper>
-          <SW.FollowerLabel
-            onMouseEnter={this.onMouseEnter}
-            onMouseLeave={this.onMouseLeave}
-          >
-            {`${followers.size} follower${followers.size === 1 ? '' : 's'}`}
-          </SW.FollowerLabel>
+          <SW.Button
+            title="Put name of project here"
+            icon="Comment"
+            border
+            leftAlign
+          />
+          <SW.Button title="See attachments" />
+          <SW.Button icon="ThreeDots" />
         </SW.ContextWrapper>
       </Fragment>
     );
