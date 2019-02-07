@@ -5,7 +5,7 @@ import SW from './Modal.swiss';
 
 @connect(
   (state, props) => ({
-    modal: state.main.getIn(['modals', props.target])
+    modal: state.main.getIn(['modals', props.side])
   }),
   {
     clear: mainActions.modal
@@ -13,8 +13,8 @@ import SW from './Modal.swiss';
 )
 export default class Modal extends PureComponent {
   hideModal = () => {
-    const { clear, target } = this.props;
-    clear(target);
+    const { clear, side } = this.props;
+    clear(side);
   };
   clickedBackground = e => {
     const isBackground =

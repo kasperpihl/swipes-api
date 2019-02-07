@@ -6,7 +6,7 @@ import FormModal from 'src/react/_components/FormModal/FormModal';
 import ListMenu from 'src/react/_components/ListMenu/ListMenu';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
 import SW from './OrganizationHeader.swiss';
-import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
+import withNav from 'src/react/_hocs/Nav/withNav';
 import request from 'swipes-core-js/utils/request';
 
 const kDelete = {
@@ -17,7 +17,7 @@ const kLeave = {
   subtitle: 'Transfer ownership before leaving'
 };
 
-@navWrapper
+@withNav
 @withLoader
 @connect(
   null,
@@ -27,10 +27,10 @@ const kLeave = {
 )
 export default class OrganizationHeader extends PureComponent {
   openBillingView = () => {
-    const { navPush, organization } = this.props;
+    const { nav, organization } = this.props;
 
-    navPush({
-      id: 'Billing',
+    nav.push({
+      screenId: 'Billing',
       title: 'Billing',
       props: {
         organizationId: organization.get('organization_id')
@@ -39,9 +39,9 @@ export default class OrganizationHeader extends PureComponent {
   };
 
   openRenameModal = () => {
-    const { openModal, organization } = this.props;
+    const { nav, organization } = this.props;
 
-    openModal(FormModal, {
+    nav.openModal(FormModal, {
       title: 'Rename organization',
       inputs: [
         {
@@ -133,9 +133,9 @@ export default class OrganizationHeader extends PureComponent {
   };
 
   openFormModal = ({ ...props }) => {
-    const { openModal } = this.props;
+    const { nav } = this.props;
 
-    openModal(FormModal, props);
+    nav.openModal(FormModal, props);
   };
 
   handleListClick = (i, button) => {

@@ -2,12 +2,12 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import SWView from 'src/react/_Layout/view-controller/SWView';
 import Loader from 'src/react/_components/loaders/Loader';
-import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
+import withNav from 'src/react/_hocs/Nav/withNav';
 import BrowserNavBar from './BrowserNavBar';
 import BrowserWebview from './BrowserWebview';
 import SW from './Browser.swiss';
 
-@navWrapper
+@withNav
 @connect(state => ({
   me: state.me
 }))
@@ -80,7 +80,7 @@ export default class Browser extends PureComponent {
     switch (action) {
       case 'browser':
         window.open(this.state.currentUrl);
-        this.props.navPop();
+        this.props.nav.pop();
         return null;
       case 'back':
         return this.webview.goBack();

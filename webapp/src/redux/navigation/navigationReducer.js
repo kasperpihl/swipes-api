@@ -3,38 +3,31 @@ import * as coreTypes from 'swipes-core-js/redux/constants';
 import * as types from '../constants';
 
 const initialState = fromJS({
-  primary: {
-    id: 'Projects',
-    stack: [
-      {
-        id: 'Projects',
-        title: 'Projects'
-      }
-    ]
-  },
-  secondary: {
-    id: null,
-    stack: []
-  },
-  counters: {},
+  sideMenuId: 'Projects',
+  onTopSide: 'left',
+  left: [
+    {
+      screenId: 'Projects',
+      title: 'Projects'
+    }
+  ],
+  right: [],
   locked: false,
   url: null
 });
+
 // Add support for Tester View
-const testerState = initialState.set(
-  'primary',
-  fromJS({
-    id: 'Tester',
-    stack: [
-      {
-        id: 'Tester',
-        title: 'Tester'
-      }
-    ]
-  })
+const testerState = initialState.set('sideMenuId', 'Tester').set(
+  'left',
+  fromJS([
+    {
+      screenId: 'Tester',
+      title: 'Tester'
+    }
+  ])
 );
 
-export default function history(state = initialState, action) {
+export default function navigationReducer(state = initialState, action) {
   const { payload, type } = action;
   switch (type) {
     case types.NAVIGATION_URL: {
@@ -48,35 +41,44 @@ export default function history(state = initialState, action) {
       return state.set('url', val);
     }
     case types.NAVIGATION_SET: {
-      return state.update(s => {
-        s = s.setIn([payload.target, 'id'], payload.id);
-        return s.setIn([payload.target, 'stack'], fromJS(payload.stack));
-      });
+      // Enforce lock to go left
+      if (state.get('locked')) {
+        payload.side = 'left';
+      }
+      if (payload.side === 'left') {
+        state = state.set('sideMenuId', payload.sideMenuId);
+      }
+      state = state.set('onTopSide', payload.side);
+      return state.set(
+        payload.side,
+        fromJS(payload.screen ? [payload.screen] : [])
+      );
+    }
+    case types.NAVIGATION_SET_ON_TOP: {
+      return state.set('onTopSide', payload.side);
     }
     case types.NAVIGATION_SAVE_STATE: {
       return state.updateIn(
-        [
-          payload.target,
-          'stack',
-          state.getIn([payload.target, 'stack']).size - 1
-        ],
+        [payload.side, state.get(payload.side).size - 1],
         s => s.setIn(['props', 'savedState'], fromJS(payload.savedState))
       );
     }
     case types.NAVIGATION_TOGGLE_LOCK: {
+      if (payload.side === 'left') {
+        return state;
+      }
       return state.set('locked', !state.get('locked'));
     }
     case types.NAVIGATION_PUSH: {
-      const target = state.get('locked') ? 'primary' : payload.target;
-      return state.updateIn([target, 'stack'], s =>
-        s.push(fromJS(payload.obj))
-      );
+      const side = state.get('locked') ? 'left' : payload.side;
+      state = state.set('onTopSide', side);
+      return state.updateIn([side], s => s.push(fromJS(payload.screen)));
     }
     case types.NAVIGATION_POP: {
-      if (payload.target === 'secondary' && state.get('locked')) {
+      if (payload.side === 'right' && state.get('locked')) {
         state = state.set('locked', false);
       }
-      return state.updateIn([payload.target, 'stack'], s => {
+      return state.updateIn([payload.side], s => {
         if (payload && typeof payload.index === 'number') {
           return s.slice(0, payload.index + 1);
         }

@@ -7,9 +7,9 @@ import ProjectTask from 'src/react/Project/Task/ProjectTask';
 import SWView from 'src/react/_Layout/view-controller/SWView';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
 import Button from 'src/react/_components/Button/Button';
-import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
+import withNav from 'src/react/_hocs/Nav/withNav';
 
-@navWrapper
+@withNav
 @withRequests(
   {
     project: {
@@ -28,9 +28,7 @@ import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
   { renderLoader: () => <div>loading</div> }
 )
 export default class ProjectOverview extends PureComponent {
-  static sizes() {
-    return [750];
-  }
+  static sizes = [750];
   constructor(props) {
     super(props);
     this.stateManager = new ProjectStateManager(props.project);
@@ -83,9 +81,9 @@ export default class ProjectOverview extends PureComponent {
     this.setState({ sliderValue: depth });
   };
   handleProjectChat = () => {
-    const { project, openSecondary } = this.props;
-    openSecondary({
-      id: 'DiscussionOverview',
+    const { project, nav } = this.props;
+    nav.openRight({
+      screenId: 'DiscussionOverview',
       title: 'Chat',
       props: {
         discussionId: project.get('discussion_id')

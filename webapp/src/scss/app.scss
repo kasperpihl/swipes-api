@@ -41,18 +41,11 @@
 // OS specific modifiers
 
 #app {
-
   // windows
   &.platform-win32 {
-
     &.window-is-maximized {
       $paddingSide: 4px;
       // padding: $paddingSide;
-
-      & section.view-container.view-container--fullscreen {
-        @include size(calc(100% - (#{$paddingSide} * 2)) !important, calc(100% - (38px + #{$paddingSide})) !important);
-        left: $paddingSide; top: 38px;
-      }
     }
 
     .topbar__window-actions {
@@ -62,17 +55,11 @@
 
   // Mac
   &.platform-darwin {
-
     .content-wrapper {
       border-radius: 5px;
     }
 
     &.window-is-fullscreen {
-      & section.view-container.view-container--fullscreen {
-        @include size(100% !important);
-        left: 0; top: 0;
-      }
-
       .topbar {
         -webkit-app-region: no-drag !important;
         //pointer-events: none;

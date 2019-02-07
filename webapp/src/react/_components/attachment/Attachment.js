@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
+import withNav from 'src/react/_hocs/Nav/withNav';
 import SW from './Attachment.swiss';
 import * as mainActions from 'src/redux/main/mainActions';
 
-@navWrapper
+@withNav
 @connect(
   null,
   {
@@ -19,14 +19,14 @@ export default class Attachment extends PureComponent {
     };
   }
   handleClick = e => {
-    const { openSecondary, attachment, browser, target } = this.props;
+    const { nav, attachment, browser } = this.props;
     const type = attachment.get('type');
     if (type === 'url') {
-      return browser(target, attachment.get('id'));
+      return browser(nav.side, attachment.get('id'));
     }
     if (type === 'note') {
-      return openSecondary({
-        id: 'Note',
+      return nav.openRight({
+        screenId: 'Note',
         title: 'Note',
         props: {
           noteId: attachment.get('id')
@@ -34,8 +34,8 @@ export default class Attachment extends PureComponent {
       });
     }
 
-    openSecondary({
-      id: 'File',
+    nav.openRight({
+      screenId: 'File',
       title: 'File',
       props: {
         fileId: attachment.get('id')

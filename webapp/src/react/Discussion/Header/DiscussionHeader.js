@@ -6,17 +6,17 @@ import FormModal from 'src/react/_components/FormModal/FormModal';
 import SW from './DiscussionHeader.swiss';
 import contextMenu from 'src/utils/contextMenu';
 import ListMenu from 'src/react/_components/ListMenu/ListMenu';
-import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
+import withNav from 'src/react/_hocs/Nav/withNav';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
+import orgGetBelonging from 'swipes-core-js/utils/org/orgGetBelonging';
 import TooltipUsers from 'src/react/_components/TooltipUsers/TooltipUsers';
 import request from 'swipes-core-js/utils/request';
 
-@navWrapper
+@withNav
 @withLoader
 @connect(
-  (state, props) => ({
-    myId: state.me.get('user_id'),
-    organization: state.organizations.get(props.discussion.get('owned_by'))
+  state => ({
+    myId: state.me.get('user_id')
   }),
   {
     tooltip: mainActions.tooltip
@@ -45,8 +45,8 @@ export default class DiscussionHeader extends PureComponent {
     tooltip(null);
   };
   onTitleClick = e => {
-    const { openModal, discussion } = this.props;
-    openModal(FormModal, {
+    const { nav, discussion } = this.props;
+    nav.openModal(FormModal, {
       title: 'Rename discussion',
       inputs: [
         {
@@ -66,8 +66,8 @@ export default class DiscussionHeader extends PureComponent {
     });
   };
   onArchive(options) {
-    const { discussion, openModal, loader } = this.props;
-    openModal(FormModal, {
+    const { discussion, nav, loader } = this.props;
+    nav.openModal(FormModal, {
       title: 'Delete discussion',
       subtitle:
         'This will delete the discussion permanently and cannot be undone.',
@@ -86,10 +86,6 @@ export default class DiscussionHeader extends PureComponent {
       }
     });
   }
-  onContextClick = () => {
-    const { openSecondary, discussion } = this.props;
-    // openSecondary(navForContext(discussion.get('context')));
-  };
   openDiscussionOptions = e => {
     const { discussion, myId } = this.props;
     const followers = discussion.get('followers');
@@ -113,12 +109,14 @@ export default class DiscussionHeader extends PureComponent {
     });
   };
   renderSubtitle = () => {
-    const { discussion, organization } = this.props;
+    const { discussion } = this.props;
     const followers = discussion.get('followers');
     const privacy = discussion.get('privacy');
     return (
       <>
-        <SW.OrganizationName>{organization.get('name')} / </SW.OrganizationName>
+        <SW.OrganizationName>
+          {orgGetBelonging(discussion.get('owned_by'))} /{' '}
+        </SW.OrganizationName>
         <SW.FollowerLabel
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
@@ -143,11 +141,7 @@ export default class DiscussionHeader extends PureComponent {
 
     return (
       <Fragment>
-        <CardHeader
-          title={topic}
-          delegate={this}
-          subtitle={this.renderSubtitle()}
-        />
+        <CardHeader title={topic} subtitle={this.renderSubtitle()} />
         <SW.ContextWrapper>
           <SW.Button
             title="Put name of project here"

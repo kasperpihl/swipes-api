@@ -6,18 +6,18 @@ import PaginationScrollToMore from 'src/react/_components/pagination/PaginationS
 import { withOptimist } from 'react-optimist';
 import PaginationProvider from 'swipes-core-js/components/pagination/PaginationProvider';
 
-import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
+import withNav from 'src/react/_hocs/Nav/withNav';
 
 import SW from './DiscussionList.swiss';
 
-@navWrapper
+@withNav
 @withOptimist
 @connect(state => ({
   myId: state.me.get('user_id')
 }))
 export default class DiscussionList extends PureComponent {
   renderItems(pagination, type) {
-    const { onSelectItemId, optimist, viewWidth } = this.props;
+    const { onSelectItemId, optimist, nav } = this.props;
     let { results } = pagination;
     let newSelectedId = null;
 
@@ -53,7 +53,7 @@ export default class DiscussionList extends PureComponent {
           siblingToSelectedItem={siblingToSelectedItem}
           item={item}
           key={item.get('discussion_id')}
-          viewWidth={viewWidth}
+          viewWidth={nav.width}
         />
       );
     });

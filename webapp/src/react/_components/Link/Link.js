@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { addGlobalStyles } from 'swiss-react';
 import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
-import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
+import withNav from 'src/react/_hocs/Nav/withNav';
 
 addGlobalStyles({
   '.links': {
@@ -13,7 +13,7 @@ addGlobalStyles({
   }
 });
 
-@navWrapper
+@withNav
 @connect(
   null,
   {
@@ -22,11 +22,11 @@ addGlobalStyles({
 )
 export default class Link extends PureComponent {
   onClick = () => {
-    let { browser, target, url } = this.props;
+    let { browser, nav, url } = this.props;
     if (url.indexOf('://') === -1) {
       url = `https://${url}`;
     }
-    browser(target, url);
+    browser(nav.side, url);
   };
   render() {
     const { url, title } = this.props;

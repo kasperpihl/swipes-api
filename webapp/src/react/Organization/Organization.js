@@ -6,11 +6,9 @@ import OrganizationInviteInput from 'src/react/Organization/Invite/Input/Organiz
 import OrganizationPendingInvites from 'src/react/Organization/Invite/PendingInvites/OrganizationPendingInvites';
 import SW from './Organization.swiss';
 
-import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
 import propsOrPop from 'src/react/_hocs/propsOrPop';
 import SWView from 'src/react/_Layout/view-controller/SWView';
 
-@navWrapper
 @connect((state, props) => ({
   meInOrg: state.organizations.getIn([
     props.organizationId,
@@ -21,7 +19,7 @@ import SWView from 'src/react/_Layout/view-controller/SWView';
 }))
 @propsOrPop('organization')
 export default class Organization extends PureComponent {
-  static sizes = () => [540];
+  static sizes = [540];
   constructor(props) {
     super(props);
 

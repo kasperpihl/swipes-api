@@ -7,9 +7,9 @@ import UserImage from 'src/react/_components/UserImage/UserImage';
 import SW from './ProfileHeader.swiss';
 import ListMenu from 'src/react/_components/ListMenu/ListMenu';
 import request from 'swipes-core-js/utils/request';
-import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
+import withNav from 'src/react/_hocs/Nav/withNav';
 
-@navWrapper
+@withNav
 @withLoader
 @connect(
   state => ({
@@ -21,8 +21,8 @@ import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
 )
 export default class ProfileHeader extends PureComponent {
   logout() {
-    const { openModal, loader } = this.props;
-    openModal(FormModal, {
+    const { nav, loader } = this.props;
+    nav.openModal(FormModal, {
       title: 'Log out',
       subtitle: 'Do you want to log out?',
       onConfirm: () => {
@@ -94,9 +94,9 @@ export default class ProfileHeader extends PureComponent {
     }
   };
   handleOpenProfileUpdate = () => {
-    const { openModal, me } = this.props;
+    const { nav, me } = this.props;
 
-    openModal(FormModal, {
+    nav.openModal(FormModal, {
       title: 'Update Profile',
       inputs: [
         {

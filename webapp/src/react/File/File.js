@@ -3,13 +3,11 @@ import withLoader from 'src/react/_hocs/withLoader';
 import Loader from 'src/react/_components/loaders/Loader';
 import SWView from 'src/react/_Layout/view-controller/SWView';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
-import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
 import Button from 'src/react/_components/Button/Button';
 import * as Files from './registerFileTypes';
 import SW from './File.swiss';
 import request from 'swipes-core-js/utils/request';
 
-@navWrapper
 @withLoader
 export default class File extends PureComponent {
   static minWidth() {

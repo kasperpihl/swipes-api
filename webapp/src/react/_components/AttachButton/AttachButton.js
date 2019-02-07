@@ -7,14 +7,14 @@ import Button from 'src/react/_components/Button/Button';
 import FormModal from 'src/react/_components/FormModal/FormModal';
 import ListMenu from 'src/react/_components/ListMenu/ListMenu';
 import SW from './AttachButton.swiss';
-import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
+import withNav from 'src/react/_hocs/Nav/withNav';
 
 const kFile = 0;
 const kUrl = 1;
 const kNote = 2;
 
 @withLoader
-@navWrapper
+@withNav
 export default class extends PureComponent {
   state = {
     fileVal: ''
@@ -61,7 +61,7 @@ export default class extends PureComponent {
     });
   }
   callbackChoseAttachmentType = (i, chosen) => {
-    const { openModal } = this.props;
+    const { nav } = this.props;
     switch (i) {
       case kFile: {
         this.hiddenInput.click();
@@ -73,7 +73,7 @@ export default class extends PureComponent {
         if (i === kUrl) {
           placeholder = 'http://';
         }
-        openModal(FormModal, {
+        nav.openModal(FormModal, {
           inputs: [{ type: 'text', placeholder, autoFocus: true }],
           confirmLabel,
           onConfirm: ([title]) => {

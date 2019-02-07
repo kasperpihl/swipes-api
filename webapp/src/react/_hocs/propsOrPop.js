@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 import hoistNonReactStatics from 'hoist-non-react-statics';
-import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
+import withNav from 'src/react/_hocs/Nav/withNav';
 
 export default (...propsToEnforce) => WrappedComponent => {
-  @navWrapper
+  @withNav
   class PropsOrPop extends PureComponent {
     componentDidMount() {
       this.checkForPop();
@@ -12,8 +12,8 @@ export default (...propsToEnforce) => WrappedComponent => {
       this.checkForPop();
     }
     checkForPop() {
-      if (this.missing && this.props.navPop) {
-        this.props.navPop();
+      if (this.missing && this.props.nav) {
+        this.props.nav.pop();
       }
     }
     render() {

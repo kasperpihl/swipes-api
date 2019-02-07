@@ -6,7 +6,7 @@ import withLoader from 'src/react/_hocs/withLoader';
 import UserImage from 'src/react/_components/UserImage/UserImage';
 import FormModal from 'src/react/_components/FormModal/FormModal';
 import ListMenu from 'src/react/_components/ListMenu/ListMenu';
-import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
+import withNav from 'src/react/_hocs/Nav/withNav';
 import request from 'swipes-core-js/utils/request';
 import SW from './OrganizationUser.swiss';
 
@@ -15,7 +15,8 @@ const kDemote = 'Demote to user';
 const kDisable = 'Disable user';
 const kTransfer = 'Transfer ownership';
 const kInvite = 'Invite user';
-@navWrapper
+
+@withNav
 @withLoader
 @connect(
   (state, props) => ({
@@ -38,8 +39,8 @@ export default class OrganizationUser extends PureComponent {
     };
   };
   openTransferModal() {
-    const { openModal, user } = this.props;
-    openModal(FormModal, {
+    const { nav, user } = this.props;
+    nav.openModal(FormModal, {
       title: 'Transfer ownership of organization',
       subtitle:
         'Warrning: Transferring the ownership is permanent and it cannot be reversed!',

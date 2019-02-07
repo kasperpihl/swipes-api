@@ -5,20 +5,20 @@ import ProfileOrg from 'src/react/Profile/Org/ProfileOrg.js';
 import withLoader from 'src/react/_hocs/withLoader';
 import request from 'swipes-core-js/utils/request';
 import FormModal from 'src/react/_components/FormModal/FormModal';
-import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
+import withNav from 'src/react/_hocs/Nav/withNav';
 import SW from './Profile.swiss';
 import SWView from 'src/react/_Layout/view-controller/SWView';
 
-@navWrapper
+@withNav
 @withLoader
 @connect(state => ({
   organizations: state.organizations
 }))
 export default class Profile extends PureComponent {
-  static sizes = () => [540];
+  static sizes = [540];
   handleCreateOrganization = () => {
-    const { openModal, loader } = this.props;
-    openModal(FormModal, {
+    const { nav, loader } = this.props;
+    nav.openModal(FormModal, {
       title: 'Create Organization',
       subtitle:
         'This will start a trial for 30 days, after which it will be $7.5/user/month.',

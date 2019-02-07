@@ -4,14 +4,14 @@ import CardHeader from 'src/react/_components/CardHeader/CardHeader';
 import SWView from 'src/react/_Layout/view-controller/SWView';
 import Button from 'src/react/_components/Button/Button';
 import ModalCreate from 'src/react/Modal/Create/ModalCreate';
-import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
+import withNav from 'src/react/_hocs/Nav/withNav';
 
-@navWrapper
+@withNav
 export default class Organize extends PureComponent {
-  static sizes = () => [600];
+  static sizes = [600];
   handleNewProject = () => {
-    const { openModal } = this.props;
-    openModal(ModalCreate, {
+    const { nav } = this.props;
+    nav.openModal(ModalCreate, {
       type: 'project'
     });
   };

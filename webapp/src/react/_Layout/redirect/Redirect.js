@@ -13,7 +13,7 @@ import * as navigationActions from 'src/redux/navigation/navigationActions';
     goToUrl: state.navigation.get('url')
   }),
   {
-    setUrl: navigationActions.url
+    redirectTo: navigationActions.redirectTo
   }
 )
 export default class Redirect extends PureComponent {
@@ -35,21 +35,21 @@ export default class Redirect extends PureComponent {
   checkRedirects() {
     // Reset if any
     const { location } = this.props;
-    const { goToUrl, token, isHydrated, setUrl, lastConnect } = this.props;
+    const { goToUrl, token, isHydrated, redirectTo, lastConnect } = this.props;
     if (goToUrl && location.pathname === (goToUrl.to.pathname || goToUrl.to)) {
-      setUrl(null);
+      redirectTo(null);
     }
 
     const path = location.pathname;
 
     if (isHydrated && !token) {
       if (['/'].indexOf(path) > -1) {
-        setUrl('/login');
+        redirectTo('/login');
       }
     }
     if (isHydrated && lastConnect) {
       if (['/login', '/register'].indexOf(path) > -1) {
-        setUrl('/');
+        redirectTo('/');
       }
     }
   }

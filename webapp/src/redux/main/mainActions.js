@@ -55,7 +55,7 @@ export const browser = (from, url, onLoad) => (dp, getState) => {
   }
   return dp(
     navigationActions.openSecondary(from, {
-      id: 'Browser',
+      screenId: 'Browser',
       showTitleInCrumb: true,
       title: 'Browser',
       props: {

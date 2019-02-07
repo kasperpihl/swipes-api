@@ -1,15 +1,15 @@
 import React, { PureComponent } from 'react';
 import SW from './ProjectListItem.swiss';
 import ProgressCircle from 'src/react/_components/ProgressCircle/ProgressCircle';
-import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
+import withNav from 'src/react/_hocs/Nav/withNav';
 import orgGetBelonging from 'swipes-core-js/utils/org/orgGetBelonging';
 
-@navWrapper
+@withNav
 export default class ProjectListItem extends PureComponent {
   handleClick = () => {
-    const { project, navPush } = this.props;
-    navPush({
-      id: 'ProjectOverview',
+    const { project, nav } = this.props;
+    nav.push({
+      screenId: 'ProjectOverview',
       title: 'Project',
       props: {
         projectId: project.get('project_id')

@@ -4,12 +4,11 @@ import cachedCallback from 'src/utils/cachedCallback';
 import UserImage from 'src/react/_components/UserImage/UserImage';
 import AttachButton from 'src/react/_components/AttachButton/AttachButton';
 import Attachment from 'src/react/_components/attachment/Attachment';
-import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
+
 import request from 'swipes-core-js/utils/request';
 
 import SW from './CommentComposer.swiss';
 
-@navWrapper
 export default class CommentComposer extends PureComponent {
   constructor(props) {
     super(props);

@@ -6,7 +6,7 @@ import SW from './Breadcrumbs.swiss';
 
 @connect(
   (state, props) => ({
-    history: state.navigation.getIn([props.target, 'stack'])
+    history: state.navigation.get(props.side)
   }),
   {
     pop: navigationActions.pop
@@ -14,11 +14,11 @@ import SW from './Breadcrumbs.swiss';
 )
 export default class Breadcrumbs extends Component {
   static propTypes = {
-    target: PropTypes.oneOf(['primary', 'secondary']).isRequired
+    side: PropTypes.oneOf(['left', 'right']).isRequired
   };
   handleClickCached = i => () => {
-    const { target, pop } = this.props;
-    pop(target, i);
+    const { side, pop } = this.props;
+    pop(side, i);
   };
   renderBreadcrumbs() {
     const { history } = this.props;

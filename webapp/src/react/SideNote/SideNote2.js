@@ -8,7 +8,7 @@ import SW from './SideNote.swiss';
 
 @withSyncedNote
 export default class SideNote extends PureComponent {
-  static sizes = () => [698];
+  static sizes = [698];
   setEditorState(editorState) {
     const { updateNote } = this.props;
     updateNote(editorState);

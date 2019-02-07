@@ -1,12 +1,13 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
+import withNav from 'src/react/_hocs/Nav/withNav';
+
 import timeGetDayOrTime from 'swipes-core-js/utils/time/timeGetDayOrTime';
 import SW from './DiscussionListItem.swiss';
 import orgGetBelonging from 'swipes-core-js/utils/org/orgGetBelonging';
 import userGetFirstName from 'swipes-core-js/utils/user/userGetFirstName';
 
-@navWrapper
+@withNav
 @connect(state => ({
   myId: state.me.get('user_id')
 }))
@@ -19,10 +20,6 @@ export default class DiscussionListItem extends PureComponent {
     const { onSelectItemId, item } = this.props;
     onSelectItemId(item.get('discussion_id'));
   };
-  onContextClick = () => {
-    const { openSecondary, item } = this.props;
-    // openSecondary(navForContext(item.get('context')));
-  };
   render() {
     const {
       item,
@@ -31,7 +28,7 @@ export default class DiscussionListItem extends PureComponent {
       siblingToSelectedItem,
       compact,
       first,
-      viewWidth
+      nav
     } = this.props;
     const firstName = userGetFirstName(
       item.get('last_comment_by'),
@@ -53,7 +50,7 @@ export default class DiscussionListItem extends PureComponent {
         siblingToSelectedItem={siblingToSelectedItem}
         first={first}
         compact={compact}
-        viewWidth={viewWidth}
+        viewWidth={nav.width}
       >
         <SW.Wrapper onClick={this.onClick}>
           <SW.UnreadCircle />

@@ -7,15 +7,13 @@ import TabBar from 'src/react/_components/TabBar/TabBar';
 import { withOptimist } from 'react-optimist';
 import SWView from 'src/react/_Layout/view-controller/SWView';
 import ModalCreate from 'src/react/Modal/Create/ModalCreate';
-import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
+import withNav from 'src/react/_hocs/Nav/withNav';
 import Button from 'src/react/_components/Button/Button';
 
-@navWrapper
+@withNav
 @withOptimist
 export default class Discuss extends PureComponent {
-  static sizes() {
-    return [800, 910, 1080, 1200];
-  }
+  static sizes = [800, 910, 1080, 1200];
   constructor(props) {
     super(props);
     this.state = {
@@ -33,8 +31,8 @@ export default class Discuss extends PureComponent {
     }
   };
   handleNewDiscussion = () => {
-    const { openModal } = this.props;
-    openModal(ModalCreate, {
+    const { nav } = this.props;
+    nav.openModal(ModalCreate, {
       type: 'discussion'
     });
   };
@@ -77,17 +75,16 @@ export default class Discuss extends PureComponent {
   }
   render() {
     const { tabIndex, selectedId } = this.state;
-    const { viewWidth } = this.props;
+    const { nav } = this.props;
     return (
-      <SW.ProvideContext viewWidth={viewWidth}>
+      <SW.ProvideContext viewWidth={nav.width}>
         <SW.ParentWrapper>
           <SW.LeftSide>
             <SWView header={this.renderLeftHeader()} noframe>
               <DiscussionList
                 tabIndex={tabIndex}
                 onSelectItemId={this.onSelectItemId}
-                compact={viewWidth === 800}
-                viewWidth={viewWidth}
+                viewWidth={nav.width}
               />
             </SWView>
           </SW.LeftSide>

@@ -7,7 +7,7 @@ import CardHeader from 'src/react/_components/CardHeader/CardHeader';
 import TimeAgo from 'swipes-core-js/components/TimeAgo';
 import { convertToRaw, EditorState } from 'draft-js';
 import Button from 'src/react/_components/Button/Button';
-import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
+// import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
 import getDiffServerClient from 'src/utils/draft-js/getDiffServerClient';
 import { setupLoading } from 'swipes-core-js/classes/utils';
 import randomString from 'swipes-core-js/utils/randomString';
@@ -39,7 +39,7 @@ const mapStateToProps = (state, props) => {
   };
 };
 
-@navWrapper
+// @navWrapper
 @connect(
   mapStateToProps,
   {
@@ -49,12 +49,7 @@ const mapStateToProps = (state, props) => {
   }
 )
 export default class SideNote extends PureComponent {
-  static sizes() {
-    return [600, 900];
-  }
-  static fullscreen() {
-    return true;
-  }
+  static sizes = [600, 900];
   constructor(props) {
     super(props);
     this.state = {};

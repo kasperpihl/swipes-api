@@ -1,76 +1,69 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { setupCachedCallback } from 'react-delegate';
-import * as mainActions from 'src/redux/main/mainActions';
+import cachedCallback from 'src/utils/cachedCallback';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 import SW from './Sidebar.swiss';
 import UserImage from 'src/react/_components/UserImage/UserImage';
 
 const kNavItems = [
-  { id: 'Projects', svg: 'Milestones' },
-  { id: 'Chat', svg: 'Messages' }
+  { screenId: 'Projects', svg: 'Milestones' },
+  { screenId: 'Chat', svg: 'Messages' }
 ];
 
 @connect(
   state => ({
-    me: state.me,
     auth: state.auth,
-    navId: state.navigation.getIn(['primary', 'id']),
+    sideMenuId: state.navigation.get('sideMenuId'),
     unreadCounter: state.connection.get('unread').size
   }),
   {
-    navSet: navigationActions.set,
-    contextMenu: mainActions.contextMenu
+    navSet: navigationActions.set
   }
 )
 export default class Sidebar extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.onClickCached = setupCachedCallback(this.onClick, this);
-    this.onRightClickCached = setupCachedCallback(this.onClick, this);
-    this.onMouseDownCached = setupCachedCallback(this.onMouseDown, this);
-  }
-  onMouseDown(id, e) {
+  handleMouseDownCached = cachedCallback((screenId, e) => {
     if (e.button === 1) {
-      this.onClick(id, 'secondary', e);
+      this.openScreen('right', screenId);
     }
-  }
-  onClick(id, target, e) {
+  });
+  handleContextMenuCached = cachedCallback((screenId, e) => {
+    e.preventDefault();
+    this.openScreen('right', screenId);
+  });
+  handleClickCached = cachedCallback(screenId =>
+    this.openScreen('left', screenId)
+  );
+  openScreen(side, screenId) {
     const { navSet } = this.props;
-
-    if (e.which === 2 || e.which === 4) {
-      target = 'secondary';
-    }
-
-    navSet(target, {
-      id,
-      title: id
+    navSet(side, {
+      screenId,
+      title: screenId
     });
   }
 
   renderItem(item) {
-    const { navId, unreadCounter, auth } = this.props;
+    const { sideMenuId, unreadCounter, auth } = this.props;
 
-    let count = item.id === 'Chat' ? unreadCounter : 0;
+    let count = item.screenId === 'Chat' ? unreadCounter : 0;
     if (count > 9) {
       count = '9+';
     }
 
-    const active = item.id === navId;
+    const active = item.screenId === sideMenuId;
 
     return (
-      <SW.ProvideContext active={active} key={item.id}>
+      <SW.ProvideContext active={active} key={item.screenId}>
         <SW.Item
-          round={item.id === 'Profile'}
-          onClick={this.onClickCached(item.id, 'primary')}
-          onContextMenu={this.onRightClickCached(item.id, 'secondary')}
-          onMouseDown={this.onMouseDownCached(item.id)}
-          key={item.id}
-          data-id={item.id}
+          round={item.screenId === 'Profile'}
+          onClick={this.handleClickCached(item.screenId)}
+          onContextMenu={this.handleContextMenuCached(item.screenId)}
+          onMouseDown={this.handleMouseDownCached(item.screenId)}
           className="item"
         >
-          <SW.Description className="description">{item.id}</SW.Description>
-          {item.id === 'Profile' && auth.get('token') ? (
+          <SW.Description className="description">
+            {item.screenId}
+          </SW.Description>
+          {item.screenId === 'Profile' && auth.get('token') ? (
             <UserImage userId="me" />
           ) : (
             <SW.Icon icon={item.svg} className="icon" />
@@ -92,7 +85,7 @@ export default class Sidebar extends PureComponent {
           </SW.Section>
         </SW.MiddleSection>
         <SW.BottomSection>
-          {this.renderItem({ id: 'Profile' })}
+          {this.renderItem({ screenId: 'Profile' })}
         </SW.BottomSection>
       </SW.Wrapper>
     );

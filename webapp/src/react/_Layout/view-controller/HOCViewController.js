@@ -1,115 +1,47 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { Map } from 'immutable';
-import Button from 'src/react/_components/Button/Button';
-import * as mainActions from 'src/redux/main/mainActions';
-import * as navigationActions from 'src/redux/navigation/navigationActions';
 import * as views from 'src/react/registerScreens';
-import { setupCachedCallback } from 'react-delegate';
-import debounce from 'swipes-core-js/utils/debounce';
-import Breadcrumbs from 'src/react/_components/Breadcrumbs/Breadcrumbs';
-import ContextWrapper from './ContextWrapper';
-import './styles/view-controller';
-import Modal from 'src/react/_Layout/modal/Modal';
-import prefixAll from 'inline-style-prefixer/static';
+import throttle from 'swipes-core-js/utils/throttle';
+import NavProvider from 'src/react/_hocs/Nav/NavProvider';
+import Card from 'src/react/_Layout/Card/Card';
+import SW from './ViewController.swiss';
 
 const DEFAULT_MAX_WIDTH = 800;
 const SPACING = 15;
 const OVERLAY_LEFT_MIN = 90;
 
-@connect(
-  state => ({
-    navigation: state.navigation
-  }),
-  {
-    pop: navigationActions.pop,
-    push: navigationActions.push,
-    modal: mainActions.modal,
-    toggleLock: navigationActions.toggleLock,
-    openSecondary: navigationActions.openSecondary,
-    saveState: navigationActions.saveState,
-    navSet: navigationActions.set
-  }
-)
+@connect(state => ({
+  navigation: state.navigation
+}))
 export default class extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      appWidth: -1,
-      onTop: 'secondary',
-      fullscreen: null
-    };
-    this.onPopCached = setupCachedCallback(props.pop, this);
-    this.onPushCached = setupCachedCallback(props.push, this);
-    this.onOpenModalCached = setupCachedCallback(props.modal, this);
-    this.onOpenSecondary = setupCachedCallback(props.openSecondary, this);
-    this.onSaveState = setupCachedCallback(props.saveState, this);
-    this.onUnderlayCached = setupCachedCallback(this.onUnderlay, this);
-    this.onFullscreenCached = setupCachedCallback(this.onFullscreen, this);
-    this.bouncedUpdateAppWidth = debounce(this.updateAppWidth, 50);
-  }
+  state = {
+    appWidth: -1
+  };
   componentDidMount() {
     this.updateAppWidth();
-    window.addEventListener('resize', this.bouncedUpdateAppWidth);
-  }
-  componentWillReceiveProps(nextProps) {
-    const nav = this.props.navigation;
-    const nextNav = nextProps.navigation;
-    const { onTop } = this.state;
-    if (
-      onTop === 'primary' &&
-      nav.get('secondary') !== nextNav.get('secondary')
-    ) {
-      this.setState({ onTop: 'secondary' });
-    }
-    if (
-      onTop === 'secondary' &&
-      nav.get('primary') !== nextNav.get('primary')
-    ) {
-      this.setState({ onTop: 'primary' });
-    }
+    window.addEventListener('resize', this.updateAppWidth);
   }
   componentWillUnmount() {
     this._unmounted = true;
-    window.removeEventListener('resize', this.bouncedUpdateAppWidth);
+    window.removeEventListener('resize', this.updateAppWidth);
   }
   componentDidCatch(e) {
     console.log('hi', e);
   }
-  onClose = () => {
-    const { navSet } = this.props;
-    const { fullscreen } = this.state;
-    if (fullscreen) {
-      this.setState({ fullscreen: null });
-    }
-    this.setState({ onTop: 'primary' });
-    navSet('secondary', null);
-  };
-  onUnderlay(target) {
-    this.setState({ onTop: target });
-  }
-  onFullscreen(target) {
-    const { fullscreen } = this.state;
-    if (fullscreen) {
-      this.setState({ fullscreen: null });
-    } else {
-      this.setState({ fullscreen: target });
-    }
-  }
-  onToggleLock = () => {
+  handleToggleLock = () => {
     const { toggleLock } = this.props;
     toggleLock();
   };
-  getSizeForView(View, hasTwoViews) {
-    if (typeof View === 'undefined') {
+  getSizeForComp(Comp, hasTwoViews) {
+    if (!Comp) {
       return 0;
     }
 
     const { appWidth } = this.state;
     const spacing = hasTwoViews ? OVERLAY_LEFT_MIN : SPACING;
 
-    if (typeof View.sizes === 'function') {
-      const sizes = View.sizes();
+    if (Array.isArray(Comp.sizes)) {
+      const sizes = Comp.sizes;
 
       for (let i = sizes.length - 1; i >= 0; i--) {
         const size = sizes[i];
@@ -120,8 +52,8 @@ export default class extends PureComponent {
     }
 
     let maxWidth = DEFAULT_MAX_WIDTH;
-    if (typeof View.maxWidth === 'function') {
-      maxWidth = View.maxWidth();
+    if (typeof Comp.maxWidth === 'function') {
+      maxWidth = Comp.maxWidth();
     }
     return Math.min(maxWidth, appWidth - spacing);
   }
@@ -130,189 +62,91 @@ export default class extends PureComponent {
     return appWidth - SPACING - sizes.reduce((c, b) => c + b);
   }
 
-  updateAppWidth = () => {
+  updateAppWidth = throttle(() => {
     if (!this._unmounted) {
-      this.setState({ appWidth: this.refs.controller.clientWidth });
+      this.setState({ appWidth: this.wrapperRef.clientWidth });
     }
-  };
-  renderViewControllers() {
+  }, 50);
+  getScreen(side) {
     const { navigation } = this.props;
-    const { appWidth, onTop, fullscreen } = this.state;
+    const screen = navigation.get(side).last();
+    if (!screen) {
+      return [null, null];
+    }
+    const Comp = views[screen && screen.get('screenId')] || views.NotFound;
+    const props = screen.get('props') && screen.get('props').toObject();
+    return [Comp, props];
+  }
+  renderViewControllers() {
+    console.log('rendering view controller');
+    const { appWidth } = this.state;
+    const onTopSide = this.props.navigation.get('onTopSide');
     if (appWidth === -1) return null;
 
-    // Primary view
-    const pView = navigation.getIn(['primary', 'stack']).last();
-    const PView = views[pView && pView.get('id')] || views.NotFound;
-
-    // Secondary view
-    const sView = navigation.getIn(['secondary', 'stack']).last();
-    const SView = sView ? views[sView.get('id')] || views.NotFound : undefined;
-
-    const hasTwo = !!SView;
+    const [LeftComp, leftProps] = this.getScreen('left');
+    const [RightComp, rightProps] = this.getScreen('right');
     const sizes = [
-      this.getSizeForView(PView, hasTwo),
-      this.getSizeForView(SView, hasTwo)
+      this.getSizeForComp(LeftComp, !!RightComp),
+      this.getSizeForComp(RightComp, !!RightComp)
     ];
 
     const remainingSpace = this.getRemainingSpace(sizes);
-    const isOverlay = SView && remainingSpace < 0;
+    const hasOverlay = RightComp && remainingSpace < 0;
 
-    let runningX = isOverlay ? 0 : remainingSpace / 2;
-    return [pView, sView].map((currentView, i) => {
-      const width = sizes[i];
-      const options = {
-        view: currentView,
-        target: i === 0 ? 'primary' : 'secondary',
-        classes: [],
-        width,
-        styles: {
-          width: `${width}px`,
-          transform: `translate3d(${parseInt(runningX, 10)}px, 0px, 0px)`,
-          zIndex: 2 - i
-        }
-      };
-
-      runningX += width + SPACING;
-
-      if (isOverlay) {
-        let top = 0;
-        let left = 0;
-        if (options.target === onTop) {
-          options.styles.zIndex = 3;
-          options.classes.push('view-container--overlay');
-        } else {
-          options.classes.push('view-container--underlay');
-          top = 20;
-        }
-        if (options.target === 'secondary') {
-          left = appWidth - width - SPACING;
-        }
-        options.styles.transform = `translate3d(${parseInt(
-          left,
-          10
-        )}px, ${top}px, 0px)`;
-      }
-      if (fullscreen) {
-        if (fullscreen === options.target) {
-          options.classes.push('view-container--fullscreen');
-          options.styles.zIndex = 4;
-        } else {
-          options.classes.push('view-container--not-fullscreen');
-        }
-      }
-
-      return this.renderContent(options);
-    });
-  }
-  renderCardHeader(target, canFullscreen) {
-    const { fullscreen } = this.state;
-    const { navigation } = this.props;
-    const closeButton =
-      target !== 'primary' && !navigation.get('locked') ? (
-        <Button.Standard
-          onClick={this.onClose}
-          icon="CloseThick"
-          key="close-button"
-        />
-      ) : (
-        undefined
-      );
-    const lockButton =
-      target !== 'primary' ? (
-        <Button.Standard
-          onClick={this.onToggleLock}
-          icon={navigation.get('locked') ? 'WindowLock' : 'WindowUnlock'}
-          key="lock-button"
-        />
-      ) : (
-        undefined
-      );
-    const fullscreenButton = canFullscreen ? (
-      <Button.Standard
-        onClick={this.onFullscreenCached(target)}
-        icon={fullscreen === target ? 'FromFullscreen' : 'ToFullscreen'}
-        key="fullscreen-button"
-      />
-    ) : (
-      undefined
-    );
+    const startX = hasOverlay ? 0 : remainingSpace / 2;
 
     return (
-      <div className="view-container__header">
-        <Breadcrumbs target={target} />
-        <div className="view-container__actions">
-          {fullscreenButton}
-          {lockButton}
-          {closeButton}
-        </div>
-      </div>
+      <>
+        {this.renderSide('right', {
+          Comp: RightComp,
+          props: rightProps,
+          width: sizes[1],
+          cardProps: {
+            left: hasOverlay
+              ? appWidth - sizes[1] - SPACING
+              : startX + sizes[0] + SPACING,
+            isOverlay: hasOverlay && onTopSide === 'right',
+            isUnderlay: hasOverlay && onTopSide !== 'right'
+          }
+        })}
+        {this.renderSide('left', {
+          Comp: LeftComp,
+          props: leftProps,
+          width: sizes[0],
+          cardProps: {
+            left: hasOverlay ? 0 : startX,
+            isOverlay: hasOverlay && onTopSide === 'left',
+            isUnderlay: hasOverlay && onTopSide !== 'left'
+          }
+        })}
+      </>
     );
   }
-  renderContent(options) {
-    if (!options.view) {
+  renderSide(side, { Comp, width, props, cardProps }) {
+    if (!Comp) {
       return undefined;
     }
-
     const { navigation } = this.props;
 
-    const { target, classes } = options;
-    const View = views[options.view.get('id')] || views.NotFound;
-    let props = {};
-    if (options.view.get('props')) {
-      props = options.view.get('props').toObject();
-    }
-
-    const className = ['view-container', `view-container--${target}`]
-      .concat(classes)
-      .join(' ');
-
-    let canFullscreen = false;
-    if (typeof View.fullscreen === 'function') {
-      canFullscreen = !!View.fullscreen();
-    }
-
-    let onClick;
-    if (classes.indexOf('view-container--underlay') !== -1) {
-      onClick = this.onUnderlayCached(target);
-    }
     return (
-      <ContextWrapper
-        target={target}
-        key={target}
-        viewWidth={options.width}
-        navPop={this.onPopCached(target)}
-        navPush={this.onPushCached(target)}
-        saveState={this.onSaveState(target)}
-        openSecondary={this.onOpenSecondary(target)}
-        popSecondary={this.onPopCached('secondary')}
-        openModal={this.onOpenModalCached(target)}
+      <NavProvider
+        isLocked={side === 'right' && navigation.get('locked')}
+        side={side}
+        width={width}
+        key={side}
       >
-        <section
-          className={className}
-          style={prefixAll(options.styles)}
-          onClick={onClick}
-        >
-          {this.renderCardHeader(target, canFullscreen)}
-          <View
-            delegate={this}
-            key={
-              navigation.getIn([target, 'id']) +
-              navigation.getIn([target, 'stack']).size
-            }
-            {...props}
-          />
-          <Modal target={target} />
-        </section>
-      </ContextWrapper>
+        <Card {...cardProps}>
+          <Comp key={side + navigation.get(side).size} {...props} />
+        </Card>
+      </NavProvider>
     );
   }
 
   render() {
-    const target = 'primary';
     return (
-      <div ref="controller" className="view-controller">
+      <SW.Wrapper innerRef={c => (this.wrapperRef = c)}>
         {this.renderViewControllers()}
-      </div>
+      </SW.Wrapper>
     );
   }
 }

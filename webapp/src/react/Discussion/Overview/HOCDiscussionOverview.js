@@ -1,15 +1,12 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 
-import propsOrPop from 'src/react/_hocs/propsOrPop';
 import withRequests from 'swipes-core-js/components/withRequests';
 import PaginationProvider from 'swipes-core-js/components/pagination/PaginationProvider';
 import Loader from 'src/react/_components/loaders/Loader';
 import DiscussionOverview from './DiscussionOverview';
 import request from 'swipes-core-js/utils/request';
-import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
 
-@navWrapper
 @withRequests({
   discussion: {
     request: {
@@ -28,16 +25,10 @@ import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
   myId: state.me.get('user_id')
 }))
 export default class HOCDiscussionOverview extends PureComponent {
-  static sizes() {
-    return [654];
-  }
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      viewAttachments: false
-    };
-  }
+  static sizes = [654];
+  state = {
+    viewAttachments: false
+  };
   onInitialLoad = () => {
     const { discussion, myId } = this.props;
     const ts = discussion.getIn(['followers', myId]);
@@ -53,6 +44,7 @@ export default class HOCDiscussionOverview extends PureComponent {
   };
   render() {
     const { requestReady, requestError, discussion } = this.props;
+    const { viewAttachments } = this.state;
     if (!requestReady) {
       return <Loader center size={54} text="Loading" />;
     }
@@ -63,9 +55,11 @@ export default class HOCDiscussionOverview extends PureComponent {
     }
     return (
       <PaginationProvider
+        key={`${viewAttachments}`}
         request={{
           body: {
-            discussion_id: discussion.get('discussion_id')
+            discussion_id: discussion.get('discussion_id'),
+            attachments_only: viewAttachments
           },
           url: 'comment.list',
           resPath: 'comments'
@@ -73,7 +67,7 @@ export default class HOCDiscussionOverview extends PureComponent {
         limit={40}
         onInitialLoad={this.onInitialLoad}
         cache={{
-          path: ['comment', discussion.get('discussion_id')],
+          path: [`comment-${viewAttachments}`, discussion.get('discussion_id')],
           orderBy: '-sent_at',
           idAttribute: 'comment_id'
         }}

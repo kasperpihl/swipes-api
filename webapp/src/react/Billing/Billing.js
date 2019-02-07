@@ -7,7 +7,7 @@ import request from 'swipes-core-js/utils/request';
 import propsOrPop from 'src/react/_hocs/propsOrPop';
 import SWView from 'src/react/_Layout/view-controller/SWView';
 
-import navWrapper from 'src/react/_Layout/view-controller/NavWrapper';
+import withNav from 'src/react/_hocs/Nav/withNav';
 import FormModal from 'src/react/_components/FormModal/FormModal';
 import BillingHeader from './Header/BillingHeader';
 import BillingPaymentActive from './Payment/Active/BillingPaymentActive';
@@ -17,7 +17,7 @@ import BillingPlan from './Plan/BillingPlan';
 
 import SW from './Billing.swiss';
 
-@navWrapper
+@withNav
 @withLoader
 @connect((state, props) => ({
   organization: state.organizations.get(props.organizationId)
@@ -36,11 +36,11 @@ export default class Billing extends PureComponent {
     });
   };
   handlePlanChange = plan => {
-    const { openModal, organization } = this.props;
+    const { nav, organization } = this.props;
     if (!organization.get('stripe_subscription_id')) {
       this.setState({ plan });
     } else {
-      openModal(FormModal, {
+      nav.openModal(FormModal, {
         title: 'Change billing plan',
         subtitle: `You are about to change your billing plan from ${organization.get(
           'plan'
@@ -52,7 +52,7 @@ export default class Billing extends PureComponent {
     }
   };
   render() {
-    const { organization, openModal } = this.props;
+    const { organization, nav } = this.props;
     const { plan } = this.state;
 
     return (
@@ -66,7 +66,7 @@ export default class Billing extends PureComponent {
             <SW.PaymentSection>
               {organization.get('stripe_subscription_id') ? (
                 <BillingPaymentActive
-                  openModal={openModal}
+                  openModal={nav.openModal}
                   organization={organization}
                 />
               ) : (
