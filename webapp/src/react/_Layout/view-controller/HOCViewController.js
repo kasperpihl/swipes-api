@@ -78,7 +78,6 @@ export default class extends PureComponent {
     return [Comp, props];
   }
   renderViewControllers() {
-    console.log('rendering view controller');
     const { appWidth } = this.state;
     const onTopSide = this.props.navigation.get('onTopSide');
     if (appWidth === -1) return null;
@@ -97,18 +96,6 @@ export default class extends PureComponent {
 
     return (
       <>
-        {this.renderSide('right', {
-          Comp: RightComp,
-          props: rightProps,
-          width: sizes[1],
-          cardProps: {
-            left: hasOverlay
-              ? appWidth - sizes[1] - SPACING
-              : startX + sizes[0] + SPACING,
-            isOverlay: hasOverlay && onTopSide === 'right',
-            isUnderlay: hasOverlay && onTopSide !== 'right'
-          }
-        })}
         {this.renderSide('left', {
           Comp: LeftComp,
           props: leftProps,
@@ -119,13 +106,23 @@ export default class extends PureComponent {
             isUnderlay: hasOverlay && onTopSide !== 'left'
           }
         })}
+        {RightComp &&
+          this.renderSide('right', {
+            Comp: RightComp,
+            props: rightProps,
+            width: sizes[1],
+            cardProps: {
+              left: hasOverlay
+                ? appWidth - sizes[1] - SPACING
+                : startX + sizes[0] + SPACING,
+              isOverlay: hasOverlay && onTopSide === 'right',
+              isUnderlay: hasOverlay && onTopSide !== 'right'
+            }
+          })}
       </>
     );
   }
   renderSide(side, { Comp, width, props, cardProps }) {
-    if (!Comp) {
-      return undefined;
-    }
     const { navigation } = this.props;
 
     return (

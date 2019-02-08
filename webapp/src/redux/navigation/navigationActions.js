@@ -39,14 +39,25 @@ export function focus(side) {
 }
 
 export const openSecondary = (fromSide, screen) => (d, getState) => {
-  const isLocked = getState().navigation.get('locked');
+  const navState = getState().navigation;
+
+  const isLocked = navState.get('locked');
+  let toSide = 'right';
   if (isLocked) {
-    return d(push('left', screen));
+    toSide = 'left';
   }
-  if (fromSide === 'left') {
+  const leftCurrent = navState.get('left').last();
+  if (
+    leftCurrent.get('uniqueId') &&
+    leftCurrent.get('uniqueId') === screen.uniqueId
+  ) {
+    return d(focus('left'));
+  }
+
+  if (fromSide === 'left' && !isLocked) {
     return d(set('right', screen));
   }
-  return d(push('right', screen));
+  return d(push(toSide, screen));
 };
 
 export function pop(side, i) {
