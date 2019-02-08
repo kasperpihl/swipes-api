@@ -35,7 +35,7 @@ export default class DiscussionHeader extends PureComponent {
       },
       options: {
         boundingRect: e.target.getBoundingClientRect(),
-        position: 'bottom'
+        position: 'right'
       }
     });
   };
