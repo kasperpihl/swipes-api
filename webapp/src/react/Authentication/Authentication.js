@@ -17,7 +17,7 @@ import SW from './Authentication.swiss';
     invitedToOrg: state.invitation.get('invitedToOrg')
   }),
   {
-    setUrl: navigationActions.url
+    redirectTo: navigationActions.redirectTo
   }
 )
 export default class Authentication extends PureComponent {
@@ -56,7 +56,7 @@ export default class Authentication extends PureComponent {
   };
   handleAuthentication = () => {
     const { formData } = this.state;
-    const { setUrl, loader } = this.props;
+    const { redirectTo, loaderedirectTo = this.props;
 
     if (loader.check('authButton')) {
       return;
@@ -73,8 +73,8 @@ export default class Authentication extends PureComponent {
       if (res.ok) {
         loader.clear('authButton');
         window.analytics.sendEvent(analyticsEvent, {});
-        setUrl('/');
-      } else {
+        redirectTo('/');
+      } eredirectTo {
         loader.error('authButton', res.error);
       }
     });
@@ -99,11 +99,11 @@ export default class Authentication extends PureComponent {
     return this.props.location.pathname === '/login';
   }
   handleTabChange = i => {
-    const { setUrl } = this.props;
+    const { redirectTo } = tredirectTo.props;
     if (this.isLogin() && i === 0) {
-      setUrl('/register');
+      redirectTo('/registerredirectTo
     } else if (!this.isLogin() && i === 1) {
-      setUrl('/login');
+      redirectTo('/loginredirectTo
     }
   };
   getSubtitle() {

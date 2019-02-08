@@ -1,6 +1,6 @@
 import { styleSheet } from 'swiss-react';
 
-export default styleSheet('Card', {
+export default styleSheet('Card2', {
   Wrapper: {
     _size: ['100%'],
     overflowY: 'auto',
