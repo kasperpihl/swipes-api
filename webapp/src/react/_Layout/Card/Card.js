@@ -1,19 +1,16 @@
 import React from 'react';
 import Button from 'src/react/_components/Button/Button';
 import { connect } from 'react-redux';
-import compose from 'src/utils/compose';
-import withNav from 'src/react/_hocs/Nav/withNav';
+import useNav from 'src/react/_hooks/useNav';
 import Breadcrumbs from 'src/react/_components/Breadcrumbs/Breadcrumbs';
 import Modal from 'src/react/_Layout/modal/Modal';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 import SW from './Card.swiss';
 
-export default compose(
-  connect(),
-  withNav
-)(Card);
+export default connect()(Card);
 
-function Card({ nav, children, top, left, isOverlay, isUnderlay, dispatch }) {
+function Card({ children, top, left, isOverlay, isUnderlay, dispatch }) {
+  const nav = useNav();
   const handleClick = () => {
     if (isUnderlay) {
       dispatch(navigationActions.focus(nav.side));
