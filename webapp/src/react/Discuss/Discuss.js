@@ -23,11 +23,9 @@ export default class Discuss extends PureComponent {
     };
   }
   handleTabChange = i => {
-    const { optimist } = this.props;
     if (i !== this.state.tabIndex) {
-      this.setState({ tabIndex: i, selectedId: null }, () => {
-        optimist.set('discussSelectedId', null);
-      });
+      this.setState({ tabIndex: i });
+      this.selectDiscussionId(null);
     }
   };
   handleNewDiscussion = () => {
@@ -36,8 +34,14 @@ export default class Discuss extends PureComponent {
       type: 'discussion'
     });
   };
+  selectDiscussionId(selectedId) {
+    const { nav, optimist } = this.props;
+    this.setState({ selectedId }, () => {
+      optimist.set('discussSelectedId', selectedId);
+    });
+    nav.setUniqueId(selectedId);
+  }
   onSelectItemId = (id, results) => {
-    const { optimist } = this.props;
     const { selectedId } = this.state;
     let newId = id;
     if (
@@ -53,9 +57,7 @@ export default class Discuss extends PureComponent {
       return;
     }
     if (newId !== selectedId) {
-      this.setState({ selectedId: id }, () => {
-        optimist.set('discussSelectedId', id);
-      });
+      this.selectDiscussionId(id);
     }
   };
   renderLeftHeader() {

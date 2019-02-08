@@ -32,7 +32,7 @@ function Card({ children, top, left, isOverlay, isUnderlay, dispatch }) {
           )}
           {nav.side !== 'left' && (
             <Button.Standard
-              onClick={nav.lock}
+              onClick={nav.toggleLock}
               icon={nav.isLocked ? 'WindowLock' : 'WindowUnlock'}
             />
           )}
