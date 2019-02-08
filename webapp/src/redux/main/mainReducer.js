@@ -40,12 +40,12 @@ export default function main(state = initialState, action) {
     // ======================================================
     // Modals
     // ======================================================
-    case types.NAVIGATION_PUSH:
-    case types.NAVIGATION_SET:
-    case types.NAVIGATION_POP: {
+    case types.NAV_PUSH:
+    case types.NAV_SET:
+    case types.NAV_POP: {
       return state.setIn(['modals', payload.target], null);
     }
-    case types.NAVIGATION_MODAL: {
+    case types.NAV_MODAL: {
       const modal = payload.component
         ? {
             component: payload.component,

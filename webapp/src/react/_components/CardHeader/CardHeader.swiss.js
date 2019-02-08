@@ -2,7 +2,7 @@ import { styleSheet } from 'swiss-react';
 
 export default styleSheet('CardHeader', {
   Wrapper: {
-    _size: ['100%', '99px'],
+    _size: ['100%', '84px'],
     _flex: ['row', 'between', 'top'],
 
     '!subtitle': {

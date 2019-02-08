@@ -20,7 +20,7 @@ export const tooltip = payload => ({ type: types.TOOLTIP, payload });
 // ======================================================
 export function modal(target, component, props) {
   return {
-    type: types.NAVIGATION_MODAL,
+    type: types.NAV_MODAL,
     payload: { target, component, props }
   };
 }

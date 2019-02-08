@@ -30,7 +30,7 @@ const testerState = initialState.set('sideMenuId', 'Tester').set(
 export default function navigationReducer(state = initialState, action) {
   const { payload, type } = action;
   switch (type) {
-    case types.NAVIGATION_URL: {
+    case types.NAV_URL: {
       let val = payload.url;
       if (payload.url) {
         val = {
@@ -40,7 +40,7 @@ export default function navigationReducer(state = initialState, action) {
       }
       return state.set('url', val);
     }
-    case types.NAVIGATION_SET: {
+    case types.NAV_SET: {
       // Enforce lock to go left
       if (state.get('locked')) {
         payload.side = 'left';
@@ -54,27 +54,27 @@ export default function navigationReducer(state = initialState, action) {
         fromJS(payload.screen ? [payload.screen] : [])
       );
     }
-    case types.NAVIGATION_SET_ON_TOP: {
+    case types.NAV_SET_ON_TOP: {
       return state.set('onTopSide', payload.side);
     }
-    case types.NAVIGATION_SAVE_STATE: {
+    case types.NAV_SAVE_STATE: {
       return state.updateIn(
         [payload.side, state.get(payload.side).size - 1],
         s => s.setIn(['props', 'savedState'], fromJS(payload.savedState))
       );
     }
-    case types.NAVIGATION_TOGGLE_LOCK: {
+    case types.NAV_TOGGLE_LOCK: {
       if (payload.side === 'left') {
         return state;
       }
       return state.set('locked', !state.get('locked'));
     }
-    case types.NAVIGATION_PUSH: {
+    case types.NAV_PUSH: {
       const side = state.get('locked') ? 'left' : payload.side;
       state = state.set('onTopSide', side);
       return state.updateIn([side], s => s.push(fromJS(payload.screen)));
     }
-    case types.NAVIGATION_POP: {
+    case types.NAV_POP: {
       if (payload.side === 'right' && state.get('locked')) {
         state = state.set('locked', false);
       }
