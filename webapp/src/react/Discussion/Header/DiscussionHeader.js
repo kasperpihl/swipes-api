@@ -94,6 +94,17 @@ export default class DiscussionHeader extends PureComponent {
       buttons: [{ title: followers.get(myId) ? 'Unfollow' : 'Follow' }]
     });
   };
+  handleOpenContext = () => {
+    const { nav, discussion } = this.props;
+    nav.openRight({
+      screenId: 'ProjectOverview',
+      crumbTitle: 'Project',
+      uniqueId: discussion.get('context_id'),
+      props: {
+        projectId: discussion.get('context_id')
+      }
+    });
+  };
   onFollowClick = () => {
     const { myId, discussion, loader } = this.props;
 
@@ -137,18 +148,21 @@ export default class DiscussionHeader extends PureComponent {
       viewAttachments
     } = this.props;
     const topic = discussion.get('topic');
-    const followers = discussion.get('followers');
 
     return (
       <Fragment>
         <CardHeader title={topic} subtitle={this.renderSubtitle()} />
-        <SW.ContextWrapper>
-          <SW.Button
-            title="Put name of project here"
-            icon="Comment"
-            border
-            leftAlign
-          />
+        <SW.ContextWrapper hasContext={!!discussion.get('context_id')}>
+          {discussion.get('context_id') && (
+            <SW.Button
+              title={discussion.get('topic')}
+              onClick={this.handleOpenContext}
+              icon="Milestones"
+              border
+              leftAlign
+            />
+          )}
+
           <SW.Button
             title={'See attachments'}
             onClick={onClickAttachments}

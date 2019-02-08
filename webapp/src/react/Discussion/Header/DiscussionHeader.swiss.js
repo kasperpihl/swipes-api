@@ -30,7 +30,11 @@ export default styleSheet('DiscussionHeader', {
     _flex: ['row', 'right', 'center'],
     borderBottom: '1px solid $sw3',
     padding: '6px 0',
-    width: '100%'
+    width: '100%',
+    pointerEvents: 'none',
+    '!hasContext': {
+      marginTop: '-48px'
+    }
   },
   FollowerLabel: {
     _flex: ['row', 'flex-start', 'center'],
@@ -60,6 +64,7 @@ export default styleSheet('DiscussionHeader', {
 
   Button: {
     _el: Button.Standard,
+    pointerEvents: 'auto',
     leftAlign: {
       marginRight: 'auto'
     },
