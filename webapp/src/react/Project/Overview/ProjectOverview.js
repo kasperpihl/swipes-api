@@ -85,6 +85,7 @@ export default class ProjectOverview extends PureComponent {
     nav.openRight({
       screenId: 'DiscussionOverview',
       crumbTitle: 'Chat',
+      uniqueId: project.get('discussion_id'),
       props: {
         discussionId: project.get('discussion_id')
       }

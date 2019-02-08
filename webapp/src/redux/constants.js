@@ -16,5 +16,6 @@ export const NAV_PUSH = 'NAV_PUSH';
 export const NAV_POP = 'NAV_POP';
 export const NAV_SAVE_STATE = 'NAV_SAVE_STATE';
 export const NAV_TOGGLE_LOCK = 'NAV_TOGGLE_LOCK';
-export const NAV_SET_ON_TOP = 'NAV_SET_ON_TOP';
+export const NAV_FOCUS = 'NAV_FOCUS';
 export const NAV_MODAL = 'NAV_MODAL';
+export const NAV_SET_UNIQUE_ID = 'NAV_SET_UNIQUE_ID';

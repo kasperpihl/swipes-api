@@ -5,10 +5,6 @@ export const redirectTo = (url, options) => (d, getState) => {
   d({ type: types.NAV_URL, payload: { url, options } });
 };
 
-export function setOnTop(side) {
-  return { type: types.NAV_SET_ON_TOP, payload: { side } };
-}
-
 export function set(side, screen) {
   const payload = { side };
   if (screen) {
@@ -18,6 +14,10 @@ export function set(side, screen) {
     payload.sideMenuId = screen.screenId;
   }
   return { type: types.NAV_SET, payload };
+}
+
+export function setUniqueId(side, uniqueId) {
+  return { type: types.NAV_SET_UNIQUE_ID, payload: { side, uniqueId } };
 }
 
 export function saveState(side, savedState) {
@@ -33,6 +33,11 @@ export function push(side, screen) {
   const payload = { screen, side };
   return { type: types.NAV_PUSH, payload };
 }
+
+export function focus(side) {
+  return { type: types.NAV_FOCUS, payload: { side } };
+}
+
 export const openSecondary = (fromSide, screen) => (d, getState) => {
   const isLocked = getState().navigation.get('locked');
   if (isLocked) {

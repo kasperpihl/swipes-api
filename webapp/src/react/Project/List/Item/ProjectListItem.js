@@ -11,6 +11,7 @@ export default class ProjectListItem extends PureComponent {
     nav.push({
       screenId: 'ProjectOverview',
       crumbTitle: 'Project',
+      uniqueId: project.get('project_id'),
       props: {
         projectId: project.get('project_id')
       }

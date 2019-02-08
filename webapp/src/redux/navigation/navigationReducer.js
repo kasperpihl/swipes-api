@@ -54,8 +54,12 @@ export default function navigationReducer(state = initialState, action) {
         fromJS(payload.screen ? [payload.screen] : [])
       );
     }
-    case types.NAV_SET_ON_TOP: {
-      return state.set('onTopSide', payload.side);
+
+    case types.NAV_SET_UNIQUE_ID: {
+      return state.setIn(
+        [payload.side, state.get(payload.side).size - 1, 'uniqueId'],
+        payload.uniqueId
+      );
     }
     case types.NAV_SAVE_STATE: {
       return state.updateIn(
@@ -68,6 +72,9 @@ export default function navigationReducer(state = initialState, action) {
         return state;
       }
       return state.set('locked', !state.get('locked'));
+    }
+    case types.NAV_FOCUS: {
+      return state.set('onTopSide', payload.side);
     }
     case types.NAV_PUSH: {
       const side = state.get('locked') ? 'left' : payload.side;
