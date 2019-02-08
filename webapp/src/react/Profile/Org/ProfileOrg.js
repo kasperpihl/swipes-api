@@ -14,7 +14,7 @@ export default class ProfileOrg extends PureComponent {
 
     nav.push({
       screenId: 'Organization',
-      title: 'Organization',
+      crumbTitle: 'Organization',
       props: {
         organizationId: organization.get('organization_id')
       }

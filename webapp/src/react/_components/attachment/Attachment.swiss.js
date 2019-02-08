@@ -32,13 +32,13 @@ export default styleSheet('Attachment', {
       }
     },
     '!hasCloseIcon': {
-      '.attachment-container:hover &': {
+      '.Attachment_ATag:hover &': {
         _svgColor: '$blue'
       }
     },
 
     hasCloseIcon: {
-      '.icon-container:hover &': {
+      '.Attachment_IconContainer:hover &': {
         _svgColor: '$blue'
       }
     }
@@ -46,11 +46,11 @@ export default styleSheet('Attachment', {
   Text: {
     _truncateString: '',
     _textStyle: 'body',
-    '.attachment-container:hover &': {
+    '.Attachment_ATag:hover &': {
       color: '$blue'
     },
     hasCloseIcon: {
-      '.icon-container:hover + &': {
+      '.Attachment_IconContainer:hover + &': {
         color: '$sw1'
       }
     }

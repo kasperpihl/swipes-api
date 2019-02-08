@@ -37,7 +37,7 @@ export default class Sidebar extends PureComponent {
     const { navSet } = this.props;
     navSet(side, {
       screenId,
-      title: screenId
+      crumbTitle: screenId
     });
   }
 

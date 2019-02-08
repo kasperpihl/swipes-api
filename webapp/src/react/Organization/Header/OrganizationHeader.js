@@ -31,7 +31,7 @@ export default class OrganizationHeader extends PureComponent {
 
     nav.push({
       screenId: 'Billing',
-      title: 'Billing',
+      crumbTitle: 'Billing',
       props: {
         organizationId: organization.get('organization_id')
       }

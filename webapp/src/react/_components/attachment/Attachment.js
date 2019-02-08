@@ -27,7 +27,7 @@ export default class Attachment extends PureComponent {
     if (type === 'note') {
       return nav.openRight({
         screenId: 'Note',
-        title: 'Note',
+        crumbTitle: 'Note',
         props: {
           noteId: attachment.get('id')
         }
@@ -36,7 +36,7 @@ export default class Attachment extends PureComponent {
 
     nav.openRight({
       screenId: 'File',
-      title: 'File',
+      crumbTitle: 'File',
       props: {
         fileId: attachment.get('id')
       }
@@ -73,15 +73,11 @@ export default class Attachment extends PureComponent {
 
     return (
       <SW.ATag
-        className="attachment-container"
         onClick={this.handleClick}
         onMouseEnter={onClose && this.onMouseEnter}
         onMouseLeave={onClose && this.onMouseLeave}
       >
-        <SW.IconContainer
-          className="icon-container"
-          onClick={showCloseIcon && this.handleClose}
-        >
+        <SW.IconContainer onClick={showCloseIcon && this.handleClose}>
           <SW.Icon
             icon={showCloseIcon || icon}
             hasCloseIcon={!!showCloseIcon}

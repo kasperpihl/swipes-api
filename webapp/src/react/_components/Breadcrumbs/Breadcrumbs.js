@@ -49,7 +49,7 @@ export default class Breadcrumbs extends Component {
               </SW.Seperator>
             )}
             <SW.Title disableClick={disableClick}>
-              {crumb.get('title')}
+              {crumb.get('crumbTitle')}
             </SW.Title>
           </SW.Crumb>
         );

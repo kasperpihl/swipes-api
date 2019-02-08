@@ -8,7 +8,7 @@ const initialState = fromJS({
   left: [
     {
       screenId: 'Projects',
-      title: 'Projects'
+      crumbTitle: 'Projects'
     }
   ],
   right: [],
@@ -22,7 +22,7 @@ const testerState = initialState.set('sideMenuId', 'Tester').set(
   fromJS([
     {
       screenId: 'Tester',
-      title: 'Tester'
+      crumbTitle: 'Tester'
     }
   ])
 );
