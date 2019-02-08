@@ -21,7 +21,7 @@ let config = {
     version: 2,
     transforms: [immutableTransform()],
     whitelist: ['navigation', 'auth'],
-    key: 'root',
+    key: 'root-1',
     storage
   }
 };
