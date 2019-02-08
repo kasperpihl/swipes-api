@@ -56,7 +56,7 @@ export default class Authentication extends PureComponent {
   };
   handleAuthentication = () => {
     const { formData } = this.state;
-    const { redirectTo, loaderedirectTo = this.props;
+    const { redirectTo, loader } = this.props;
 
     if (loader.check('authButton')) {
       return;
@@ -74,7 +74,7 @@ export default class Authentication extends PureComponent {
         loader.clear('authButton');
         window.analytics.sendEvent(analyticsEvent, {});
         redirectTo('/');
-      } eredirectTo {
+      } else {
         loader.error('authButton', res.error);
       }
     });
@@ -99,11 +99,11 @@ export default class Authentication extends PureComponent {
     return this.props.location.pathname === '/login';
   }
   handleTabChange = i => {
-    const { redirectTo } = tredirectTo.props;
+    const { redirectTo } = this.props;
     if (this.isLogin() && i === 0) {
-      redirectTo('/registerredirectTo
+      redirectTo('/register');
     } else if (!this.isLogin() && i === 1) {
-      redirectTo('/loginredirectTo
+      redirectTo('/login');
     }
   };
   getSubtitle() {
