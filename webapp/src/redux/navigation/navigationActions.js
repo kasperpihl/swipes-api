@@ -38,7 +38,7 @@ export function focus(side) {
   return { type: types.NAV_FOCUS, payload: { side } };
 }
 
-export const openSecondary = (fromSide, screen) => (d, getState) => {
+export const openRight = (fromSide, screen) => (d, getState) => {
   const navState = getState().navigation;
 
   const isLocked = navState.get('locked');

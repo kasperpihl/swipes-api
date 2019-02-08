@@ -16,7 +16,7 @@ function NavProvider({ side, width, isLocked, children, dispatch }) {
     return {
       push: fire(navigationActions.push),
       pop: fire(navigationActions.pop),
-      openRight: fire(navigationActions.openSecondary),
+      openRight: fire(navigationActions.openRight),
       setUniqueId: fire(navigationActions.setUniqueId),
       openModal: fire(mainActions.modal),
       saveState: fire(navigationActions.saveState),

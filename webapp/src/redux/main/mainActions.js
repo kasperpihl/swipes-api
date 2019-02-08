@@ -54,7 +54,7 @@ export const browser = (from, url, onLoad) => (dp, getState) => {
     return window.open(url);
   }
   return dp(
-    navigationActions.openSecondary(from, {
+    navigationActions.openRight(from, {
       screenId: 'Browser',
       showTitleInCrumb: true,
       crumbTitle: 'Browser',
