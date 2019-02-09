@@ -1,10 +1,5 @@
-import React, { PureComponent } from 'react';
-import AssignMenu from 'src/react/_components/AssignMenu/AssignMenu.js';
-import SideNote from 'src/react/SideNote/SideNote2';
+import React from 'react';
 
-export default class Tester extends PureComponent {
-  static sizes = [698];
-  render() {
-    return <div>This is the tester.</div>;
-  }
+export default function Tester() {
+  return <div>This is the tester.</div>;
 }
