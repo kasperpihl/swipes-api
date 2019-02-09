@@ -18,9 +18,6 @@ export default class Browser extends PureComponent {
   static maxWidth() {
     return 1600;
   }
-  static fullscreen() {
-    return true;
-  }
   constructor(props) {
     super(props);
     this.state = {

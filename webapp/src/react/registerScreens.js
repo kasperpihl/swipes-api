@@ -1,6 +1,6 @@
 // Account
 export { default as Billing } from './Billing/Billing';
-// export { default as Browser } from './Browser/Browser';
+export { default as Browser } from './Browser/Browser';
 export { default as Chat } from './Discuss/Discuss';
 export {
   default as DiscussionOverview
