@@ -56,23 +56,6 @@ export default function main(state = initialState, action) {
     }
 
     // ======================================================
-    // DragAndDrop
-    // ======================================================
-    case types.SUBSCRIBE_TO_DROP: {
-      return state.updateIn(['dragAndDrop', payload.target || 'global'], s =>
-        s.push({
-          handler: payload.handler,
-          title: payload.title
-        })
-      );
-    }
-
-    case types.UNSUBSCRIBE_FROM_DROP: {
-      return state.updateIn(['dragAndDrop', payload.target || 'global'], s =>
-        s.filter(o => o.handler !== payload.handler)
-      );
-    }
-    // ======================================================
     // Context Menu
     // ======================================================
     case types.CONTEXT_MENU: {
