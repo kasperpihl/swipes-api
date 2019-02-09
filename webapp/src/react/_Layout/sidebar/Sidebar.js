@@ -6,8 +6,9 @@ import SW from './Sidebar.swiss';
 import UserImage from 'src/react/_components/UserImage/UserImage';
 
 const kNavItems = [
-  { screenId: 'Projects', svg: 'Milestones' },
-  { screenId: 'Chat', svg: 'Messages' }
+  { screenId: 'ProjectList', svg: 'Milestones', title: 'Projects' },
+  { screenId: 'Chat', svg: 'Messages' },
+  { screenId: 'Profile' }
 ];
 
 @connect(
@@ -21,27 +22,28 @@ const kNavItems = [
   }
 )
 export default class Sidebar extends PureComponent {
-  handleMouseDownCached = cachedCallback((screenId, e) => {
+  handleMouseDownCached = cachedCallback((i, e) => {
     if (e.button === 1) {
-      this.openScreen('right', screenId);
+      this.openScreen('right', kNavItems[i]);
     }
   });
-  handleContextMenuCached = cachedCallback((screenId, e) => {
+  handleContextMenuCached = cachedCallback((i, e) => {
     e.preventDefault();
-    this.openScreen('right', screenId);
+    this.openScreen('right', kNavItems[i]);
   });
-  handleClickCached = cachedCallback(screenId =>
-    this.openScreen('left', screenId)
+  handleClickCached = cachedCallback(i =>
+    this.openScreen('left', kNavItems[i])
   );
-  openScreen(side, screenId) {
+  openScreen(side, { screenId, title }) {
     const { navSet } = this.props;
     navSet(side, {
       screenId,
-      crumbTitle: screenId
+      crumbTitle: title || screenId
     });
   }
 
-  renderItem(item) {
+  renderItem(i) {
+    const item = kNavItems[i];
     const { sideMenuId, unreadCounter, auth } = this.props;
 
     let count = item.screenId === 'Chat' ? unreadCounter : 0;
@@ -55,13 +57,13 @@ export default class Sidebar extends PureComponent {
       <SW.ProvideContext active={active} key={item.screenId}>
         <SW.Item
           round={item.screenId === 'Profile'}
-          onClick={this.handleClickCached(item.screenId)}
-          onContextMenu={this.handleContextMenuCached(item.screenId)}
-          onMouseDown={this.handleMouseDownCached(item.screenId)}
+          onClick={this.handleClickCached(i)}
+          onContextMenu={this.handleContextMenuCached(i)}
+          onMouseDown={this.handleMouseDownCached(i)}
           className="item"
         >
           <SW.Description className="description">
-            {item.screenId}
+            {item.title || item.screenId}
           </SW.Description>
           {item.screenId === 'Profile' && auth.get('token') ? (
             <UserImage userId="me" />
@@ -81,12 +83,11 @@ export default class Sidebar extends PureComponent {
         <SW.TopSection />
         <SW.MiddleSection>
           <SW.Section>
-            {kNavItems.map((o, i) => this.renderItem(o, i))}
+            {this.renderItem(0)}
+            {this.renderItem(1)}
           </SW.Section>
         </SW.MiddleSection>
-        <SW.BottomSection>
-          {this.renderItem({ screenId: 'Profile' })}
-        </SW.BottomSection>
+        <SW.BottomSection>{this.renderItem(2)}</SW.BottomSection>
       </SW.Wrapper>
     );
   }
