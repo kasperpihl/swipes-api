@@ -1,46 +1,38 @@
-import React, { PureComponent } from 'react';
-import { setupLoading } from 'swipes-core-js/classes/utils';
+import React from 'react';
+import useLoader from 'src/react/_hooks/useLoader';
 import urlGetParameter from 'src/utils/url/urlGetParameter';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
 import request from 'swipes-core-js/utils/request';
 import Card from 'src/react/_components/Card/Card';
 
-export default class extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      confirmationToken: urlGetParameter('confirmation_token')
-    };
-    setupLoading(this);
-  }
-  componentWillMount() {
-    const { confirmationToken } = this.state;
+export default function ConfirmAccount() {
+  const confirmationToken = urlGetParameter('confirmation_token');
 
+  const loader = useLoader();
+
+  useEffect(() => {
     if (!confirmationToken) {
-      return this.clearLoading('confirm', '!Missing confirmation token');
+      loader.error('confirm', 'Missing confirmation token');
+      return;
     }
-    this.setLoading('confirm', 'Confirming...');
+    loader.set('confirm', 'Confirming...');
     request('users.confirm', confirmationToken).then(res => {
       if (res.ok) {
-        this.clearLoading('confirm', 'Successfully confirmed the email');
+        loader.success('confirm', 'Successfully confirmed the email');
       } else {
-        this.clearLoading('confirm', '!Something went wrong.');
+        loader.error('confirm', 'Something went wrong.');
       }
     });
-  }
-  componentWillUnmount() {
-    this._unmounted = true;
-  }
-  render() {
-    const lState = this.getLoading('confirm');
-    const subtitle = lState.loading || lState.success || lState.error;
+  }, []);
 
-    return (
-      <Card>
-        <div style={{ marginTop: '36px' }}>
-          <CardHeader title="confirming your email" subtitle={subtitle} />
-        </div>
-      </Card>
-    );
-  }
+  const lState = loader.get('confirm');
+  const subtitle = lState.loading || lState.success || lState.error;
+
+  return (
+    <Card>
+      <div style={{ marginTop: '36px' }}>
+        <CardHeader title="confirming your email" subtitle={subtitle} />
+      </div>
+    </Card>
+  );
 }
