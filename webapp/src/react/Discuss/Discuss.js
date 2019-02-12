@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import SW from './Discuss.swiss';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
 import DiscussionList from 'src/react/Discussion/List/DiscussionList';
@@ -13,11 +13,11 @@ import Button from 'src/react/_components/Button/Button';
 @withNav
 @withOptimist
 export default class Discuss extends PureComponent {
-  static sizes = [800, 910, 1080, 1200];
+  static sizes = [800, 910];
   constructor(props) {
     super(props);
     this.state = {
-      tabs: ['Following', 'All other'],
+      tabs: ['Conversations', 'Not part of'],
       tabIndex: 0,
       selectedId: null
     };

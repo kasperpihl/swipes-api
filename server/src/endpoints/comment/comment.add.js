@@ -38,7 +38,7 @@ export default endpointCreate(
       sqlInsertQuery('discussion_comments', {
         discussion_id,
         message,
-        comment_id: idGenerate('C', 7),
+        comment_id: idGenerate('MES-', 5),
         sent_at: 'now()',
         attachments:
           (attachments && attachments.length && JSON.stringify(attachments)) ||

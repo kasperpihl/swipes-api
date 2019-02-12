@@ -16,7 +16,7 @@ export default endpointCreate(
     const { user_id, input } = res.locals;
     const { name } = input;
 
-    const organizationId = idGenerate('O');
+    const organizationId = idGenerate('ORG-');
     // creating a new user from scratch
     const [organizationRes, userRes] = await transaction([
       sqlInsertQuery('organizations', {

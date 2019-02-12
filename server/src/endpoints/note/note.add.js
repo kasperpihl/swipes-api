@@ -19,7 +19,7 @@ export default endpointCreate(
     const { user_id, input } = res.locals;
     const { owned_by, title } = input;
 
-    const noteId = idGenerate('N', 20);
+    const noteId = idGenerate('NOTE-', 20);
 
     const noteRes = await query(
       sqlInsertQuery('notes', {

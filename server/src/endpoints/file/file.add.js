@@ -26,7 +26,7 @@ export default endpointCreate(
     const { owned_by, file_name, s3_url } = input;
 
     const slugFileFame = slug(file_name);
-    const fileId = idGenerate('F', 10);
+    const fileId = idGenerate('FILE-', 9);
     const nameArr = slugFileFame.split('.');
     const ext = nameArr[nameArr.length - 1];
     const contentType = mime.lookup(ext) || 'application/octet-stream';

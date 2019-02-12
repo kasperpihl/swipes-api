@@ -13,13 +13,7 @@ export default styleSheet('Discuss', {
     height: '100%',
     flex: 'none',
     borderRight: '1px solid $sw4',
-    width: '348px',
-    'viewWidth=910': {
-      width: '378px'
-    },
-    'viewWidth>=1080': {
-      width: '408px'
-    }
+    width: '348px'
   },
   RightSide: {
     _flex: ['center'],
@@ -27,13 +21,7 @@ export default styleSheet('Discuss', {
     fontSize: '24px',
     width: '452px',
     'viewWidth=910': {
-      width: '532px'
-    },
-    'viewWidth=1080': {
-      width: '672px'
-    },
-    'viewWidth=1200': {
-      width: '792px'
+      width: '562px'
     }
   },
   Wrapper: {

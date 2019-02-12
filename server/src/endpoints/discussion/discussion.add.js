@@ -29,7 +29,7 @@ export default endpointCreate(
       owned_by,
       privacy = 'public'
     } = res.locals.input;
-    const discussionId = idGenerate('D', 15);
+    const discussionId = idGenerate('CHAT-', 15);
 
     const uniqueFollowers = [...new Set(followers).add(user_id)];
 

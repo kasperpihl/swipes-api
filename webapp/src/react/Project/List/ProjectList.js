@@ -10,6 +10,8 @@ import Button from 'src/react/_components/Button/Button';
 import ModalCreate from 'src/react/Modal/Create/ModalCreate';
 import ProjectListItem from './Item/ProjectListItem';
 
+ProjectList.sizes = [750];
+
 export default compose(
   connect(state => ({
     me: state.me

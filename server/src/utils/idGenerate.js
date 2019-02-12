@@ -1,3 +1,4 @@
 import randomstring from 'randomstring';
 
-export default (type = '', number = 8) => (type + randomstring.generate(number)).toUpperCase();
+export default (prefix = '', number = 8) =>
+  prefix + randomstring.generate(number);
