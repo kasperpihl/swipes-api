@@ -15,7 +15,7 @@ export default class DayTracker extends PureComponent {
       const weekday = deltaDate.day();
       if (weekday > 0 && weekday < 6) {
         if (!weekArr[deltaIndex] || weekArr[deltaIndex].length === 5) {
-          weekArr.push(new Array(weekday - 1).fill('hidden', 0));
+          weekArr.push(new Array(weekday - 1).fill('hidden'));
           deltaIndex++;
         }
         const deltaWeek = weekArr[deltaIndex];
