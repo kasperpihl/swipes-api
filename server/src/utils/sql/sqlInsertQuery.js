@@ -1,4 +1,8 @@
-export default (tableName, mapping, options = { returning: true }) => {
+export default function sqlInsertQuery(
+  tableName,
+  mapping,
+  options = { returning: true }
+) {
   if (typeof tableName !== 'string') {
     throw 'dbInsertQuery expects tableName as first parameter';
   }
@@ -54,4 +58,4 @@ export default (tableName, mapping, options = { returning: true }) => {
     text,
     values
   };
-};
+}
