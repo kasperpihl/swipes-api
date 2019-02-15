@@ -29,12 +29,20 @@ export default endpointCreate(
     const planId = idGenerate('PLAN-', 8);
 
     const userIds = [...new Set(members).add(user_id)];
+    const d = new Date();
+    // Setting date to monday (today if monday, or next monday).
+    d.setDate(d.getDate() + ((((7 - d.getDay()) % 7) + 1) % 7));
+    const startDate = d.toISOString().slice(0, 10);
+    d.setDate(d.getDate() + 11);
+    const endDate = d.toISOString().slice(0, 10);
 
     const [planRes] = await transaction([
       sqlInsertQuery('plans', {
         owned_by,
         title,
         plan_id: planId,
+        start_date: startDate,
+        end_date: endDate,
         created_by: user_id
       }),
       sqlPermissionInsertQuery(planId, privacy, owned_by, userIds)
