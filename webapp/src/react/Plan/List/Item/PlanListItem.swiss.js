@@ -3,6 +3,7 @@ import { styleSheet } from 'swiss-react';
 export default styleSheet('PlanListItem', {
   Wrapper: {
     _flex: ['row', 'left', 'top'],
+    width: '50%',
     padding: '12px'
   },
   TextWrapper: {

@@ -35,14 +35,13 @@ function PlanList({ me, plans }) {
     });
   };
   const sections = plans.groupBy(p => {
-    if (p.get('completed_at')) return 'completed';
-    if (!p.get('started_at')) return 'draft';
-    console.log(p.get('start_date'), new Date().toISOString().slice(0, 10));
+    if (p.get('completed_at')) return 'Completed';
+    if (!p.get('started_at')) return 'Drafts';
     if (p.get('start_date') < new Date().toISOString().slice(0, 10))
-      return 'upcoming';
-    return 'running';
+      return 'Upcoming';
+    return 'Current';
   });
-  console.log(sections.toJS());
+
   return (
     <SWView
       noframe
@@ -53,9 +52,17 @@ function PlanList({ me, plans }) {
       }
     >
       <SW.Wrapper>
-        {plans.map(p => (
-          <PlanListItem plan={p} key={p.get('plan_id')} />
-        ))}
+        {['Current', 'Drafts', 'Upcoming', 'Completed'].map(
+          sec =>
+            sections.get(sec) && (
+              <SW.Section key={sec}>
+                <SW.SectionTitle>{sec}</SW.SectionTitle>
+                {sections.get(sec).map(p => (
+                  <PlanListItem plan={p} key={p.get('plan_id')} />
+                ))}
+              </SW.Section>
+            )
+        )}
       </SW.Wrapper>
     </SWView>
   );
