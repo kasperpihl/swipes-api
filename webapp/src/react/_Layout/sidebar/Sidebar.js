@@ -6,6 +6,7 @@ import SW from './Sidebar.swiss';
 import UserImage from 'src/react/_components/UserImage/UserImage';
 
 const kNavItems = [
+  { screenId: 'PlanList', svg: 'Messages', title: 'Plans' },
   { screenId: 'ProjectList', svg: 'Milestones', title: 'Projects' },
   { screenId: 'Chat', svg: 'Messages' },
   { screenId: 'Profile' }
@@ -85,9 +86,10 @@ export default class Sidebar extends PureComponent {
           <SW.Section>
             {this.renderItem(0)}
             {this.renderItem(1)}
+            {this.renderItem(2)}
           </SW.Section>
         </SW.MiddleSection>
-        <SW.BottomSection>{this.renderItem(2)}</SW.BottomSection>
+        <SW.BottomSection>{this.renderItem(3)}</SW.BottomSection>
       </SW.Wrapper>
     );
   }
