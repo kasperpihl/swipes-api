@@ -1,5 +1,5 @@
-import { object, array, string } from 'valjs';
-import { query } from 'src/utils/db/db';
+import { string } from 'valjs';
+import { query, transaction } from 'src/utils/db/db';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 
@@ -39,7 +39,7 @@ export default endpointCreate(
     }
     console.log(foundProjectRes.rows);
 
-    await query(
+    await transaction([
       sqlInsertQuery(
         'plan_project_tasks',
         {
@@ -50,8 +50,16 @@ export default endpointCreate(
         {
           upsert: 'plan_project_tasks_pkey'
         }
-      )
-    );
+      ),
+      {
+        text: `
+          UPDATE plans
+          SET tasks_count = tasks_count + 1
+          WHERE plan_id = $1
+        `,
+        values: [plan_id]
+      }
+    ]);
     // Create response data.
     res.locals.output = {};
   }
