@@ -9,7 +9,11 @@ export default endpointCreate(
     expectedInput
   },
   async (req, res) => {
-    const { user_id } = res.locals;
+    const { user_id, input } = res.locals;
+
+    const skip = input.skip || 0;
+    const limit = input.limit || 20;
+
     const projectQuery = {
       text: `
         SELECT p.project_id, p.name, p.due_date, p.owned_by, p.completion_percentage, per.granted_at, po.opened_at
@@ -20,12 +24,17 @@ export default endpointCreate(
         ON p.project_id = po.project_id AND po.user_id = $1
         WHERE ${sqlCheckPermissions('per.granted_to', user_id)}
         AND p.deleted=FALSE
-        ORDER BY po.opened_at DESC
+        ORDER BY po.opened_at DESC NULLS FIRST
+        LIMIT $2
+        OFFSET $3
       `,
-      values: [user_id]
+      values: [user_id, limit + 1, skip]
     };
     const projectRes = await query(projectQuery);
+
+    const has_more = projectRes.rows.length > limit;
+    const projects = projectRes.rows.slice(0, limit);
     // Create response data.
-    res.locals.output = { projects: projectRes.rows };
+    res.locals.output = { projects, skip, limit, has_more };
   }
 );
