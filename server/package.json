@@ -46,12 +46,13 @@
   "scripts": {
     "build": "rimraf ./dist && babel src -d dist",
     "dev:api": "nodemon ./dist/index.api.js",
+    "dev:redis": "redis-server",
     "dev:websocket": "nodemon ./dist/index.websocket.js",
     "dev:queue": "nodemon ./dist/index.queue.js",
     "production:api": "node ./index.api.js",
     "production:queue": "node ./index.queue.js",
     "production:websocket": "node ./index.websocket.js",
-    "start": "npm run build && npm-run-all --parallel dev:api dev:queue dev:websocket watch",
+    "start": "npm run build && npm-run-all --parallel dev:redis dev:api dev:queue dev:websocket watch",
     "test": "jest --env=node",
     "watch": "babel src -d dist --watch --skip-initial-build"
   },
