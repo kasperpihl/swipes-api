@@ -26,7 +26,7 @@ export default endpointCreate(
     const skip = input.skip || 0;
     const limit = input.limit || 20;
 
-    const commentsRes = await query(
+    const commentRes = await query(
       `
         SELECT discussion_id, comment_id, reactions, message, attachments, sent_by, sent_at
         FROM discussion_comments
@@ -43,13 +43,9 @@ export default endpointCreate(
       `,
       [discussion_id, limit + 1, skip]
     );
-    let comments = commentsRes.rows;
 
-    let has_more = false;
-    if (comments.length >= limit + 1) {
-      has_more = true;
-      comments = comments.slice(0, limit);
-    }
+    const has_more = commentRes.rows.length > limit;
+    const comments = commentRes.rows.slice(0, limit);
 
     res.locals.output = {
       comments,
