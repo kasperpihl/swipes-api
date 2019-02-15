@@ -57,6 +57,12 @@ export default class ModalCreate extends PureComponent {
 
     loader.set('creating', 'Creating');
 
+    if (type === 'plan') {
+      endpoint = 'plan.add';
+      options.title = titleVal;
+      delete options.topic;
+      analyticsEvent = 'Plan created';
+    }
     if (type === 'project') {
       const discussionRes = await request(endpoint, options);
       if (!discussionRes.ok) {
@@ -66,6 +72,7 @@ export default class ModalCreate extends PureComponent {
       endpoint = 'project.add';
       options.name = titleVal;
       options.discussion_id = discussionRes.discussion_id;
+      analyticsEvent = 'Project created';
       delete options.topic;
     }
 
@@ -122,6 +129,12 @@ export default class ModalCreate extends PureComponent {
     let titlePlaceholder = 'Topic';
     let titleLabel = '1. Set the topic';
     let createLabel = 'Create discussion';
+    if (type === 'plan') {
+      title = 'New Plan';
+      titlePlaceholder = 'Title';
+      titleLabel = '1. Choose a title for the Plan';
+      createLabel = 'Create plan';
+    }
     if (type === 'project') {
       title = 'New Project';
       titlePlaceholder = 'Name';
