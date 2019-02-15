@@ -7,8 +7,6 @@ export default class ErrorBoundary extends Component {
     error: null
   };
   componentDidCatch(error) {
-    console.log(error);
-    console.log('----------');
     this.setState({ error });
   }
   render() {
@@ -24,6 +22,7 @@ export default class ErrorBoundary extends Component {
           title="Try again"
           onClick={() => this.setState({ error: null })}
         />{' '}
+        <Button.Rounded title="Reset data (logout)" />
         or contact support (help@swipesapp.com)
       </SW.Wrapper>
     );

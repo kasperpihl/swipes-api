@@ -37,7 +37,7 @@ function PlanList({ me, plans }) {
   const sections = plans.groupBy(p => {
     if (p.get('completed_at')) return 'Completed';
     if (!p.get('started_at')) return 'Drafts';
-    if (p.get('start_date') < new Date().toISOString().slice(0, 10))
+    if (p.get('start_date') > new Date().toISOString().slice(0, 10))
       return 'Upcoming';
     return 'Current';
   });
