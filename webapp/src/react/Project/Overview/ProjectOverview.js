@@ -173,16 +173,18 @@ export default class ProjectOverview extends PureComponent {
             <SW.ProgressBarInner width={completionPercentage} />
           </SW.ProgressBarOuter>
         </SW.ProgressBarWrapper>
-        <SW.SliderWrapper>
-          <SW.StepSlider
-            min={0}
-            max={maxIndention}
-            sliderValue={sliderValue}
-            onSliderChange={this.onSliderChange}
-            increase={this.increaseSlider}
-            decrease={this.decreaseSlider}
-          />
-        </SW.SliderWrapper>
+        {maxIndention > 0 && (
+          <SW.SliderWrapper>
+            <SW.StepSlider
+              min={0}
+              max={maxIndention}
+              sliderValue={sliderValue}
+              onSliderChange={this.onSliderChange}
+              increase={this.increaseSlider}
+              decrease={this.decreaseSlider}
+            />
+          </SW.SliderWrapper>
+        )}
         {project.get('discussion_id') && (
           <Button.Standard
             title="Project chat"
