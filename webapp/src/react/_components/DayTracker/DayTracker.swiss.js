@@ -2,6 +2,7 @@ import { styleSheet } from 'swiss-react';
 
 export default styleSheet('DayTrack', {
   Wrapper: {
+    _size: ['80px', 'auto'],
     _flex: ['column', 'left', 'top']
   },
 
