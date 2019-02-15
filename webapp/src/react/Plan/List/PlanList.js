@@ -5,8 +5,10 @@ import withRequests from 'swipes-core-js/components/withRequests';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
 import SWView from 'src/react/_Layout/view-controller/SWView';
 import Button from 'src/react/_components/Button/Button';
+import Loader from 'src/react/_components/loaders/Loader';
+
 import ModalCreate from 'src/react/Modal/Create/ModalCreate';
-// import PlanListItem from './Item/PlanListItem';
+import PlanListItem from './Item/PlanListItem';
 
 PlanList.sizes = [750];
 
@@ -22,7 +24,7 @@ export default withRequests(
       }
     }
   },
-  { renderLoader: () => <div>loading</div> }
+  { renderLoader: () => <Loader center /> }
 )(PlanList);
 
 function PlanList({ me, plans }) {
@@ -32,16 +34,15 @@ function PlanList({ me, plans }) {
       type: 'plan'
     });
   };
-  const handleItemClick = planId => {
-    nav.push({
-      screenId: 'PlanOverview',
-      crumbTitle: 'Plan',
-      uniqueId: planId,
-      props: {
-        planId: planId
-      }
-    });
-  };
+  const sections = plans.groupBy(p => {
+    if (p.get('completed_at')) return 'completed';
+    if (!p.get('started_at')) return 'draft';
+    console.log(p.get('start_date'), new Date().toISOString().slice(0, 10));
+    if (p.get('start_date') < new Date().toISOString().slice(0, 10))
+      return 'upcoming';
+    return 'running';
+  });
+  console.log(sections.toJS());
   return (
     <SWView
       noframe
@@ -53,12 +54,7 @@ function PlanList({ me, plans }) {
     >
       <SW.Wrapper>
         {plans.map(p => (
-          <div
-            onClick={() => handleItemClick(p.get('plan_id'))}
-            key={p.get('plan_id')}
-          >
-            {p.get('title')}
-          </div>
+          <PlanListItem plan={p} key={p.get('plan_id')} />
         ))}
       </SW.Wrapper>
     </SWView>

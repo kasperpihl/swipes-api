@@ -7,6 +7,8 @@ import ProjectTask from 'src/react/Project/Task/ProjectTask';
 import SWView from 'src/react/_Layout/view-controller/SWView';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
 import Button from 'src/react/_components/Button/Button';
+import Loader from 'src/react/_components/loaders/Loader';
+
 import withNav from 'src/react/_hocs/Nav/withNav';
 
 @withNav
@@ -25,7 +27,7 @@ import withNav from 'src/react/_hocs/Nav/withNav';
       }
     }
   },
-  { renderLoader: () => <div>loading</div> }
+  { renderLoader: () => <Loader center /> }
 )
 export default class ProjectOverview extends PureComponent {
   static sizes = [750];

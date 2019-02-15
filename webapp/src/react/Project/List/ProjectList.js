@@ -8,6 +8,7 @@ import CardHeader from 'src/react/_components/CardHeader/CardHeader';
 import SWView from 'src/react/_Layout/view-controller/SWView';
 import Button from 'src/react/_components/Button/Button';
 import ModalCreate from 'src/react/Modal/Create/ModalCreate';
+import Loader from 'src/react/_components/loaders/Loader';
 import ProjectListItem from './Item/ProjectListItem';
 
 ProjectList.sizes = [750];
@@ -28,7 +29,7 @@ export default compose(
         }
       }
     },
-    { renderLoader: () => <div>loading</div> }
+    { renderLoader: () => <Loader center /> }
   )
 )(ProjectList);
 

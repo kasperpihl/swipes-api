@@ -7,7 +7,7 @@ export default function PlanSide({ plan }) {
     console.log('pressed start');
   };
   return (
-    <SW.SidebarWrapper>
+    <SW.Wrapper>
       <SW.TasksTracker>
         <SW.BigNumber>{plan.get('task_counter')}</SW.BigNumber>
       </SW.TasksTracker>
@@ -15,6 +15,6 @@ export default function PlanSide({ plan }) {
       {plan.get('state') === 'draft' && (
         <Button.Standard title="Start" icon="Comment" onClick={handleStart} />
       )}
-    </SW.SidebarWrapper>
+    </SW.Wrapper>
   );
 }

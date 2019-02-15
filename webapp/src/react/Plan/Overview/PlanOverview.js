@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import SW from './PlanOverview.swiss';
+import Loader from 'src/react/_components/loaders/Loader';
 import withRequests from 'swipes-core-js/components/withRequests';
 import SWView from 'src/react/_Layout/view-controller/SWView';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
@@ -22,7 +23,7 @@ import withNav from 'src/react/_hocs/Nav/withNav';
       }
     }
   },
-  { renderLoader: () => <div>loading</div> }
+  { renderLoader: () => <Loader center /> }
 )
 export default class PlanOverview extends PureComponent {
   static sizes = [750];
