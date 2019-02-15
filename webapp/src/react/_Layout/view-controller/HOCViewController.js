@@ -5,6 +5,7 @@ import throttle from 'swipes-core-js/utils/throttle';
 import NavProvider from 'src/react/_hocs/Nav/NavProvider';
 import Card from 'src/react/_Layout/Card/Card';
 import SW from './ViewController.swiss';
+import ErrorBoundary from 'src/react/_Layout/ErrorBoundary/ErrorBoundary';
 
 const DEFAULT_MAX_WIDTH = 800;
 const SPACING = 15;
@@ -24,9 +25,6 @@ export default class extends PureComponent {
   componentWillUnmount() {
     this._unmounted = true;
     window.removeEventListener('resize', this.updateAppWidth);
-  }
-  componentDidCatch(e) {
-    console.log('hi', e);
   }
   handleToggleLock = () => {
     const { toggleLock } = this.props;
@@ -124,7 +122,15 @@ export default class extends PureComponent {
   }
   renderSide(side, { Comp, width, props, cardProps }) {
     const { navigation } = this.props;
-
+    const screenId = navigation
+      .get(side)
+      .last()
+      .get('screenId');
+    const uniqueId =
+      navigation
+        .get(side)
+        .last()
+        .get('uniqueId') || '';
     return (
       <NavProvider
         isLocked={side === 'right' && navigation.get('locked')}
@@ -133,7 +139,9 @@ export default class extends PureComponent {
         key={side}
       >
         <Card {...cardProps}>
-          <Comp key={side + navigation.get(side).size} {...props} />
+          <ErrorBoundary key={side + screenId + uniqueId}>
+            <Comp key={side + navigation.get(side).size} {...props} />
+          </ErrorBoundary>
         </Card>
       </NavProvider>
     );
