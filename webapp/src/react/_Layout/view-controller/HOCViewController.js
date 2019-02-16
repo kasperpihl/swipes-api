@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as views from 'src/react/registerScreens';
+import * as mainActions from 'src/redux/main/mainActions';
 import throttle from 'swipes-core-js/utils/throttle';
 import NavProvider from 'src/react/_hocs/Nav/NavProvider';
 import Card from 'src/react/_Layout/Card/Card';
@@ -10,21 +11,37 @@ import ErrorBoundary from 'src/react/_Layout/ErrorBoundary/ErrorBoundary';
 const DEFAULT_MAX_WIDTH = 800;
 const SPACING = 15;
 const OVERLAY_LEFT_MIN = 90;
+const kSidebarExpandedThreshold = 100; // pixels that sidebar needs to be expanded
 
-@connect(state => ({
-  navigation: state.navigation
-}))
+@connect(
+  state => ({
+    navigation: state.navigation
+  }),
+  {
+    sidebarSetExpanded: mainActions.sidebarSetExpanded
+  }
+)
 export default class extends PureComponent {
   state = {
     appWidth: -1
   };
   componentDidMount() {
     this.updateAppWidth();
+    this.updateSidebarExpanded();
     window.addEventListener('resize', this.updateAppWidth);
+  }
+  componentDidUpdate() {
+    this.updateSidebarExpanded();
   }
   componentWillUnmount() {
     this._unmounted = true;
     window.removeEventListener('resize', this.updateAppWidth);
+  }
+  updateSidebarExpanded() {
+    const { sidebarSetExpanded } = this.props;
+    if (typeof this._sidebarExpanded === 'boolean') {
+      sidebarSetExpanded(this._sidebarExpanded);
+    }
   }
   handleToggleLock = () => {
     const { toggleLock } = this.props;
@@ -91,6 +108,7 @@ export default class extends PureComponent {
     const hasOverlay = RightComp && remainingSpace < 0;
 
     const startX = hasOverlay ? 0 : remainingSpace / 2;
+    this._sidebarExpanded = startX > kSidebarExpandedThreshold;
 
     return (
       <>

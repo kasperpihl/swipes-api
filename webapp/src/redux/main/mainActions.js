@@ -25,6 +25,18 @@ export function modal(target, component, props) {
   };
 }
 
+export function sidebarSetExpanded(sidebarExpanded) {
+  return function(dispatch, getState) {
+    const currIsExpanded = getState().main.get('sidebarExpanded');
+    if (sidebarExpanded !== currIsExpanded) {
+      dispatch({
+        type: types.SIDEBAR_SET_EXPANDED,
+        payload: { sidebarExpanded }
+      });
+    }
+  };
+}
+
 // ======================================================
 // Context Menu
 // ======================================================

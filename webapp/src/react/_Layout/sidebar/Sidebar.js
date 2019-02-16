@@ -15,6 +15,7 @@ const kNavItems = [
 @connect(
   state => ({
     auth: state.auth,
+    sidebarExpanded: state.main.get('sidebarExpanded'),
     sideMenuId: state.navigation.get('sideMenuId'),
     unreadCounter: state.connection.get('unread').size
   }),
@@ -45,7 +46,7 @@ export default class Sidebar extends PureComponent {
 
   renderItem(i) {
     const item = kNavItems[i];
-    const { sideMenuId, unreadCounter, auth } = this.props;
+    const { sideMenuId, sidebarExpanded, unreadCounter, auth } = this.props;
 
     let count = item.screenId === 'Chat' ? unreadCounter : 0;
     if (count > 9) {
@@ -55,7 +56,11 @@ export default class Sidebar extends PureComponent {
     const active = item.screenId === sideMenuId;
 
     return (
-      <SW.ProvideContext active={active} key={item.screenId}>
+      <SW.ProvideContext
+        active={active}
+        key={item.screenId}
+        expanded={sidebarExpanded}
+      >
         <SW.Item
           round={item.screenId === 'Profile'}
           onClick={this.handleClickCached(i)}

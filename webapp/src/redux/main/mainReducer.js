@@ -7,6 +7,7 @@ const initialState = fromJS({
   overlay: null,
   isHydrated: false,
   successState: false,
+  sidebarExpanded: true,
   modals: {
     primary: null,
     secondary: null
@@ -28,6 +29,10 @@ export default function main(state = initialState, action) {
     }
     case types.SET_FULLSCREEN: {
       return state.set('isFullscreen', payload.toggle);
+    }
+
+    case types.SIDEBAR_SET_EXPANDED: {
+      return state.set('sidebarExpanded', payload.sidebarExpanded);
     }
 
     // ======================================================
