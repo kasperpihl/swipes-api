@@ -3,10 +3,10 @@ import Icon from 'src/react/_components/Icon/Icon';
 
 export default styleSheet('Sidebar', {
   Wrapper: {
-    _size: ['84px', '100%'],
+    _size: ['72px', '100%'],
     _flex: 'column',
-    zIndex: '5',
-    paddingBottom: '22px'
+    paddingBottom: '22px',
+    flex: 'none'
   },
 
   TopSection: {
@@ -48,17 +48,20 @@ export default styleSheet('Sidebar', {
 
   Section: {
     _size: ['54px', 'auto'],
-    _flex: ['column', 'center', 'center']
+    _flex: ['column', 'left', 'center']
   },
 
   Item: {
     _size: '54px',
-    _flex: ['row', 'center', 'center'],
-    zIndex: '2',
+    zIndex: '3',
+    // overflow: 'hidden',
     backgroundColor: 'rgba(255, 255, 255, .3)',
-    transition: '.2s ease',
+    transition: '.3s ease',
 
     '!round': {
+      expanded: {
+        width: '150px'
+      },
       '&:first-child': {
         borderRadius: '4px 4px 0 0'
       },
@@ -79,62 +82,63 @@ export default styleSheet('Sidebar', {
     '& > *': {
       pointerEvents: 'none'
     },
-
-    '&:hover > .description': {
-      opacity: '1',
-      transform: 'translateX(100%)',
-      transition: '.2s ease'
+    '&:hover': {
+      backgroundColor: 'white'
     },
-
-    '&:hover > .icon': {
-      _svgColor: '$sw1',
-      opacity: '1',
-      transition: '.2s ease'
-    },
-
     active: {
-      backgroundColor: 'white',
-      opacity: '1'
+      backgroundColor: 'white'
     }
+  },
+  OverflowHidden: {
+    _size: '100',
+    overflow: 'hidden',
+    _flex: ['row', 'left', 'center']
   },
 
   NotificationCounter: {
-    _size: ['16px', '16px'],
+    _size: ['18px', '18px'],
     _flex: ['row', 'center', 'center'],
     _font: ['10px', '12px', 'bold'],
     color: '$sw5',
     background: '$red',
+    borderRadius: '9px',
     position: 'absolute',
-    right: '1px',
-    top: '1px',
-    paddingBottom: '1px',
-    pointerEvents: 'none',
-    borderTopRightRadius: '4px',
-    pointerEvents: 'none',
-
-    active: {
-      color: '$sw5',
-      backgroundColor: '$sw1',
-      transition: '.2s ease'
-    }
+    left: '30px',
+    top: '5px'
   },
-
+  IconWrapper: {
+    _size: '54px',
+    _flex: 'center',
+    flex: 'none'
+  },
   Icon: {
     _el: Icon,
     _size: '24px',
-    _svgColor: '$sw1',
-    opacity: '.3',
-    transition: '.2s ease',
+    _svgColor: '$sw2',
+    transition: '.3s ease',
     pointerEvents: 'none',
 
     active: {
+      _svgColor: '$sw1'
+    },
+    '.Sidebar_Item:hover &': {
       _svgColor: '$sw1',
-      opacity: '1',
-      transition: '.2s ease'
+      transition: '.3s ease'
     }
   },
 
   Description: {
+    _font: '15px',
+    color: '$sw2',
+    paddingLeft: '3px',
+    active: {
+      color: '$sw1'
+    },
+    'active || .Sidebar_Item:hover &': {
+      color: '$sw1'
+    }
+  },
+  Tooltip: {
     pointerEvents: 'none',
     _font: '15px',
     color: '$sw1',
@@ -148,7 +152,22 @@ export default styleSheet('Sidebar', {
     padding: '9px 15px',
     position: 'absolute',
     right: '-9px',
-    transform: 'translateX(110%)',
-    transition: '.2s ease'
+    top: '50%',
+    transform: 'translateX(110%) translateY(-50%)',
+    transition: '.3s ease',
+    forceShow: {
+      '.Sidebar_Item:hover &': {
+        opacity: '1',
+        transform: 'translateX(100%) translateY(-50%)',
+        transition: '.3s ease'
+      }
+    },
+    '!expanded': {
+      '.Sidebar_Item:hover &': {
+        opacity: '1',
+        transform: 'translateX(100%) translateY(-50%)',
+        transition: '.3s ease'
+      }
+    }
   }
 });

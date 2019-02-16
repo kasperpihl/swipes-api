@@ -33,7 +33,7 @@ export default class UserImage extends PureComponent {
   render() {
     const { grayscale, size } = this.props;
     const user = this.getUser();
-    const test = true;
+    if (!user) return null;
 
     const photo = user.get('photo');
 

@@ -14,7 +14,6 @@ const kNavItems = [
 
 @connect(
   state => ({
-    auth: state.auth,
     sidebarExpanded: state.main.get('sidebarExpanded'),
     sideMenuId: state.navigation.get('sideMenuId'),
     unreadCounter: state.connection.get('unread').size
@@ -43,24 +42,28 @@ export default class Sidebar extends PureComponent {
       crumbTitle: title || screenId
     });
   }
+  renderNotificationCounter(item) {
+    let { unreadCounter } = this.props;
+    unreadCounter = 9;
+    if (item.screenId !== 'Chat' || !unreadCounter) {
+      return null;
+    }
 
-  renderItem(i) {
-    const item = kNavItems[i];
-    const { sideMenuId, sidebarExpanded, unreadCounter, auth } = this.props;
-
-    let count = item.screenId === 'Chat' ? unreadCounter : 0;
+    let count = unreadCounter;
     if (count > 9) {
       count = '9+';
     }
 
+    return <SW.NotificationCounter>{count}</SW.NotificationCounter>;
+  }
+  renderItem(i) {
+    const item = kNavItems[i];
+    const { sideMenuId } = this.props;
+
     const active = item.screenId === sideMenuId;
 
     return (
-      <SW.ProvideContext
-        active={active}
-        key={item.screenId}
-        expanded={sidebarExpanded}
-      >
+      <SW.ProvideContext active={active} key={item.screenId}>
         <SW.Item
           round={item.screenId === 'Profile'}
           onClick={this.handleClickCached(i)}
@@ -68,34 +71,45 @@ export default class Sidebar extends PureComponent {
           onMouseDown={this.handleMouseDownCached(i)}
           className="item"
         >
-          <SW.Description className="description">
+          <SW.OverflowHidden>
+            {item.screenId === 'Profile' && <UserImage userId="me" />}
+            {item.screenId !== 'Profile' && (
+              <>
+                <SW.IconWrapper>
+                  <SW.Icon icon={item.svg} />
+                </SW.IconWrapper>
+                <SW.Description>{item.title || item.screenId}</SW.Description>
+              </>
+            )}
+            {this.renderNotificationCounter(item)}
+          </SW.OverflowHidden>
+
+          <SW.Tooltip forceShow={item.screenId === 'Profile'}>
             {item.title || item.screenId}
-          </SW.Description>
-          {item.screenId === 'Profile' && auth.get('token') ? (
-            <UserImage userId="me" />
-          ) : (
-            <SW.Icon icon={item.svg} className="icon" />
-          )}
-          {count ? (
-            <SW.NotificationCounter>{count}</SW.NotificationCounter>
-          ) : null}
+          </SW.Tooltip>
         </SW.Item>
       </SW.ProvideContext>
     );
   }
   render() {
+    const { sidebarExpanded } = this.props;
+    if (typeof sidebarExpanded === 'undefined') {
+      return null;
+    }
     return (
-      <SW.Wrapper>
-        <SW.TopSection />
-        <SW.MiddleSection>
-          <SW.Section>
-            {this.renderItem(0)}
-            {this.renderItem(1)}
-            {this.renderItem(2)}
-          </SW.Section>
-        </SW.MiddleSection>
-        <SW.BottomSection>{this.renderItem(3)}</SW.BottomSection>
-      </SW.Wrapper>
+      <SW.ProvideContext expanded={sidebarExpanded}>
+        <SW.Wrapper>
+          <SW.TopSection />
+          <SW.MiddleSection>
+            <SW.Section>
+              {this.renderItem(0)}
+              {this.renderItem(1)}
+              {this.renderItem(2)}
+            </SW.Section>
+          </SW.MiddleSection>
+          <SW.BottomSection>{this.renderItem(3)}</SW.BottomSection>
+        </SW.Wrapper>
+      </SW.ProvideContext>
     );
   }
 }

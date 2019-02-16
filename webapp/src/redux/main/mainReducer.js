@@ -7,7 +7,6 @@ const initialState = fromJS({
   overlay: null,
   isHydrated: false,
   successState: false,
-  sidebarExpanded: true,
   modals: {
     primary: null,
     secondary: null
