@@ -33,7 +33,8 @@ export default endpointCreate(
     // Setting date to monday (today if monday, or next monday).
     d.setDate(d.getDate() + ((((7 - d.getDay()) % 7) + 1) % 7));
     const startDate = d.toISOString().slice(0, 10);
-    d.setDate(d.getDate() + 11);
+    // Setting end date to be friday.
+    d.setDate(d.getDate() + 4);
     const endDate = d.toISOString().slice(0, 10);
 
     const [planRes] = await transaction([
