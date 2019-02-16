@@ -63,15 +63,14 @@ export default class ProfileHeader extends PureComponent {
     const file = e.target.files[0];
     if (file) {
       loader.set('uploadImage');
-      request(
-        { command: 'me.uploadPhoto', formData: true },
-        { photo: file }
-      ).then(res => {
-        loader.clear('uploadImage');
-        if (res.ok) {
-          window.analytics.sendEvent('Profile photo updated', {});
+      request('me.uploadPhoto', { photo: file }, { formData: true }).then(
+        res => {
+          loader.clear('uploadImage');
+          if (res.ok) {
+            window.analytics.sendEvent('Profile photo updated', {});
+          }
         }
-      });
+      );
     }
   };
   callbackProfileUpdate = ([first_name, last_name]) => {
