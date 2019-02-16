@@ -31,26 +31,6 @@ export default styleSheet('ProjectOverview', {
     flex: 'none'
   },
 
-  TasksTracker: {
-    _flex: ['row', 'flex-start', 'flex-start'],
-    marginBottom: '12px'
-  },
-
-  CompletedTasks: {
-    _font: ['43px', '36px', '400']
-  },
-
-  TotalTasks: {
-    _font: ['13px', '18px', '400'],
-    marginLeft: '6px',
-    color: '$sw2'
-  },
-
-  Text: {
-    _textStyle: 'body',
-    color: '$sw2'
-  },
-
   ProgressBarWrapper: {
     _size: ['100%', 'auto'],
     margin: '12px 0 24px 0'

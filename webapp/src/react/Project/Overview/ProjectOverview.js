@@ -8,7 +8,7 @@ import SWView from 'src/react/_Layout/view-controller/SWView';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
 import Button from 'src/react/_components/Button/Button';
 import Loader from 'src/react/_components/loaders/Loader';
-
+import SideHeader from 'src/react/_components/SideHeader/SideHeader';
 import withNav from 'src/react/_hocs/Nav/withNav';
 
 @withNav
@@ -165,11 +165,11 @@ export default class ProjectOverview extends PureComponent {
     );
     return (
       <SW.SidebarWrapper>
-        <SW.TasksTracker>
-          <SW.CompletedTasks>{completedTasksAmount}</SW.CompletedTasks>
-          <SW.TotalTasks>/{totalAmountOfTasks}</SW.TotalTasks>
-        </SW.TasksTracker>
-        <SW.Text>Tasks Completed</SW.Text>
+        <SideHeader
+          title={completedTasksAmount}
+          smallTitle={`/${totalAmountOfTasks}`}
+          subtitle="Tasks Completed"
+        />
         <SW.ProgressBarWrapper>
           <SW.ProgressBarOuter>
             <SW.ProgressBarInner width={completionPercentage} />
