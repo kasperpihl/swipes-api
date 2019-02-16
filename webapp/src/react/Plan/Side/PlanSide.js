@@ -1,20 +1,15 @@
 import React from 'react';
 import SW from './PlanSide.swiss';
-import Button from 'src/react/_components/Button/Button';
+import PlanSideDraft from './Draft/PlanSideDraft';
+// import PlanSideRunning from './Running/PlanSideRunning';
+// import PlanSideCompleted from './Completed/PlanSideCompleted';
 
 export default function PlanSide({ plan }) {
-  const handleStart = () => {
-    console.log('pressed start');
-  };
+  let SideComp;
+
   return (
     <SW.Wrapper>
-      <SW.TasksTracker>
-        <SW.BigNumber>{plan.get('task_counter')}</SW.BigNumber>
-      </SW.TasksTracker>
-      <SW.Text>Tasks selected</SW.Text>
-      {plan.get('state') === 'draft' && (
-        <Button.Standard title="Start" icon="Comment" onClick={handleStart} />
-      )}
+      <PlanSideDraft plan={plan} />
     </SW.Wrapper>
   );
 }
