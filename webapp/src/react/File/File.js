@@ -68,7 +68,7 @@ export default class File extends PureComponent {
     }
 
     if (!res.ok) {
-      loader.error('fetch', res.error);
+      loader.error('fetch', res.error, 3000);
       return;
     }
     if (!this.getComponentForFile(res.file)) {

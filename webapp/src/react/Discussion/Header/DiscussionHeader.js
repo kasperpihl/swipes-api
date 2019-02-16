@@ -80,7 +80,7 @@ export default class DiscussionHeader extends PureComponent {
             window.analytics.sendEvent('Discussion archived', {});
           }
           if (!res || !res.ok) {
-            loader.clear('dots', res.error);
+            loader.error('dots', res.error, 3000);
           }
         });
       }

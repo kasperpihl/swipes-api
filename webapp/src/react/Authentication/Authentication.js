@@ -75,7 +75,7 @@ export default class Authentication extends PureComponent {
         window.analytics.sendEvent(analyticsEvent, {});
         redirectTo('/');
       } else {
-        loader.error('authButton', res.error);
+        loader.error('authButton', res.error, 3000);
       }
     });
   };

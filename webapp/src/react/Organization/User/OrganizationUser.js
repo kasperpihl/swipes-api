@@ -67,7 +67,7 @@ export default class OrganizationUser extends PureComponent {
       if (res.ok) {
         loader.success('buttonClicked', 'Transferred');
       } else {
-        loader.error('buttonClicked', res.error);
+        loader.error('buttonClicked', res.error, 3000);
       }
     });
   };

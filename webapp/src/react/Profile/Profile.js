@@ -36,7 +36,7 @@ export default class Profile extends PureComponent {
           if (res && res.ok) {
             loader.clear('createOrg');
           } else {
-            loader.error('createOrg', res.error);
+            loader.error('createOrg', res.error, 3000);
           }
         });
       }
