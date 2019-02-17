@@ -1,5 +1,4 @@
 import React from 'react';
-import useLoader from 'src/react/_hooks/useLoader';
 import BillingPaymentModal from 'src/react/Billing/Payment/Modal/BillingPaymentModal';
 import SW from './BillingPaymentActive.swiss';
 

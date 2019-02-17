@@ -144,11 +144,8 @@ export default class extends PureComponent {
       .get(side)
       .last()
       .get('screenId');
-    const uniqueId =
-      navigation
-        .get(side)
-        .last()
-        .get('uniqueId') || '';
+
+    const key = side + screenId + navigation.get(side).size;
     return (
       <NavProvider
         isLocked={side === 'right' && navigation.get('locked')}
@@ -157,8 +154,8 @@ export default class extends PureComponent {
         key={side}
       >
         <Card {...cardProps}>
-          <ErrorBoundary key={side + screenId + uniqueId}>
-            <Comp key={side + navigation.get(side).size} {...props} />
+          <ErrorBoundary key={key}>
+            <Comp key={key} {...props} />
           </ErrorBoundary>
         </Card>
       </NavProvider>
