@@ -5,10 +5,11 @@ export default styleSheet('Gradient', {
     _size: '100%',
     backgroundImage: 'linear-gradient(#0D315B, #40A3E7, #2D7EDB)',
     backgroundSize: '100% 200%',
+    backgroundPosition: '0% 100%',
     transition: '2.0s ease-in',
     isNight: {
       transition: '2.0s ease-in',
-      backgroundPosition: '0% 100%'
+      backgroundPosition: '0% 0%'
     },
     left: 0,
     top: 0,
