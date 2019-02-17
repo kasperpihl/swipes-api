@@ -29,15 +29,12 @@ export default class Gradient extends PureComponent {
   }
   periodicallyCheck = () => {
     clearTimeout(this.dayTimer);
-
     const { isNight } = this.state;
     const newNight = this.determineNight();
-    console.log('checking', newNight);
-    this.setState({ isNight: !isNight });
     if (isNight !== newNight) {
-      // this.setState({ isNight: newNight });
+      this.setState({ isNight: newNight });
     }
-    this.dayTimer = setTimeout(this.periodicallyCheck, 4000);
+    this.dayTimer = setTimeout(this.periodicallyCheck, 30000);
   };
   determineNight() {
     const hours = new Date().getHours();
