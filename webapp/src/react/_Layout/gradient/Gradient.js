@@ -1,24 +1,21 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import gradient from 'swipes-core-js/classes/gradient';
 import SW from './Gradient.swiss';
 
 @connect(state => ({
   successState: state.main.get('successState'),
-  successColor: state.main.get('successColor'),
+  successColor: state.main.get('successColor')
 }))
 export default class Gradient extends PureComponent {
   constructor(props) {
     super(props);
-    const gradientPos = gradient.getGradientPos();
     this.state = {
-      gradientPos,
       show: false,
+      isNight: this.determineNight()
     };
-    this.gradientStep = this.gradientStep.bind(this);
   }
   componentDidMount() {
-    this.gradientStep();
+    this.periodicallyCheck();
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.successState !== this.props.successState) {
@@ -26,37 +23,39 @@ export default class Gradient extends PureComponent {
     }
   }
   componentWillUnmount() {
-    clearTimeout(this.timer);
+    clearTimeout(this.pulseTimer);
+    clearTimeout(this.dayTimer);
     window.cancelAnimationFrame(this.animationFrame);
+  }
+  periodicallyCheck = () => {
+    clearTimeout(this.dayTimer);
+
+    const { isNight } = this.state;
+    const newNight = this.determineNight();
+    console.log('checking', newNight);
+    this.setState({ isNight: !isNight });
+    if (isNight !== newNight) {
+      // this.setState({ isNight: newNight });
+    }
+    this.dayTimer = setTimeout(this.periodicallyCheck, 4000);
+  };
+  determineNight() {
+    const hours = new Date().getHours();
+    return hours < 8 || hours >= 18;
   }
   runPulse(nextProps) {
     this.setState({ show: true });
-    clearTimeout(this.timer);
-    this.timer = setTimeout(() => {
+    clearTimeout(this.pulseTimer);
+    this.pulseTimer = setTimeout(() => {
       this.setState({ show: false });
     }, 700);
   }
-  gradientStep() {
-    const gradientPos = gradient.getGradientPos();
-
-    if (this.state.gradientPos !== gradientPos) {
-      this.setState({ gradientPos });
-    }
-
-    this.animationFrame = window.requestAnimationFrame(this.gradientStep);
-  }
   render() {
-    const { show, gradientPos } = this.state;
-    const { successColor } = this.props;
-    let styles = gradient.getGradientStyles();
-
-    if (gradientPos) {
-      styles.backgroundPosition = `${gradientPos}% 50%`;
-    }
-
+    const { show, isNight } = this.state;
+    const { successColor } = this.props;
     return (
-      <SW.Wrapper style={styles}>
-        <SW.Success color={successColor} show={show}/>
+      <SW.Wrapper isNight={isNight}>
+        <SW.Success color={successColor} show={show} />
       </SW.Wrapper>
     );
   }
