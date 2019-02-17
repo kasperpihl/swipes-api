@@ -8,6 +8,7 @@ const updateSchema = object.as({
       'discussion',
       'me',
       'note',
+      'plan',
       'organization',
       'organization_user',
       'project'
