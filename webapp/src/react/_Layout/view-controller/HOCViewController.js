@@ -102,7 +102,6 @@ export default class extends PureComponent {
 
     const remainingSpace = appWidth - SPACING - sizes[0] - sizes[1];
     const hasOverlay = RightComp && remainingSpace < 0;
-    console.log(sizes, appWidth, remainingSpace, hasOverlay);
 
     const startX = hasOverlay ? 0 : remainingSpace / 2;
     this._sidebarExpanded = startX > kSidebarExpandedThreshold;
