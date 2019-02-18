@@ -29,6 +29,8 @@ export default function useRequest(endpoint, params) {
   function retry(reset) {
     if (reset) {
       setReq(defaultState);
+    } else {
+      setReq(r => ({ ...r, retrying: true }));
     }
     setReqId(count => count + 1);
   }
