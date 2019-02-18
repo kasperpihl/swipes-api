@@ -72,10 +72,6 @@ export default class extends PureComponent {
     }
     return Math.min(maxWidth, appWidth - spacing);
   }
-  getRemainingSpace(sizes) {
-    const { appWidth } = this.state;
-    return appWidth - SPACING - sizes.reduce((c, b) => c + b);
-  }
 
   updateAppWidth = throttle(() => {
     if (!this._unmounted) {
@@ -104,8 +100,9 @@ export default class extends PureComponent {
       this.getSizeForComp(RightComp, !!RightComp)
     ];
 
-    const remainingSpace = this.getRemainingSpace(sizes);
+    const remainingSpace = appWidth - SPACING - sizes[0] - sizes[1];
     const hasOverlay = RightComp && remainingSpace < 0;
+    console.log(sizes, appWidth, remainingSpace, hasOverlay);
 
     const startX = hasOverlay ? 0 : remainingSpace / 2;
     this._sidebarExpanded = startX > kSidebarExpandedThreshold;

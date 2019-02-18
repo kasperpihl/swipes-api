@@ -93,21 +93,23 @@ export default class Sidebar extends PureComponent {
   }
   render() {
     const { sidebarExpanded } = this.props;
-    if (typeof sidebarExpanded === 'undefined') {
-      return null;
-    }
+
     return (
       <SW.ProvideContext expanded={sidebarExpanded}>
         <SW.Wrapper>
-          <SW.TopSection />
-          <SW.MiddleSection>
-            <SW.Section>
-              {this.renderItem(0)}
-              {this.renderItem(1)}
-              {this.renderItem(2)}
-            </SW.Section>
-          </SW.MiddleSection>
-          <SW.BottomSection>{this.renderItem(3)}</SW.BottomSection>
+          {typeof sidebarExpanded !== 'undefined' && (
+            <>
+              <SW.TopSection />
+              <SW.MiddleSection>
+                <SW.Section>
+                  {this.renderItem(0)}
+                  {this.renderItem(1)}
+                  {this.renderItem(2)}
+                </SW.Section>
+              </SW.MiddleSection>
+              <SW.BottomSection>{this.renderItem(3)}</SW.BottomSection>
+            </>
+          )}
         </SW.Wrapper>
       </SW.ProvideContext>
     );
