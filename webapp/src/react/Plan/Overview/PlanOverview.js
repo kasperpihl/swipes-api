@@ -14,9 +14,9 @@ export default function PlanOverview({ planId }) {
     plan_id: planId
   });
 
-  useUpdate(update => {
-    if (update.type === 'plan' && update.data.plan_id === planId) {
-      req.merge('plan', update.data);
+  useUpdate('plan', plan => {
+    if (plan.plan_id === planId) {
+      req.merge('plan', plan);
     }
   });
 
