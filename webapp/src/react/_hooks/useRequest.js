@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import request from 'swipes-core-js/utils/request';
 
-export default function useRequest(endpoint, params) {
+export default function useRequest(endpoint, params, callback) {
   const [reqId, setReqId] = useState(1);
 
   const defaultState = { loading: true, retry, merge };
@@ -46,6 +46,9 @@ export default function useRequest(endpoint, params) {
       }
       if (res.ok) {
         setReq({ result: res, retry, merge });
+        if (typeof callback === 'function') {
+          callback(res);
+        }
       } else {
         setReq({ error: res.error, retry, merge });
       }
