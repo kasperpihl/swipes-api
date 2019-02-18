@@ -44,7 +44,6 @@ export default class Sidebar extends PureComponent {
   }
   renderNotificationCounter(item) {
     let { unreadCounter } = this.props;
-    unreadCounter = 9;
     if (item.screenId !== 'Chat' || !unreadCounter) {
       return null;
     }

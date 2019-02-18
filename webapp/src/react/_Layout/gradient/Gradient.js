@@ -25,7 +25,6 @@ export default class Gradient extends PureComponent {
   componentWillUnmount() {
     clearTimeout(this.pulseTimer);
     clearTimeout(this.dayTimer);
-    window.cancelAnimationFrame(this.animationFrame);
   }
   periodicallyCheck = () => {
     clearTimeout(this.dayTimer);
@@ -40,7 +39,7 @@ export default class Gradient extends PureComponent {
     const hours = new Date().getHours();
     return hours < 8 || hours >= 18;
   }
-  runPulse(nextProps) {
+  runPulse() {
     this.setState({ show: true });
     clearTimeout(this.pulseTimer);
     this.pulseTimer = setTimeout(() => {

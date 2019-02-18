@@ -1,4 +1,4 @@
-import { any, number } from 'valjs';
+import { any, number, string, bool } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import sqlCheckPermissions from 'src/utils/sql/sqlCheckPermissions';
 
@@ -6,7 +6,8 @@ import { query } from 'src/utils/db/db';
 
 const expectedInput = {
   type: any.of('following', 'all other').require(),
-  skip: number.gte(0),
+  cursor: string,
+  fetch_new: bool,
   limit: number.gte(1).lte(100)
 };
 
@@ -17,10 +18,15 @@ export default endpointCreate(
   async (req, res) => {
     // Get inputs
     const { input, user_id } = res.locals;
-    const { type } = input;
-    let { skip, limit } = input;
-    skip = skip || 0;
+    const { type, cursor, fetch_new } = input;
+    let { limit } = input;
     limit = limit || 20;
+    const values = [user_id, limit + 1];
+    let pagination = '';
+    if (cursor) {
+      pagination = `AND d.last_comment_at ${fetch_new ? '>' : '<'} $3`;
+      values.push(cursor);
+    }
 
     const discussionsRes = await query(
       `
@@ -31,11 +37,11 @@ export default endpointCreate(
         WHERE ${sqlCheckPermissions('per.granted_to', user_id)}
         AND d.followers->>$1 IS ${type === 'all other' ? 'NULL' : 'NOT NULL'}
         AND d.deleted=FALSE
+        ${pagination}
         ORDER BY d.last_comment_at DESC
         LIMIT $2
-        OFFSET $3
       `,
-      [user_id, limit + 1, skip]
+      values
     );
     let discussions = discussionsRes.rows;
 
@@ -47,7 +53,6 @@ export default endpointCreate(
 
     res.locals.output = {
       discussions,
-      skip,
       limit,
       has_more
     };
