@@ -10,18 +10,16 @@ import SW from './Note.swiss';
 Note.sizes = [698];
 
 export default function Note({ noteId }) {
-  const { editorState, setEditorState, req, disabled } = useSyncedNote(noteId);
+  const { editorState, setEditorState, req, rawState } = useSyncedNote(noteId);
 
-  const delegateRef = useRef({
-    setEditorState
-  });
+  const delegate = useRef({});
+  delegate.current.setEditorState = setEditorState;
 
   if (req.error || req.loading) {
     return <RequestLoader req={req} />;
   }
 
   const { note } = req.result;
-  const rawState = !editorState && note.text;
 
   return (
     <SWView header={<CardHeader title={note.title} />}>
@@ -30,8 +28,7 @@ export default function Note({ noteId }) {
           mediumEditor
           rawState={rawState}
           editorState={editorState}
-          disabled={disabled}
-          delegate={delegateRef.current}
+          delegate={delegate.current}
         />
       </SW.Wrapper>
     </SWView>

@@ -1,101 +1,120 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import useDebouncedCallback from 'src/react/_hooks/useDebouncedCallback';
 import useRequest from 'src/react/_hooks/useRequest';
+import useUpdate from 'src/react/_hooks/useUpdate';
+import useBeforeUnload from 'src/react/_hooks/useBeforeUnload';
+import useUnmountedRef from 'src/react/_hooks/useUnmountedRef';
 import { convertToRaw } from 'draft-js';
 import getDiffServerClient from 'src/utils/draft-js/getDiffServerClient';
 import request from 'swipes-core-js/utils/request';
 
 export default function useSyncedNote(noteId) {
-  const req = useRequest('note.get', {
-    note_id: noteId
-  });
+  const unmountedRef = useUnmountedRef();
+  const [rev, setRev] = useState();
+  const [rawState, setRawState] = useState();
 
-  const unmounted = useRef();
-  const lastSentToServerRef = useRef();
-  const [disabled, setDisabled] = useState(false);
+  const req = useRequest(
+    'note.get',
+    {
+      note_id: noteId
+    },
+    res => {
+      if (unmountedRef.current) return;
+      setRev(res.note.rev);
+      setRawState(res.note.text);
+    }
+  );
+
+  const handleUpdateRef = useRef();
+  const [lastServerContentState, setLastServerContentState] = useState();
+  const [lastContentState, setLastContentState] = useState();
   const [editorState, _setEditorState] = useState();
-  const saveToServerRef = useRef();
 
-  saveToServerRef.current = async function saveToServer(
-    forcedRawState,
-    forcedRev
-  ) {
-    const contentState = editorState.getCurrentContent();
-    if (!forcedRawState && contentState === lastSentToServerRef.current) {
-      return;
-    }
-
-    const rawState = forcedRawState || convertToRaw(contentState);
-    const rev = forcedRev || req.result.note.rev;
-
-    let res = await request('note.update', {
-      note_id: noteId,
-      rev,
-      text: JSON.stringify(rawState)
-    });
-    if (unmounted.current) return;
-
-    if (res.ok) {
-      lastSentToServerRef.current = contentState;
-      setDisabled(false);
-      req.merge('note', res.note);
-      return;
-    } else if (res.error !== 'Out of sync') {
-      return;
-    }
-
-    // Resolve merge conflict
-    setDisabled(true);
-    res = await request('note.get', {
+  async function fetchNote() {
+    const res = await request('note.get', {
       note_id: noteId
     });
-    if (unmounted.current) return;
 
     if (!res.ok) {
       throw Error('Could not fetch newest note');
     }
+    return res.note;
+  }
 
-    const latestNote = res.note;
+  handleUpdateRef.current = function(latestNote) {
+    const needSave = editorState.getCurrentContent() !== lastServerContentState;
+    let rawState = latestNote.text;
+    if (needSave) {
+      rawState = getDiffServerClient(
+        convertToRaw(lastServerContentState),
+        latestNote.text,
+        convertToRaw(editorState.getCurrentContent())
+      ).editorState;
 
-    const diffObj = getDiffServerClient(
-      latestNote.text,
-      note.text,
-      convertToRaw(editorState.getCurrentContent())
-    );
+      saveToServer(rawState, latestNote.rev);
+    }
 
-    saveToServer(diffObj.editorState, latestNote.rev);
+    if (!unmountedRef.current) {
+      setRev(latestNote.rev);
+      setRawState(rawState);
+    }
   };
 
-  const bouncedSaveToServer = useDebouncedCallback(() => {
-    saveToServerRef.current();
-  }, 5000);
+  async function saveToServer(rawState, _rev) {
+    let res = await request('note.update', {
+      note_id: noteId,
+      rev: _rev,
+      text: JSON.stringify(rawState)
+    });
 
-  // Force save on unload (both killing app and unmounting)
-  useEffect(() => {
-    function beforeUnload() {
-      console.log('save');
-      saveToServerRef.current();
+    if (res.error === 'Out of sync') {
+      const latestNote = await fetchNote();
+      handleUpdateRef.current(latestNote);
     }
-    window.addEventListener('beforeunload', beforeUnload);
-    return () => {
-      unmounted.current = true;
-      beforeUnload();
-      window.removeEventListener('beforeunload', beforeUnload);
-    };
-  }, []);
 
-  function setEditorState(editorState) {
-    if (!lastSentToServerRef.current) {
-      lastSentToServerRef.current = editorState.getCurrentContent();
+    if (unmountedRef.current) return;
+    if (res.ok && res.rev > rev) {
+      setRev(res.rev);
     }
-    _setEditorState(editorState);
-    bouncedSaveToServer();
+    return res;
   }
+
+  useUpdate('note', async note => {
+    if (note.note_id === noteId && note.rev > rev) {
+      const latestNote = await fetchNote();
+      handleUpdateRef.current(latestNote);
+    }
+  });
+
+  const bouncedSaveToServer = useDebouncedCallback(
+    () => saveToServer(convertToRaw(editorState.getCurrentContent()), rev),
+    5000,
+    [editorState, rev]
+  );
+
+  useBeforeUnload(() => {
+    saveToServer(convertToRaw(editorState.getCurrentContent()), rev);
+  });
+
+  const setEditorState = useCallback(
+    function(editorState) {
+      const contentState = editorState.getCurrentContent();
+      if (rawState) {
+        setLastServerContentState(contentState);
+        setRawState(undefined);
+      } else if (contentState !== lastContentState) {
+        bouncedSaveToServer();
+      }
+      setLastContentState(contentState);
+      _setEditorState(editorState);
+    },
+    [rawState, lastContentState]
+  );
 
   return {
     editorState,
     req,
     setEditorState,
-    disabled
+    rawState
   };
 }
