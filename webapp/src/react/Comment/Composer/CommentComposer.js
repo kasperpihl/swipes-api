@@ -32,7 +32,7 @@ export default class CommentComposer extends PureComponent {
     });
 
     request('comment.add', {
-      discussion_id: discussion.get('discussion_id'),
+      discussion_id: discussion.discussion_id,
       attachments,
       message: commentVal
     }).then(res => {
@@ -101,7 +101,7 @@ export default class CommentComposer extends PureComponent {
             <SW.ButtonWrapper>
               <AttachButton
                 onAttach={this.handleAttach}
-                ownedBy={discussion.get('owned_by')}
+                ownedBy={discussion.owned_by}
               />
               <SW.SubmitButton
                 onClick={this.handleAddComment}

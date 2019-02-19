@@ -1,83 +1,67 @@
-import React, { PureComponent } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
-
-import withRequests from 'swipes-core-js/components/withRequests';
 import PaginationProvider from 'swipes-core-js/components/pagination/PaginationProvider';
-import Loader from 'src/react/_components/loaders/Loader';
 import DiscussionOverview from './DiscussionOverview';
 import request from 'swipes-core-js/utils/request';
+import useRequest from 'src/react/_hooks/useRequest';
 
-@withRequests({
-  discussion: {
-    request: {
-      url: 'discussion.get',
-      body: props => ({
-        discussion_id: props.discussionId
-      }),
-      resPath: 'discussion'
-    },
-    cache: {
-      path: props => ['discussion', props.discussionId]
-    }
-  }
-})
-@connect(state => ({
+import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
+
+export default connect(state => ({
   myId: state.me.get('user_id')
-}))
-export default class HOCDiscussionOverview extends PureComponent {
-  static sizes = [654];
-  state = {
-    viewAttachments: false
-  };
-  onInitialLoad = () => {
-    const { discussion, myId } = this.props;
-    const ts = discussion.getIn(['followers', myId]);
-    if (ts === 'n' || ts < discussion.get('last_comment_at')) {
-      request('discussion.markAsRead', {
-        read_at: discussion.get('last_comment_at'),
-        discussion_id: discussion.get('discussion_id')
-      });
-    }
-  };
-  onClickAttachments = () => {
-    this.setState({ viewAttachments: !this.state.viewAttachments });
-  };
-  render() {
-    const { requestReady, requestError, discussion } = this.props;
-    const { viewAttachments } = this.state;
-    if (!requestReady) {
-      return <Loader center size={54} text="Loading" />;
-    }
+}))(HOCDiscussionOverview);
 
-    // @kasper how I should fix this
-    if (!discussion) {
-      return null;
+function HOCDiscussionOverview({ discussionId, myId }) {
+  const [viewAttachments, setViewAttachments] = useState(false);
+
+  const req = useRequest(
+    'discussion.get',
+    {
+      discussion_id: discussionId
+    },
+    result => {
+      const { discussion } = result;
+      const ts = discussion.followers[myId];
+      if (ts === 'n' || ts < discussion.last_comment_at) {
+        request('discussion.markAsRead', {
+          read_at: discussion.last_comment_at,
+          discussion_id: discussion.discussion_id
+        });
+      }
     }
-    return (
-      <PaginationProvider
-        key={`${viewAttachments}`}
-        request={{
-          body: {
-            discussion_id: discussion.get('discussion_id'),
-            attachments_only: viewAttachments
-          },
-          url: 'comment.list',
-          resPath: 'comments'
-        }}
-        limit={40}
-        onInitialLoad={this.onInitialLoad}
-        cache={{
-          path: [`comment-${viewAttachments}`, discussion.get('discussion_id')],
-          orderBy: '-sent_at',
-          idAttribute: 'comment_id'
-        }}
-      >
-        <DiscussionOverview
-          discussion={discussion}
-          onClickAttachments={this.onClickAttachments}
-          viewAttachments={this.state.viewAttachments}
-        />
-      </PaginationProvider>
-    );
+  );
+
+  if (req.loading || req.error) {
+    return <RequestLoader req={req} />;
   }
+
+  const handleClick = () => {
+    setViewAttachments(c => !c);
+  };
+  const { discussion } = req.result;
+  return (
+    <PaginationProvider
+      key={`${viewAttachments}`}
+      request={{
+        body: {
+          discussion_id: discussion.discussion_id,
+          attachments_only: viewAttachments
+        },
+        url: 'comment.list',
+        resPath: 'comments'
+      }}
+      limit={40}
+      cache={{
+        path: [`comment-${viewAttachments}`, discussion.discussion_id],
+        orderBy: '-sent_at',
+        idAttribute: 'comment_id'
+      }}
+    >
+      <DiscussionOverview
+        discussion={discussion}
+        onClickAttachments={handleClick}
+        viewAttachments={viewAttachments}
+      />
+    </PaginationProvider>
+  );
 }

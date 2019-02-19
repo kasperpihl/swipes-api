@@ -25,12 +25,12 @@ import request from 'swipes-core-js/utils/request';
 export default class DiscussionHeader extends PureComponent {
   onMouseEnter = e => {
     const { tooltip, discussion } = this.props;
-    if (!discussion.get('followers').size) return;
+    if (!Object.keys(discussion.followers).length) return;
     tooltip({
       component: TooltipUsers,
       props: {
-        organizationId: discussion.get('owned_by'),
-        userIds: discussion.get('followers').keySeq(),
+        organizationId: discussion.owned_by,
+        userIds: Object.keys(discussion.followers),
         size: 24
       },
       options: {
@@ -41,7 +41,7 @@ export default class DiscussionHeader extends PureComponent {
   };
   onMouseLeave = () => {
     const { tooltip, discussion } = this.props;
-    if (!discussion.get('followers').size) return;
+    if (!Object.keys(discussion.followers).length) return;
     tooltip(null);
   };
   onTitleClick = e => {
@@ -51,14 +51,14 @@ export default class DiscussionHeader extends PureComponent {
       inputs: [
         {
           placeholder: 'Name of discussion',
-          initialValue: discussion.get('topic')
+          initialValue: discussion.topic
         }
       ],
       confirmLabel: 'Rename',
       onConfirm: ([text]) => {
-        if (text !== discussion.get('topic') && text.length) {
+        if (text !== discussion.topic && text.length) {
           request('discussion.rename', {
-            discussion_id: discussion.get('discussion_id'),
+            discussion_id: discussion.discussion_id,
             topic: text
           });
         }
@@ -74,7 +74,7 @@ export default class DiscussionHeader extends PureComponent {
       onConfirm: () => {
         loader.set('dots');
         request('discussion.archive', {
-          discussion_id: discussion.get('user_id')
+          discussion_id: discussion.discussion_id
         }).then(res => {
           if (res.ok) {
             window.analytics.sendEvent('Discussion archived', {});
@@ -88,10 +88,9 @@ export default class DiscussionHeader extends PureComponent {
   }
   openDiscussionOptions = e => {
     const { discussion, myId } = this.props;
-    const followers = discussion.get('followers');
     contextMenu(ListMenu, e, {
       onClick: this.onFollowClick,
-      buttons: [{ title: followers.get(myId) ? 'Unfollow' : 'Follow' }]
+      buttons: [{ title: discussion.followers[myId] ? 'Unfollow' : 'Follow' }]
     });
   };
   handleOpenContext = () => {
@@ -99,9 +98,9 @@ export default class DiscussionHeader extends PureComponent {
     nav.openRight({
       screenId: 'ProjectOverview',
       crumbTitle: 'Project',
-      uniqueId: discussion.get('context_id'),
+      uniqueId: discussion.context_id,
       props: {
-        projectId: discussion.get('context_id')
+        projectId: discussion.context_id
       }
     });
   };
@@ -110,23 +109,24 @@ export default class DiscussionHeader extends PureComponent {
 
     loader.set('following');
     let endpoint = 'discussion.follow';
-    if (discussion.get('followers').find((ts, uId) => uId === myId)) {
+    if (discussion.followers[my]) {
       endpoint = 'discussion.unfollow';
     }
     request(endpoint, {
-      discussion_id: discussion.get('discussion_id')
+      discussion_id: discussion.discussion_id
     }).then(res => {
       loader.clear('following');
     });
   };
   renderSubtitle = () => {
     const { discussion } = this.props;
-    const followers = discussion.get('followers');
-    const privacy = discussion.get('privacy');
+    const followers = discussion.followers;
+    const privacy = discussion.privacy;
+    const numberOfFollowers = Object.keys(followers).length;
     return (
       <>
         <SW.OrganizationName>
-          {orgGetBelonging(discussion.get('owned_by'))} /{' '}
+          {orgGetBelonging(discussion.owned_by)} /{' '}
         </SW.OrganizationName>
         <SW.FollowerLabel
           onMouseEnter={this.onMouseEnter}
@@ -134,7 +134,7 @@ export default class DiscussionHeader extends PureComponent {
         >
           <SW.Icon icon={privacy ? 'ThreeDots' : 'Earth'} />
           {/* TODO: Change icon once privacy is wired up */}
-          {`${followers.size} follower${followers.size === 1 ? '' : 's'}`}
+          {`${numberOfFollowers} follower${numberOfFollowers === 1 ? '' : 's'}`}
         </SW.FollowerLabel>
       </>
     );
@@ -147,15 +147,15 @@ export default class DiscussionHeader extends PureComponent {
       onClickAttachments,
       viewAttachments
     } = this.props;
-    const topic = discussion.get('topic');
+    const topic = discussion.topic;
 
     return (
       <Fragment>
         <CardHeader title={topic} subtitle={this.renderSubtitle()} />
-        <SW.ContextWrapper hasContext={!!discussion.get('context_id')}>
-          {discussion.get('context_id') && (
+        <SW.ContextWrapper hasContext={!!discussion.context_id}>
+          {discussion.context_id && (
             <SW.Button
-              title={discussion.get('topic')}
+              title={discussion.topic}
               onClick={this.handleOpenContext}
               icon="Milestones"
               border

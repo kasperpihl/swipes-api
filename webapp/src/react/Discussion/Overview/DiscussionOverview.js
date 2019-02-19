@@ -77,8 +77,8 @@ export default class DiscussionOverview extends PureComponent {
           <CommentItem
             key={i}
             comment={comment}
-            discussionId={discussion.get('discussion_id')}
-            ownedBy={discussion.get('owned_by')}
+            discussionId={discussion.discussion_id}
+            ownedBy={discussion.owned_by}
           />
         ))}
         {pagination.results && !pagination.results.size && (
