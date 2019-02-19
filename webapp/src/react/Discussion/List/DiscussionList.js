@@ -1,23 +1,43 @@
 import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
-import { fromJS } from 'immutable';
-import DiscussionListItem from './Item/DiscussionListItem';
+import DiscussionListItems from 'src/react/Discussion/List/Items/DiscussionListItems';
 import PaginationScrollToMore from 'src/react/_components/pagination/PaginationScrollToMore';
-import { withOptimist } from 'react-optimist';
-import PaginationProvider from 'swipes-core-js/components/pagination/PaginationProvider';
 
-import withNav from 'src/react/_hocs/Nav/withNav';
+import usePaginationRequest from 'src/react/_hooks/usePaginationRequest';
+import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
 
 import SW from './DiscussionList.swiss';
 
-@withNav
-@withOptimist
-@connect(state => ({
-  myId: state.me.get('user_id')
-}))
-export default class DiscussionList extends PureComponent {
-  renderItems(pagination, type) {
-    const { onSelectItemId, optimist, nav } = this.props;
+export default function DiscussionList({ type, onSelectItemId }) {
+  const req = usePaginationRequest(
+    'discussion.list',
+    {
+      type
+    },
+    {
+      idAttribute: 'discussion_id',
+      cursorKey: 'last_comment_at',
+      resultPath: 'discussions'
+    }
+  );
+
+  const showLoad = req.error || req.loading;
+
+  return (
+    <SW.Wrapper>
+      {showLoad && <RequestLoader req={req} />}
+      {!showLoad && (
+        <DiscussionListItems req={req} onSelectItemId={onSelectItemId} />
+      )}
+      {!showLoad && (
+        <PaginationScrollToMore errorLabel="Couldn't get discussions." />
+      )}
+    </SW.Wrapper>
+  );
+}
+
+class DiscussionList2 extends PureComponent {
+  renderItems(pagination) {
+    const { onSelectItemId, optimist } = this.props;
     let { results } = pagination;
     let newSelectedId = null;
 
@@ -53,20 +73,12 @@ export default class DiscussionList extends PureComponent {
           siblingToSelectedItem={siblingToSelectedItem}
           item={item}
           key={item.get('discussion_id')}
-          viewWidth={nav.width}
         />
       );
     });
   }
   render() {
-    const { tabIndex, myId } = this.props;
-    let type = 'following';
-    let filter = d => d.get('followers').find((ts, uId) => uId === myId);
-
-    if (tabIndex === 1) {
-      type = 'all other';
-      filter = d => !d.get('followers').find((ts, uId) => uId === myId);
-    }
+    const { type } = this.props;
 
     return (
       <PaginationProvider

@@ -39,10 +39,7 @@ export default styleSheet('DiscussionListItem', {
     _textStyle: 'item',
     minWidth: 0,
     maxWidth: '180px',
-    paddingBottom: '1px',
-    'viewWidth>=1080': {
-      maxWidth: '210px'
-    }
+    paddingBottom: '1px'
   },
   Subtitle: {
     _el: LinesEllipsis,

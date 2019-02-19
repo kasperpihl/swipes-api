@@ -1,4 +1,4 @@
-import { useState, useReducer } from 'react';
+import { useRef, useReducer } from 'react';
 import request from 'swipes-core-js/utils/request';
 import useCallbackRef from 'src/react/_hooks/useCallbackRef';
 import useRequest from 'src/react/_hooks/useRequest';
@@ -16,7 +16,7 @@ export default function usePaginationRequest(endpoint, params, options) {
   }
 
   const { idAttribute, cursorKey, resultPath } = options;
-  const [hasMore, setHasMore] = useState();
+  const hasMoreRef = useRef();
 
   const [items, dispatch] = useReducer((state, action) => {
     const hasAlreadyFilter = item =>
@@ -31,8 +31,22 @@ export default function usePaginationRequest(endpoint, params, options) {
     }
   }, null);
 
+  async function fetchRequest(type, params) {
+    const res = await request(endpoint, params);
+    if (res.ok) {
+      if (type !== 'new') {
+        hasMoreRef.current = res.has_more;
+      }
+      dispatch({
+        type,
+        payload: res[resultPath]
+      });
+    }
+    return res;
+  }
+
   const fetchMoreRef = useCallbackRef(async function(type) {
-    if (!items || !hasMore) return;
+    if (!items || !hasMoreRef.current) return;
     let newParams = params;
     if (items.length) {
       const index = type === 'new' ? 0 : items.length - 1;
@@ -42,25 +56,15 @@ export default function usePaginationRequest(endpoint, params, options) {
         fetch_new: type === 'new'
       };
     }
-    const res = await request(endpoint, newParams);
-    if (res.ok) {
-      dispatch({
-        type,
-        payload: res[resultPath]
-      });
-    }
-    return res;
+    return fetchRequest(type, newParams);
   });
 
   const fetchNew = () => fetchMoreRef.current('new');
   const fetchNext = () => fetchMoreRef.current('next');
 
   const req = useRequest(endpoint, params, res => {
-    console.log('before');
-    setHasMore(res.has_more);
-    console.log('hi');
+    hasMoreRef.current = res.has_more;
     dispatch({ type: 'seed', payload: res[resultPath] });
-    console.log('there');
   });
 
   return {

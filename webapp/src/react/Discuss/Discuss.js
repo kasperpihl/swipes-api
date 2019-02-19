@@ -17,7 +17,7 @@ export default class Discuss extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      tabs: ['Conversations', 'Not part of'],
+      tabs: ['Following', 'All other'],
       tabIndex: 0,
       selectedId: null
     };
@@ -41,22 +41,9 @@ export default class Discuss extends PureComponent {
     });
     nav.setUniqueId(selectedId);
   }
-  onSelectItemId = (id, results) => {
+  onSelectItemId = id => {
     const { selectedId } = this.state;
-    let newId = id;
-    if (
-      selectedId &&
-      (!results ||
-        !results.filter(r => r.get('discussion_id') === selectedId).size)
-    ) {
-      newId = null;
-      if (results && results.size) {
-        newId = results.first().get('discussion_id');
-      }
-    } else if (results && selectedId) {
-      return;
-    }
-    if (newId !== selectedId) {
+    if (id !== selectedId) {
       this.selectDiscussionId(id);
     }
   };
@@ -72,21 +59,26 @@ export default class Discuss extends PureComponent {
     );
   }
   render() {
-    const { tabIndex, selectedId } = this.state;
     const { nav } = this.props;
+    const { tabIndex, selectedId } = this.state;
+    let type = 'following';
+    if (tabIndex === 1) {
+      type = 'all other';
+    }
+
     return (
-      <SW.ProvideContext viewWidth={nav.width}>
+      <SW.ProvideContext>
         <SW.ParentWrapper>
           <SW.LeftSide>
             <SWView header={this.renderLeftHeader()} noframe>
               <DiscussionList
-                tabIndex={tabIndex}
+                key={type}
+                type={type}
                 onSelectItemId={this.onSelectItemId}
-                viewWidth={nav.width}
               />
             </SWView>
           </SW.LeftSide>
-          <SW.RightSide>
+          <SW.RightSide viewWidth={nav.width}>
             {selectedId && (
               <HOCDiscussionOverview
                 key={selectedId}
