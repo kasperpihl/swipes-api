@@ -1,25 +1,19 @@
 import React from 'react';
-import usePaginationRequest from 'src/react/_hooks/usePaginationRequest';
+import DayTracker from 'src/react/_components/DayTracker/DayTracker';
 
 export default function Tester() {
-  const req = usePaginationRequest(
-    'discussion.list',
-    { type: 'following' },
-    {
-      // Which key to use as the ><
-      cursorKey: 'last_comment_at',
-      // Where to find the data on response (res.discussions)
-      resultPath: 'discussions',
-      idAttribute: 'discussion_id'
-    }
+  const startDate = '2019-02-20';
+  const endDate = '2019-02-25';
+  const maxWeeks = 5;
+  return (
+    <div>
+      <DayTracker
+        startDate={startDate}
+        endDate={endDate}
+        maxWeeks={maxWeeks}
+        compact
+      />
+      <DayTracker startDate={startDate} endDate={endDate} maxWeeks={maxWeeks} />
+    </div>
   );
-
-  // useUpdate('discussion', discussion => {
-  //   if (discussion.discussion_id === discussionId) {
-  //     req.fetchNew();
-  //   }
-  // });
-
-  console.log(req);
-  return <div>Hi</div>;
 }

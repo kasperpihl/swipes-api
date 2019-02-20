@@ -64,6 +64,10 @@ addMixin('textStyle', (style = 'item') => {
         _font: ['12px', '18px', 500],
         color: '$sw1'
       };
+    case 'small':
+      return {
+        _font: ['8px', '12px', 500]
+      };
     default:
       console.warn(
         `unsupported textStyle: ${style}. Check _textStyle.js for support`

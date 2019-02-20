@@ -36,17 +36,44 @@ export default class DayTracker extends PureComponent {
     return weekArr;
   };
 
+  getWeekDayForNumber = number => {
+    switch (number) {
+      case 0:
+        return 'M';
+      case 1:
+      case 3:
+        return 'T';
+      case 2:
+        return 'W';
+      case 4:
+      default:
+        return 'F';
+    }
+  };
+
   render() {
+    const { compact } = this.props;
     return (
-      <SW.Wrapper>
-        {this.getWeeksArr().map((week, i) => (
-          <SW.Week key={i}>
-            {week.map((state, j) => (
-              <SW.Day state={state} key={j} />
-            ))}
-          </SW.Week>
-        ))}
-      </SW.Wrapper>
+      <SW.ProvideContext compact={compact}>
+        <SW.Wrapper>
+          {this.getWeeksArr().map((week, i) => (
+            <SW.Week key={i}>
+              {week.map((state, j) => {
+                console.log(state);
+                return (
+                  <SW.DayWrapper key={j}>
+                    <SW.Day state={state}>
+                      {!compact &&
+                        state === 'upcoming' &&
+                        this.getWeekDayForNumber(j)}
+                    </SW.Day>
+                  </SW.DayWrapper>
+                );
+              })}
+            </SW.Week>
+          ))}
+        </SW.Wrapper>
+      </SW.ProvideContext>
     );
   }
 }
