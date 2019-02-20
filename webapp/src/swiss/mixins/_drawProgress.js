@@ -1,7 +1,7 @@
 import { addMixin } from 'swiss-react';
 
 addMixin('drawProgress', (progress, colorOne, colorTwo) => {
-  if (progress > 0 && progress <= 50) {
+  if (progress <= 50) {
     return {
       background: `linear-gradient(to right, ${colorOne} 50%, ${colorTwo} 50%)`,
       '&:before': {
@@ -20,7 +20,4 @@ addMixin('drawProgress', (progress, colorOne, colorTwo) => {
       }
     };
   }
-  return {
-    background: 'white'
-  };
 });

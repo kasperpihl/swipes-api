@@ -4,7 +4,6 @@ export default styleSheet('ProgressCircle', {
   Wrapper: {
     _size: '24px',
     borderRadius: '100%',
-    border: '2px solid $green1',
     flex: 'none'
   },
 
