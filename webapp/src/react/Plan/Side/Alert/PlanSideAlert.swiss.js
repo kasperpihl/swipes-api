@@ -13,7 +13,7 @@ export default styleSheet('PlanSideAlert', {
       backgroundColor: '$red'
     },
     'type=completed': {
-      backgroundColor: '$green'
+      backgroundColor: '$green1'
     }
   },
   Title: {
@@ -27,7 +27,7 @@ export default styleSheet('PlanSideAlert', {
       color: '$sw5'
     },
     'type=completed': {
-      backgroundColor: '$green',
+      backgroundColor: '$green1',
       color: '$sw5'
     }
   }

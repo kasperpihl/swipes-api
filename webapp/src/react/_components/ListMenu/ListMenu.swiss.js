@@ -16,7 +16,7 @@ export default styleSheet('ListMenu', {
     userSelect: 'none',
 
     '&:hover': {
-      backgroundColor: 'rgba($blue60, 0.25)'
+      backgroundColor: 'rgba($blue, 0.25)'
     },
 
     disabled: {

@@ -20,7 +20,7 @@ export default styleSheet('ButtonStandard', {
       },
 
       'status=Success': {
-        borderColor: '$green'
+        borderColor: '$green1'
       },
       'status=Error': {
         borderColor: '$red'
@@ -42,7 +42,7 @@ export default styleSheet('ButtonStandard', {
       }
     },
     'status=Success': {
-      color: '$green'
+      color: '$green1'
     },
 
     'status=Error': {

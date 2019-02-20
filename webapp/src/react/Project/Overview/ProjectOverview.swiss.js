@@ -41,13 +41,13 @@ export default styleSheet('ProjectOverview', {
     _flex: ['column', 'flex-start', 'center'],
     borderRadius: '8px',
     padding: '2px',
-    border: '2px solid $green'
+    border: '2px solid $green1'
   },
 
   ProgressBarInner: {
     width: get => `${get('width')}%`,
     height: '10px',
-    backgroundColor: '$green',
+    backgroundColor: '$green1',
     borderRadius: '5px'
   },
 

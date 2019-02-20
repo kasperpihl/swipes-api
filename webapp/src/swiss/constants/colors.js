@@ -1,19 +1,19 @@
 import { addConstants } from 'swiss-react';
 
 addConstants({
+  dark: '#121317',
+  base: '#FCFCFA',
+
   sw1: '#2E2E2D',
-  sw2: '#7A7A79',
-  sw3: '#C7C6C5',
-  sw4: '#EBEAE8',
+  sw2: '#5C5B5B',
+  sw3: '#B8B7B6',
+  sw4: '#E6E4E1',
   sw5: 'white',
 
-  blue: '#0038B1',
-  blue5: '#F0F7FF',
-  blue20: '#CCE4FF',
-  blue60: '#66AFFF',
-  blue80: '#3394FF',
-
-  red: '#F7473E',
-  green: '#05A851',
+  red: '#F54D45',
+  green1: '#05A851',
+  green2: '#D5EDD1',
+  green3: '#E6F2EB',
+  blue: '#3491ED',
   yellow: '#FFB038'
 });

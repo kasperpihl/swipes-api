@@ -13,7 +13,7 @@ export default styleSheet('BillingHeader', {
 
   Status: {
     _font: ['12px', '21px', '500'],
-    color: '$blue20',
+    color: '$blue',
     borderRadius: '2px',
     marginLeft: '6px',
     height: '21px',

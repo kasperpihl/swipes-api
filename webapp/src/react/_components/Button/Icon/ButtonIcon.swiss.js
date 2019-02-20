@@ -33,7 +33,7 @@ export default styleSheet('ButtonIcon', {
     },
 
     'status=Success': {
-      _svgColor: '$green'
+      _svgColor: '$green1'
     },
 
     'status=Error': {
