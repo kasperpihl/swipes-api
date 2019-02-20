@@ -1,19 +1,16 @@
-import React from 'react';
-import DayTracker from 'src/react/_components/DayTracker/DayTracker';
+import React, { Component } from 'react';
+import ProgressCircle from 'src/react/_components/ProgressCircle/ProgressCircle';
+import ProgressBar from 'src/react/_components/ProgressBar/ProgressBar';
 
-export default function Tester() {
-  const startDate = '2019-02-20';
-  const endDate = '2019-02-25';
-  const maxWeeks = 5;
-  return (
-    <div>
-      <DayTracker
-        startDate={startDate}
-        endDate={endDate}
-        maxWeeks={maxWeeks}
-        compact
-      />
-      <DayTracker startDate={startDate} endDate={endDate} maxWeeks={maxWeeks} />
-    </div>
-  );
+export default class Tester extends Component {
+  state = {
+    progress: 50
+  };
+  render() {
+    return (
+      <div>
+        <ProgressBar progress={this.state.progress} />
+      </div>
+    );
+  }
 }
