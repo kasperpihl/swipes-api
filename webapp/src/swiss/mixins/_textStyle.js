@@ -66,7 +66,7 @@ addMixin('textStyle', (style = 'item') => {
       };
     case 'small':
       return {
-        _font: ['8px', '12px', 500]
+        _font: ['10px', '12px', 500]
       };
     default:
       console.warn(

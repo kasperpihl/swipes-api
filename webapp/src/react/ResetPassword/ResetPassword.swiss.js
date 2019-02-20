@@ -64,7 +64,7 @@ export default styleSheet('ResetPassword', {
     alignSelf: 'flex-end',
 
     '&:hover': {
-      backgroundColor: '$blue80'
+      backgroundColor: '$blue'
     }
   }
 });
