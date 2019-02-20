@@ -19,6 +19,7 @@ export default function PlanListItem({ plan }) {
   return (
     <SW.Wrapper onClick={handleClick}>
       <DayTracker
+        compact
         startDate={plan.get('start_date')}
         endDate={plan.get('end_date')}
         maxWeeks={5}

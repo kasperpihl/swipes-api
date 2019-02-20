@@ -1,41 +1,38 @@
-import React, { PureComponent } from 'react';
+import React, { useEffect } from 'react';
 import request from 'swipes-core-js/utils/request';
-import { setupLoading } from 'swipes-core-js/classes/utils';
+import useLoader from 'src/react/_hooks/useLoader';
 import urlGetParameter from 'src/utils/url/urlGetParameter';
 import SW from './Unsubscribe.swiss';
 
-export default class extends PureComponent {
-  constructor(props) {
-    super(props);
-    setupLoading(this);
-  }
-  componentWillMount() {
+export default function Unsubscribe() {
+  const loader = useLoader();
+
+  useEffect(() => {
     const email = urlGetParameter('email');
     const emailType = urlGetParameter('email_type');
-    this.setLoading('unsubscribe', 'Unsubscribing...');
+    loader.set('unsubscribe', 'Unsubscribing...');
     request('users.unsubscribe', {
       email,
       email_type: emailType
     }).then(res => {
       if (res.ok) {
-        this.clearLoading(
+        loader.success(
           'unsubscribe',
           'You have been unsubscribed from these types of emails'
         );
       } else {
-        this.clearLoading('unsubscribe', '!Something went wrong');
+        loader.error('unsubscribe', '!Something went wrong');
       }
     });
-  }
-  render() {
-    return (
-      <SW.Wrapper>
-        <SW.Text>
-          {this.getLoading('unsubscribe').loading}
-          {this.getLoading('unsubscribe').success}
-          {this.getLoading('unsubscribe').error}
-        </SW.Text>
-      </SW.Wrapper>
-    );
-  }
+  }, []);
+
+  return (
+    <SW.Wrapper>
+      <SW.Text>
+        {loader.get('unsubscribe').loading}
+        {loader.get('unsubscribe').success}
+        {loader.get('unsubscribe').error}
+      </SW.Text>
+    </SW.Wrapper>
+  );
 }
