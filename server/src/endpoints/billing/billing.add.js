@@ -1,5 +1,6 @@
-import { object, array, string, any } from 'valjs';
-import { query, transaction } from 'src/utils/db/db';
+import { string, any } from 'valjs';
+import { query } from 'src/utils/db/db';
+import update from 'src/utils/update';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import userOrganizationCheck from 'src/utils/userOrganizationCheck';
 import stripeGetPlanId from 'src/utils/stripe/stripeGetPlanId';
@@ -51,7 +52,7 @@ export default endpointCreate(
       stripePlanId
     );
 
-    await query(
+    const orgRes = await query(
       `
         UPDATE organizations
         SET
@@ -60,11 +61,15 @@ export default endpointCreate(
           stripe_plan_id = $2,
           plan = $3
         WHERE organization_id = $4
+        RETURNING plan, updated_at, organization_id, stripe_plan_id, stripe_subscription_id, stripe_customer_id
       `,
       [subscription.id, stripePlanId, plan, organization_id]
     );
 
-    // Create response data.
-    res.locals.output = {};
+    res.locals.update = update.prepare(organization_id, [
+      { type: 'organization', data: orgRes.rows[0] }
+    ]);
   }
-);
+).background(async (req, res) => {
+  update.send(res.locals.update);
+});

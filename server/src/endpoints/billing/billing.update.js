@@ -41,8 +41,5 @@ export default endpointCreate(
     await stripeClient.customers.update(org.stripe_customer_id, {
       source: stripe_token
     });
-
-    // Create response data.
-    res.locals.output = {};
   }
 );

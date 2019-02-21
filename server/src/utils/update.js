@@ -32,10 +32,7 @@ export default {
     }
 
     for (let i = 0; i < receivers.length; i++) {
-      await redisPublish(
-        receivers[i],
-        JSON.stringify({ type: 'update', payload: update })
-      );
+      await redisPublish(receivers[i], { type: 'update', payload: update });
     }
   }
 };

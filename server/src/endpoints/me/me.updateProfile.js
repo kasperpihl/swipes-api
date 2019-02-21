@@ -1,5 +1,6 @@
-import { object, array, string } from 'valjs';
+import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
+import update from 'src/utils/update';
 import { query } from 'src/utils/db/db';
 
 const expectedInput = {
@@ -29,7 +30,7 @@ export default endpointCreate(
       UPDATE users
       SET updated_at = now()
     `;
-    let returning = ['updated_at', 'user_id'];
+    let returning = ['user_id'];
 
     if (first_name) {
       text += `, first_name = ${insertVariable(first_name)}`;
@@ -44,9 +45,22 @@ export default endpointCreate(
       WHERE user_id=${insertVariable(user_id)}
       RETURNING ${returning.join(', ')}`;
 
-    await query(text, values);
+    const userRes = await query(text, values);
 
-    // Create response data.
-    res.locals.output = {};
+    const orgRes = await query(
+      `
+        SELECT organization_id
+        FROM organization_users
+        WHERE user_id = $1
+        AND status = 'active'
+      `,
+      [user_id]
+    );
+
+    const channels = [user_id, ...orgRes.rows.map(r => r.organization_id)];
+
+    res.locals.update = update.prepare(channels, [
+      { type: 'me', data: userRes.rows[0] }
+    ]);
   }
 );

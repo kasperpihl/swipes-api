@@ -48,7 +48,7 @@ export default endpointCreate(
 
     const usersRes = await query(
       `
-        SELECT ou.status, ou.organization_id, ou.admin, u.first_name, u.last_name, u.email, u.user_id, u.username, photo
+        SELECT ou.status, ou.organization_id, ou.admin, u.first_name, u.last_name, u.email, u.user_id, u.username, u.photo
         FROM organization_users ou
         LEFT JOIN users u
         ON u.user_id = ou.user_id

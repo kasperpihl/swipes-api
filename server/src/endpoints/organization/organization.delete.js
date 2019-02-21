@@ -2,6 +2,7 @@ import sha1 from 'sha1';
 import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import { transaction, query } from 'src/utils/db/db';
+import update from 'src/utils/update';
 import userOrganizationCheck from 'src/utils/userOrganizationCheck';
 import stripeCancelSubscription from 'src/utils/stripe/stripeCancelSubscription';
 
@@ -70,7 +71,10 @@ export default endpointCreate(
       }
     ]);
 
-    // Create response data.
-    res.locals.output = {};
+    res.locals.update = update.prepare(organization_id, [
+      { type: 'organization', data: { organization_id, deleted: true } }
+    ]);
   }
-);
+).background(async (req, res) => {
+  update.send(res.locals.update);
+});

@@ -4,6 +4,7 @@ import AWS from 'aws-sdk';
 import config from 'config';
 import fs from 'fs';
 import mime from 'mime-types';
+import update from 'src/utils/update';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import { query } from 'src/utils/db/db';
 import sqlJsonbBuild from 'src/utils/sql/sqlJsonbBuild';
@@ -79,17 +80,34 @@ export default endpointCreate(
       '64x64': `${s3Url}${s3Path}64x64.${fileExt}`
     };
 
-    await query(
+    const userRes = await query(
       `
         UPDATE users
         SET
           photo = ${sqlJsonbBuild(photo)},
           updated_at = now()
         WHERE user_id = $1
+        RETURNING photo, user_id
       `,
       [user_id]
     );
 
-    res.locals.output = { photo };
+    const orgRes = await query(
+      `
+        SELECT organization_id
+        FROM organization_users
+        WHERE user_id = $1
+        AND status = 'active'
+      `,
+      [user_id]
+    );
+
+    const channels = [user_id, ...orgRes.rows.map(r => r.organization_id)];
+
+    res.locals.update = update.prepare(channels, [
+      { type: 'me', data: userRes.rows[0] }
+    ]);
   }
-);
+).background(async (req, res) => {
+  update.send(res.locals.update);
+});

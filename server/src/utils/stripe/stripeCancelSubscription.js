@@ -16,7 +16,7 @@ export default async organizationId => {
     return;
   }
 
-  await stripeClient.subscription.del(org.stripe_subscription_id);
+  await stripeClient.subscriptions.del(org.stripe_subscription_id);
 
   await query(
     `

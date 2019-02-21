@@ -1,9 +1,9 @@
 import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import { query } from 'src/utils/db/db';
+import update from 'src/utils/update';
 import userOrganizationCheck from 'src/utils/userOrganizationCheck';
 import tokenCreate from 'src/utils/token/tokenCreate';
-import tokenParse from 'src/utils/token/tokenParse';
 import emailInviteUser from 'src/utils/email/emailInviteUser';
 
 const expectedInput = {
@@ -59,11 +59,12 @@ export default endpointCreate(
     });
 
     const now = Math.floor(Date.now() / 1000);
-    await query(
+    const orgUpdateRes = await query(
       `
           UPDATE organizations
           SET pending_users = pending_users || jsonb_build_object('${target_email}', ${now})
           WHERE organization_id = $1
+          RETURNING pending_users, organization_id
         `,
       [organization_id]
     );
@@ -76,10 +77,15 @@ export default endpointCreate(
       inviterEmail: org.inviter_email
     };
 
-    // Create response data.
-    res.locals.output = {};
+    res.locals.update = update.prepare(organization_id, [
+      {
+        type: 'organization',
+        data: orgUpdateRes.rows[0]
+      }
+    ]);
   }
 ).background(async (req, res) => {
+  update.send(res.locals.update);
   const {
     email,
     inviteToken,

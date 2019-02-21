@@ -1,5 +1,6 @@
-import { object, array, string } from 'valjs';
-import { query, transaction } from 'src/utils/db/db';
+import { string } from 'valjs';
+import { query } from 'src/utils/db/db';
+import update from 'src/utils/update';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import userOrganizationCheck from 'src/utils/userOrganizationCheck';
 import sqlJsonbBuild from 'src/utils/sql/sqlJsonbBuild';
@@ -24,15 +25,23 @@ export default endpointCreate(
     });
 
     const jsonb = sqlJsonbBuild({ [target_email]: null });
-    await query(
+    const orgRes = await query(
       `
         UPDATE organizations
         SET pending_users = jsonb_strip_nulls(pending_users || ${jsonb})
         WHERE organization_id = $1
+        RETURNING pending_users, organization_id
       `,
       [organization_id]
     );
-    // Create response data.
-    res.locals.output = {};
+
+    res.locals.update = update.prepare(organization_id, [
+      {
+        type: 'organization',
+        data: orgRes.rows[0]
+      }
+    ]);
   }
-);
+).background(async (req, res) => {
+  update.send(res.locals.update);
+});

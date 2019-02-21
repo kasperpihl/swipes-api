@@ -40,7 +40,5 @@ export default endpointCreate(
       `,
       [passwordSha1, parsedToken.tokenContent.iss]
     );
-    // Create response data.
-    res.locals.output = {};
   }
 );

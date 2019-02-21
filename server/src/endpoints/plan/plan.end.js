@@ -25,7 +25,5 @@ export default endpointCreate(
     `,
       [plan_id]
     );
-    // Create response data.
-    res.locals.output = {};
   }
 );

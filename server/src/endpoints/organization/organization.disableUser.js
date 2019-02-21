@@ -1,6 +1,7 @@
 import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import { transaction } from 'src/utils/db/db';
+import update from 'src/utils/update';
 import userOrganizationCheck from 'src/utils/userOrganizationCheck';
 import stripeUpdateQuantity from 'src/utils/stripe/stripeUpdateQuantity';
 
@@ -32,7 +33,7 @@ export default endpointCreate(
     });
 
     // creating a new user from scratch
-    await transaction([
+    const [orgUserRes] = await transaction([
       {
         text: `
           UPDATE organization_users
@@ -41,6 +42,7 @@ export default endpointCreate(
             admin = false
           WHERE organization_id = $1
           AND user_id = $2
+          RETURNING user_id, organization_id, admin, status
         `,
         values: [organization_id, target_user_id]
       },
@@ -57,10 +59,13 @@ export default endpointCreate(
     res.locals.backgroundInput = {
       organization_id
     };
-    // Create response data.
-    res.locals.output = {};
+
+    res.locals.update = update.prepare(organization_id, [
+      { type: 'organization_user', data: orgUserRes.rows[0] }
+    ]);
   }
 ).background(async (req, res) => {
+  update.send(res.locals.update);
   const { organization_id } = res.locals.input;
   await stripeUpdateQuantity(organization_id);
 });

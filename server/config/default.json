@@ -30,7 +30,7 @@
     "yearlyPlanId": "swipes-yearly",
     "monthlyPlanId": "plan_DnVQNeetpk0hx6"
   },
-  "host": "https://wspc.io/",
+  "host": "http://localhost:3000/",
   "jwtTokenSecret": "swipy the dinocat",
   "env": "dev"
 }

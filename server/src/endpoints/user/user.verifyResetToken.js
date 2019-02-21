@@ -23,8 +23,5 @@ export default endpointCreate(
     ) {
       throw Error('Invalid reset token');
     }
-
-    // Create response data.
-    res.locals.output = {};
   }
 );

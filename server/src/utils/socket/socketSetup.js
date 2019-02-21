@@ -31,15 +31,20 @@ export default server => {
     redisClient.on('message', (channel, actionString) => {
       try {
         const action = JSON.parse(actionString);
-        if (channel === 'global') {
-          if (action.type === 'forceDisconnect') {
-            socket.terminate();
-          }
-        } else {
+
+        if (action.type === 'forceDisconnect') {
+          socket.terminate();
+        } else if (action.type === 'subscribeChannel') {
+          redisClient.subscribe(action.payload.channel);
+        } else if (action.type === 'unsubscribeChannel') {
+          redisClient.unsubscribe(action.payload.channel);
+        } else if (action.type === 'update') {
           socket.send(JSON.stringify(action), e => e && socket.terminate());
+        } else {
+          console.log('unknown redis message', action.type);
         }
       } catch (e) {
-        console.log('invalid payload', actionString);
+        console.log('redis invalid payload', actionString);
       }
     });
     socket.send(

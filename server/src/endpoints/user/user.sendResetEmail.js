@@ -37,9 +37,6 @@ export default endpointCreate(
         resetToken
       };
     }
-
-    // Create response data.
-    res.locals.output = {};
   }
 ).background(async (req, res) => {
   const { email, firstName, resetToken } = res.locals.input;

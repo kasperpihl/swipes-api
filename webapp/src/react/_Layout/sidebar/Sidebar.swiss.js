@@ -90,7 +90,7 @@ export default styleSheet('Sidebar', {
     }
   },
   OverflowHidden: {
-    _size: '100',
+    _size: '100%',
     overflow: 'hidden',
     _flex: ['row', 'left', 'center']
   },

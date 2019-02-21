@@ -15,8 +15,5 @@ export default endpointCreate(
       'UPDATE sessions SET expires_at = now() WHERE user_id=$1 AND token=$2',
       [user_id, token]
     );
-
-    // Create response data.
-    res.locals.output = {};
   }
 );

@@ -1,6 +1,7 @@
 import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import { query } from 'src/utils/db/db';
+import update from 'src/utils/update';
 import userOrganizationCheck from 'src/utils/userOrganizationCheck';
 
 const expectedInput = {
@@ -28,17 +29,21 @@ export default endpointCreate(
     });
 
     // creating a new user from scratch
-    await query(
+    const orgUserRes = await query(
       `
         UPDATE organization_users
         SET admin = false
         WHERE organization_id = $1
         AND user_id = $2
+        RETURNING user_id, organization_id, admin
       `,
       [organization_id, target_user_id]
     );
 
-    // Create response data.
-    res.locals.output = {};
+    res.locals.update = update.prepare(organization_id, [
+      { type: 'organization_user', data: orgUserRes.rows[0] }
+    ]);
   }
-);
+).background(async (req, res) => {
+  update.send(res.locals.update);
+});

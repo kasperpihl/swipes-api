@@ -1,5 +1,6 @@
 import { string, any } from 'valjs';
 import { query } from 'src/utils/db/db';
+import update from 'src/utils/update';
 import stripeClient from 'src/utils/stripe/stripeClient';
 import userOrganizationCheck from 'src/utils/userOrganizationCheck';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
@@ -60,18 +61,21 @@ export default endpointCreate(
       ]
     });
 
-    await query(
+    const orgUpdateRes = await query(
       `
         UPDATE organizations
         SET
           stripe_plan_id = $1,
           plan = $2
         WHERE organization_id = $3
+        RETURNING organization_id, plan, stripe_plan_id
       `,
       [stripePlanId, plan, organization_id]
     );
-
-    // Create response data.
-    res.locals.output = {};
+    res.locals.update = update.prepare(organization_id, [
+      { type: 'organization', data: orgUpdateRes.rows[0] }
+    ]);
   }
-);
+).background(async (req, res) => {
+  update.send(res.locals.update);
+});

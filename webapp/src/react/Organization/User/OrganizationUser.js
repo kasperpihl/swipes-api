@@ -55,7 +55,7 @@ export default class OrganizationUser extends PureComponent {
       onConfirm: this.handleTransferOwnership
     });
   }
-  handleTransferOwnership = password => {
+  handleTransferOwnership = ([password]) => {
     const { organization, user, loader } = this.props;
 
     loader.set('buttonClicked');

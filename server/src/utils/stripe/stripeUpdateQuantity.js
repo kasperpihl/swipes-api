@@ -33,7 +33,7 @@ export default async organizationId => {
     quantity: activeUsers
   };
 
-  await stripeClient.subscription.update(
+  await stripeClient.subscriptions.update(
     org.stripe_subscription_id,
     subscription
   );
