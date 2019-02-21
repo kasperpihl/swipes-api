@@ -58,6 +58,7 @@ export default (options, middleware) => {
             endpointName,
             {
               output: res.locals.output,
+              update: res.locals.update || null,
               organization_id: res.locals.organization_id,
               user_id: res.locals.user_id,
               input: res.locals.backgroundInput

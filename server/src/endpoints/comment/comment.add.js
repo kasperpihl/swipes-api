@@ -3,8 +3,7 @@ import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import idGenerate from 'src/utils/idGenerate';
 import { transaction, query } from 'src/utils/db/db';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
-import redisSendUpdates from 'src/utils/redis/redisSendUpdates';
-import dbReceiversForPermissionId from 'src/utils/db/dbReceiversForPermissionId';
+import update from 'src/utils/update';
 import mentionsGetArray from 'src/utils/mentions/mentionsGetArray';
 import mentionsClean from 'src/utils/mentions/mentionsClean';
 import pushSend from 'src/utils/push/pushSend';
@@ -67,22 +66,19 @@ export default endpointCreate(
     ]);
 
     // Create response data.
-    res.locals.output = {
-      updates: [
-        { type: 'discussion', data: discussionRes.rows[0] },
-        { type: 'comment', data: commentRes.rows[0] }
-      ]
-    };
+    res.locals.update = update.prepare(discussion_id, [
+      { type: 'discussion', data: discussionRes.rows[0] },
+      { type: 'comment', data: commentRes.rows[0] }
+    ]);
   }
 ).background(async (req, res) => {
   const { user_id } = res.locals;
-  const { updates } = res.locals.output;
+  const { rows } = res.locals.update;
 
-  const discussion = updates[0].data;
-  const comment = updates[1].data;
+  await update.send(res.locals.update);
 
-  const recs = await dbReceiversForPermissionId(discussion.discussion_id);
-  await redisSendUpdates(recs, updates);
+  const discussion = rows[0].data;
+  const comment = rows[1].data;
 
   // Fetch sender (to have the name)
   const senderRes = await query(

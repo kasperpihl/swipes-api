@@ -3,9 +3,10 @@ import logger from 'src/utils/logger';
 import logGetObject from 'src/utils/log/logGetObject';
 
 export default schema => async (req, res, next) => {
-  let output = res.locals.output;
-  if (typeof output !== 'object') {
-    output = {};
+  const output = res.locals.output || {};
+
+  if (res.locals.update) {
+    output.update = res.locals.update;
   }
 
   if (schema) {

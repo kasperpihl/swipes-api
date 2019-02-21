@@ -1,5 +1,6 @@
-import { object, array, string } from 'valjs';
-import { query, transaction } from 'src/utils/db/db';
+import { string } from 'valjs';
+import { query } from 'src/utils/db/db';
+import update from 'src/utils/update';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 
 const expectedInput = {
@@ -27,7 +28,7 @@ export default endpointCreate(
       throw Error('Start date is before end date');
     }
 
-    await query(
+    const planRes = await query(
       `
         UPDATE plans
         SET
@@ -35,8 +36,17 @@ export default endpointCreate(
           start_date = $1,
           end_date = $2
         WHERE plan_id = $3
+        RETURNING plan_id, updated_at, start_date, end_date
       `,
       [start_date, end_date, plan_id]
     );
+    res.locals.update = update.prepare(plan_id, [
+      {
+        type: 'plan',
+        data: planRes.rows[0]
+      }
+    ]);
   }
-);
+).background(async (req, res) => {
+  await update.send(res.locals.update);
+});

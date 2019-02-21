@@ -1,8 +1,7 @@
 import { string } from 'valjs';
 import { query } from 'src/utils/db/db';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
-import redisSendUpdates from 'src/utils/redis/redisSendUpdates';
-import dbReceiversForPermissionId from 'src/utils/db/dbReceiversForPermissionId';
+import update from 'src/utils/update';
 
 const expectedInput = {
   plan_id: string.require()
@@ -31,15 +30,12 @@ export default endpointCreate(
     if (!planRes.rows.length) {
       throw Error('Not found').code(404);
     }
+
     // Create response data.
-    res.locals.output = {
-      updates: [{ type: 'plan', data: planRes.rows[0] }]
-    };
+    res.locals.update = update.prepare(plan_id, [
+      { type: 'plan', data: planRes.rows[0] }
+    ]);
   }
 ).background(async (req, res) => {
-  const { updates } = res.locals.output;
-  const plan = updates[0].data;
-
-  const recs = await dbReceiversForPermissionId(plan.plan_id);
-  await redisSendUpdates(recs, updates);
+  await update.send(res.locals.update);
 });

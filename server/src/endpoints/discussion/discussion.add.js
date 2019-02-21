@@ -5,8 +5,7 @@ import { transaction } from 'src/utils/db/db';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
 import sqlToIsoString from 'src/utils/sql/sqlToIsoString';
 import sqlPermissionInsertQuery from 'src/utils/sql/sqlPermissionInsertQuery';
-import redisSendUpdates from 'src/utils/redis/redisSendUpdates';
-import dbReceiversForPermissionId from 'src/utils/db/dbReceiversForPermissionId';
+import update from 'src/utils/update';
 
 const expectedInput = {
   topic: string.min(1).require(),
@@ -62,16 +61,14 @@ export default endpointCreate(
       sqlPermissionInsertQuery(discussionId, privacy, owned_by, uniqueFollowers)
     ]);
 
+    res.locals.update = update.prepare(discussionId, [
+      { type: 'discussion', data: discussionRes.rows[0] }
+    ]);
+
     res.locals.output = {
-      discussion_id: discussionId,
-      updates: [{ type: 'discussion', data: discussionRes.rows[0] }]
+      discussion_id: discussionId
     };
   }
 ).background(async (req, res) => {
-  const { updates } = res.locals.output;
-
-  const discussion = updates[0].data;
-
-  const receivers = await dbReceiversForPermissionId(discussion.discussion_id);
-  await redisSendUpdates(receivers, updates);
+  await update.send(res.locals.update);
 });

@@ -1,7 +1,7 @@
 import { string, number } from 'valjs';
 import { transaction } from 'src/utils/db/db';
 import sqlCheckPermissions from 'src/utils/sql/sqlCheckPermissions';
-import redisSendUpdates from 'src/utils/redis/redisSendUpdates';
+import update from 'src/utils/update';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 
 const expectedInput = {
@@ -77,15 +77,17 @@ export default endpointCreate(
         .toClient();
     }
 
+    const note = noteRes.rows[0];
+
+    res.locals.update = update.prepare(note.owned_by, [
+      { type: 'note', data: note }
+    ]);
+
     // Create response data.
     res.locals.output = {
-      rev: noteRes.rows[0].rev,
-      updates: [{ type: 'note', data: noteRes.rows[0] }]
+      rev: note.rev
     };
   }
 ).background(async (req, res) => {
-  const { updates } = res.locals.output;
-  const note = updates[0].data;
-
-  await redisSendUpdates([note.owned_by], updates);
+  await update.send(res.locals.update);
 });

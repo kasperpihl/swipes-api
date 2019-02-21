@@ -1,8 +1,6 @@
 import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
-// import dbSendUpdates from 'src/utils/db/dbSendUpdates';
-import redisSendUpdates from 'src/utils/redis/redisSendUpdates';
-import dbReceiversForPermissionId from 'src/utils/db/dbReceiversForPermissionId';
+import update from 'src/utils/update';
 import mentionsClean from 'src/utils/mentions/mentionsClean';
 import pushSend from 'src/utils/push/pushSend';
 import { query, transaction } from 'src/utils/db/db';
@@ -64,30 +62,30 @@ export default endpointCreate(
       })
     ]);
 
+    res.locals.update = update.prepare(discussion_id, [
+      {
+        type: 'discussion',
+        data: discussionRes.rows[0]
+      },
+      {
+        type: 'comment',
+        data: commentRes.rows[0]
+      }
+    ]);
+
     // Create response data.
     res.locals.output = {
-      updates: [
-        {
-          type: 'discussion',
-          data: discussionRes.rows[0]
-        },
-        {
-          type: 'comment',
-          data: commentRes.rows[0]
-        }
-      ],
       reaction
     };
   }
 ).background(async (req, res) => {
   const { user_id } = res.locals;
-  const { updates, reaction } = res.locals.output;
+  const { reaction } = res.locals.output;
+  const { rows } = res.locals.update;
+  await update.send(res.locals.update);
 
-  const discussion = updates[0].data;
-  const comment = updates[1].data;
-
-  const receivers = await dbReceiversForPermissionId(discussion.discussion_id);
-  await redisSendUpdates(receivers, updates);
+  const discussion = rows[0].data;
+  const comment = rows[1].data;
 
   // Fire push to the commenter.
   if (reaction) {
