@@ -61,7 +61,7 @@ export default class IpcListener {
     const myId = this.store.getState().me.get('user_id');
     let discussion;
     let comment;
-    payload.updates.forEach(({ type, data }) => {
+    payload.rows.forEach(({ type, data }) => {
       if (
         type === 'comment' &&
         data.sent_by !== myId &&
