@@ -4,12 +4,13 @@ import ProgressBar from 'src/react/_components/ProgressBar/ProgressBar';
 
 export default class Tester extends Component {
   state = {
-    progress: 50
+    progress: 75
   };
   render() {
     return (
       <div>
-        <ProgressBar progress={this.state.progress} />
+        <ProgressCircle progress={this.state.progress} />
+        <ProgressBar progress={50} />
       </div>
     );
   }

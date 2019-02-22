@@ -1,32 +1,43 @@
 import { styleSheet } from 'swiss-react';
 
 export default styleSheet('ProgressCircle', {
-  Wrapper: {
+  RadialCircle: {
     _size: '24px',
-    borderRadius: '100%',
-    flex: 'none'
+    backgroundColor: '#D5EDD1',
+    borderRadius: '50%'
+  },
+
+  Progress: {
+    _size: '24px',
+    backgroundColor: '#D5EDD1',
+    position: 'absolute',
+    borderRadius: '50%'
+  },
+
+  Mask: {
+    _size: '24px',
+    backgroundColor: '#D5EDD1',
+    position: 'absolute',
+    borderRadius: '50%',
+    clip: 'rect(0px, 24px, 24px, 12px)',
+    transform: get => `rotate(${get('prog')}deg)`,
+
+    left: {
+      clip: 'rect(0px, 24px, 24px, 12px)',
+      transform: 'none'
+    }
   },
 
   Fill: {
-    _drawProgress: get => [get('prog'), 'white', '$green1'],
-    _size: '18px',
-    overflow: 'hidden',
-    borderRadius: '50%',
+    _size: '24px',
+    backgroundColor: '$green1',
     position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translateY(-50%) translateX(-50%)',
+    borderRadius: '50%',
+    transform: get => `rotate(${get('prog')}deg)`,
+    clip: 'rect(0px, 12px, 24px, 0px)',
 
-    'prog>50': {
-      _drawProgress: get => [get('prog'), '$green1', 'white']
-    },
-
-    '&:before': {
-      _size: '100%',
-      display: 'block',
-      borderRadius: '0 100% 100% 0 / 50%',
-      marginLeft: '50%',
-      transformOrigin: 'left'
+    fix: {
+      transform: get => `rotate(${get('prog') * 2}deg)`
     }
   }
 });
