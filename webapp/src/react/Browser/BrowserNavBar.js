@@ -1,53 +1,43 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { setupDelegate } from 'react-delegate';
+import cachedCallback from 'src/utils/cachedCallback';
 import SW from './Browser.swiss';
 
 class BrowserNavBar extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-    setupDelegate(this, 'navbarAction');
-
-  }
+  handleActionCached = cachedCallback(name => {
+    this.props.onAction(name);
+  });
   renderNavigation() {
-    const {
-      backEnabled,
-      forwardEnabled,
-    } = this.props;
+    const { backEnabled, forwardEnabled } = this.props;
     return [
       <SW.BackButton
         key="back"
         icon="ArrowLeftLine"
         compact
         disabled={!backEnabled}
-        onClick={this.navbarActionCached('back')}
+        onClick={this.handleActionCached('back')}
       />,
       <SW.ForwardButton
         key="forward"
         icon="ArrowRightLine"
         compact
         disabled={!forwardEnabled}
-        onClick={this.navbarActionCached('forward')}
+        onClick={this.handleActionCached('forward')}
       />,
       <SW.ReloadButton
         key="reload"
         icon="Reload"
         compact
-        onClick={this.navbarActionCached('reload')}
-      />,
+        onClick={this.handleActionCached('reload')}
+      />
     ];
   }
   renderTitleURL() {
-    const {
-      title,
-    } = this.props;
+    const { title } = this.props;
 
     return (
-      <SW.TitleWrapper className='wrapper'>
-        <SW.Title className='title'>
-          {title}
-        </SW.Title>
+      <SW.TitleWrapper className="wrapper">
+        <SW.Title className="title">{title}</SW.Title>
       </SW.TitleWrapper>
     );
   }
@@ -57,20 +47,16 @@ class BrowserNavBar extends Component {
         key="browser"
         icon="Earth"
         compact
-        onClick={this.navbarActionCached('browser')}
-      />,
+        onClick={this.handleActionCached('browser')}
+      />
     ];
   }
   render() {
     return (
       <SW.BrowserNavBar>
-        <SW.Left>
-          {this.renderNavigation()}
-        </SW.Left>
+        <SW.Left>{this.renderNavigation()}</SW.Left>
         {this.renderTitleURL()}
-        <SW.Right>
-          {this.renderRightActions()}
-        </SW.Right>
+        <SW.Right>{this.renderRightActions()}</SW.Right>
       </SW.BrowserNavBar>
     );
   }
@@ -84,5 +70,5 @@ BrowserNavBar.propTypes = {
   delegate: object,
   backEnabled: bool,
   forwardEnabled: bool,
-  title: string,
+  title: string
 };

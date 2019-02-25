@@ -73,7 +73,7 @@ export default class Browser extends PureComponent {
     updateObj.forwardEnabled = this.webview.canGoForward();
     this.setState(updateObj);
   }
-  navbarAction(action) {
+  handleAction(action) {
     switch (action) {
       case 'browser':
         window.open(this.state.currentUrl);
@@ -117,7 +117,7 @@ export default class Browser extends PureComponent {
         <BrowserNavBar
           backEnabled={backEnabled}
           forwardEnabled={forwardEnabled}
-          delegate={this}
+          onAction={this.handleAction}
           title={title}
           url={currentUrl}
         />

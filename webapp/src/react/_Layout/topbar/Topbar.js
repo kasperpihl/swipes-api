@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { setupCachedCallback } from 'react-delegate';
+import cachedCallback from 'src/utils/cachedCallback';
 
 import Icon from 'src/react/_components/Icon/Icon';
 import Button from 'src/react/_components/Button/Button';
@@ -24,7 +24,6 @@ export default class Topbar extends PureComponent {
     this.state = {
       secondsLeft: 0
     };
-    this.onWinClickCached = setupCachedCallback(this.onWinClick, this);
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.nextRetry !== this.props.nextRetry) {
@@ -34,9 +33,9 @@ export default class Topbar extends PureComponent {
       }
     }
   }
-  onWinClick(name) {
+  onWinClickCached = cachedCallback(name => {
     window.ipcListener[name]();
-  }
+  });
   onDownload = () => {
     const { versionInfo } = this.props;
     window.open(versionInfo.get('updateUrl'));
