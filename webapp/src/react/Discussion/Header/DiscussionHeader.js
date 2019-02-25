@@ -109,7 +109,7 @@ export default class DiscussionHeader extends PureComponent {
 
     loader.set('following');
     let endpoint = 'discussion.follow';
-    if (discussion.followers[my]) {
+    if (discussion.followers[myId]) {
       endpoint = 'discussion.unfollow';
     }
     request(endpoint, {

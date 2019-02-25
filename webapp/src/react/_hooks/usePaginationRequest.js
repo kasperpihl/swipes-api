@@ -1,4 +1,4 @@
-import { useRef, useReducer } from 'react';
+import { useRef, useReducer, useState } from 'react';
 import request from 'swipes-core-js/utils/request';
 import useCallbackRef from 'src/react/_hooks/useCallbackRef';
 import useRequest from 'src/react/_hooks/useRequest';
@@ -16,12 +16,21 @@ export default function usePaginationRequest(endpoint, params, options) {
   }
 
   const { idAttribute, cursorKey, resultPath } = options;
-  const hasMoreRef = useRef();
+  const hasMoreRef = useRef(false);
 
   const [items, dispatch] = useReducer((state, action) => {
     const hasAlreadyFilter = item =>
       !action.payload.find(it => item[idAttribute] === it[idAttribute]);
     switch (action.type) {
+      case 'merge':
+        const newItems = action.payload.handler(state);
+        if (!Array.isArray(newItems)) {
+          console.warn(
+            'usePaginationRequest mergeItems did not return an array as expected'
+          );
+          return state;
+        }
+        return newItems;
       case 'seed':
         return action.payload;
       case 'new':
@@ -45,8 +54,8 @@ export default function usePaginationRequest(endpoint, params, options) {
     return res;
   }
 
-  const fetchMoreRef = useCallbackRef(async function(type) {
-    if (!items || !hasMoreRef.current) return;
+  const fetchMoreRef = useCallbackRef(function(type) {
+    if (!items) return;
     let newParams = params;
     if (items.length) {
       const index = type === 'new' ? 0 : items.length - 1;
@@ -67,8 +76,20 @@ export default function usePaginationRequest(endpoint, params, options) {
     dispatch({ type: 'seed', payload: res[resultPath] });
   });
 
+  const mergeItems = handler => {
+    if (typeof handler !== 'function') {
+      throw Error('mergeItems expects function as first param');
+    }
+    dispatch({
+      type: 'merge',
+      payload: { handler }
+    });
+  };
+
   return {
     ...req,
+    hasMore: hasMoreRef.current,
+    mergeItems,
     items,
     fetchNew,
     fetchNext

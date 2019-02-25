@@ -58,6 +58,7 @@ export default class IpcListener {
     }
   }
   handleDesktopNotifications(payload) {
+    return;
     const myId = this.store.getState().me.get('user_id');
     let discussion;
     let comment;

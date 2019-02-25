@@ -72,7 +72,7 @@ export default class DiscussionOverview extends PureComponent {
     const results = (pagination.results || fromJS([])).reverse().toArray();
     return (
       <SW.CommentWrapper>
-        <PaginationScrollToMore errorLabel="Couldn't get discussions." />
+        {/* <PaginationScrollToMore errorLabel="Couldn't get discussions." /> */}
         {results.map((comment, i) => (
           <CommentItem
             key={i}
