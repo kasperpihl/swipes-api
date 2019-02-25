@@ -1,6 +1,6 @@
 {
   "presets": [
-    "es2015"
+      "@babel/preset-env"
   ],
   "plugins": [
     [
@@ -8,15 +8,19 @@
       {
         "root": ["."],
         "alias": {
-          "src": "../server/src",
-          "swipes-core-js": "../mobile/swipes-core-js"
+          "src": "./src"
         }
       }
     ],
-    "transform-object-rest-spread",
-    ["transform-runtime", {
-      "polyfill": false,
-      "regenerator": true
-    }]
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "corejs": false,
+        "helpers": false,
+        "regenerator": true,
+        "useESModules": false
+      }
+    ],
+    "@babel/plugin-proposal-object-rest-spread"
   ]
 }
