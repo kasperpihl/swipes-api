@@ -1,9 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Document, setOptions, Page } from 'react-pdf/dist/entry.webpack';
-
-setOptions({
-  workerSrc: '/js/pdf.worker.js',
-});
+// import { Document, Page } from 'react-pdf/dist/entry.webpack';
 
 class PDFRender extends PureComponent {
   constructor(props) {
@@ -16,12 +12,9 @@ class PDFRender extends PureComponent {
       <Document
         file={file}
         onLoadSuccess={onDocumentComplete}
-        loading={(<span />)}
+        loading={<span />}
       >
-        <Page
-          pageIndex={page}
-          scale={scale}
-        />
+        <Page pageIndex={page} scale={scale} />
       </Document>
     );
   }
