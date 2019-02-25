@@ -7,11 +7,11 @@ export default withOptimist(DiscussionListItems);
 
 function DiscussionListItems({ req, optimist, onSelectItemId }) {
   const { items } = req;
+  const selectedRef = useRef();
 
   if (!items || !items.length) {
     return <EmptyState title="No discussions yet" />;
   }
-  const selectedRef = useRef();
 
   // onSelectItemId(newSelectedId, results);
 
