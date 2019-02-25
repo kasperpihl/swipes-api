@@ -94,7 +94,7 @@ export default styleSheet('ProjectTask', {
   },
 
   Button: {
-    _el: Button.Standard
+    _el: Button
     // selected: {
     //   _svgColor: '$sw5'
     // }

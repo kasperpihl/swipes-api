@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
+import Button from '../_components/Button/Button';
 export default class Tester extends Component {
   render() {
     const subtitle = {
@@ -8,8 +9,11 @@ export default class Tester extends Component {
       privacy: 'public'
     };
     return (
-      <div>
-        <CardHeader title="test" subtitle={subtitle} separator />
+      <div style={{ width: '100%' }}>
+        <CardHeader title="test" subtitle={subtitle} separator>
+          <Button icon="Messages" title="Test" />
+          <Button icon="ThreeDots" />
+        </CardHeader>
       </div>
     );
   }

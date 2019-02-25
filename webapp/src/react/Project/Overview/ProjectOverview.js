@@ -188,7 +188,7 @@ export default class ProjectOverview extends PureComponent {
           </SW.SliderWrapper>
         )}
         {project.get('discussion_id') && (
-          <Button.Standard
+          <Button
             title="Project chat"
             icon="Comment"
             onClick={this.handleProjectChat}

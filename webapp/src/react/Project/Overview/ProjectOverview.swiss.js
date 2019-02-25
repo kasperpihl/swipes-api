@@ -13,7 +13,7 @@ export default styleSheet('ProjectOverview', {
     marginLeft: '48px'
   },
   AddButton: {
-    _el: Button.Rounded,
+    _el: Button,
     marginLeft: '22px'
   },
   Div: {

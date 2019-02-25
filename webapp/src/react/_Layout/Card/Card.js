@@ -28,10 +28,10 @@ function Card({ children, top, left, isOverlay, isUnderlay, dispatch }) {
         <Breadcrumbs side={nav.side} />
         <SW.Actions>
           {nav.side !== 'left' && !nav.isLocked && (
-            <Button.Standard onClick={nav.pop} icon="CloseThick" />
+            <Button onClick={nav.pop} icon="CloseThick" />
           )}
           {nav.side !== 'left' && (
-            <Button.Standard
+            <Button
               onClick={nav.toggleLock}
               icon={nav.isLocked ? 'WindowLock' : 'WindowUnlock'}
             />

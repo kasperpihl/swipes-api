@@ -113,7 +113,7 @@ export default class extends PureComponent {
 
     return (
       <Fragment>
-        <Button.Standard
+        <Button
           onClick={this.handleChooseType}
           status={loader.get('attach')}
           icon="Attach"

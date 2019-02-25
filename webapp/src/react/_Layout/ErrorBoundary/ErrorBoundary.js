@@ -18,11 +18,11 @@ export default class ErrorBoundary extends Component {
     return (
       <SW.Wrapper>
         <div>Something went really wrong in this view :(</div>
-        <Button.Rounded
+        <Button
           title="Try again"
           onClick={() => this.setState({ error: null })}
         />{' '}
-        <Button.Rounded title="Reset data (logout)" />
+        <Button title="Reset data (logout)" />
         or contact support (help@swipesapp.com)
       </SW.Wrapper>
     );

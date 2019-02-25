@@ -68,7 +68,7 @@ export default styleSheet('CommentComposer', {
     }
   },
   SubmitButton: {
-    _el: Button.Rounded,
+    _el: Button,
     display: 'none',
     shown: {
       display: 'inline-flex'

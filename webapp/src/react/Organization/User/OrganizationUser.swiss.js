@@ -42,13 +42,13 @@ export default styleSheet('OrganizationUser', {
   },
 
   Button: {
-    _el: Button.Rounded,
+    _el: Button,
     flexShrink: '0',
     justifySelf: 'flex-end'
   },
 
   OptionsButton: {
-    _el: Button.Rounded,
+    _el: Button,
     marginLeft: 'auto',
     flexShrink: '0'
   }

@@ -58,7 +58,7 @@ export default styleSheet('Invitation', {
   },
 
   Button: {
-    _el: Button.Rounded,
+    _el: Button,
 
     '&:not(:last-child)': {
       marginRight: '20px'

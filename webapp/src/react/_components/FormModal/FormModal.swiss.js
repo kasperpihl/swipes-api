@@ -57,7 +57,7 @@ export default styleSheet('FormModal', {
   },
 
   Button: {
-    _el: Button.Rounded,
+    _el: Button,
     marginLeft: '12px'
   }
 });

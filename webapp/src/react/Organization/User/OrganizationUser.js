@@ -199,7 +199,7 @@ export default class OrganizationUser extends PureComponent {
         </SW.UserDetails>
         {(isOwner && this.getUserTag(user) !== 'active') ||
         (meUser && this.getUserTag(user) !== 'active') ? null : (
-          <Button.Rounded
+          <Button
             icon="ThreeDots"
             onClick={this.openListMenu}
             status={loader.get('buttonClicked')}

@@ -177,7 +177,7 @@ export default class ModalCreate extends PureComponent {
                   maxImages={9}
                   onClick={this.handleAssignClick}
                 >
-                  <Button.Rounded
+                  <Button
                     title="Tag people"
                     onClick={this.handleAssignClick}
                   />
@@ -187,7 +187,7 @@ export default class ModalCreate extends PureComponent {
           )}
         </FMSW.InputContainer>
         <FMSW.ButtonWrapper>
-          <Button.Rounded
+          <Button
             title={createLabel}
             onClick={this.handleCreate}
             status={loader.get('creating')}

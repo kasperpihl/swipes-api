@@ -16,20 +16,13 @@ CardHeader.propTypes = {
 export default function CardHeader({
   title,
   subtitle,
-  ownedBy,
-  members,
-  privacy,
   separator,
   onTitleClick,
-  className,
-  children
+  children,
+  ...rest
 }) {
   return (
-    <SW.Wrapper
-      className={className}
-      subtitle={!!subtitle}
-      separator={separator}
-    >
+    <SW.Wrapper separator={separator} {...rest}>
       <SW.Title key="header-title" onClick={onTitleClick}>
         {title}
       </SW.Title>

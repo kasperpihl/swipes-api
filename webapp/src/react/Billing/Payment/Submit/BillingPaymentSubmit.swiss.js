@@ -7,7 +7,7 @@ export default styleSheet('BillingPaymentSubmit', {
     _flex: ['column', 'center']
   },
   SubmitButton: {
-    _el: Button.Rounded,
+    _el: Button,
     marginTop: '20px'
   },
   Subtitle: {

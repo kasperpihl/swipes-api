@@ -79,7 +79,7 @@ class NoteDiffTester extends PureComponent {
   renderCalculatedDiff() {
     const { calculatedDiff } = this.state;
     if (!calculatedDiff) {
-      return <Button.Standard title="Calculate Diff" onClick={this.onDiff} />;
+      return <Button title="Calculate Diff" onClick={this.onDiff} />;
     }
     return (
       <NoteEditor

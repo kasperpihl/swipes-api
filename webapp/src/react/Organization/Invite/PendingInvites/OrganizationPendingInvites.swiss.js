@@ -61,7 +61,7 @@ export default styleSheet('OrganizationPendingInvites', {
   },
 
   EmailButton: {
-    _el: Button.Standard,
+    _el: Button,
     margin: '0 6px'
   }
 });

@@ -43,25 +43,25 @@ export default styleSheet('Browser', {
   },
 
   BackButton: {
-    _el: Button.Rounded,
+    _el: Button,
     zIndex: '9',
     margin: '0 6px',
   },
 
   ForwardButton: {
-    _el: Button.Rounded,
+    _el: Button,
     zIndex: '9',
     margin: '0 6px',
   },
 
   ReloadButton: {
-    _el: Button.Rounded,
+    _el: Button,
     zIndex: '9',
     margin: '0 6px',
   },
 
   BrowserButton: {
-    _el: Button.Rounded,
+    _el: Button,
     zIndex: '9',
     margin: '0 6px',
   },

@@ -28,7 +28,7 @@ export default function PlanSideDraft({ plan }) {
         type="draft"
         title="This is a draft - Select some tasks and press start"
       >
-        <Button.Standard
+        <Button
           title="Start"
           icon="Comment"
           onClick={handleStart}

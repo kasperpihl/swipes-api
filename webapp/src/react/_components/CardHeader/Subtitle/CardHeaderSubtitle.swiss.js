@@ -27,6 +27,10 @@ export default styleSheet('CardHeaderSubtitle', {
 
   Actions: {
     _flex: ['row', 'left', 'center'],
-    marginLeft: 'auto'
+    marginLeft: 'auto',
+
+    '& > *:not(:last-child)': {
+      marginRight: '6px'
+    }
   }
 });

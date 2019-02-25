@@ -10,7 +10,7 @@ export default styleSheet('Profile', {
   },
 
   Button: {
-    _el: Button.Rounded,
+    _el: Button,
     margin: '6px 0',
     marginLeft: 'auto'
   },

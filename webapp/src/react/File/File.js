@@ -103,11 +103,11 @@ export default class File extends PureComponent {
 
     return (
       <CardHeader title={file.file_name}>
-        <Button.Rounded
+        <Button
           title="Open in browser"
           onClick={this.handleOpenInBrowser}
         />
-        <Button.Rounded
+        <Button
           download
           title="Download"
           target="_blank"

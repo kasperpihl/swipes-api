@@ -63,7 +63,7 @@ export default styleSheet('DiscussionHeader', {
   },
 
   Button: {
-    _el: Button.Standard,
+    _el: Button,
     pointerEvents: 'auto',
     leftAlign: {
       marginRight: 'auto'

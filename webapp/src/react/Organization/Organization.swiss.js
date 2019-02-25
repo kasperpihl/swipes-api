@@ -20,7 +20,7 @@ export default styleSheet('Organization', {
   },
 
   Button: {
-    _el: Button.Rounded,
+    _el: Button,
     border: '1px solid $sw3',
     borderRadius: '300px',
     overflow: 'hidden',

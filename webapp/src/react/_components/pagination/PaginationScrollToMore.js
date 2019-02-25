@@ -88,7 +88,7 @@ export default function PaginationScrollToMore({ req, errorLabel }) {
           <SW.ErrorLabel>
             {errorLabel || loader.get('more').error}
           </SW.ErrorLabel>
-          <Button.Rounded icon="Reload" onClick={handleReload} />
+          <Button icon="Reload" onClick={handleReload} />
         </SW.LoadWrapper>
       )}
     </SW.Wrapper>

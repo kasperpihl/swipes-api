@@ -49,7 +49,7 @@ function ProjectList({ me, projects }) {
           title="Projects"
           subtitle="Store all your projects here"
         >
-          <Button.Rounded icon="Plus" onClick={handleNewProject} />
+          <Button icon="Plus" onClick={handleNewProject} />
         </CardHeader>
       }
     >

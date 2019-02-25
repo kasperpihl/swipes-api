@@ -38,7 +38,7 @@ export default function PlanList() {
       noframe
       header={
         <CardHeader padding={30} title="Plans">
-          <Button.Rounded icon="Plus" onClick={handleNewProject} />
+          <Button icon="Plus" onClick={handleNewProject} />
         </CardHeader>
       }
     >

@@ -84,7 +84,7 @@ export default styleSheet('ProfileHeader', {
   },
 
   OptionsButton: {
-    _el: Button.Rounded,
+    _el: Button,
     marginLeft: 'auto'
   }
 });
