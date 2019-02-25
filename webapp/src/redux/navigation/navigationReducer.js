@@ -3,12 +3,12 @@ import * as coreTypes from 'swipes-core-js/redux/constants';
 import * as types from '../constants';
 
 const initialState = fromJS({
-  sideMenuId: 'ProjectList',
+  sideMenuId: 'PlanList',
   onTopSide: 'left',
   left: [
     {
-      screenId: 'ProjectList',
-      crumbTitle: 'Projects'
+      screenId: 'PlanList',
+      crumbTitle: 'Plans'
     }
   ],
   right: [],
