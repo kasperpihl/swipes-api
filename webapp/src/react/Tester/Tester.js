@@ -1,20 +1,15 @@
 import React, { Component } from 'react';
-import ProgressCircle from 'src/react/_components/ProgressCircle/ProgressCircle';
-import ProgressBar from 'src/react/_components/ProgressBar/ProgressBar';
-import DayTracker from 'src/react/_components/DayTracker/DayTracker';
-
+import CardHeader from 'src/react/_components/CardHeader/CardHeader';
 export default class Tester extends Component {
-  state = {
-    progress: 75
-  };
   render() {
-    const startDate = '2019-02-19';
-    const endDate = '2019-02-28';
+    const subtitle = {
+      ownedBy: 'UT5UFVX2I',
+      members: ['me'],
+      privacy: 'public'
+    };
     return (
       <div>
-        <ProgressCircle progress={this.state.progress} />
-        <ProgressBar progress={50} />
-        <DayTracker startDate={startDate} endDate={endDate} compact />
+        <CardHeader title="test" subtitle={subtitle} separator />
       </div>
     );
   }

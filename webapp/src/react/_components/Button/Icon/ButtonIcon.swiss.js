@@ -21,10 +21,15 @@ export default styleSheet('ButtonIcon', {
     animation: 'button-loader 1.0s infinite ease-in-out'
   },
 
+  IconWrapper: {
+    _size: '24px',
+    _flex: ['row', 'center', 'center'],
+    flex: 'none'
+  },
+
   Icon: {
     _el: Icon,
-    _size: ['36px', '24px'],
-    padding: '0 6px',
+    _size: '24px',
 
     'status=Standard': {
       '.button-icon-js:hover &': {

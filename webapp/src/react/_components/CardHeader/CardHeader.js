@@ -1,25 +1,40 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import SW from './CardHeader.swiss';
+import CardHeaderSubtitle from './Subtitle/CardHeaderSubtitle';
 
-const CardHeader = ({
-  children,
-  padding,
+CardHeader.propTypes = {
+  title: PropTypes.string.isRequired,
+  subtitle: PropTypes.shape({
+    ownedBy: PropTypes.string.isRequired,
+    members: PropTypes.arrayOf(PropTypes.string).isRequired,
+    privacy: PropTypes.oneOf(['public', 'private']).isRequired
+  }),
+  separator: PropTypes.bool
+};
+
+export default function CardHeader({
   title,
-  onTitleClick,
   subtitle,
+  ownedBy,
+  members,
+  privacy,
+  separator,
+  onTitleClick,
   className,
-  inputRef,
-  ...rest
-}) => {
-  const isInput = !!rest.onChange;
+  children
+}) {
   return (
-    <SW.Wrapper className={className} padding={padding} subtitle={!!subtitle}>
+    <SW.Wrapper
+      className={className}
+      subtitle={!!subtitle}
+      separator={separator}
+    >
       <SW.Title key="header-title" onClick={onTitleClick}>
-        {isInput ? <SW.Input type="text" ref={inputRef} {...rest} /> : title}
-        {subtitle && <SW.Subtitle>{subtitle}</SW.Subtitle>}
+        {title}
       </SW.Title>
-      <SW.Actions>{children}</SW.Actions>
+      {!subtitle && <SW.Actions>{children}</SW.Actions>}
+      {subtitle && <CardHeaderSubtitle {...subtitle} children={children} />}
     </SW.Wrapper>
   );
-};
-export default CardHeader;
+}

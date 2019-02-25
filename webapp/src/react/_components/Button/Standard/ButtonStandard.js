@@ -43,7 +43,7 @@ export default class ButtonStandard extends PureComponent {
           {...rest}
           onClick={(parsedStatus === 'Standard' && onClick) || undefined}
           className={parsedClassName}
-        >
+      >
           <ButtonIcon icon={icon} status={parsedStatus} />
           {!!parsedTitle && <SW.Title>{parsedTitle}</SW.Title>}
         </SW.Wrapper>

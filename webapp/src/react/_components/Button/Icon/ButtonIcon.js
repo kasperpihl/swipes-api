@@ -22,5 +22,9 @@ export default function ButtonIcon(props) {
     default:
       break;
   }
-  return <SW.Icon icon={icon} />;
+  return (
+    <SW.IconWrapper>
+      <SW.Icon icon={icon} />
+    </SW.IconWrapper>
+  );
 }

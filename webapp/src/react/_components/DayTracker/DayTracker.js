@@ -59,7 +59,6 @@ export default class DayTracker extends PureComponent {
           {this.getWeeksArr().map((week, i) => (
             <SW.Week key={i}>
               {week.map((state, j) => {
-                console.log(state);
                 return (
                   <SW.DayWrapper key={j}>
                     <SW.Day state={state}>
