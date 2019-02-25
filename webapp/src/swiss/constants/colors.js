@@ -15,5 +15,8 @@ addConstants({
   green2: '#D5EDD1',
   green3: '#E6F2EB',
   blue: '#3491ED',
-  yellow: '#FFB038'
+  yellow: '#F59D45',
+
+  cardShadow: '0px 3px 5px 1px #000000',
+  popupShadow: '0px 1px 2px 0.3px #000000'
 });

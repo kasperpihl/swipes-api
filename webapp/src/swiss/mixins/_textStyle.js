@@ -4,69 +4,35 @@ addMixin('textStyle', (style = 'item') => {
   switch (style) {
     case 'body':
       return {
-        _font: ['13px', '19px', 400],
-        color: '$sw1'
-      };
-    case 'bodyMedium':
-      return {
-        _font: ['15px', '24px', 400]
-      };
-    case 'bodyLarge':
-      return {
-        _font: ['18px', '24px', 400],
-        color: '$sw1'
-      };
-    case 'bodySubtitle':
-      return {
-        _font: ['13px', '19px', 400],
-        color: '$sw2'
-      };
-    case 'breadcrumb':
-      return {
-        _font: ['13px', '19px', 400],
-        color: '$sw2',
-        textTransform: 'uppercase'
+        _font: ['13px', '18px', 400],
+        color: '$dark'
       };
     case 'caption':
       return {
-        _font: ['11px', '19px', 400],
+        _font: ['11px', '13px', 400],
         color: '$sw2'
       };
-    case 'cardTitle':
+    case 'H3':
       return {
-        _font: ['27px', '42px', 400],
-        color: '$sw1'
+        _font: ['14px', '18px', 400],
+        color: '$dark'
       };
-    case 'item':
+    case 'H2':
       return {
-        _font: ['13px', '19px', 500],
-        color: '$sw1'
+        _font: ['16px', '19px', 400],
+        color: '$dark'
       };
-    case 'tabActive':
+    case 'H1':
       return {
-        _font: ['11px', '24px', 500],
-        color: '$sw1',
-        textTransform: 'uppercase'
+        _font: ['25px', '36px', 400],
+        color: '$dark',
+        letterSpacing: '-0.6px'
       };
-    case 'tabInactive':
+    case 'title':
       return {
-        _font: ['11px', '24px', 500],
-        color: '$sw3',
-        textTransform: 'uppercase'
-      };
-    case 'labelLight':
-      return {
-        _font: ['12px', '18px', 500],
-        color: '$sw2'
-      };
-    case 'labelDark':
-      return {
-        _font: ['12px', '18px', 500],
-        color: '$sw1'
-      };
-    case 'small':
-      return {
-        _font: ['10px', '12px', 500]
+        _font: ['43px', '51px', 400],
+        color: '$dark',
+        letterSpacing: '-1.5px'
       };
     default:
       console.warn(
