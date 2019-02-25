@@ -10,7 +10,7 @@ export default class Tester extends Component {
     };
     return (
       <div style={{ width: '100%' }}>
-        <CardHeader title="test" subtitle={subtitle} separator>
+        <CardHeader title="test" separator>
           <Button icon="Messages" title="Test" />
           <Button icon="ThreeDots" />
         </CardHeader>

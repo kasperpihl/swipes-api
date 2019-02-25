@@ -4,9 +4,9 @@ import Button from 'src/react/_components/Button/Button';
 
 export default styleSheet('DiscussionHeader', {
   Wrapper: {
-    _flex: ['row', 'left', 'top'],
-    borderBottom: '1px solid $sw3',
-    paddingBottom: '12px'
+    _size: ['100%', '74px'],
+    _flex: ['column', 'left', 'between'],
+    borderBottom: '1px solid $sw3'
   },
   TitleWrapper: {
     paddingTop: '3px',
@@ -28,7 +28,6 @@ export default styleSheet('DiscussionHeader', {
   },
   ContextWrapper: {
     _flex: ['row', 'right', 'center'],
-    borderBottom: '1px solid $sw3',
     padding: '6px 0',
     width: '100%',
     pointerEvents: 'none',

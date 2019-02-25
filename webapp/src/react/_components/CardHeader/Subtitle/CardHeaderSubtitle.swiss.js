@@ -3,7 +3,7 @@ import Icon from 'src/react/_components/Icon/Icon';
 
 export default styleSheet('CardHeaderSubtitle', {
   Wrapper: {
-    _size: ['100%', 'auto'],
+    _size: ['100%', '30px'],
     _flex: ['row', 'left', 'center']
   },
 

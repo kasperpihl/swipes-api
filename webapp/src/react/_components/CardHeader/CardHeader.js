@@ -22,7 +22,7 @@ export default function CardHeader({
   ...rest
 }) {
   return (
-    <SW.Wrapper separator={separator} {...rest}>
+    <SW.Wrapper separator={separator} {...rest} subtitle={!subtitle}>
       <SW.Title key="header-title" onClick={onTitleClick}>
         {title}
       </SW.Title>

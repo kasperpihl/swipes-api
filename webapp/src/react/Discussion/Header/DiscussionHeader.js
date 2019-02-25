@@ -118,27 +118,6 @@ export default class DiscussionHeader extends PureComponent {
       loader.clear('following');
     });
   };
-  renderSubtitle = () => {
-    const { discussion } = this.props;
-    const followers = discussion.followers;
-    const privacy = discussion.privacy;
-    const numberOfFollowers = Object.keys(followers).length;
-    return (
-      <>
-        <SW.OrganizationName>
-          {orgGetBelonging(discussion.owned_by)} /{' '}
-        </SW.OrganizationName>
-        <SW.FollowerLabel
-          onMouseEnter={this.onMouseEnter}
-          onMouseLeave={this.onMouseLeave}
-        >
-          <SW.Icon icon={privacy ? 'ThreeDots' : 'Earth'} />
-          {/* TODO: Change icon once privacy is wired up */}
-          {`${numberOfFollowers} follower${numberOfFollowers === 1 ? '' : 's'}`}
-        </SW.FollowerLabel>
-      </>
-    );
-  };
   render() {
     const {
       discussion,
@@ -148,11 +127,15 @@ export default class DiscussionHeader extends PureComponent {
       viewAttachments
     } = this.props;
     const topic = discussion.topic;
+    const subtitle = {
+      ownedBy: 'UT5UFVX2I',
+      members: ['me'],
+      privacy: 'public'
+    };
 
     return (
-      <Fragment>
-        <CardHeader title={topic} subtitle={this.renderSubtitle()} />
-        <SW.ContextWrapper hasContext={!!discussion.context_id}>
+      <SW.Wrapper>
+        <CardHeader title={topic} subtitle={subtitle}>
           {discussion.context_id && (
             <SW.Button
               title={discussion.topic}
@@ -169,13 +152,14 @@ export default class DiscussionHeader extends PureComponent {
             icon={viewAttachments ? 'Eye' : undefined}
             viewAttachments={viewAttachments}
           />
+          <SW.Button icon="Project" />
           <SW.Button
             icon="ThreeDots"
             onClick={this.openDiscussionOptions}
             status={loader.get('following')}
           />
-        </SW.ContextWrapper>
-      </Fragment>
+        </CardHeader>
+      </SW.Wrapper>
     );
   }
 }

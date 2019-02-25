@@ -8,18 +8,16 @@ export default styleSheet('ButtonStandard', {
     _textStyle: 'body',
     display: 'inline-flex',
     flex: 'none',
-    userSelect: 'none'
+    userSelect: 'none',
+
+    '&:hover': {
+      backgroundColor: '$sw4'
+    }
   },
 
   Title: {
     _el: 'p',
-    padding: '0 12px',
-
-    'status=Standard': {
-      '.ButtonStandard_Wrapper:hover &': {
-        color: '$blue'
-      }
-    },
+    padding: '0 6px',
     'status=Success': {
       color: '$green1'
     },

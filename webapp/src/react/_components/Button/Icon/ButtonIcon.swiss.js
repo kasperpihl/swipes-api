@@ -31,12 +31,6 @@ export default styleSheet('ButtonIcon', {
     _el: Icon,
     _size: '24px',
 
-    'status=Standard': {
-      '.button-icon-js:hover &': {
-        _svgColor: '$blue'
-      }
-    },
-
     'status=Success': {
       _svgColor: '$green1'
     },

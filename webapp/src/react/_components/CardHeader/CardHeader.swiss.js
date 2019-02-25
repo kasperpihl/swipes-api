@@ -6,8 +6,12 @@ export default styleSheet('CardHeader', {
     _flex: ['column', 'left', 'top'],
 
     separator: {
-      paddingBottom: '12px',
+      // paddingBottom: '12px',
       borderBottom: '1px solid $sw4'
+    },
+
+    subtitle: {
+      _flex: ['row', 'left', 'bottom']
     }
   },
 
@@ -50,7 +54,6 @@ export default styleSheet('CardHeader', {
   },
 
   Actions: {
-    _size: ['auto', '42px'],
     _flex: ['row', 'right', 'center'],
     marginLeft: '30px',
 
