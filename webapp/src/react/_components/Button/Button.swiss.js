@@ -11,7 +11,8 @@ export default styleSheet('ButtonStandard', {
     userSelect: 'none',
 
     '&:hover': {
-      backgroundColor: '$sw4'
+      backgroundColor: '$sw4',
+      borderRadius: '2px'
     }
   },
 

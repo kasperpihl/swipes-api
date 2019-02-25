@@ -52,9 +52,7 @@ export default class DiscussionListItem extends PureComponent {
               basedOn="letters"
             />
           </SW.MiddleWrapper>
-          <SW.RightWrapper>
-            <SW.Time>{timeGetDayOrTime(item.last_comment_at)}</SW.Time>
-          </SW.RightWrapper>
+          <SW.Time>{timeGetDayOrTime(item.last_comment_at)}</SW.Time>
         </SW.Wrapper>
       </SW.ProvideContext>
     );

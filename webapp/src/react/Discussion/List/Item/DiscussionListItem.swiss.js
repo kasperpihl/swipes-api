@@ -7,8 +7,7 @@ export default styleSheet('DiscussionListItem', {
     borderTop: '1px solid $sw4',
     width: 'auto',
     padding: '10px 0',
-    marginLeft: '25px',
-    marginRight: '25px',
+    marginLeft: '29px',
     selected: {
       width: '100%',
       background: '$sw4',
@@ -30,41 +29,47 @@ export default styleSheet('DiscussionListItem', {
     width: '100%',
     paddingRight: '25px'
   },
-  RightWrapper: {
-    _flex: 'none',
-    whiteSpace: 'nowrap'
-  },
   Topic: {
     _truncateString: '',
-    _textStyle: 'item',
+    _textStyle: 'H3',
     minWidth: 0,
     maxWidth: '180px',
-    paddingBottom: '1px'
+    paddingBottom: '1px',
+    flex: 'none'
   },
   Subtitle: {
     _el: LinesEllipsis,
-    _textStyle: 'bodySubtitle',
-    width: '100%'
+    _textStyle: 'body',
+    color: '$sw2',
+    width: '100%',
+    flex: 'none'
   },
   Time: {
     _el: 'span',
-    _textStyle: 'caption'
+    _textStyle: 'caption',
+    _flex: ['row', 'center', 'center'],
+    flex: 'none',
+    position: 'absolute',
+    top: '13px',
+    right: '12px',
+    color: '$sw2'
   },
   OrganizationName: {
     _textStyle: 'body',
-    color: '$sw2',
-    fontWeight: '500'
+    flex: 'none'
   },
   UnreadCircle: {
     _size: '10px',
-    display: 'none',
+    opacity: '0',
+    visibility: 'hidden',
     position: 'absolute',
     top: '14px',
-    left: '12px',
+    left: '-19px',
     borderRadius: '50%',
     backgroundColor: '$blue',
     unread: {
-      display: 'block'
+      opacity: '1',
+      visibility: 'visible'
     }
   },
   AttachmentWrapper: {
