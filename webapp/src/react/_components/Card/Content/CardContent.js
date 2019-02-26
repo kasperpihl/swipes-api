@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import './styles/view-controller.scss';
 
-export default class SWView extends Component {
+export default class CardContent extends Component {
   componentDidMount() {
     const { initialScroll } = this.props;
 
@@ -17,11 +17,7 @@ export default class SWView extends Component {
       return undefined;
     }
 
-    return (
-      <div className="sw-view__header">
-        {header}
-      </div>
-    );
+    return <div className="sw-view__header">{header}</div>;
   }
   renderFooter() {
     const { footer } = this.props;
@@ -30,11 +26,7 @@ export default class SWView extends Component {
       return undefined;
     }
 
-    return (
-      <div className="sw-view__footer">
-        {footer}
-      </div>
-    );
+    return <div className="sw-view__footer">{footer}</div>;
   }
   render() {
     const { children, disableScroll, noframe, onScroll } = this.props;
@@ -51,19 +43,18 @@ export default class SWView extends Component {
     return (
       <div className={className}>
         {this.renderHeader()}
-        <div 
-          className="sw-view__scroll" 
-          ref={(c) => {
+        <div
+          className="sw-view__scroll"
+          ref={c => {
             this.scroller = c;
-            if(typeof this.props.scrollRef === 'function') {
+            if (typeof this.props.scrollRef === 'function') {
               this.props.scrollRef(c);
             }
-          }} 
-          onScroll={onScroll}>
+          }}
+          onScroll={onScroll}
+        >
           <div className="sw-view__container">
-            <div className="sw-view__content">
-              {children}
-            </div>
+            <div className="sw-view__content">{children}</div>
           </div>
         </div>
         {this.renderFooter()}

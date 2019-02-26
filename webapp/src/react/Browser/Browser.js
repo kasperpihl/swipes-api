@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import SWView from 'src/react/_Layout/view-controller/SWView';
+import CardContent from 'src/react/_components/Card/Content/CardContent';
 import Loader from 'src/react/_components/loaders/Loader';
 import withNav from 'src/react/_hocs/Nav/withNav';
 import BrowserNavBar from './BrowserNavBar';
@@ -108,7 +108,7 @@ export default class Browser extends PureComponent {
     const { url, me } = this.props;
     const { forwardEnabled, backEnabled, title, currentUrl } = this.state;
     return (
-      <SWView noframe>
+      <CardContent noframe>
         <BrowserWebview
           url={url}
           persistId={`browser${me.get('user_id')}`}
@@ -122,7 +122,7 @@ export default class Browser extends PureComponent {
           url={currentUrl}
         />
         {this.renderLoader()}
-      </SWView>
+      </CardContent>
     );
   }
 }

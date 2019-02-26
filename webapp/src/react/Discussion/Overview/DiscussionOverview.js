@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import DiscussionHeader from '../Header/DiscussionHeader';
 import CommentComposer from 'src/react/Comment/Composer/CommentComposer';
 import CommentList from 'src/react/Comment/List/CommentList';
-import SWView from 'src/react/_Layout/view-controller/SWView';
+import CardContent from 'src/react/_components/Card/Content/CardContent';
 
 import SW from './DiscussionOverview.swiss';
 
@@ -48,7 +48,7 @@ function DiscussionOverview({ discussionId, myId }) {
   const { discussion } = req.result;
 
   return (
-    <SWView
+    <CardContent
       header={
         <DiscussionHeader
           discussion={discussion}
@@ -71,6 +71,6 @@ function DiscussionOverview({ discussionId, myId }) {
         key={`${attachmentsOnly}`}
         discussion={discussion}
       />
-    </SWView>
+    </CardContent>
   );
 }

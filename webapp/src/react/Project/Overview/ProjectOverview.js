@@ -4,7 +4,7 @@ import SW from './ProjectOverview.swiss';
 import ProjectProvider from 'core/react/_hocs/Project/ProjectProvider';
 import ProjectStateManager from 'core/classes/ProjectStateManager';
 import ProjectTask from 'src/react/Project/Task/ProjectTask';
-import SWView from 'src/react/_Layout/view-controller/SWView';
+import CardContent from 'src/react/_components/Card/Content/CardContent';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
 import Button from 'src/react/_components/Button/Button';
 import SideHeader from 'src/react/_components/SideHeader/SideHeader';
@@ -201,7 +201,10 @@ export default class ProjectOverview extends PureComponent {
     const { visibleOrder, projectName } = this.state;
 
     return (
-      <SWView noframe header={<CardHeader padding={30} title={projectName} />}>
+      <CardContent
+        noframe
+        header={<CardHeader padding={30} title={projectName} />}
+      >
         <ProjectProvider stateManager={this.stateManager}>
           <SW.Wrapper>
             {this.renderSidebar()}
@@ -212,7 +215,7 @@ export default class ProjectOverview extends PureComponent {
             </SW.TasksWrapper>
           </SW.Wrapper>
         </ProjectProvider>
-      </SWView>
+      </CardContent>
     );
   }
 }

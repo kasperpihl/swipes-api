@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import withLoader from 'src/react/_hocs/withLoader';
 import request from 'core/utils/request';
 import propsOrPop from 'src/react/_hocs/propsOrPop';
-import SWView from 'src/react/_Layout/view-controller/SWView';
+import CardContent from 'src/react/_components/Card/Content/CardContent';
 
 import withNav from 'src/react/_hocs/Nav/withNav';
 import FormModal from 'src/react/_components/FormModal/FormModal';
@@ -57,7 +57,7 @@ export default class Billing extends PureComponent {
 
     return (
       <Elements>
-        <SWView header={<BillingHeader organization={organization} />}>
+        <CardContent header={<BillingHeader organization={organization} />}>
           <SW.Wrapper>
             <BillingPlan
               value={organization.get('plan') || plan}
@@ -74,7 +74,7 @@ export default class Billing extends PureComponent {
               )}
             </SW.PaymentSection>
           </SW.Wrapper>
-        </SWView>
+        </CardContent>
       </Elements>
     );
   }

@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
-import SWView from 'src/react/_Layout/view-controller/SWView';
+import CardContent from 'src/react/_components/Card/Content/CardContent';
 import useSyncedNote from 'src/react/_hooks/useSyncedNote';
 import NoteEditor from 'src/react/_components/note-editor/NoteEditor';
 import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
@@ -22,7 +22,7 @@ export default function Note({ noteId }) {
   const { note } = req.result;
 
   return (
-    <SWView header={<CardHeader title={note.title} />}>
+    <CardContent header={<CardHeader title={note.title} />}>
       <SW.Wrapper>
         <NoteEditor
           mediumEditor
@@ -31,6 +31,6 @@ export default function Note({ noteId }) {
           delegate={delegate.current}
         />
       </SW.Wrapper>
-    </SWView>
+    </CardContent>
   );
 }

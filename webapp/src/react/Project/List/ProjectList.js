@@ -4,7 +4,7 @@ import SW from './ProjectList.swiss';
 import compose from 'src/utils/compose';
 import useNav from 'src/react/_hooks/useNav';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
-import SWView from 'src/react/_Layout/view-controller/SWView';
+import CardContent from 'src/react/_components/Card/Content/CardContent';
 import Button from 'src/react/_components/Button/Button';
 import ModalCreate from 'src/react/Modal/Create/ModalCreate';
 import ProjectListItem from './Item/ProjectListItem';
@@ -39,7 +39,7 @@ function ProjectList({ me, projects }) {
     });
   };
   return (
-    <SWView
+    <CardContent
       noframe
       header={
         <CardHeader title="Projects">
@@ -56,6 +56,6 @@ function ProjectList({ me, projects }) {
           />
         ))}
       </SW.Wrapper>
-    </SWView>
+    </CardContent>
   );
 }

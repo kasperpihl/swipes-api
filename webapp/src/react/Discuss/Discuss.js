@@ -5,7 +5,7 @@ import DiscussionList from 'src/react/Discussion/List/DiscussionList';
 import DiscussionOverview from 'src/react/Discussion/Overview/DiscussionOverview';
 import TabBar from 'src/react/_components/TabBar/TabBar';
 import { withOptimist } from 'react-optimist';
-import SWView from 'src/react/_Layout/view-controller/SWView';
+import CardContent from 'src/react/_components/Card/Content/CardContent';
 import ModalCreate from 'src/react/Modal/Create/ModalCreate';
 import withNav from 'src/react/_hocs/Nav/withNav';
 import Button from 'src/react/_components/Button/Button';
@@ -70,13 +70,13 @@ export default class Discuss extends PureComponent {
       <SW.ProvideContext>
         <SW.ParentWrapper>
           <SW.LeftSide>
-            <SWView header={this.renderLeftHeader()} noframe>
+            <CardContent header={this.renderLeftHeader()} noframe>
               <DiscussionList
                 key={type}
                 type={type}
                 onSelectItemId={this.onSelectItemId}
               />
-            </SWView>
+            </CardContent>
           </SW.LeftSide>
           <SW.RightSide viewWidth={nav.width}>
             {selectedId && (

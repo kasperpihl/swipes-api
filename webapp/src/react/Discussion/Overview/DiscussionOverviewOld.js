@@ -4,7 +4,7 @@ import SW from './DiscussionOverview.swiss';
 import DiscussionHeader from '../Header/DiscussionHeader';
 import CommentComposer from 'src/react/Comment/Composer/CommentComposer';
 import CommentList from 'src/react/Comment/List/CommentList';
-import SWView from 'src/react/_Layout/view-controller/SWView';
+import CardContent from 'src/react/_components/Card/Content/CardContent';
 
 export default class DiscussionOverview extends PureComponent {
   constructor(props) {
@@ -60,7 +60,7 @@ export default class DiscussionOverview extends PureComponent {
     const { discussion, onClickAttachments, viewAttachments } = this.props;
 
     return (
-      <SWView
+      <CardContent
         header={
           <DiscussionHeader
             discussion={discussion}
@@ -83,7 +83,7 @@ export default class DiscussionOverview extends PureComponent {
           key={`${viewAttachments}`}
           discussion={discussion}
         />
-      </SWView>
+      </CardContent>
     );
   }
 }

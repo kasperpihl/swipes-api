@@ -7,7 +7,7 @@ import request from 'core/utils/request';
 import FormModal from 'src/react/_components/FormModal/FormModal';
 import withNav from 'src/react/_hocs/Nav/withNav';
 import SW from './Profile.swiss';
-import SWView from 'src/react/_Layout/view-controller/SWView';
+import CardContent from 'src/react/_components/Card/Content/CardContent';
 
 @withNav
 @withLoader
@@ -46,7 +46,7 @@ export default class Profile extends PureComponent {
   render() {
     const { organizations, loader } = this.props;
     return (
-      <SWView header={this.renderHeader()}>
+      <CardContent header={this.renderHeader()}>
         <SW.Wrapper>
           <SW.Title>Organizations</SW.Title>
           <SW.Button
@@ -60,7 +60,7 @@ export default class Profile extends PureComponent {
             ))
             .toList()}
         </SW.Wrapper>
-      </SWView>
+      </CardContent>
     );
   }
 }
