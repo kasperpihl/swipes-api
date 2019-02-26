@@ -20,7 +20,6 @@ export default class CommentReaction extends PureComponent {
   constructor(props) {
     super(props);
     props.optimist.identify(props.commentId);
-    this.state = {};
   }
   componentWillMount() {
     this.size = Object.keys(this.props.reactions).length;

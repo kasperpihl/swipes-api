@@ -1,5 +1,4 @@
 import { styleSheet } from 'swiss-react';
-import TimeAgo from 'core/components/TimeAgo';
 
 export default styleSheet('CommentItem', {
   Container: {
