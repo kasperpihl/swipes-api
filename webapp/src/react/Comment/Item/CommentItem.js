@@ -52,14 +52,14 @@ export default class CommentItem extends PureComponent {
           {this.renderAttachments()}
         </SW.Content>
         <SW.Actions>
-          {/* <CommentReaction
+          <CommentReaction
             alignRight
             ownedBy={ownedBy}
             discussionId={discussionId}
             reactions={comment.reactions}
             postId={postId}
             commentId={comment.comment_id}
-          /> */}
+          />
         </SW.Actions>
       </SW.Container>
     );

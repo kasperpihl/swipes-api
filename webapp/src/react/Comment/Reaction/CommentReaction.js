@@ -23,11 +23,11 @@ export default class CommentReaction extends PureComponent {
     this.state = {};
   }
   componentWillMount() {
-    this.size = this.props.reactions.size;
+    this.size = Object.keys(this.props.reactions).length;
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.reactions !== this.props.reactions) {
-      this.size = nextProps.reactions.size;
+      this.size = Object.keys(nextProps.reactions).length;
     }
   }
   componentWillUnmount() {
@@ -35,7 +35,7 @@ export default class CommentReaction extends PureComponent {
   }
   doILike = () => {
     const { optimist, reactions, myId } = this.props;
-    return optimist.get('like', !!reactions.get(myId));
+    return optimist.get('like', !!reactions[myId]);
   };
   onReaction = () => {
     const { optimist, commentId, successGradient, discussionId } = this.props;
