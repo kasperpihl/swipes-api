@@ -4,15 +4,11 @@ import Icon from 'src/react/_components/Icon/Icon';
 export default styleSheet('CommentReaction', {
   Container: {
     _flex: ['row', 'left', 'center'],
-    display: 'inline-flex'
+    flex: 'none'
   },
   HeartButton: {
-    _size: ['30px', '36px'],
-    _flex: ['row', 'left', 'center'],
-    alignRight: {
-      _size: ['36px', '36px'],
-      _flex: ['row', 'center', 'center']
-    }
+    _size: ['30px', '30px'],
+    _flex: ['row', 'center', 'center']
   },
   HeartSvg: {
     _el: Icon,
@@ -37,11 +33,12 @@ export default styleSheet('CommentReaction', {
     }
   },
   LikeString: {
-    opacity: 0,
     _font: ['12px', '18px', 400],
+    display: 'none',
     color: '$sw1',
     show: {
-      opacity: 1
+      display: 'initial',
+      paddingLeft: '3px'
     },
     liked: {
       color: '$red'

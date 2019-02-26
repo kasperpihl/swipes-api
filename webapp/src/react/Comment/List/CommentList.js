@@ -1,16 +1,23 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import { connect } from 'react-redux';
+import moment from 'moment';
 import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
 import usePaginationRequest from 'core/react/_hooks/usePaginationRequest';
 import PaginationScrollToMore from 'src/react/_components/pagination/PaginationScrollToMore';
 import CommentItem from 'src/react/Comment/Item/CommentItem';
 import EmptyState from 'src/react/_components/EmptyState/EmptyState';
+import SectionHeader from 'src/react/_components/SectionHeader/SectionHeader';
 import useUpdate from 'core/react/_hooks/useUpdate';
+import SWView from 'src/react/_Layout/view-controller/SWView';
 
-export default function CommentList({
-  attachmentsOnly,
-  discussion,
-  scrollRef
-}) {
+const kTimeDifference = 30;
+export default connect(
+  state => ({
+    myId: state.me.get('user_id')
+  }),
+  null
+)(CommentList);
+function CommentList({ attachmentsOnly, discussion, scrollRef, ...props }) {
   const req = usePaginationRequest(
     'comment.list',
     {
@@ -43,6 +50,8 @@ export default function CommentList({
       />
     );
   }
+  let deltaDate = moment('1970-02-15');
+  let deltaSentBy;
 
   return (
     <>
@@ -50,14 +59,28 @@ export default function CommentList({
         req={req}
         errorLabel="Couldn't get discussions."
       />
-      {req.items.map(comment => (
-        <CommentItem
-          key={comment.comment_id}
-          comment={comment}
-          discussionId={discussion.discussion_id}
-          ownedBy={discussion.owned_by}
-        />
-      ))}
+      {req.items.map(comment => {
+        const currentDate = moment(comment.sent_at);
+        const showSectionHeader = currentDate.isAfter(deltaDate, 'days');
+        const isSingleLine =
+          !showSectionHeader && deltaSentBy === comment.sent_by;
+        deltaDate = currentDate;
+        deltaSentBy = comment.sent_by;
+
+        return (
+          <Fragment key={comment.comment_id}>
+            {showSectionHeader && (
+              <SectionHeader>{currentDate.format('MMM D')}</SectionHeader>
+            )}
+            <CommentItem
+              comment={comment}
+              discussionId={discussion.discussion_id}
+              ownedBy={discussion.owned_by}
+              isSingleLine={isSingleLine}
+            />
+          </Fragment>
+        );
+      })}
     </>
   );
 }

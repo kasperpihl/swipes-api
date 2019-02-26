@@ -4,24 +4,12 @@ import LinesEllipsis from 'react-lines-ellipsis';
 export default styleSheet('DiscussionListItem', {
   Wrapper: {
     _flex: ['row', 'left', 'top'],
-    borderTop: '1px solid $sw4',
     width: 'auto',
-    padding: '10px 0',
-    marginLeft: '29px',
+    padding: '10px 30px',
+    marginLeft: '12px',
+    marginRight: '6px',
     selected: {
-      width: '100%',
-      background: '$sw4',
-      marginLeft: '0',
-      marginRight: '0',
-      paddingLeft: '30px',
-      paddingRight: '30px',
-      borderBottom: '1px solid $sw4'
-    },
-    '&:first-child': {
-      borderTop: 'none'
-    },
-    siblingToSelectedItem: {
-      borderTop: 'none'
+      background: '$green3'
     }
   },
   MiddleWrapper: {

@@ -9,6 +9,7 @@ export default styleSheet('TabBar', {
     _flex: 'center',
     _textStyle: 'caption',
     color: '$sw2',
+    height: 'calc(100% + 1px)',
     padding: '6px 0',
     textTransform: 'uppercase',
     '&:hover': {
@@ -17,7 +18,8 @@ export default styleSheet('TabBar', {
     },
     active: {
       _textStyle: 'caption',
-      color: '$dark'
+      color: '$dark',
+      borderBottom: '1px solid $dark'
     },
     '&:not(:last-child)': {
       marginRight: '24px'

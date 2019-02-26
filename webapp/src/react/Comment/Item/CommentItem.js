@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
+import moment from 'moment';
 
-import timeGetTimeString from 'core/utils/time/timeGetTimeString';
 import UserImage from 'src/react/_components/UserImage/UserImage';
 import Attachment from 'src/react/_components/attachment/Attachment';
 
@@ -11,7 +11,6 @@ import parseMentions from 'src/utils/parseMentions';
 
 import userGetFullName from 'core/utils/user/userGetFullName';
 
-import CommentReaction from '../Reaction/CommentReaction';
 import SW from './CommentItem.swiss';
 
 export default class CommentItem extends PureComponent {
@@ -29,39 +28,65 @@ export default class CommentItem extends PureComponent {
       </SW.Attachments>
     );
   }
-  render() {
-    const { comment, postId, discussionId, ownedBy } = this.props;
+
+  renderLeftSide() {
+    const { comment, isSingleLine, ownedBy } = this.props;
+    if (isSingleLine) {
+      return (
+        <SW.TimeStamp>{moment(comment.sent_at).format('LT')}</SW.TimeStamp>
+      );
+    }
+    return (
+      <SW.Picture>
+        <UserImage
+          userId={comment.sent_by}
+          organizationId={ownedBy}
+          size={30}
+        />
+      </SW.Picture>
+    );
+  }
+
+  renderTopSide() {
+    const { comment, isSingleLine, ownedBy } = this.props;
     const fullName = userGetFullName(comment.sent_by, ownedBy);
+    if (isSingleLine) {
+      return null;
+    }
+    return (
+      <SW.TopWrapper>
+        <SW.Name>{`${fullName}`}</SW.Name>
+        <SW.Time>{`${moment(comment.sent_at).format('LT')}`}</SW.Time>
+      </SW.TopWrapper>
+    );
+  }
+  render() {
+    const { comment, postId, discussionId, ownedBy, isSingleLine } = this.props;
 
     return (
-      <SW.Container>
-        <SW.Picture>
-          <UserImage
-            userId={comment.sent_by}
-            organizationId={ownedBy}
-            size={36}
-          />
-        </SW.Picture>
-        <SW.Content>
-          <SW.Name>{`${fullName} ${timeGetTimeString(
-            comment.sent_at
-          )}`}</SW.Name>
-          <SW.Message>
-            {chain(parseNewLines, parseMentions, parseLinks)(comment.message)}
-          </SW.Message>
-          {this.renderAttachments()}
-        </SW.Content>
-        <SW.Actions>
-          <CommentReaction
-            alignRight
-            ownedBy={ownedBy}
-            discussionId={discussionId}
-            reactions={comment.reactions}
-            postId={postId}
-            commentId={comment.comment_id}
-          />
-        </SW.Actions>
-      </SW.Container>
+      <SW.ProvideContext isSingleLine={isSingleLine}>
+        <SW.Wrapper>
+          <SW.LeftSide>{this.renderLeftSide()}</SW.LeftSide>
+          <SW.Center>
+            {this.renderTopSide()}
+            <SW.Message>
+              {chain(parseNewLines, parseMentions, parseLinks)(comment.message)}
+            </SW.Message>
+            {this.renderAttachments()}
+          </SW.Center>
+          <SW.RightSide>
+            <SW.Button icon="ThreeDots" size={30} />
+            <SW.Reaction
+              ownedBy={ownedBy}
+              discussionId={discussionId}
+              reactions={comment.reactions}
+              postId={postId}
+              commentId={comment.comment_id}
+              liked={Object.keys(comment.reactions).length > 0}
+            />
+          </SW.RightSide>
+        </SW.Wrapper>
+      </SW.ProvideContext>
     );
   }
 }

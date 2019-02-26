@@ -91,34 +91,20 @@ export default class CommentReaction extends PureComponent {
     clearTimeout(this.tooltipDelay);
     tooltip(null);
   };
-  renderButton() {
-    const { alignRight } = this.props;
-
-    return (
-      <SW.HeartButton
-        alignRight={!!alignRight}
-        className="heart-button"
-        onClick={this.onReaction}
-      >
-        <SW.HeartSvg icon="Heart" liked={this.doILike()} />
-      </SW.HeartButton>
-    );
-  }
-  renderString() {
-    return (
-      <SW.LikeString show={!!this.size} liked={this.doILike()}>
-        {this.size}
-      </SW.LikeString>
-    );
-  }
 
   render() {
-    const { alignRight } = this.props;
-
     return (
-      <SW.Container onMouseEnter={this.onEnter} onMouseLeave={this.onLeave}>
-        {alignRight ? this.renderString() : this.renderButton()}
-        {alignRight ? this.renderButton() : this.renderString()}
+      <SW.Container
+        onMouseEnter={this.onEnter}
+        onMouseLeave={this.onLeave}
+        className={this.props.className}
+      >
+        <SW.LikeString show={!!this.size} liked={this.doILike()}>
+          {this.size}
+        </SW.LikeString>
+        <SW.HeartButton className="heart-button" onClick={this.onReaction}>
+          <SW.HeartSvg icon="Heart" liked={this.doILike()} />
+        </SW.HeartButton>
       </SW.Container>
     );
   }
