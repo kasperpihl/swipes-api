@@ -26,7 +26,11 @@ export default function CommentList({
 
   useUpdate('comment', comment => {
     if (comment.discussion_id === discussion.discussion_id) {
-      req.fetchNew();
+      if (comment.sent_at) {
+        req.appendItem(comment);
+      } else {
+        req.mergeItem(comment);
+      }
     }
   });
 

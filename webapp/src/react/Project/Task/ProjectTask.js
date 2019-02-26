@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Icon from 'src/react/_components/Icon/Icon';
 import AssignMenu from 'src/react/_components/AssignMenu/AssignMenu';
 import SW from './ProjectTask.swiss';
-import withProjectTask from 'core/components/project/withProjectTask';
+import withProjectTask from 'core/react/_hocs/Project/withProjectTask';
 import Assignees from 'src/react/_components/Assignees/Assignees';
 import contextMenu from 'src/utils/contextMenu';
 import * as mainActions from 'src/redux/main/mainActions';

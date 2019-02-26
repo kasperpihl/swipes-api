@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import SW from './ProjectOverview.swiss';
 import withRequests from 'core/components/withRequests';
-import ProjectProvider from 'core/components/project/ProjectProvider';
+import ProjectProvider from 'core/react/_hocs/Project/ProjectProvider';
 import ProjectStateManager from 'core/classes/ProjectStateManager';
 import ProjectTask from 'src/react/Project/Task/ProjectTask';
 import SWView from 'src/react/_Layout/view-controller/SWView';
