@@ -180,11 +180,12 @@ export default class Authentication extends PureComponent {
     );
   }
   render() {
+    //subtitle={this.getSubtitle()}}
     const { loader } = this.props;
     return (
       <Card>
         <SW.Wrapper>
-          <CardHeader title="Swipes Workspace" subtitle={this.getSubtitle()} />
+          <CardHeader title="Swipes Workspace" />
           <SW.StyledTabBar
             onChange={this.handleTabChange}
             tabs={['Create account', 'Sign in']}

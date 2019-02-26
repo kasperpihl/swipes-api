@@ -1,6 +1,6 @@
 {
   "presets": [
-      "@babel/preset-env"
+    "es2015"
   ],
   "plugins": [
     [
@@ -12,15 +12,10 @@
         }
       }
     ],
-    [
-      "@babel/plugin-transform-runtime",
-      {
-        "corejs": false,
-        "helpers": false,
-        "regenerator": true,
-        "useESModules": false
-      }
-    ],
-    "@babel/plugin-proposal-object-rest-spread"
+    "transform-object-rest-spread",
+    ["transform-runtime", {
+      "polyfill": false,
+      "regenerator": true
+    }]
   ]
 }
