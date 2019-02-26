@@ -4,7 +4,7 @@ import * as mainActions from 'src/redux/main/mainActions';
 import withLoader from 'src/react/_hocs/withLoader';
 import FormModal from 'src/react/_components/FormModal/FormModal';
 import ListMenu from 'src/react/_components/ListMenu/ListMenu';
-import CardHeader from 'src/react/_components/CardHeader/CardHeader';
+import CardHeader from 'src/react/_components/Card/Header/CardHeader';
 import SW from './OrganizationHeader.swiss';
 import withNav from 'src/react/_hocs/Nav/withNav';
 import request from 'core/utils/request';

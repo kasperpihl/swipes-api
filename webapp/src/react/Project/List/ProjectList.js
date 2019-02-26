@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import SW from './ProjectList.swiss';
 import compose from 'src/utils/compose';
 import useNav from 'src/react/_hooks/useNav';
-import CardHeader from 'src/react/_components/CardHeader/CardHeader';
+import CardHeader from 'src/react/_components/Card/Header/CardHeader';
 import CardContent from 'src/react/_components/Card/Content/CardContent';
 import Button from 'src/react/_components/Button/Button';
 import ModalCreate from 'src/react/Modal/Create/ModalCreate';

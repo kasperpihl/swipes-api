@@ -3,7 +3,7 @@ import { fromJS } from 'immutable';
 import SW from './PlanOverview.swiss';
 import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
 import CardContent from 'src/react/_components/Card/Content/CardContent';
-import CardHeader from 'src/react/_components/CardHeader/CardHeader';
+import CardHeader from 'src/react/_components/Card/Header/CardHeader';
 import PlanSide from 'src/react/Plan/Side/PlanSide';
 import useUpdate from 'core/react/_hooks/useUpdate';
 import useRequest from 'core/react/_hooks/useRequest';

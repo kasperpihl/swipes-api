@@ -3,7 +3,7 @@ import SW from './PlanList.swiss';
 import { fromJS } from 'immutable';
 import useNav from 'src/react/_hooks/useNav';
 import useRequest from 'core/react/_hooks/useRequest';
-import CardHeader from 'src/react/_components/CardHeader/CardHeader';
+import CardHeader from 'src/react/_components/Card/Header/CardHeader';
 import CardContent from 'src/react/_components/Card/Content/CardContent';
 import Button from 'src/react/_components/Button/Button';
 import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';

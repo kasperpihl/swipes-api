@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import CardHeader from 'src/react/_components/CardHeader/CardHeader';
+import CardHeader from 'src/react/_components/Card/Header/CardHeader';
 import CardContent from 'src/react/_components/Card/Content/CardContent';
 import useSyncedNote from 'src/react/_hooks/useSyncedNote';
 import NoteEditor from 'src/react/_components/note-editor/NoteEditor';

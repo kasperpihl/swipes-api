@@ -1,7 +1,7 @@
 import React from 'react';
 import useLoader from 'src/react/_hooks/useLoader';
 import urlGetParameter from 'src/utils/url/urlGetParameter';
-import CardHeader from 'src/react/_components/CardHeader/CardHeader';
+import CardHeader from 'src/react/_components/Card/Header/CardHeader';
 import request from 'core/utils/request';
 import Card from 'src/react/_components/Card/Card';
 

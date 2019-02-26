@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import SW from './Discuss.swiss';
-import CardHeader from 'src/react/_components/CardHeader/CardHeader';
+import CardHeader from 'src/react/_components/Card/Header/CardHeader';
 import DiscussionList from 'src/react/Discussion/List/DiscussionList';
 import DiscussionOverview from 'src/react/Discussion/Overview/DiscussionOverview';
 import TabBar from 'src/react/_components/TabBar/TabBar';

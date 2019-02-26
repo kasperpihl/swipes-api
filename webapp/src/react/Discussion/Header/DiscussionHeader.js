@@ -7,7 +7,7 @@ import SW from './DiscussionHeader.swiss';
 import contextMenu from 'src/utils/contextMenu';
 import ListMenu from 'src/react/_components/ListMenu/ListMenu';
 import withNav from 'src/react/_hocs/Nav/withNav';
-import CardHeader from 'src/react/_components/CardHeader/CardHeader';
+import CardHeader from 'src/react/_components/Card/Header/CardHeader';
 import TooltipUsers from 'src/react/_components/TooltipUsers/TooltipUsers';
 import request from 'core/utils/request';
 

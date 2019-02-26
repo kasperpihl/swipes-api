@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import withLoader from 'src/react/_hocs/withLoader';
 import Loader from 'src/react/_components/loaders/Loader';
 import CardContent from 'src/react/_components/Card/Content/CardContent';
-import CardHeader from 'src/react/_components/CardHeader/CardHeader';
+import CardHeader from 'src/react/_components/Card/Header/CardHeader';
 import Button from 'src/react/_components/Button/Button';
 import * as Files from './registerFileTypes';
 import SW from './File.swiss';

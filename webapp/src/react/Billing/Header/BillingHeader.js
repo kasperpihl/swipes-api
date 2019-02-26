@@ -1,5 +1,5 @@
 import React from 'react';
-import CardHeader from 'src/react/_components/CardHeader/CardHeader';
+import CardHeader from 'src/react/_components/Card/Header/CardHeader';
 import SW from './BillingHeader.swiss';
 
 const BillingHeader = ({ organization }) => {

@@ -5,7 +5,7 @@ import ProjectProvider from 'core/react/_hocs/Project/ProjectProvider';
 import ProjectStateManager from 'core/classes/ProjectStateManager';
 import ProjectTask from 'src/react/Project/Task/ProjectTask';
 import CardContent from 'src/react/_components/Card/Content/CardContent';
-import CardHeader from 'src/react/_components/CardHeader/CardHeader';
+import CardHeader from 'src/react/_components/Card/Header/CardHeader';
 import Button from 'src/react/_components/Button/Button';
 import SideHeader from 'src/react/_components/SideHeader/SideHeader';
 import withNav from 'src/react/_hocs/Nav/withNav';

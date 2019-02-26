@@ -7,7 +7,7 @@ import withLoader from 'src/react/_hocs/withLoader';
 import request from 'core/utils/request';
 import Card from 'src/react/_components/Card/Card';
 import Button from 'src/react/_components/Button/Button';
-import CardHeader from 'src/react/_components/CardHeader/CardHeader';
+import CardHeader from 'src/react/_components/Card/Header/CardHeader';
 import SW from './Authentication.swiss';
 
 @withRouter

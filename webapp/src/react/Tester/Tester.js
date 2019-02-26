@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import CardHeader from 'src/react/_components/CardHeader/CardHeader';
+import CardHeader from 'src/react/_components/Card/Header/CardHeader';
 import Button from '../_components/Button/Button';
 export default class Tester extends Component {
   render() {
