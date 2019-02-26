@@ -43,7 +43,7 @@ export default class CommentItem extends PureComponent {
           />
         </SW.Picture>
         <SW.Content>
-          <SW.Name>{`${fullName} - ${timeGetTimeString(
+          <SW.Name>{`${fullName} ${timeGetTimeString(
             comment.sent_at
           )}`}</SW.Name>
           <SW.Message>

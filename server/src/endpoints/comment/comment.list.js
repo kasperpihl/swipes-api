@@ -52,7 +52,7 @@ export default endpointCreate(
     );
 
     const has_more = commentRes.rows.length > limit;
-    const comments = commentRes.rows.slice(0, limit);
+    const comments = commentRes.rows.slice(0, limit).reverse();
 
     res.locals.output = {
       comments,

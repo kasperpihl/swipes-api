@@ -24,6 +24,12 @@ export default function CommentList({
     }
   );
 
+  useUpdate('comment', comment => {
+    if (comment.discussion_id === discussion.discussion_id) {
+      req.fetchNew();
+    }
+  });
+
   if (req.error || req.loading) {
     return <RequestLoader req={req} />;
   }

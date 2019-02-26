@@ -3,14 +3,15 @@ import TimeAgo from 'core/components/TimeAgo';
 
 export default styleSheet('CommentItem', {
   Container: {
-    _flex: ['row', 'left', 'top'],
+    _flex: ['row', 'left', 'center'],
     paddingTop: '12px',
     width: '100%'
   },
   Picture: {
+    _size: '36px',
     flex: 'none',
     marginLeft: '6px',
-    _size: '36px'
+    marginBottom: 'auto'
   },
   Content: {
     _flex: ['column', 'left', 'top'],
@@ -22,7 +23,8 @@ export default styleSheet('CommentItem', {
     _flex: ['column', 'center', 'top']
   },
   Name: {
-    _textStyle: 'caption'
+    _textStyle: 'body',
+    fontWeight: '500'
   },
   Message: {
     _textStyle: 'body'
