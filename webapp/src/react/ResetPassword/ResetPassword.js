@@ -1,28 +1,29 @@
 import React, { PureComponent } from 'react';
-import { setupLoading } from 'core/classes/utils';
+import withLoader from 'src/react/_hocs/withLoader';
 import urlGetParameter from 'src/utils/url/urlGetParameter';
 import request from 'core/utils/request';
 import Icon from 'src/react/_components/Icon/Icon';
 import SW from './ResetPassword.swiss';
 
+@withLoader
 export default class ResetPassword extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       newPass: ''
     };
-    setupLoading(this);
   }
   componentWillMount() {
-    this.setLoading('verify');
+    const { loader } = this.props;
+    loader.set('verify');
     request('me.verifyResetToken', {
       resetToken: urlGetParameter('token')
     }).then(res => {
       if (res && res.ok) {
-        this.clearLoading('verify');
+        loader.clear('verify');
       } else {
-        this.clearLoading('verify');
-        this.clearLoading('reset', 'This token is no longer valid');
+        loader.clear('verify');
+        loader.success('reset', 'This token is no longer valid');
       }
     });
   }
@@ -33,21 +34,22 @@ export default class ResetPassword extends PureComponent {
   };
   onReset = () => {
     const { newPass } = this.state;
+    const { loader } = this.props;
     if (!newPass.length) {
       return;
     }
-    this.setLoading('reset');
+    loader.set('reset');
     request('me.resetPassword', {
       resetToken: urlGetParameter('token'),
       password: newPass
     }).then(res => {
       if (res && res.ok) {
-        this.clearLoading(
+        loader.success(
           'reset',
           'Your password has been reset. Try login again now.'
         );
       } else {
-        this.clearLoading('reset', 'Something went wrong');
+        loader.success('reset', 'Something went wrong');
       }
       console.log(res);
     });
@@ -56,14 +58,16 @@ export default class ResetPassword extends PureComponent {
     this.setState({ newPass: e.target.value });
   };
   renderLoading() {
-    if (!this.isLoading('verify')) {
+    const { loader } = this.props;
+    if (!loader.check('verify')) {
       return undefined;
     }
     return <SW.Loading className="loading">Loading</SW.Loading>;
   }
   renderForm() {
-    const success = this.getLoading('reset').success;
-    if (this.isLoading('verify') || success) {
+    const { loader } = this.props;
+    const success = loader.get('reset').success;
+    if (loader.check('verify') || success) {
       return undefined;
     }
     return (
@@ -89,9 +93,10 @@ export default class ResetPassword extends PureComponent {
     );
   }
   renderButton() {
+    const { loader } = this.props;
     return (
       <SW.Button className="button" ref="button" onClick={this.onReset}>
-        {this.isLoading('reset') ? (
+        {loader.check('reset') ? (
           <Icon icon="loader" width="12" height="12" />
         ) : (
           'Reset'
@@ -100,7 +105,8 @@ export default class ResetPassword extends PureComponent {
     );
   }
   renderSuccess() {
-    const success = this.getLoading('reset').success;
+    const { loader } = this.props;
+    const success = loader.get('reset').success;
     if (!success) {
       return undefined;
     }
