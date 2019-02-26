@@ -19,12 +19,14 @@ export default endpointCreate(
     // Get inputs
     const { input, user_id } = res.locals;
     const { type, cursor, fetch_new } = input;
-    let { limit } = input;
-    limit = limit || 20;
+
+    const limit = input.limit || 20;
+
     const values = [user_id, limit + 1];
+
     let pagination = '';
     if (cursor) {
-      pagination = `AND d.last_comment_at ${fetch_new ? '>' : '<'} $3`;
+      pagination = `AND d.last_comment_at ${fetch_new ? '>=' : '<='} $3`;
       values.push(cursor);
     }
 
@@ -43,13 +45,9 @@ export default endpointCreate(
       `,
       values
     );
-    let discussions = discussionsRes.rows;
 
-    let has_more = false;
-    if (discussions.length >= limit + 1) {
-      has_more = true;
-      discussions = discussions.slice(0, limit);
-    }
+    const has_more = discussionsRes.rows.length > limit;
+    const discussions = discussionsRes.rows.slice(0, limit);
 
     res.locals.output = {
       discussions,

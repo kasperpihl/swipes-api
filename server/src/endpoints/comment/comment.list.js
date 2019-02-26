@@ -21,10 +21,17 @@ export default endpointCreate(
   async (req, res) => {
     // Get inputs
     const { input, user_id } = res.locals;
-    const { discussion_id, attachments_only } = input;
+    const { discussion_id, attachments_only, cursor, fetch_new } = input;
 
-    const skip = input.skip || 0;
     const limit = input.limit || 20;
+
+    const values = [discussion_id, limit + 1];
+
+    let pagination = '';
+    if (cursor) {
+      pagination = `AND sent_at ${fetch_new ? '>=' : '<='} $3`;
+      values.push(cursor);
+    }
 
     const commentRes = await query(
       `
@@ -37,11 +44,11 @@ export default endpointCreate(
           AND ${sqlCheckPermissions('granted_to', user_id)}
         )
         ${attachments_only ? 'AND attachments IS NOT NULL' : ''}
+        ${pagination}
         ORDER BY sent_at DESC
         LIMIT $2
-        OFFSET $3
       `,
-      [discussion_id, limit + 1, skip]
+      values
     );
 
     const has_more = commentRes.rows.length > limit;
@@ -49,7 +56,6 @@ export default endpointCreate(
 
     res.locals.output = {
       comments,
-      skip,
       limit,
       has_more
     };

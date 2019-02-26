@@ -20,16 +20,16 @@ export default class Attachment extends PureComponent {
   }
   handleClick = e => {
     const { nav, attachment, browser } = this.props;
-    const type = attachment.get('type');
+    const type = attachment.type;
     if (type === 'url') {
-      return browser(nav.side, attachment.get('id'));
+      return browser(nav.side, attachment.id);
     }
     if (type === 'note') {
       return nav.openRight({
         screenId: 'Note',
         crumbTitle: 'Note',
         props: {
-          noteId: attachment.get('id')
+          noteId: attachment.id
         }
       });
     }
@@ -38,7 +38,7 @@ export default class Attachment extends PureComponent {
       screenId: 'File',
       crumbTitle: 'File',
       props: {
-        fileId: attachment.get('id')
+        fileId: attachment.id
       }
     });
   };
@@ -57,7 +57,7 @@ export default class Attachment extends PureComponent {
   };
   getIcon() {
     const { attachment } = this.props;
-    switch (attachment.get('type')) {
+    switch (attachment.type) {
       case 'url':
         return 'Hyperlink';
       case 'note':
@@ -83,9 +83,7 @@ export default class Attachment extends PureComponent {
             hasCloseIcon={!!showCloseIcon}
           />
         </SW.IconContainer>
-        <SW.Text hasCloseIcon={!!showCloseIcon}>
-          {attachment.get('title')}
-        </SW.Text>
+        <SW.Text hasCloseIcon={!!showCloseIcon}>{attachment.title}</SW.Text>
       </SW.ATag>
     );
   }

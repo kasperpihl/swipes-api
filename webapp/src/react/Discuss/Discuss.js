@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import SW from './Discuss.swiss';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
 import DiscussionList from 'src/react/Discussion/List/DiscussionList';
-import HOCDiscussionOverview from 'src/react/Discussion/Overview/HOCDiscussionOverview';
+import DiscussionOverview from 'src/react/Discussion/Overview/DiscussionOverview';
 import TabBar from 'src/react/_components/TabBar/TabBar';
 import { withOptimist } from 'react-optimist';
 import SWView from 'src/react/_Layout/view-controller/SWView';
@@ -80,10 +80,7 @@ export default class Discuss extends PureComponent {
           </SW.LeftSide>
           <SW.RightSide viewWidth={nav.width}>
             {selectedId && (
-              <HOCDiscussionOverview
-                key={selectedId}
-                discussionId={selectedId}
-              />
+              <DiscussionOverview key={selectedId} discussionId={selectedId} />
             )}
           </SW.RightSide>
         </SW.ParentWrapper>
