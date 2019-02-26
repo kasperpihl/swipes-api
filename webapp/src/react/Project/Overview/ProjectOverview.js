@@ -1,34 +1,33 @@
 import React, { PureComponent } from 'react';
 import SW from './ProjectOverview.swiss';
-import withRequests from 'core/components/withRequests';
+// import withRequests from 'core/components/withRequests';
 import ProjectProvider from 'core/react/_hocs/Project/ProjectProvider';
 import ProjectStateManager from 'core/classes/ProjectStateManager';
 import ProjectTask from 'src/react/Project/Task/ProjectTask';
 import SWView from 'src/react/_Layout/view-controller/SWView';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
 import Button from 'src/react/_components/Button/Button';
-import Loader from 'src/react/_components/loaders/Loader';
 import SideHeader from 'src/react/_components/SideHeader/SideHeader';
 import withNav from 'src/react/_hocs/Nav/withNav';
 
 @withNav
-@withRequests(
-  {
-    project: {
-      request: {
-        url: 'project.get',
-        body: props => ({
-          project_id: props.projectId
-        }),
-        resPath: 'result'
-      },
-      cache: {
-        path: props => ['project', props.projectId]
-      }
-    }
-  },
-  { renderLoader: () => <Loader center /> }
-)
+// @withRequests(
+//   {
+//     project: {
+//       request: {
+//         url: 'project.get',
+//         body: props => ({
+//           project_id: props.projectId
+//         }),
+//         resPath: 'result'
+//       },
+//       cache: {
+//         path: props => ['project', props.projectId]
+//       }
+//     }
+//   },
+//   { renderLoader: () => <Loader center /> }
+// )
 export default class ProjectOverview extends PureComponent {
   static sizes = [750];
   constructor(props) {
