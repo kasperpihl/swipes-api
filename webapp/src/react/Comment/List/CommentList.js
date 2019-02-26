@@ -8,9 +8,7 @@ import CommentItem from 'src/react/Comment/Item/CommentItem';
 import EmptyState from 'src/react/_components/EmptyState/EmptyState';
 import SectionHeader from 'src/react/_components/SectionHeader/SectionHeader';
 import useUpdate from 'core/react/_hooks/useUpdate';
-import SWView from 'src/react/_Layout/view-controller/SWView';
 
-const kTimeDifference = 30;
 export default connect(
   state => ({
     myId: state.me.get('user_id')
