@@ -2,7 +2,7 @@ import React from 'react';
 import { fromJS } from 'immutable';
 import SW from './PlanOverview.swiss';
 import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
-import SWView from 'src/react/_Layout/view-controller/SWView';
+import CardContent from 'src/react/_components/Card/Content/CardContent';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
 import PlanSide from 'src/react/Plan/Side/PlanSide';
 import useUpdate from 'core/react/_hooks/useUpdate';
@@ -26,7 +26,7 @@ export default function PlanOverview({ planId }) {
 
   const plan = fromJS(req.result.plan);
   return (
-    <SWView
+    <CardContent
       noframe
       header={<CardHeader padding={30} title={plan.get('title')} />}
     >
@@ -34,6 +34,6 @@ export default function PlanOverview({ planId }) {
         <PlanSide plan={plan} />
         <SW.TasksWrapper>Here will be many tasks</SW.TasksWrapper>
       </SW.Wrapper>
-    </SWView>
+    </CardContent>
   );
 }

@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import withLoader from 'src/react/_hocs/withLoader';
 import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
@@ -8,7 +8,6 @@ import contextMenu from 'src/utils/contextMenu';
 import ListMenu from 'src/react/_components/ListMenu/ListMenu';
 import withNav from 'src/react/_hocs/Nav/withNav';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
-import orgGetBelonging from 'core/utils/org/orgGetBelonging';
 import TooltipUsers from 'src/react/_components/TooltipUsers/TooltipUsers';
 import request from 'core/utils/request';
 
@@ -128,8 +127,8 @@ export default class DiscussionHeader extends PureComponent {
     } = this.props;
     const topic = discussion.topic;
     const subtitle = {
-      ownedBy: 'UT5UFVX2I',
-      members: ['me'],
+      ownedBy: discussion.owned_by,
+      members: Object.keys(discussion.followers),
       privacy: 'public'
     };
 

@@ -4,7 +4,7 @@ import { fromJS } from 'immutable';
 import useNav from 'src/react/_hooks/useNav';
 import useRequest from 'core/react/_hooks/useRequest';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
-import SWView from 'src/react/_Layout/view-controller/SWView';
+import CardContent from 'src/react/_components/Card/Content/CardContent';
 import Button from 'src/react/_components/Button/Button';
 import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
 
@@ -34,7 +34,7 @@ export default function PlanList() {
   });
 
   return (
-    <SWView
+    <CardContent
       noframe
       header={
         <CardHeader padding={30} title="Plans">
@@ -55,6 +55,6 @@ export default function PlanList() {
             )
         )}
       </SW.Wrapper>
-    </SWView>
+    </CardContent>
   );
 }

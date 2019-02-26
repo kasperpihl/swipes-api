@@ -1,34 +1,33 @@
 import React, { PureComponent } from 'react';
 import SW from './ProjectOverview.swiss';
-import withRequests from 'core/components/withRequests';
-import ProjectProvider from 'core/components/project/ProjectProvider';
+// import withRequests from 'core/components/withRequests';
+import ProjectProvider from 'core/react/_hocs/Project/ProjectProvider';
 import ProjectStateManager from 'core/classes/ProjectStateManager';
 import ProjectTask from 'src/react/Project/Task/ProjectTask';
-import SWView from 'src/react/_Layout/view-controller/SWView';
+import CardContent from 'src/react/_components/Card/Content/CardContent';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
 import Button from 'src/react/_components/Button/Button';
-import Loader from 'src/react/_components/loaders/Loader';
 import SideHeader from 'src/react/_components/SideHeader/SideHeader';
 import withNav from 'src/react/_hocs/Nav/withNav';
 
 @withNav
-@withRequests(
-  {
-    project: {
-      request: {
-        url: 'project.get',
-        body: props => ({
-          project_id: props.projectId
-        }),
-        resPath: 'result'
-      },
-      cache: {
-        path: props => ['project', props.projectId]
-      }
-    }
-  },
-  { renderLoader: () => <Loader center /> }
-)
+// @withRequests(
+//   {
+//     project: {
+//       request: {
+//         url: 'project.get',
+//         body: props => ({
+//           project_id: props.projectId
+//         }),
+//         resPath: 'result'
+//       },
+//       cache: {
+//         path: props => ['project', props.projectId]
+//       }
+//     }
+//   },
+//   { renderLoader: () => <Loader center /> }
+// )
 export default class ProjectOverview extends PureComponent {
   static sizes = [750];
   constructor(props) {
@@ -202,7 +201,10 @@ export default class ProjectOverview extends PureComponent {
     const { visibleOrder, projectName } = this.state;
 
     return (
-      <SWView noframe header={<CardHeader padding={30} title={projectName} />}>
+      <CardContent
+        noframe
+        header={<CardHeader padding={30} title={projectName} />}
+      >
         <ProjectProvider stateManager={this.stateManager}>
           <SW.Wrapper>
             {this.renderSidebar()}
@@ -213,7 +215,7 @@ export default class ProjectOverview extends PureComponent {
             </SW.TasksWrapper>
           </SW.Wrapper>
         </ProjectProvider>
-      </SWView>
+      </CardContent>
     );
   }
 }

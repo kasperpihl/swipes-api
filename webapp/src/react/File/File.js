@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import withLoader from 'src/react/_hocs/withLoader';
 import Loader from 'src/react/_components/loaders/Loader';
-import SWView from 'src/react/_Layout/view-controller/SWView';
+import CardContent from 'src/react/_components/Card/Content/CardContent';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
 import Button from 'src/react/_components/Button/Button';
 import * as Files from './registerFileTypes';
@@ -103,16 +103,8 @@ export default class File extends PureComponent {
 
     return (
       <CardHeader title={file.file_name}>
-        <Button
-          title="Open in browser"
-          onClick={this.handleOpenInBrowser}
-        />
-        <Button
-          download
-          title="Download"
-          target="_blank"
-          href={file.s3_url}
-        />
+        <Button title="Open in browser" onClick={this.handleOpenInBrowser} />
+        <Button download title="Download" target="_blank" href={file.s3_url} />
       </CardHeader>
     );
   }
@@ -126,7 +118,7 @@ export default class File extends PureComponent {
     const error = loader.get('fetch').error || loader.get('file').error;
 
     return (
-      <SWView header={this.renderHeader()}>
+      <CardContent header={this.renderHeader()}>
         {error && this.renderError(error)}
         {isLoading && (
           <SW.LoaderWrapper>
@@ -147,7 +139,7 @@ export default class File extends PureComponent {
             />
           </SW.FileWrapper>
         )}
-      </SWView>
+      </CardContent>
     );
   }
 }

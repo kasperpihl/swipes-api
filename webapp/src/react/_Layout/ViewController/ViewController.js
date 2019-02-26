@@ -21,7 +21,7 @@ const kSidebarExpandedThreshold = 100; // pixels that sidebar needs to be expand
     sidebarSetExpanded: mainActions.sidebarSetExpanded
   }
 )
-export default class extends PureComponent {
+export default class ViewController extends PureComponent {
   state = {
     appWidth: -1
   };

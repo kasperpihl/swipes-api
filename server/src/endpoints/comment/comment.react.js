@@ -72,6 +72,10 @@ export default endpointCreate(
         data: commentRes.rows[0]
       }
     ]);
+
+    res.locals.output = {
+      reaction
+    };
   }
 ).background(async (req, res) => {
   const { user_id } = res.locals;

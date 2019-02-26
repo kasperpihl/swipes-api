@@ -7,7 +7,7 @@ import OrganizationPendingInvites from 'src/react/Organization/Invite/PendingInv
 import SW from './Organization.swiss';
 
 import propsOrPop from 'src/react/_hocs/propsOrPop';
-import SWView from 'src/react/_Layout/view-controller/SWView';
+import CardContent from 'src/react/_components/Card/Content/CardContent';
 
 @connect((state, props) => ({
   meInOrg: state.organizations.getIn([
@@ -80,7 +80,7 @@ export default class Organization extends PureComponent {
     const userStatus = tabIndex === 0 ? 'active' : 'disabled';
 
     return (
-      <SWView header={this.renderHeader()}>
+      <CardContent header={this.renderHeader()}>
         <SW.Wrapper>
           <OrganizationInviteInput
             organizationId={organization.get('organization_id')}
@@ -102,7 +102,7 @@ export default class Organization extends PureComponent {
               .toList()}
           </SW.UsersWrapper>
         </SW.Wrapper>
-      </SWView>
+      </CardContent>
     );
   }
 }

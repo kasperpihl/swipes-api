@@ -24,14 +24,10 @@ module.exports = {
     alias: {
       // 'swiss-react': path.resolve(__dirname, '../../../swiss-react/dist/es'),
       // 'react-optimist': path.resolve(__dirname, '../../opensource/react-optimist/dist/es'),
-      src: path.resolve(__dirname, 'src'),
-      styles: path.resolve(__dirname, 'src/scss'),
       core: '@swipesapp/core/dist',
-      // 'core': path.resolve(
-      //   __dirname,
-      //   '../../packages/swipes-core-js/dist'
-      // ),
-      icons: path.resolve(__dirname, 'src/react/_components')
+      // core: path.resolve(__dirname, '../../packages/core/dist'),
+      src: path.resolve(__dirname, 'src'),
+      styles: path.resolve(__dirname, 'src/scss')
     },
     extensions: ['.js', '.scss']
   },
