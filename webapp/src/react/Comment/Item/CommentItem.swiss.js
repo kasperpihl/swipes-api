@@ -1,5 +1,5 @@
 import { styleSheet } from 'swiss-react';
-import TimeAgo from 'swipes-core-js/components/TimeAgo';
+import TimeAgo from 'core/components/TimeAgo';
 
 export default styleSheet('CommentItem', {
   Container: {

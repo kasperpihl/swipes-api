@@ -1,12 +1,12 @@
 import { useState, useCallback, useRef } from 'react';
 import useDebouncedCallback from 'src/react/_hooks/useDebouncedCallback';
-import useRequest from 'src/react/_hooks/useRequest';
-import useUpdate from 'src/react/_hooks/useUpdate';
+import useRequest from 'core/react/_hooks/useRequest';
+import useUpdate from 'core/react/_hooks/useUpdate';
 import useBeforeUnload from 'src/react/_hooks/useBeforeUnload';
 import useUnmountedRef from 'src/react/_hooks/useUnmountedRef';
 import { convertToRaw } from 'draft-js';
 import getDiffServerClient from 'src/utils/draft-js/getDiffServerClient';
-import request from 'swipes-core-js/utils/request';
+import request from 'core/utils/request';
 
 export default function useSyncedNote(noteId) {
   const unmountedRef = useUnmountedRef();

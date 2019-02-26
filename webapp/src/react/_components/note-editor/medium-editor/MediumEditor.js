@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
-import { traverseElement } from 'swipes-core-js/classes/utils';
+import { traverseElement } from 'core/classes/utils';
 import { getVisibleSelectionRect } from 'draft-js';
 import ControlPanel from './ControlPanel';
 import prefixAll from 'inline-style-prefixer/static';

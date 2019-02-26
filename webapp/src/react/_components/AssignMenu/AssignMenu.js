@@ -4,7 +4,7 @@ import { fromJS } from 'immutable';
 import cachedCallback from 'src/utils/cachedCallback';
 import SW from './AssignMenu.swiss';
 import UserImage from 'src/react/_components/UserImage/UserImage';
-import userGetFullName from 'swipes-core-js/utils/user/userGetFullName';
+import userGetFullName from 'core/utils/user/userGetFullName';
 import Button from 'src/react/_components/Button/Button';
 
 @connect((state, props) => ({

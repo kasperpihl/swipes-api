@@ -1,4 +1,4 @@
-import storeGet from 'swipes-core-js/utils/store/storeGet';
+import storeGet from 'core/utils/store/storeGet';
 import * as mainActions from 'src/redux/main/mainActions';
 
 export default (component, options, props) => {

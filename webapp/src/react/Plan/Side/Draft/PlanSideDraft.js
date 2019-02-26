@@ -3,7 +3,7 @@ import SW from './PlanSideDraft.swiss';
 import PlanSideAlert from 'src/react/Plan/Side/Alert/PlanSideAlert';
 import PlanSidePicker from 'src/react/Plan/Side/Picker/PlanSidePicker';
 import SideHeader from 'src/react/_components/SideHeader/SideHeader';
-import request from 'swipes-core-js/utils/request';
+import request from 'core/utils/request';
 import useLoader from 'src/react/_hooks/useLoader';
 import Button from 'src/react/_components/Button/Button';
 

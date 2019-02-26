@@ -1,5 +1,5 @@
 import * as types from '../constants';
-import request from 'swipes-core-js/utils/request';
+import request from 'core/utils/request';
 
 export const fetch = invitationToken => dispatch => {
   request('organization.inviteReadToken', {

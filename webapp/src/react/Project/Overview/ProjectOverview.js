@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import SW from './ProjectOverview.swiss';
-import withRequests from 'swipes-core-js/components/withRequests';
-import ProjectProvider from 'swipes-core-js/components/project/ProjectProvider';
-import ProjectStateManager from 'swipes-core-js/classes/ProjectStateManager';
+import withRequests from 'core/components/withRequests';
+import ProjectProvider from 'core/components/project/ProjectProvider';
+import ProjectStateManager from 'core/classes/ProjectStateManager';
 import ProjectTask from 'src/react/Project/Task/ProjectTask';
 import SWView from 'src/react/_Layout/view-controller/SWView';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';

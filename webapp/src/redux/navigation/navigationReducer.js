@@ -1,5 +1,5 @@
 import { fromJS } from 'immutable';
-import * as coreTypes from 'swipes-core-js/redux/constants';
+import * as coreTypes from 'core/redux/constants';
 import * as types from '../constants';
 
 const initialState = fromJS({

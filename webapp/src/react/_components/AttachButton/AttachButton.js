@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
-import fileUpload from 'swipes-core-js/utils/fileUpload';
-import request from 'swipes-core-js/utils/request';
+import fileUpload from 'core/utils/fileUpload';
+import request from 'core/utils/request';
 import withLoader from 'src/react/_hocs/withLoader';
 import contextMenu from 'src/utils/contextMenu';
 import Button from 'src/react/_components/Button/Button';

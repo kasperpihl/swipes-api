@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
-import { setupLoading } from 'swipes-core-js/classes/utils';
+import { setupLoading } from 'core/classes/utils';
 import urlGetParameter from 'src/utils/url/urlGetParameter';
-import request from 'swipes-core-js/utils/request';
+import request from 'core/utils/request';
 import Icon from 'src/react/_components/Icon/Icon';
 import SW from './ResetPassword.swiss';
 

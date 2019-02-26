@@ -26,8 +26,8 @@ module.exports = {
       // 'react-optimist': path.resolve(__dirname, '../../opensource/react-optimist/dist/es'),
       src: path.resolve(__dirname, 'src'),
       styles: path.resolve(__dirname, 'src/scss'),
-      'swipes-core-js': '@swipesapp/core/dist',
-      // 'swipes-core-js': path.resolve(
+      core: '@swipesapp/core/dist',
+      // 'core': path.resolve(
       //   __dirname,
       //   '../../packages/swipes-core-js/dist'
       // ),

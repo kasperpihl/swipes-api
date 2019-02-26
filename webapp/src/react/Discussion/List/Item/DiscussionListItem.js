@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 
-import timeGetDayOrTime from 'swipes-core-js/utils/time/timeGetDayOrTime';
+import timeGetDayOrTime from 'core/utils/time/timeGetDayOrTime';
 import SW from './DiscussionListItem.swiss';
-import orgGetBelonging from 'swipes-core-js/utils/org/orgGetBelonging';
-import userGetFirstName from 'swipes-core-js/utils/user/userGetFirstName';
+import orgGetBelonging from 'core/utils/org/orgGetBelonging';
+import userGetFirstName from 'core/utils/user/userGetFirstName';
 
 @connect(state => ({
   myId: state.me.get('user_id')

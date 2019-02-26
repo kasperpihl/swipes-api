@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import ProfileHeader from 'src/react/Profile/Header/ProfileHeader';
 import ProfileOrg from 'src/react/Profile/Org/ProfileOrg.js';
 import withLoader from 'src/react/_hocs/withLoader';
-import request from 'swipes-core-js/utils/request';
+import request from 'core/utils/request';
 import FormModal from 'src/react/_components/FormModal/FormModal';
 import withNav from 'src/react/_hocs/Nav/withNav';
 import SW from './Profile.swiss';

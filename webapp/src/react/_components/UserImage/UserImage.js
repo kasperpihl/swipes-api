@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import userGetInitials from 'swipes-core-js/utils/user/userGetInitials';
-import userGetFullName from 'swipes-core-js/utils/user/userGetFullName';
+import userGetInitials from 'core/utils/user/userGetInitials';
+import userGetFullName from 'core/utils/user/userGetFullName';
 
 import SW from './UserImage.swiss';
 

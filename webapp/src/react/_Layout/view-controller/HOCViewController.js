@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as views from 'src/react/registerScreens';
 import * as mainActions from 'src/redux/main/mainActions';
-import throttle from 'swipes-core-js/utils/throttle';
+import throttle from 'core/utils/throttle';
 import NavProvider from 'src/react/_hocs/Nav/NavProvider';
 import Card from 'src/react/_Layout/Card/Card';
 import SW from './ViewController.swiss';

@@ -1,9 +1,9 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import SW from './ProjectList.swiss';
 import compose from 'src/utils/compose';
 import useNav from 'src/react/_hooks/useNav';
-import withRequests from 'swipes-core-js/components/withRequests';
+import withRequests from 'core/components/withRequests';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
 import SWView from 'src/react/_Layout/view-controller/SWView';
 import Button from 'src/react/_components/Button/Button';
@@ -44,11 +44,7 @@ function ProjectList({ me, projects }) {
     <SWView
       noframe
       header={
-        <CardHeader
-          padding={30}
-          title="Projects"
-          subtitle="Store all your projects here"
-        >
+        <CardHeader title="Projects">
           <Button icon="Plus" onClick={handleNewProject} />
         </CardHeader>
       }

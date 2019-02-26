@@ -8,9 +8,9 @@ import contextMenu from 'src/utils/contextMenu';
 import ListMenu from 'src/react/_components/ListMenu/ListMenu';
 import withNav from 'src/react/_hocs/Nav/withNav';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
-import orgGetBelonging from 'swipes-core-js/utils/org/orgGetBelonging';
+import orgGetBelonging from 'core/utils/org/orgGetBelonging';
 import TooltipUsers from 'src/react/_components/TooltipUsers/TooltipUsers';
-import request from 'swipes-core-js/utils/request';
+import request from 'core/utils/request';
 
 @withNav
 @withLoader

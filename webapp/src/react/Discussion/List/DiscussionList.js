@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import DiscussionListItems from 'src/react/Discussion/List/Items/DiscussionListItems';
 import PaginationScrollToMore from 'src/react/_components/pagination/PaginationScrollToMore';
 
-import usePaginationRequest from 'src/react/_hooks/usePaginationRequest';
-import useUpdate from 'src/react/_hooks/useUpdate';
+import usePaginationRequest from 'core/react/_hooks/usePaginationRequest';
+import useUpdate from 'core/react/_hooks/useUpdate';
 import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
 
 import SW from './DiscussionList.swiss';

@@ -3,7 +3,7 @@ import SW from './PlanSidePicker.swiss';
 import moment from 'moment';
 import cachedCallback from 'src/utils/cachedCallback';
 import DayTracker from 'src/react/_components/DayTracker/DayTracker';
-import request from 'swipes-core-js/utils/request';
+import request from 'core/utils/request';
 
 export default function PlanSidePicker({ plan }) {
   const defTwoWeekState =

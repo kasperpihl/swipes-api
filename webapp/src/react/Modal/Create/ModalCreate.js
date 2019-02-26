@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import request from 'swipes-core-js/utils/request';
+import request from 'core/utils/request';
 import withLoader from 'src/react/_hocs/withLoader';
 import OrgPicker from 'src/react/_components/OrgPicker/OrgPicker';
 import cachedCallback from 'src/utils/cachedCallback';

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import withLoader from 'src/react/_hocs/withLoader';
-import request from 'swipes-core-js/utils/request';
+import request from 'core/utils/request';
 import SW from './OrganizationPendingInvites.swiss';
 
 @withLoader

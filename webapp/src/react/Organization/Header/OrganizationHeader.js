@@ -7,7 +7,7 @@ import ListMenu from 'src/react/_components/ListMenu/ListMenu';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
 import SW from './OrganizationHeader.swiss';
 import withNav from 'src/react/_hocs/Nav/withNav';
-import request from 'swipes-core-js/utils/request';
+import request from 'core/utils/request';
 
 const kDelete = {
   title: 'Delete organization'

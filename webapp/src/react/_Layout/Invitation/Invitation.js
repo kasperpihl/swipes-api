@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { withOptimist } from 'react-optimist';
-import request from 'swipes-core-js/utils/request';
+import request from 'core/utils/request';
 import * as invitationActions from 'src/redux/invitation/invitationActions';
 import SW from './Invitation.swiss';
 

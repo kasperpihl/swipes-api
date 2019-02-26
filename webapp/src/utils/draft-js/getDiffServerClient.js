@@ -1,5 +1,5 @@
 import deepEqual from 'deep-equal';
-import randomString from 'swipes-core-js/utils/randomString';
+import randomString from 'core/utils/randomString';
 
 const isEqualBlocks = (block1, block2, entityMap1, entityMap2) => {
   // Check direct comparable stuff

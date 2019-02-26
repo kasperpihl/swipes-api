@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { setupCachedCallback } from 'swipes-core-js/classes/utils';
+import { setupCachedCallback } from 'core/classes/utils';
 import getDiffServerClient from 'src/utils/draft-js/getDiffServerClient';
 import Button from 'src/react/_components/Button/Button';
 import { convertToRaw, convertFromRaw, EditorState } from 'draft-js';

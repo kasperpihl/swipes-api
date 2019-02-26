@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Elements, injectStripe } from 'react-stripe-elements';
 import withLoader from 'src/react/_hocs/withLoader';
-import request from 'swipes-core-js/utils/request';
+import request from 'core/utils/request';
 import BillingPaymentInput from 'src/react/Billing/Payment/Input/BillingPaymentInput';
 import Button from 'src/react/_components/Button/Button';
 

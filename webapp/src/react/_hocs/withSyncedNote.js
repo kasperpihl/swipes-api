@@ -4,8 +4,8 @@ import { convertToRaw } from 'draft-js';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 import getDiffServerClient from 'src/utils/draft-js/getDiffServerClient';
 
-import debounce from 'swipes-core-js/utils/debounce';
-import request from 'swipes-core-js/utils/request';
+import debounce from 'core/utils/debounce';
+import request from 'core/utils/request';
 
 export default WrappedComponent => {
   class WithSyncedNote extends PureComponent {

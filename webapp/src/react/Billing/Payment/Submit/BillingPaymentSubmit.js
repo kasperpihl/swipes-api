@@ -3,7 +3,7 @@ import useLoader from 'src/react/_hooks/useLoader';
 import { injectStripe } from 'react-stripe-elements';
 import SW from './BillingPaymentSubmit.swiss';
 import BillingPaymentInput from 'src/react/Billing/Payment/Input/BillingPaymentInput';
-import request from 'swipes-core-js/utils/request';
+import request from 'core/utils/request';
 import billingGetPrice from 'src/utils/billing/billingGetPrice';
 
 export default injectStripe(function BillingPaymentSubmit({

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import PaginationProvider from 'swipes-core-js/components/pagination/PaginationProvider';
+import PaginationProvider from 'core/components/pagination/PaginationProvider';
 import DiscussionOverview from './DiscussionOverview';
-import request from 'swipes-core-js/utils/request';
-import useRequest from 'src/react/_hooks/useRequest';
+import request from 'core/utils/request';
+import useRequest from 'core/react/_hooks/useRequest';
 
 import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import useNav from 'src/react/_hooks/useNav';
 import DayTracker from 'src/react/_components/DayTracker/DayTracker';
-import orgGetBelonging from 'swipes-core-js/utils/org/orgGetBelonging';
+import orgGetBelonging from 'core/utils/org/orgGetBelonging';
 import SW from './PlanListItem.swiss';
 
 export default function PlanListItem({ plan }) {

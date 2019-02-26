@@ -5,7 +5,7 @@ import UserImage from 'src/react/_components/UserImage/UserImage';
 import AttachButton from 'src/react/_components/AttachButton/AttachButton';
 import Attachment from 'src/react/_components/attachment/Attachment';
 
-import request from 'swipes-core-js/utils/request';
+import request from 'core/utils/request';
 
 import SW from './CommentComposer.swiss';
 

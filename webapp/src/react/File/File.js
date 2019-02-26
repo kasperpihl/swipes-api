@@ -6,7 +6,7 @@ import CardHeader from 'src/react/_components/CardHeader/CardHeader';
 import Button from 'src/react/_components/Button/Button';
 import * as Files from './registerFileTypes';
 import SW from './File.swiss';
-import request from 'swipes-core-js/utils/request';
+import request from 'core/utils/request';
 
 @withLoader
 export default class File extends PureComponent {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import useLoader from 'src/react/_hooks/useLoader';
-import request from 'swipes-core-js/utils/request';
+import request from 'core/utils/request';
 import SW from './OrganizationInviteInput.swiss';
 
 export default function OrganizationInviteInput({ organizationId }) {

@@ -6,7 +6,7 @@ import DiscussionHeader from '../Header/DiscussionHeader';
 import CommentComposer from 'src/react/Comment/Composer/CommentComposer';
 import CommentItem from 'src/react/Comment/Item/CommentItem';
 import SWView from 'src/react/_Layout/view-controller/SWView';
-import withPagination from 'swipes-core-js/components/pagination/withPagination';
+import withPagination from 'core/components/pagination/withPagination';
 import PaginationScrollToMore from 'src/react/_components/pagination/PaginationScrollToMore';
 
 @withPagination

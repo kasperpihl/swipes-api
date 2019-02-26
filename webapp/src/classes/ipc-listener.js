@@ -1,6 +1,6 @@
 import * as mainActions from 'src/redux/main/mainActions';
 
-import userGetFirstName from 'swipes-core-js/utils/user/userGetFirstName';
+import userGetFirstName from 'core/utils/user/userGetFirstName';
 
 /* global nodeRequire*/
 const isElectron = window.process && window.process.versions.electron;

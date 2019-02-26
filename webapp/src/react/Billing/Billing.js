@@ -3,7 +3,7 @@ import { Elements } from 'react-stripe-elements';
 import { connect } from 'react-redux';
 
 import withLoader from 'src/react/_hocs/withLoader';
-import request from 'swipes-core-js/utils/request';
+import request from 'core/utils/request';
 import propsOrPop from 'src/react/_hocs/propsOrPop';
 import SWView from 'src/react/_Layout/view-controller/SWView';
 

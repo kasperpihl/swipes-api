@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 
-import timeGetTimeString from 'swipes-core-js/utils/time/timeGetTimeString';
+import timeGetTimeString from 'core/utils/time/timeGetTimeString';
 import UserImage from 'src/react/_components/UserImage/UserImage';
 import Attachment from 'src/react/_components/attachment/Attachment';
 
@@ -9,7 +9,7 @@ import parseNewLines from 'src/utils/parseNewLines';
 import parseLinks from 'src/utils/parseLinks';
 import parseMentions from 'src/utils/parseMentions';
 
-import userGetFullName from 'swipes-core-js/utils/user/userGetFullName';
+import userGetFullName from 'core/utils/user/userGetFullName';
 
 import CommentReaction from '../Reaction/CommentReaction';
 import SW from './CommentItem.swiss';

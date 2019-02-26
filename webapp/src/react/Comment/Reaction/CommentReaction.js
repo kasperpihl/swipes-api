@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
 import { withOptimist } from 'react-optimist';
-import request from 'swipes-core-js/utils/request';
+import request from 'core/utils/request';
 import TooltipUsers from 'src/react/_components/TooltipUsers/TooltipUsers';
 import SW from './CommentReaction.swiss';
 

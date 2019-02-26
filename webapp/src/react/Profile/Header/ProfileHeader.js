@@ -6,7 +6,7 @@ import FormModal from 'src/react/_components/FormModal/FormModal';
 import UserImage from 'src/react/_components/UserImage/UserImage';
 import SW from './ProfileHeader.swiss';
 import ListMenu from 'src/react/_components/ListMenu/ListMenu';
-import request from 'swipes-core-js/utils/request';
+import request from 'core/utils/request';
 import withNav from 'src/react/_hocs/Nav/withNav';
 
 @withNav

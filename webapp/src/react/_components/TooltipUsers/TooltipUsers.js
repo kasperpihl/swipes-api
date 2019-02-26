@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import UserImage from 'src/react/_components/UserImage/UserImage';
-import userGetFullName from 'swipes-core-js/utils/user/userGetFullName';
+import userGetFullName from 'core/utils/user/userGetFullName';
 
 import SW from './TooltipUsers.swiss';
 

@@ -5,8 +5,8 @@ import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
 import SWView from 'src/react/_Layout/view-controller/SWView';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
 import PlanSide from 'src/react/Plan/Side/PlanSide';
-import useUpdate from 'src/react/_hooks/useUpdate';
-import useRequest from 'src/react/_hooks/useRequest';
+import useUpdate from 'core/react/_hooks/useUpdate';
+import useRequest from 'core/react/_hooks/useRequest';
 
 PlanOverview.sizes = [750];
 export default function PlanOverview({ planId }) {

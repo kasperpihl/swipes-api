@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import request from 'swipes-core-js/utils/request';
+import request from 'core/utils/request';
 import useLoader from 'src/react/_hooks/useLoader';
 import urlGetParameter from 'src/utils/url/urlGetParameter';
 import SW from './Unsubscribe.swiss';

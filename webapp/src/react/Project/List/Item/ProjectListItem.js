@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import SW from './ProjectListItem.swiss';
 import ProgressCircle from 'src/react/_components/ProgressCircle/ProgressCircle';
 import withNav from 'src/react/_hocs/Nav/withNav';
-import orgGetBelonging from 'swipes-core-js/utils/org/orgGetBelonging';
+import orgGetBelonging from 'core/utils/org/orgGetBelonging';
 
 @withNav
 export default class ProjectListItem extends PureComponent {

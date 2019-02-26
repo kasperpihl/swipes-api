@@ -5,7 +5,7 @@ import {
   ContentState,
   convertFromRaw,
 } from 'draft-js';
-import Subscriber from 'swipes-core-js/classes/subscriber';
+import Subscriber from 'core/classes/subscriber';
 
 const standardIterators = [
   'blockRendererFn',

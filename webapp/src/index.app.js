@@ -15,8 +15,8 @@ import configureStore from 'src/redux/configureStore';
 import Analytics from 'src/classes/analytics';
 import IpcListener from 'src/classes/ipc-listener';
 import urlGetParameter from 'src/utils/url/urlGetParameter';
-import { setStore } from 'swipes-core-js/utils/store/storeGet';
-import Socket from 'swipes-core-js/classes/Socket';
+import { setStore } from 'core/utils/store/storeGet';
+import Socket from 'core/classes/Socket';
 import { StripeProvider } from 'react-stripe-elements';
 
 // Init core!

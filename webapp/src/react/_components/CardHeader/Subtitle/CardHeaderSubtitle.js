@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
-import orgGetBelonging from 'swipes-core-js/utils/org/orgGetBelonging';
+import orgGetBelonging from 'core/utils/org/orgGetBelonging';
 import TooltipUsers from 'src/react/_components/TooltipUsers/TooltipUsers';
 import SW from './CardHeaderSubtitle.swiss';
 

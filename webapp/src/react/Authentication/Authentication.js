@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import * as navigationActions from 'src/redux/navigation/navigationActions';
 import { Map } from 'immutable';
 import withLoader from 'src/react/_hocs/withLoader';
-import request from 'swipes-core-js/utils/request';
+import request from 'core/utils/request';
 import Card from 'src/react/_components/Card/Card';
 import Button from 'src/react/_components/Button/Button';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';

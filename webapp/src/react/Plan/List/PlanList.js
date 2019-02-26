@@ -2,7 +2,7 @@ import React from 'react';
 import SW from './PlanList.swiss';
 import { fromJS } from 'immutable';
 import useNav from 'src/react/_hooks/useNav';
-import useRequest from 'src/react/_hooks/useRequest';
+import useRequest from 'core/react/_hooks/useRequest';
 import CardHeader from 'src/react/_components/CardHeader/CardHeader';
 import SWView from 'src/react/_Layout/view-controller/SWView';
 import Button from 'src/react/_components/Button/Button';

@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import Measure from 'react-measure';
 import * as mainActions from 'src/redux/main/mainActions';
-import debounce from 'swipes-core-js/utils/debounce';
+import debounce from 'core/utils/debounce';
 import SW from './ContextMenu.swiss';
 
 @connect(state => ({

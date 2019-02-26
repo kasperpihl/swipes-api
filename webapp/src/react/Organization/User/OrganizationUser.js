@@ -7,7 +7,7 @@ import UserImage from 'src/react/_components/UserImage/UserImage';
 import FormModal from 'src/react/_components/FormModal/FormModal';
 import ListMenu from 'src/react/_components/ListMenu/ListMenu';
 import withNav from 'src/react/_hocs/Nav/withNav';
-import request from 'swipes-core-js/utils/request';
+import request from 'core/utils/request';
 import SW from './OrganizationUser.swiss';
 
 const kPromote = 'Promote to admin';

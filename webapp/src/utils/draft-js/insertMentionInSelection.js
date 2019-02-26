@@ -1,5 +1,5 @@
 import { Editor, EditorState, Modifier } from 'draft-js';
-import userGetFirstName from 'swipes-core-js/utils/user/userGetFirstName';
+import userGetFirstName from 'core/utils/user/userGetFirstName';
 import getTriggerIndexInSelection from './getTriggerIndexInSelection';
 
 export default (editorState, triggerKey, id) => {
