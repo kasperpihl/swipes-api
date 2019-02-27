@@ -1,19 +1,16 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { useContext } from 'react';
 import DiscussionListItems from 'src/react/Discussion/List/Items/DiscussionListItems';
 import PaginationScrollToMore from 'src/react/_components/pagination/PaginationScrollToMore';
 
 import usePaginationRequest from 'core/react/_hooks/usePaginationRequest';
 import useUpdate from 'core/react/_hooks/useUpdate';
 import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
+import { MyIdContext } from 'src/react/contexts';
 
 import SW from './DiscussionList.swiss';
 
-export default connect(state => ({
-  myId: state.me.get('user_id')
-}))(DiscussionList);
-
-function DiscussionList({ myId, type, onSelectItemId }) {
+export default function DiscussionList({ type, onSelectItemId }) {
+  const myId = useContext(MyIdContext);
   const req = usePaginationRequest(
     'discussion.list',
     {
@@ -28,12 +25,7 @@ function DiscussionList({ myId, type, onSelectItemId }) {
 
   useUpdate('discussion', update => {
     if (!update.last_comment) {
-      return req.mergeItems(items =>
-        items.map(item => {
-          if (update.discussion_id !== item.discussion_id) return item;
-          return { ...item, ...update };
-        })
-      );
+      return req.mergeItem(update);
     }
     if (
       (type === 'following' && update.followers[myId]) ||

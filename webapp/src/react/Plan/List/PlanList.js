@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import SW from './PlanList.swiss';
 import { fromJS } from 'immutable';
 import useNav from 'src/react/_hooks/useNav';
@@ -7,6 +7,8 @@ import CardHeader from 'src/react/_components/Card/Header/CardHeader';
 import CardContent from 'src/react/_components/Card/Content/CardContent';
 import Button from 'src/react/_components/Button/Button';
 import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
+import SectionHeader from 'src/react/_components/SectionHeader/SectionHeader';
+
 import PaginationScrollToMore from 'src/react/_components/pagination/PaginationScrollToMore';
 
 import ModalCreate from 'src/react/Modal/Create/ModalCreate';
@@ -56,12 +58,14 @@ export default function PlanList() {
         {['Current', 'Drafts', 'Upcoming', 'Completed'].map(
           sec =>
             sections.get(sec) && (
-              <SW.Section key={sec}>
-                <SW.SectionTitle>{sec}</SW.SectionTitle>
-                {sections.get(sec).map(p => (
-                  <PlanListItem plan={p} key={p.get('plan_id')} />
-                ))}
-              </SW.Section>
+              <Fragment key={sec}>
+                <SectionHeader>{sec}</SectionHeader>
+                <SW.Section key={sec}>
+                  {sections.get(sec).map(p => (
+                    <PlanListItem plan={p} key={p.get('plan_id')} />
+                  ))}
+                </SW.Section>
+              </Fragment>
             )
         )}
         <PaginationScrollToMore req={req} errorLabel="Couldn't get plans." />

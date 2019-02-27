@@ -33,6 +33,7 @@ export default function ProjectOverview({ projectId }) {
   useBeforeUnload(() => {
     stateManager && stateManager.syncHandler.syncIfNeeded();
   });
+
   if (!visibleOrder) {
     return <Loader center />;
   }

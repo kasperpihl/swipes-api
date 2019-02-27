@@ -8,9 +8,5 @@ export default styleSheet('PlanList', {
   Section: {
     _flex: ['row', 'left', 'top'],
     flexWrap: 'wrap'
-  },
-  SectionTitle: {
-    width: '100%',
-    borderBottom: '1px solid $sw3'
   }
 });
