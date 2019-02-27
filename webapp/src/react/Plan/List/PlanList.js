@@ -2,11 +2,12 @@ import React from 'react';
 import SW from './PlanList.swiss';
 import { fromJS } from 'immutable';
 import useNav from 'src/react/_hooks/useNav';
-import useRequest from 'core/react/_hooks/useRequest';
+import usePaginationRequest from 'core/react/_hooks/usePaginationRequest';
 import CardHeader from 'src/react/_components/Card/Header/CardHeader';
 import CardContent from 'src/react/_components/Card/Content/CardContent';
 import Button from 'src/react/_components/Button/Button';
 import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
+import PaginationScrollToMore from 'src/react/_components/pagination/PaginationScrollToMore';
 
 import ModalCreate from 'src/react/Modal/Create/ModalCreate';
 import PlanListItem from './Item/PlanListItem';
@@ -15,8 +16,17 @@ PlanList.sizes = [750];
 
 export default function PlanList() {
   const nav = useNav();
-  const req = useRequest('plan.list');
-  if (req.error || req.loading) {
+  const req = usePaginationRequest(
+    'plan.list',
+    {},
+    {
+      cursorKey: 'skip',
+      idAttribute: 'plan_id',
+      resultPath: 'plans'
+    }
+  );
+
+  if (!req.items) {
     return <RequestLoader req={req} />;
   }
 
@@ -25,7 +35,7 @@ export default function PlanList() {
       type: 'plan'
     });
   };
-  const sections = fromJS(req.result.plans).groupBy(p => {
+  const sections = fromJS(req.items).groupBy(p => {
     if (p.get('completed_at')) return 'Completed';
     if (!p.get('started_at')) return 'Drafts';
     if (p.get('start_date') > new Date().toISOString().slice(0, 10))
@@ -54,6 +64,7 @@ export default function PlanList() {
               </SW.Section>
             )
         )}
+        <PaginationScrollToMore req={req} errorLabel="Couldn't get plans." />
       </SW.Wrapper>
     </CardContent>
   );

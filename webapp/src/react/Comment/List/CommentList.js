@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
 import moment from 'moment';
 import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
 import usePaginationRequest from 'core/react/_hooks/usePaginationRequest';
@@ -9,13 +8,7 @@ import EmptyState from 'src/react/_components/EmptyState/EmptyState';
 import SectionHeader from 'src/react/_components/SectionHeader/SectionHeader';
 import useUpdate from 'core/react/_hooks/useUpdate';
 
-export default connect(
-  state => ({
-    myId: state.me.get('user_id')
-  }),
-  null
-)(CommentList);
-function CommentList({ attachmentsOnly, discussion, scrollRef, ...props }) {
+export default function CommentList({ attachmentsOnly, discussion }) {
   const req = usePaginationRequest(
     'comment.list',
     {

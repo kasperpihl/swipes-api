@@ -8,7 +8,6 @@ import { string, array, any } from 'valjs';
 const expectedInput = {
   name: string.min(1).require(),
   owned_by: string.require(),
-  discussion_id: string.require(),
   privacy: any.of('public', 'private'),
   followers: array.of(string)
 };
@@ -23,7 +22,6 @@ export default endpointCreate(
     const {
       name,
       owned_by,
-      discussion_id,
       followers = [],
       privacy = 'public'
     } = res.locals.input;
@@ -36,18 +34,9 @@ export default endpointCreate(
       sqlInsertQuery('projects', {
         owned_by,
         name,
-        discussion_id,
         project_id: projectId,
         created_by: user_id
       }),
-      {
-        text: `
-          UPDATE discussions
-          SET context_id = $1
-          WHERE discussion_id = $2
-        `,
-        values: [projectId, discussion_id]
-      },
       sqlInsertQuery('project_tasks', {
         project_id: projectId
       }),

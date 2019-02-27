@@ -34,7 +34,7 @@ export default styleSheet('ProjectListItem', {
     _flex: 'center',
     _textStyle: 'tabActive',
     display: 'none',
-    '.js-list-item-wrapper:hover &': {
+    '.ProjectListItem_Wrapper:hover &': {
       display: 'flex'
     }
   }

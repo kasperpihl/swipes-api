@@ -46,10 +46,10 @@ export default class ModalCreate extends PureComponent {
     const { followers, titleVal, privacy, ownedBy } = this.state;
 
     let endpoint = 'discussion.add';
-    let analyticsEvent = 'Discussion created';
+    let analyticsEvent = 'Chat created';
 
     const options = {
-      topic: titleVal,
+      title: titleVal,
       owned_by: ownedBy,
       privacy,
       followers: followers.toJS()
@@ -59,21 +59,11 @@ export default class ModalCreate extends PureComponent {
 
     if (type === 'plan') {
       endpoint = 'plan.add';
-      options.title = titleVal;
-      delete options.topic;
       analyticsEvent = 'Plan created';
     }
     if (type === 'project') {
-      const discussionRes = await request(endpoint, options);
-      if (!discussionRes.ok) {
-        console.log('something went wrong with creating discussions');
-        return;
-      }
       endpoint = 'project.add';
-      options.name = titleVal;
-      options.discussion_id = discussionRes.discussion_id;
       analyticsEvent = 'Project created';
-      delete options.topic;
     }
 
     request(endpoint, options).then(res => {
@@ -125,20 +115,16 @@ export default class ModalCreate extends PureComponent {
     const { titleVal, ownedBy, followers } = this.state;
     const { myId, loader, type } = this.props;
 
-    let title = 'New Discussion';
-    let titlePlaceholder = 'Topic';
-    let titleLabel = '1. Set the topic';
-    let createLabel = 'Create discussion';
+    let title = 'New Chat';
+    const titlePlaceholder = 'Title';
+    const titleLabel = '1. Set the title';
+    let createLabel = 'Create chat';
     if (type === 'plan') {
       title = 'New Plan';
-      titlePlaceholder = 'Title';
-      titleLabel = '1. Choose a title for the Plan';
       createLabel = 'Create plan';
     }
     if (type === 'project') {
       title = 'New Project';
-      titlePlaceholder = 'Name';
-      titleLabel = '1. Choose a name for the project';
       createLabel = 'Create project';
     }
 
@@ -177,10 +163,7 @@ export default class ModalCreate extends PureComponent {
                   maxImages={9}
                   onClick={this.handleAssignClick}
                 >
-                  <Button
-                    title="Tag people"
-                    onClick={this.handleAssignClick}
-                  />
+                  <Button title="Tag people" onClick={this.handleAssignClick} />
                 </Assignees>
               </FMSW.InputWrapper>
             </>

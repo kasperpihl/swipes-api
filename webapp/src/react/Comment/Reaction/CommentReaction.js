@@ -51,9 +51,7 @@ export default class CommentReaction extends PureComponent {
         }).then(res => {
           next();
           if (res.ok) {
-            window.analytics.sendEvent('Reaction added', {
-              Where: commentId ? 'Comment' : 'Post'
-            });
+            window.analytics.sendEvent('Reaction added', {});
           }
         });
       }

@@ -49,7 +49,7 @@ export default class DiscussionHeader extends PureComponent {
       title: 'Rename discussion',
       inputs: [
         {
-          placeholder: 'Name of discussion',
+          placeholder: 'Title of discussion',
           initialValue: discussion.topic
         }
       ],
@@ -64,7 +64,7 @@ export default class DiscussionHeader extends PureComponent {
       }
     });
   };
-  onArchive(options) {
+  onArchive() {
     const { discussion, nav, loader } = this.props;
     nav.openModal(FormModal, {
       title: 'Delete discussion',

@@ -1,35 +1,31 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import SW from './ProjectListItem.swiss';
 import ProgressCircle from 'src/react/_components/ProgressCircle/ProgressCircle';
-import withNav from 'src/react/_hocs/Nav/withNav';
+import useNav from 'src/react/_hooks/useNav';
 import orgGetBelonging from 'core/utils/org/orgGetBelonging';
 
-@withNav
-export default class ProjectListItem extends PureComponent {
-  handleClick = () => {
-    const { project, nav } = this.props;
+export default function ProjectListItem({ project }) {
+  const nav = useNav();
+  const handleClick = () => {
     nav.push({
       screenId: 'ProjectOverview',
       crumbTitle: 'Project',
-      uniqueId: project.get('project_id'),
+      uniqueId: project.project_id,
       props: {
-        projectId: project.get('project_id')
+        projectId: project.project_id
       }
     });
   };
-  render() {
-    const { project } = this.props;
-    return (
-      <SW.Wrapper className="js-list-item-wrapper" onClick={this.handleClick}>
-        <SW.LeftSideWrapper>
-          <ProgressCircle progress={project.get('completion_percentage')} />
-          <SW.HoverLabel>{project.get('completion_percentage')}%</SW.HoverLabel>
-        </SW.LeftSideWrapper>
-        <SW.TextWrapper>
-          <SW.Title>{project.get('name')}</SW.Title>
-          <SW.Subtitle>{orgGetBelonging(project.get('owned_by'))}</SW.Subtitle>
-        </SW.TextWrapper>
-      </SW.Wrapper>
-    );
-  }
+  return (
+    <SW.Wrapper onClick={handleClick}>
+      <SW.LeftSideWrapper>
+        <ProgressCircle progress={project.completion_percentage} />
+        <SW.HoverLabel>{project.completion_percentage}%</SW.HoverLabel>
+      </SW.LeftSideWrapper>
+      <SW.TextWrapper>
+        <SW.Title>{project.name}</SW.Title>
+        <SW.Subtitle>{orgGetBelonging(project.owned_by)}</SW.Subtitle>
+      </SW.TextWrapper>
+    </SW.Wrapper>
+  );
 }
