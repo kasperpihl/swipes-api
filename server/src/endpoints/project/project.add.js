@@ -3,6 +3,7 @@ import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import idGenerate from 'src/utils/idGenerate';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
 import sqlPermissionInsertQuery from 'src/utils/sql/sqlPermissionInsertQuery';
+import update from 'src/utils/update';
 import { string, array, any } from 'valjs';
 
 const expectedInput = {
@@ -43,8 +44,10 @@ export default endpointCreate(
       sqlPermissionInsertQuery(projectId, privacy, owned_by, userIds)
     ]);
 
-    res.locals.output = {
-      updates: [{ type: 'project', data: projectRes.rows[0] }]
-    };
+    res.locals.update = update.prepare(projectId, [
+      { type: 'project', data: projectRes.rows[0] }
+    ]);
   }
-);
+).background(async (req, res) => {
+  await update.send(res.locals.update);
+});

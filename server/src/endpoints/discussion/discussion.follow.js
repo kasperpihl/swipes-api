@@ -2,6 +2,7 @@ import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import sqlToIsoString from 'src/utils/sql/sqlToIsoString';
 import { query } from 'src/utils/db/db';
+import update from 'src/utils/update';
 
 const expectedInput = {
   discussion_id: string.require()
@@ -31,9 +32,10 @@ export default endpointCreate(
       [discussion_id]
     );
 
-    // Create response data.
-    res.locals.output = {
-      updates: [{ type: 'discussion', data: discussionRes.rows[0] }]
-    };
+    res.locals.update = update.prepare(discussion_id, [
+      { type: 'discussion', data: discussionRes.rows[0] }
+    ]);
   }
-);
+).background(async (req, res) => {
+  await update.send(res.locals.update);
+});

@@ -1,6 +1,6 @@
 import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
-// import dbSendUpdates from 'src/utils/db/dbSendUpdates';
+import update from 'src/utils/update';
 import { query } from 'src/utils/db/db';
 
 const expectedInput = {
@@ -32,12 +32,11 @@ export default endpointCreate(
       throw Error('Not found').code(404);
     }
 
-    // Create response data.
-    res.locals.output = {
-      updates: [{ type: 'discussion', data: discussionRes.rows[0] }]
-    };
+    res.locals.update = update.prepare(discussion_id, [
+      { type: 'discussion', data: discussionRes.rows[0] }
+    ]);
     res.locals.messageGroupId = discussion_id;
   }
 ).background(async (req, res) => {
-  // dbSendUpdates(res.locals);
+  await update.send(res.locals.update);
 });
