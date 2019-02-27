@@ -43,7 +43,7 @@ export default endpointCreate(
       tasks_by_id[task.task_id] = task;
     });
     res.locals.output = {
-      result: { ...projectRes.rows[0], tasks_by_id }
+      project: { ...projectRes.rows[0], tasks_by_id }
     };
     res.locals.backgroundInput = { project_id };
   }

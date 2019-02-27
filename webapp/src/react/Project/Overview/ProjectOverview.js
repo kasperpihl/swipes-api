@@ -1,221 +1,57 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import SW from './ProjectOverview.swiss';
 // import withRequests from 'core/components/withRequests';
+
+import Loader from 'src/react/_components/loaders/Loader';
 import ProjectProvider from 'core/react/_hocs/Project/ProjectProvider';
-import ProjectStateManager from 'core/classes/ProjectStateManager';
 import ProjectTask from 'src/react/Project/Task/ProjectTask';
 import CardContent from 'src/react/_components/Card/Content/CardContent';
 import CardHeader from 'src/react/_components/Card/Header/CardHeader';
-import Button from 'src/react/_components/Button/Button';
-import SideHeader from 'src/react/_components/SideHeader/SideHeader';
-import withNav from 'src/react/_hocs/Nav/withNav';
+import ProjectSide from 'src/react/Project/Side/ProjectSide';
 
-@withNav
-// @withRequests(
-//   {
-//     project: {
-//       request: {
-//         url: 'project.get',
-//         body: props => ({
-//           project_id: props.projectId
-//         }),
-//         resPath: 'result'
-//       },
-//       cache: {
-//         path: props => ['project', props.projectId]
-//       }
-//     }
-//   },
-//   { renderLoader: () => <Loader center /> }
-// )
-export default class ProjectOverview extends PureComponent {
-  static sizes = [750];
-  constructor(props) {
-    super(props);
-    this.stateManager = new ProjectStateManager(props.project);
+import useSyncedProject from 'src/react/Project/useSyncedProject';
+import useProjectKeyboard from 'src/react/Project/useProjectKeyboard';
+import useProjectSlice from 'src/react/Project/useProjectSlice';
 
-    this.state = {
-      sliderValue: 0,
-      ...this.getStateFromManager(this.stateManager)
-    };
+import useBeforeUnload from 'src/react/_hooks/useBeforeUnload';
+
+ProjectOverview.sizes = [750];
+
+export default function ProjectOverview({ projectId }) {
+  const stateManager = useSyncedProject(projectId);
+
+  useProjectKeyboard(stateManager);
+
+  const [visibleOrder, projectName] = useProjectSlice(
+    stateManager,
+    (clientState, localState) => [
+      localState.get('visibleOrder'),
+      clientState.get('name')
+    ]
+  );
+
+  useBeforeUnload(() => {
+    stateManager && stateManager.syncHandler.syncIfNeeded();
+  });
+  if (!visibleOrder) {
+    return <Loader center />;
   }
 
-  componentDidMount() {
-    this.unsubscribe = this.stateManager.subscribe(stateManager => {
-      const newState = this.getStateFromManager(stateManager);
-      // Ensure no dangling slider.
-      newState.sliderValue = Math.min(
-        this.state.sliderValue,
-        newState.maxIndention
-      );
-      for (let key in newState) {
-        if (newState[key] === this.state[key]) {
-          delete newState[key];
-        }
-      }
-      if (Object.keys(newState).length) {
-        this.setState(newState);
-      }
-    });
-    window.addEventListener('keydown', this.handleKeyDown);
-  }
-  componentWillUnmount() {
-    this.unsubscribe();
-    this.stateManager.syncHandler.syncIfNeeded();
-    window.removeEventListener('keydown', this.handleKeyDown);
-  }
-  getStateFromManager(stateManager) {
-    const clientState = stateManager.getClientState();
-    const localState = stateManager.getLocalState();
-    return {
-      totalAmountOfTasks: clientState.get('sortedOrder').size,
-      completionPercentage: clientState.get('completion_percentage'),
-      maxIndention: localState.get('maxIndention'),
-      visibleOrder: localState.get('visibleOrder'),
-      projectName: clientState.get('name')
-    };
-  }
-  onStateChange = state => this.setState(state);
-  onSliderChange = e => {
-    const depth = parseInt(e.target.value, 10);
-    this.stateManager.expandHandler.setDepth(depth);
-    this.setState({ sliderValue: depth });
-  };
-  handleProjectChat = () => {
-    const { project, nav } = this.props;
-    nav.openRight({
-      screenId: 'DiscussionOverview',
-      crumbTitle: 'Chat',
-      uniqueId: project.get('discussion_id'),
-      props: {
-        discussionId: project.get('discussion_id')
-      }
-    });
-  };
-  handleKeyDown = e => {
-    const localState = this.stateManager.getLocalState();
-
-    const selectedId = localState.get('selectedId');
-    if (!selectedId) return;
-    if (e.keyCode === 8) {
-      // Backspace
-      if (e.target.selectionStart === 0 && e.target.selectionEnd === 0) {
-        e.preventDefault();
-        this.stateManager.editHandler.delete(selectedId);
-      }
-    } else if (e.keyCode === 9) {
-      // Tab
-      e.preventDefault();
-      if (e.shiftKey) this.stateManager.indentHandler.outdent(selectedId);
-      else this.stateManager.indentHandler.indent(selectedId);
-    } else if (e.keyCode === 13) {
-      e.preventDefault();
-      this.stateManager.editHandler.enter(selectedId, e.target.selectionStart);
-    } else if (e.keyCode === 37) {
-      // Left arrow
-      if (e.metaKey || e.ctrlKey) {
-        e.preventDefault();
-        this.stateManager.expandHandler.collapse(selectedId);
-      }
-    } else if (e.keyCode === 38) {
-      // Up arrow
-      e.preventDefault();
-      this.stateManager.selectHandler.selectPrev(e.target.selectionStart);
-    } else if (e.keyCode === 39) {
-      // Right arrow
-      if (e.metaKey || e.ctrlKey) {
-        e.preventDefault();
-        this.stateManager.expandHandler.expand(selectedId);
-      }
-    } else if (e.keyCode === 40) {
-      // Down arrow
-      e.preventDefault();
-      this.stateManager.selectHandler.selectNext(e.target.selectionStart);
-    } else if (e.keyCode === 90 && (e.ctrlKey || e.metaKey)) {
-      e.preventDefault();
-      if (e.shiftKey) {
-        this.stateManager.undoHandler.redo();
-      } else {
-        this.stateManager.undoHandler.undo();
-      }
-    }
-  };
-  increaseSlider = () => {
-    const { sliderValue } = this.state;
-    this.stateManager.expandHandler.setDepth(sliderValue + 1);
-    this.setState({ sliderValue: sliderValue + 1 });
-  };
-  decreaseSlider = () => {
-    const { sliderValue } = this.state;
-    this.stateManager.expandHandler.setDepth(sliderValue - 1);
-    this.setState({ sliderValue: sliderValue - 1 });
-  };
-
-  renderSidebar = () => {
-    const {
-      maxIndention,
-      sliderValue,
-      totalAmountOfTasks,
-      completionPercentage
-    } = this.state;
-    const { project } = this.props;
-    const completedTasksAmount = Math.round(
-      (completionPercentage / 100) * totalAmountOfTasks
-    );
-    return (
-      <SW.SidebarWrapper>
-        <SideHeader
-          title={completedTasksAmount}
-          smallTitle={`/${totalAmountOfTasks}`}
-          subtitle="Tasks Completed"
-        />
-        <SW.ProgressBarWrapper>
-          <SW.ProgressBarOuter>
-            <SW.ProgressBarInner width={completionPercentage} />
-          </SW.ProgressBarOuter>
-        </SW.ProgressBarWrapper>
-        {maxIndention > 0 && (
-          <SW.SliderWrapper>
-            <SW.StepSlider
-              min={0}
-              max={maxIndention}
-              sliderValue={sliderValue}
-              onSliderChange={this.onSliderChange}
-              increase={this.increaseSlider}
-              decrease={this.decreaseSlider}
-            />
-          </SW.SliderWrapper>
-        )}
-        {project.get('discussion_id') && (
-          <Button
-            title="Project chat"
-            icon="Comment"
-            onClick={this.handleProjectChat}
-          />
-        )}
-      </SW.SidebarWrapper>
-    );
-  };
-
-  render() {
-    const { visibleOrder, projectName } = this.state;
-
-    return (
-      <CardContent
-        noframe
-        header={<CardHeader padding={30} title={projectName} />}
-      >
-        <ProjectProvider stateManager={this.stateManager}>
-          <SW.Wrapper>
-            {this.renderSidebar()}
-            <SW.TasksWrapper>
-              {visibleOrder.map(taskId => (
-                <ProjectTask key={taskId} taskId={taskId} />
-              ))}
-            </SW.TasksWrapper>
-          </SW.Wrapper>
-        </ProjectProvider>
-      </CardContent>
-    );
-  }
+  return (
+    <CardContent
+      noframe
+      header={<CardHeader padding={30} title={projectName} />}
+    >
+      <ProjectProvider stateManager={stateManager}>
+        <SW.Wrapper>
+          <ProjectSide stateManager={stateManager} />
+          <SW.TasksWrapper>
+            {visibleOrder.map(taskId => (
+              <ProjectTask key={taskId} taskId={taskId} />
+            ))}
+          </SW.TasksWrapper>
+        </SW.Wrapper>
+      </ProjectProvider>
+    </CardContent>
+  );
 }
