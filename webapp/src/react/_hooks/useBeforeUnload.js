@@ -2,7 +2,9 @@ import { useRef, useEffect } from 'react';
 export default function useBeforeUnload(callback) {
   const callbackRef = useRef();
 
-  callbackRef.current = callback;
+  useEffect(() => {
+    callbackRef.current = callback;
+  });
 
   useEffect(() => {
     if (callbackRef.current) {
