@@ -4,9 +4,8 @@ export default styleSheet('CardHeader', {
   Wrapper: {
     _size: ['100%', 'auto'],
     _flex: ['column', 'left', 'top'],
-
+    padding: get => `0 ${get('padding')}px`,
     separator: {
-      // paddingBottom: '12px',
       borderBottom: '1px solid $sw4'
     },
 

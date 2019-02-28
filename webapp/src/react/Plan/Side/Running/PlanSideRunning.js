@@ -1,10 +1,19 @@
 import React from 'react';
 import SideHeader from 'src/react/_components/SideHeader/SideHeader';
+import ProgressBar from 'src/react/_components/ProgressBar/ProgressBar';
+import StepSlider from 'src/react/_components/StepSlider/StepSlider';
+import SW from './PlanSideRunning.swiss';
 
 export default function PlanSideRunning({ plan }) {
   return (
-    <>
+    <SW.Wrapper>
       <SideHeader title={plan.get('task_counter')} subtitle="Tasks selected" />
-    </>
+      <ProgressBar progress={50} />
+      <SW.ButtonWrapper>
+        <SW.Button title="Complete project" icon="Complete" />
+        <SW.Button title="Add people" icon="Assign" />
+      </SW.ButtonWrapper>
+      <StepSlider />
+    </SW.Wrapper>
   );
 }

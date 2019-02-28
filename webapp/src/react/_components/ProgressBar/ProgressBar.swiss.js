@@ -9,14 +9,14 @@ export default styleSheet('ProgressBar', {
 
   BackgroundLayer: {
     _size: '100%',
-    backgroundColor: '$green',
+    backgroundColor: '$green2',
     opacity: '0.5'
   },
 
   Bar: {
     width: get => `${get('progress')}%`,
     height: '100%',
-    backgroundColor: '$green',
+    backgroundColor: '$green1',
     borderRadius: '3px',
     position: 'absolute',
     top: '0',

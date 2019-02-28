@@ -1,5 +1,6 @@
 export { default as SwipesLogoEmpty } from './icons/swipes-logo-empty.svg';
 
+export { default as Assign } from './icons/assign.svg'; // new
 export { default as ArrowLeftLine } from './icons/arrow-left-line.svg';
 export { default as ArrowRightFull } from './icons/arrow-right-full.svg';
 export { default as ArrowRightLine } from './icons/arrow-right-line.svg';
@@ -7,12 +8,14 @@ export { default as ArrowRightLong } from './icons/arrow-right-long.svg';
 export { default as Attach } from './icons/attach.svg';
 export { default as Bold } from './icons/bold.svg';
 export { default as Breadcrumb } from './icons/breadcrumb.svg';
+export { default as Chat } from './icons/chat.svg';
 export { default as Checklist } from './icons/checklist.svg';
 export { default as ChecklistCheckmark } from './icons/checklist-checkmark.svg';
 export { default as Checkmark } from './icons/checkmark.svg';
 export { default as Close } from './icons/close.svg';
 export { default as CloseThick } from './icons/close-thick.svg';
 export { default as Comment } from './icons/comment.svg';
+export { default as Complete } from './icons/complete.svg'; // new
 export { default as Delete } from './icons/delete.svg';
 export { default as Earth } from './icons/earth.svg';
 export { default as Earth2x } from './icons/earth2x.svg';

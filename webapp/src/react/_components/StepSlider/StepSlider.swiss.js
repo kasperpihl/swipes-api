@@ -2,18 +2,16 @@ import { styleSheet } from 'swiss-react';
 
 export default styleSheet('StepSlider', {
   InputPackage: {
-    _size: ['calc(100% - 48px)', '24px'],
+    _size: ['100%', '24px'],
     _flex: ['row', 'center', 'center'],
     position: 'relative'
   },
 
   InputButton: {
     _el: 'button',
-    position: 'absolute',
-    left: '-24px',
-    top: '0px',
-    _size: '24px',
+    _size: '25px',
     cursor: 'pointer',
+    flex: 'none',
 
     '&:before': {
       content: '',
@@ -21,17 +19,14 @@ export default styleSheet('StepSlider', {
       top: '50%',
       left: '50%',
       transform: 'translateX(-50%) translateY(-50%)',
-      width: '12px',
-      height: '2px',
-      backgroundColor: '#2E2E2D'
+      width: '8px',
+      height: '1px',
+      backgroundColor: '$dark'
     },
 
     right: {
-      position: 'absolute',
-      right: '-24px',
-      top: '0px',
-      left: 'initial',
-      _size: '24px',
+      _size: '25px',
+      flex: 'none',
 
       '&:before': {
         content: '',
@@ -39,9 +34,9 @@ export default styleSheet('StepSlider', {
         top: '50%',
         left: '50%',
         transform: 'translateX(-50%) translateY(-50%)',
-        width: '12px',
-        height: '2px',
-        backgroundColor: '#2E2E2D'
+        width: '8px',
+        height: '1px',
+        backgroundColor: '$dark'
       },
 
       '&:after': {
@@ -50,9 +45,9 @@ export default styleSheet('StepSlider', {
         top: '50%',
         left: '50%',
         transform: 'translateX(-50%) translateY(-50%)',
-        height: '12px',
-        width: '2px',
-        backgroundColor: '#2E2E2D'
+        height: '8px',
+        width: '1px',
+        backgroundColor: '$dark'
       },
 
       deactivated: {
@@ -75,7 +70,7 @@ export default styleSheet('StepSlider', {
 
   Input: {
     _el: 'input',
-    height: '2px',
+    height: '1px',
     width: '100%',
     '-webkit-appearance': 'none',
     '-moz-appearance': 'none',
@@ -84,25 +79,35 @@ export default styleSheet('StepSlider', {
     fontSize: '5px',
     border: 'none',
     cursor: 'pointer',
+    margin: '0 6px',
 
     '&:focus': {
       outline: 'none'
     },
 
     '&::-webkit-slider-container': {
-      '-webkit-appearance': 'none',
-      backgroundColor: '$sw3'
+      backgroundColor: '$sw3',
+      '-webkit-appearance': 'none'
     },
 
     '&::-webkit-slider-runnable-track': {
+      _flex: ['row', 'left', 'center'],
+      height: '3px',
+      backgroundColor: '$dark',
+      borderRadius: '1.5px',
+      background: get =>
+        `linear-gradient(to right, $dark 0%, $dark ${get(
+          'colorValue'
+        )}%, $sw4 ${get('colorValue')}%, $sw4 100%)`,
       '-webkit-appearance': 'none'
     },
 
     '&::-webkit-slider-thumb': {
-      '-webkit-appearance': 'none',
-      backgroundColor: '$sw1',
-      width: '5px',
-      height: '14px'
+      _size: '13px',
+      backgroundColor: '$base',
+      borderRadius: '50%',
+      border: '1px solid $sw3',
+      '-webkit-appearance': 'none'
     },
 
     '&::-moz-range-track': {
@@ -120,10 +125,11 @@ export default styleSheet('StepSlider', {
     },
 
     '&::-moz-range-thumb': {
-      backgroundColor: '#121317',
-      width: '3px',
-      height: '15px',
-      borderRadius: '0px'
+      _size: '13px',
+      backgroundColor: '$base',
+      borderRadius: '50%',
+      border: '1px solid $sw3',
+      '-webkit-appearance': 'none'
     },
 
     '&::-moz-focus-outer': {
