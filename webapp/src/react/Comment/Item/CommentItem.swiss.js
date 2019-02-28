@@ -21,7 +21,6 @@ export default styleSheet('CommentItem', {
     width: '54px',
     height: '100%',
     flex: 'none',
-    // marginBottom: '12px',
 
     isSingleLine: {
       margin: 'auto 0'
@@ -53,7 +52,6 @@ export default styleSheet('CommentItem', {
     _flex: ['row', 'left', 'top'],
     _textStyle: 'body',
     flexWrap: 'wrap',
-    // paddingBottom: '12px',
 
     isSingleLine: {
       padding: '12px 0'
