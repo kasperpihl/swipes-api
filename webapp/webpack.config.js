@@ -23,7 +23,6 @@ module.exports = {
     modules: [path.join(__dirname, 'node_modules')],
     alias: {
       // 'swiss-react': path.resolve(__dirname, '../../../swiss-react/dist/es'),
-      // 'react-optimist': path.resolve(__dirname, '../../opensource/react-optimist/dist/es'),
       core: '@swipesapp/core/dist',
       // core: path.resolve(__dirname, '../../packages/core/dist'),
       src: path.resolve(__dirname, 'src'),

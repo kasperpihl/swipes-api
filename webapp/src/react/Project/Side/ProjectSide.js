@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import SideHeader from 'src/react/_components/SideHeader/SideHeader';
-import useProjectSlice from 'src/react/Project/useProjectSlice';
+import useProjectSlice from 'core/react/_hooks/useProjectSlice';
 
 import SW from './ProjectSide.swiss';
 

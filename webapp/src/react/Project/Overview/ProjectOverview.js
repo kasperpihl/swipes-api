@@ -9,9 +9,9 @@ import CardContent from 'src/react/_components/Card/Content/CardContent';
 import CardHeader from 'src/react/_components/Card/Header/CardHeader';
 import ProjectSide from 'src/react/Project/Side/ProjectSide';
 
-import useSyncedProject from 'src/react/Project/useSyncedProject';
+import useSyncedProject from 'core/react/_hooks/useSyncedProject';
 import useProjectKeyboard from 'src/react/Project/useProjectKeyboard';
-import useProjectSlice from 'src/react/Project/useProjectSlice';
+import useProjectSlice from 'core/react/_hooks/useProjectSlice';
 
 import useBeforeUnload from 'src/react/_hooks/useBeforeUnload';
 
