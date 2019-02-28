@@ -106,6 +106,7 @@ export default class ProjectTask extends PureComponent {
       hasChildren,
       expanded
     } = this.props.task;
+
     const { isFocused } = this.state;
     const { stateManager } = this.props;
     const ownedBy = stateManager.getClientState().get('owned_by');

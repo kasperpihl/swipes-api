@@ -3,6 +3,7 @@ import { transaction } from 'src/utils/db/db';
 import { string, object, array, number, bool } from 'valjs';
 import idGenerate from 'src/utils/idGenerate';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
+import update from 'src/utils/update';
 import randomstring from 'randomstring';
 
 const expectedInput = {
@@ -139,10 +140,13 @@ export default endpointCreate(
     updates[0].data.tasks_by_id = {};
     response.forEach(res => {
       const item = res.rows[0];
-      updates[0].data.tasks_by_id[item.id] = item;
+      updates[0].data.tasks_by_id[item.task_id] = item;
     });
 
     // Create response data.
-    res.locals.output = { update_identifier, updates };
+    res.locals.output = { update_identifier, rev: updates[0].data.rev };
+    res.locals.update = update.prepare(project_id, updates);
   }
-);
+).background(async (req, res) => {
+  await update.send(res.locals.update);
+});
