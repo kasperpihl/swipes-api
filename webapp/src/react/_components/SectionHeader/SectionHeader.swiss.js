@@ -6,8 +6,9 @@ export default styleSheet('SectionHeader', {
     _textStyle: 'caption',
     color: '$sw2',
     borderBottom: '1px solid $sw4',
+    paddingTop: '12px',
     paddingBottom: '6px',
-    textTransform: 'uppercase',
-    margin: '12px 0'
+    marginBottom: '12px',
+    textTransform: 'uppercase'
   }
 });
