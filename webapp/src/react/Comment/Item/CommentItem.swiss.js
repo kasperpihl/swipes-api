@@ -20,7 +20,11 @@ export default styleSheet('CommentItem', {
     _flex: ['column', 'center', 'center'],
     width: '54px',
     height: '100%',
-    flex: 'none'
+    flex: 'none',
+
+    isSingleLine: {
+      margin: 'auto 0'
+    }
   },
   Center: {
     _flex: ['column', 'left', 'center'],
@@ -47,7 +51,11 @@ export default styleSheet('CommentItem', {
   Message: {
     _flex: ['row', 'left', 'top'],
     _textStyle: 'body',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
+
+    isSingleLine: {
+      padding: '12px 0'
+    }
   },
   Attachments: {
     marginTop: '6px'
