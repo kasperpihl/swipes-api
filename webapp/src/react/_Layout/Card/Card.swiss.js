@@ -1,4 +1,5 @@
 import { styleSheet } from 'swiss-react';
+import Button from 'src/react/_components/Button/Button';
 
 export default styleSheet('Card', {
   Wrapper: {
@@ -43,5 +44,15 @@ export default styleSheet('Card', {
   },
   Content: {
     _size: '100%'
+  },
+  Button: {
+    _el: Button,
+    opacity: '1',
+    visibility: 'visible',
+
+    isLocked: {
+      opacity: '0',
+      visibility: 'hidden'
+    }
   }
 });

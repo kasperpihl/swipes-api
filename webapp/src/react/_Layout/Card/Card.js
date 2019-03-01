@@ -27,14 +27,14 @@ function Card({ children, top, left, isOverlay, isUnderlay, dispatch }) {
       <SW.Header>
         <Breadcrumbs side={nav.side} />
         <SW.Actions>
-          {nav.side !== 'left' && !nav.isLocked && (
-            <Button onClick={nav.pop} icon="Cross" />
-          )}
           {nav.side !== 'left' && (
             <Button
               onClick={nav.toggleLock}
               icon={nav.isLocked ? 'Pin' : 'Pin'}
             />
+          )}
+          {nav.side !== 'left' && (
+            <SW.Button onClick={nav.pop} icon="Cross" isLocked={nav.isLocked} />
           )}
         </SW.Actions>
       </SW.Header>
