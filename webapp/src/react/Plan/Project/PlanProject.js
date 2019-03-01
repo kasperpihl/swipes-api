@@ -18,6 +18,7 @@ function PlanProject({ projectId, hidden }) {
   });
 
   if (!stateManager) {
+    if (hidden) return null;
     return (
       <SW.LoaderWrapper>
         <Loader mini size={24} />
