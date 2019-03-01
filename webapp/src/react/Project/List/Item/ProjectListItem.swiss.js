@@ -6,17 +6,18 @@ export default styleSheet('ProjectListItem', {
     '&:hover': {
       background: '$sw4'
     },
-    borderRadius: '6px',
-    margin: '0 12px'
+    borderRadius: '6px'
   },
   TextWrapper: {
-    _flex: ['column', 'left', 'top']
+    _flex: ['row', 'left', 'center']
   },
   Title: {
-    _textStyle: 'H3'
+    _textStyle: 'H3',
+    width: '250px'
   },
   Subtitle: {
-    _textStyle: 'body'
+    _textStyle: 'body',
+    color: '$sw2'
   },
   LeftSideWrapper: {
     _size: ['60px', '54px'],

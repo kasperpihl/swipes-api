@@ -4,6 +4,7 @@ export default styleSheet('SectionHeader', {
   Wrapper: {
     _size: ['100%', 'auto'],
     _textStyle: 'caption',
+    _flex: ['row', 'left', 'center'],
     color: '$sw2',
     borderBottom: '1px solid $sw4',
     paddingTop: '12px',

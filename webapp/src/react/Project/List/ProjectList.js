@@ -6,6 +6,7 @@ import usePaginationRequest from 'core/react/_hooks/usePaginationRequest';
 import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
 
 import PaginationScrollToMore from 'src/react/_components/pagination/PaginationScrollToMore';
+import SectionHeader from 'src/react/_components/SectionHeader/SectionHeader';
 import CardHeader from 'src/react/_components/Card/Header/CardHeader';
 import CardContent from 'src/react/_components/Card/Content/CardContent';
 import Button from 'src/react/_components/Button/Button';
@@ -46,12 +47,16 @@ export default function ProjectList() {
     <CardContent
       noframe
       header={
-        <CardHeader title="Projects">
+        <CardHeader padding={30} title="Projects">
           <Button icon="Plus" onClick={handleNewProject} />
         </CardHeader>
       }
     >
       <SW.Wrapper>
+        <SectionHeader>
+          <SW.Name>Name</SW.Name>
+          <SW.Team>Team</SW.Team>
+        </SectionHeader>
         {req.items.map(project => (
           <ProjectListItem key={project.project_id} project={project} />
         ))}
