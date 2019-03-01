@@ -39,10 +39,10 @@ export default function PlanFilter({ plan }) {
 
   return (
     <SW.Wrapper>
-      {req.items.map(({ name, project_id }) => (
+      {req.items.map(({ title, project_id }) => (
         <Fragment key={project_id}>
           <SW.SectionHeader onClick={handleClickCached(project_id)}>
-            {name}
+            {title}
             <SW.Icon icon="ArrowRightFull" expanded={expanded[project_id]} />
           </SW.SectionHeader>
           {typeof expanded[project_id] !== 'undefined' && (
