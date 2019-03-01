@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import SW from './ProjectListItem.swiss';
 import ProgressCircle from 'src/react/_components/ProgressCircle/ProgressCircle';
 import useNav from 'src/react/_hooks/useNav';
@@ -16,6 +17,24 @@ export default function ProjectListItem({ project }) {
       }
     });
   };
+  console.log(project);
+  const isNew = !project.opened_at;
+  let openedAt;
+  if (project.opened_at) {
+    const now = moment();
+    const openedMoment = moment(project.opened_at);
+    if (openedMoment.isSame(now, 'days')) {
+      openedAt = openedMoment.format('LT');
+    } else {
+      now.subtract(1, 'days');
+      if (openedMoment.isSame(now, 'days')) {
+        openedAt = 'Yesterday';
+      } else {
+        openedAt = openedMoment.format('MMM D');
+      }
+    }
+  }
+
   return (
     <SW.Wrapper onClick={handleClick}>
       <SW.LeftSideWrapper>
@@ -25,6 +44,8 @@ export default function ProjectListItem({ project }) {
       <SW.TextWrapper>
         <SW.Title>{project.name}</SW.Title>
         <SW.Subtitle>{orgGetBelonging(project.owned_by)}</SW.Subtitle>
+        {isNew && <span>New</span>}
+        {!isNew && <span>{openedAt}</span>}
       </SW.TextWrapper>
     </SW.Wrapper>
   );
