@@ -39,19 +39,32 @@ export default function PlanSidePicker({ plan }) {
     <SW.Wrapper>
       <SW.Title>Start date</SW.Title>
       <SW.Day>{moment(plan.start_date).format('ddd, MMM D')}</SW.Day>
-      <input
-        onChange={handleUpdateCached('one')}
-        type="radio"
-        checked={!twoWeekState}
-      />{' '}
-      1 week{' '}
-      <input
-        onChange={handleUpdateCached('two')}
-        type="radio"
-        checked={twoWeekState}
-      />{' '}
-      2 weeks
-      <DayTracker startDate={plan.start_date} endDate={endDate} />
+      <SW.Title>Duration</SW.Title>
+      <SW.InputContainer>
+        <SW.InputWrapper
+          checked={!twoWeekState}
+          onClick={handleUpdateCached('one')}
+        >
+          <SW.Input
+            onChange={handleUpdateCached('one')}
+            type="radio"
+            checked={!twoWeekState}
+          />{' '}
+          <SW.InputText checked={!twoWeekState}>1 week</SW.InputText>{' '}
+        </SW.InputWrapper>
+        <SW.InputWrapper
+          checked={twoWeekState}
+          onClick={handleUpdateCached('two')}
+        >
+          <SW.Input
+            onChange={handleUpdateCached('two')}
+            type="radio"
+            checked={twoWeekState}
+          />{' '}
+          <SW.InputText checked={twoWeekState}>2 weeks</SW.InputText>
+        </SW.InputWrapper>
+      </SW.InputContainer>
+      {/* <DayTracker startDate={plan.start_date} endDate={endDate} /> */}
     </SW.Wrapper>
   );
 }

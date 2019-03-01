@@ -2,8 +2,9 @@ import { styleSheet } from 'swiss-react';
 
 export default styleSheet('PlanSide', {
   Wrapper: {
-    _size: ['200px', 'auto'],
+    _size: ['180px', 'auto'],
     _flex: ['column', 'left', 'top'],
-    flex: 'none'
+    flex: 'none',
+    marginRight: '48px'
   }
 });

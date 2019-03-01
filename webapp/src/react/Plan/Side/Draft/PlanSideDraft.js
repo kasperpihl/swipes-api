@@ -1,11 +1,14 @@
 import React from 'react';
-import SW from './PlanSideDraft.swiss';
+import request from 'core/utils/request';
+import useLoader from 'src/react/_hooks/useLoader';
+
+import Button from 'src/react/_components/Button/Button';
+import ProgressBar from 'src/react/_components/ProgressBar/ProgressBar';
 import PlanSideAlert from 'src/react/Plan/Side/Alert/PlanSideAlert';
 import PlanSidePicker from 'src/react/Plan/Side/Picker/PlanSidePicker';
 import SideHeader from 'src/react/_components/SideHeader/SideHeader';
-import request from 'core/utils/request';
-import useLoader from 'src/react/_hooks/useLoader';
-import Button from 'src/react/_components/Button/Button';
+
+import SW from './PlanSideDraft.swiss';
 
 export default function PlanSideDraft({ plan }) {
   const loader = useLoader();

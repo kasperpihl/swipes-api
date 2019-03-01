@@ -3,9 +3,9 @@ import { styleSheet } from 'swiss-react';
 export default styleSheet('PlanSideAlert', {
   Wrapper: {
     _flex: ['column', 'top', 'left'],
+    width: '100%',
     borderRadius: '2px',
     padding: '12px',
-    width: '160px',
     'type=draft': {
       backgroundColor: '$yellow'
     },

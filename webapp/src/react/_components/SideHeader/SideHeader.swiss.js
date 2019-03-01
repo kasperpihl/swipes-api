@@ -23,7 +23,8 @@ export default styleSheet('SideHeader', {
   },
 
   Subtitle: {
-    _textStyle: 'body',
+    _textStyle: 'caption',
+    textTransform: 'uppercase',
     color: '$sw2'
   }
 });
