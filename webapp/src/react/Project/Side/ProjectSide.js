@@ -1,6 +1,8 @@
 import React, { useState, useEffect, memo } from 'react';
-import SideHeader from 'src/react/_components/SideHeader/SideHeader';
 import useProjectSlice from 'core/react/_hooks/useProjectSlice';
+
+import SideHeader from 'src/react/_components/SideHeader/SideHeader';
+import ProgressBar from 'src/react/_components/ProgressBar/ProgressBar';
 
 import SW from './ProjectSide.swiss';
 
@@ -49,22 +51,20 @@ function ProjectSide({ stateManager }) {
         smallTitle={`/${totalAmountOfTasks}`}
         subtitle="Tasks Completed"
       />
-      <SW.ProgressBarWrapper>
-        <SW.ProgressBarOuter>
-          <SW.ProgressBarInner width={completionPercentage} />
-        </SW.ProgressBarOuter>
-      </SW.ProgressBarWrapper>
+      <ProgressBar progress={50} />
+      <SW.ButtonWrapper>
+        <SW.Button title="Complete project" icon="Complete" />
+        <SW.Button title="Add people" icon="Person" />
+      </SW.ButtonWrapper>
       {maxIndention > 0 && (
-        <SW.SliderWrapper>
-          <SW.StepSlider
-            min={0}
-            max={maxIndention}
-            sliderValue={sliderValue}
-            onSliderChange={handleSliderChange}
-            increase={handleIncrease}
-            decrease={handleDecrease}
-          />
-        </SW.SliderWrapper>
+        <SW.StepSlider
+          min={0}
+          max={maxIndention}
+          sliderValue={sliderValue}
+          onSliderChange={handleSliderChange}
+          increase={handleIncrease}
+          decrease={handleDecrease}
+        />
       )}
     </SW.Wrapper>
   );

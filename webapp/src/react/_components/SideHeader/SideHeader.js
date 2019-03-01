@@ -6,7 +6,7 @@ export default function SideHeader({ title, smallTitle, subtitle }) {
     <SW.Wrapper>
       <SW.TitleWrapper>
         <SW.BigNumber>{title}</SW.BigNumber>
-        {smallTitle}
+        <SW.SmallNumber>{smallTitle}</SW.SmallNumber>
       </SW.TitleWrapper>
       <SW.Subtitle>{subtitle}</SW.Subtitle>
     </SW.Wrapper>

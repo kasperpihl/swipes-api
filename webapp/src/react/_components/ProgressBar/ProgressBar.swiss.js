@@ -2,7 +2,7 @@ import { styleSheet } from 'swiss-react';
 
 export default styleSheet('ProgressBar', {
   Wrapper: {
-    _size: ['130px', '6px'],
+    _size: ['100%', '6px'],
     overflow: 'hidden',
     borderRadius: '3px'
   },
