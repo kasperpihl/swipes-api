@@ -26,13 +26,13 @@ export default endpointCreate(
     let ownedByFilter = '';
     if (owned_by) {
       ownedByFilter = 'AND p.owned_by = $4';
-      // orderBy = 'p.name ASC';
+      // orderBy = 'p.title ASC';
       values.push(owned_by);
     }
 
     const projectQuery = {
       text: `
-        SELECT p.project_id, p.name, p.due_date, p.owned_by, p.completion_percentage, per.granted_at, po.opened_at
+        SELECT p.project_id, p.title, p.due_date, p.owned_by, p.completion_percentage, per.granted_at, po.opened_at
         FROM permissions as per
         INNER JOIN projects as p
         ON p.project_id = per.permission_from

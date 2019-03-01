@@ -24,18 +24,18 @@ function ProjectOverview({ projectId }) {
     stateManager && stateManager.syncHandler.syncIfNeeded();
   });
 
-  const [projectName] = useProjectSlice(stateManager, clientState => [
-    clientState.get('name')
+  const [projectTitle] = useProjectSlice(stateManager, clientState => [
+    clientState.get('title')
   ]);
 
-  if (!projectName) {
+  if (!projectTitle) {
     return <Loader center />;
   }
 
   return (
     <CardContent
       noframe
-      header={<CardHeader padding={30} title={projectName} />}
+      header={<CardHeader padding={30} title={projectTitle} />}
     >
       <ProjectContext.Provider value={stateManager}>
         <SW.Wrapper>

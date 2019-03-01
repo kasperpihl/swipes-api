@@ -42,7 +42,7 @@ export default function ProjectListItem({ project }) {
         <SW.HoverLabel>{project.completion_percentage}%</SW.HoverLabel>
       </SW.LeftSideWrapper>
       <SW.TextWrapper>
-        <SW.Title>{project.name}</SW.Title>
+        <SW.Title>{project.title}</SW.Title>
         <SW.Subtitle>{orgGetBelonging(project.owned_by)}</SW.Subtitle>
         {isNew && <span>New</span>}
         {!isNew && <span>{openedAt}</span>}

@@ -7,7 +7,7 @@ import update from 'src/utils/update';
 import { string, array, any } from 'valjs';
 
 const expectedInput = {
-  name: string.min(1).require(),
+  title: string.min(1).require(),
   owned_by: string.require(),
   privacy: any.of('public', 'private'),
   followers: array.of(string)
@@ -21,7 +21,7 @@ export default endpointCreate(
   async (req, res) => {
     const { user_id } = res.locals;
     const {
-      name,
+      title,
       owned_by,
       followers = [],
       privacy = 'public'
@@ -34,7 +34,7 @@ export default endpointCreate(
     const [projectRes] = await transaction([
       sqlInsertQuery('projects', {
         owned_by,
-        name,
+        title,
         project_id: projectId,
         created_by: user_id
       }),
