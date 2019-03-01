@@ -25,7 +25,7 @@ export default function PlanOverview({ planId }) {
     return <RequestLoader req={req} />;
   }
 
-  const plan = fromJS(req.result.plan);
+  const plan = req.result.plan;
 
   const subtitle = {
     ownedBy: req.result.plan.owned_by,
@@ -38,7 +38,7 @@ export default function PlanOverview({ planId }) {
     <CardContent
       noframe
       header={
-        <CardHeader padding={30} title={plan.get('title')} subtitle={subtitle}>
+        <CardHeader padding={30} title={plan.title} subtitle={subtitle}>
           <Button title="See my tasks" />
           <Button icon="ThreeDots" />
         </CardHeader>
@@ -46,7 +46,6 @@ export default function PlanOverview({ planId }) {
     >
       <SW.Wrapper>
         <PlanSide plan={plan} />
-        <SW.TasksWrapper>Here will be many tasks</SW.TasksWrapper>
       </SW.Wrapper>
     </CardContent>
   );

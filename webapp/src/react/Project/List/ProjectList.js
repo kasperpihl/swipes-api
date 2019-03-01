@@ -1,6 +1,7 @@
 import React from 'react';
 import SW from './ProjectList.swiss';
 import useNav from 'src/react/_hooks/useNav';
+import useUpdate from 'core/react/_hooks/useUpdate';
 import usePaginationRequest from 'core/react/_hooks/usePaginationRequest';
 import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
 
@@ -24,6 +25,12 @@ export default function ProjectList() {
       resultPath: 'projects'
     }
   );
+
+  useUpdate('project', update => {
+    if (update.created_at) {
+      req.prependItem(update);
+    }
+  });
 
   const handleNewProject = () => {
     nav.openModal(ModalCreate, {

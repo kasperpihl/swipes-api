@@ -6,7 +6,7 @@ import PlanSideRunning from './Running/PlanSideRunning';
 
 export default function PlanSide({ plan }) {
   let SideComp = PlanSideDraft;
-  if (plan.get('started_at')) {
+  if (plan.started_at) {
     SideComp = PlanSideRunning;
   }
 

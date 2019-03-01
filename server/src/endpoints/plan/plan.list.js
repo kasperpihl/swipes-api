@@ -26,9 +26,9 @@ export default endpointCreate(
         ON p.plan_id = per.permission_from
         WHERE ${sqlCheckPermissions('per.granted_to', user_id)}
         AND p.deleted=FALSE
-        ORDER BY 
+        ORDER BY
           completed_at DESC NULLS FIRST,
-          started_at DESC NULLS LAST,
+          started_at DESC NULLS FIRST,
           created_at DESC
         LIMIT $1
         OFFSET $2

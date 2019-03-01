@@ -1,8 +1,9 @@
 import React, { Fragment } from 'react';
 import SW from './PlanList.swiss';
-import { fromJS } from 'immutable';
+import { List } from 'immutable';
 import useNav from 'src/react/_hooks/useNav';
 import usePaginationRequest from 'core/react/_hooks/usePaginationRequest';
+import useUpdate from 'core/react/_hooks/useUpdate';
 import CardHeader from 'src/react/_components/Card/Header/CardHeader';
 import CardContent from 'src/react/_components/Card/Content/CardContent';
 import Button from 'src/react/_components/Button/Button';
@@ -27,6 +28,12 @@ export default function PlanList() {
       resultPath: 'plans'
     }
   );
+
+  useUpdate('plan', update => {
+    if (update.created_at) {
+      req.prependItem(update);
+    }
+  });
 
   const handleNewPlan = () => {
     nav.openModal(ModalCreate, {
@@ -55,25 +62,26 @@ export default function PlanList() {
     );
   }
 
-  const sections = fromJS(req.items).groupBy(p => {
-    if (p.get('completed_at')) return 'Completed';
-    if (!p.get('started_at')) return 'Drafts';
-    if (p.get('start_date') > new Date().toISOString().slice(0, 10))
-      return 'Upcoming';
+  const currDate = new Date().toISOString().slice(0, 10);
+  const sections = List(req.items).groupBy(p => {
+    if (p.completed_at) return 'Completed';
+    if (!p.started_at) return 'Drafts';
+    if (p.start_date > currDate) return 'Upcoming';
+    if (p.end_date < currDate) return 'Overdue';
     return 'Current';
   });
 
   return (
     <ContentWrapper>
       <SW.Wrapper>
-        {['Current', 'Drafts', 'Upcoming', 'Completed'].map(
+        {['Drafts', 'Overdue', 'Current', 'Upcoming', 'Completed'].map(
           sec =>
             sections.get(sec) && (
               <Fragment key={sec}>
                 <SectionHeader>{sec}</SectionHeader>
                 <SW.Section key={sec}>
                   {sections.get(sec).map(p => (
-                    <PlanListItem plan={p} key={p.get('plan_id')} />
+                    <PlanListItem plan={p} key={p.plan_id} />
                   ))}
                 </SW.Section>
               </Fragment>

@@ -10,9 +10,9 @@ export default function PlanListItem({ plan }) {
     nav.push({
       screenId: 'PlanOverview',
       crumbTitle: 'Plan',
-      uniqueId: plan.get('plan_id'),
+      uniqueId: plan.plan_id,
       props: {
-        planId: plan.get('plan_id')
+        planId: plan.plan_id
       }
     });
   };
@@ -20,13 +20,13 @@ export default function PlanListItem({ plan }) {
     <SW.Wrapper onClick={handleClick}>
       <DayTracker
         compact
-        startDate={plan.get('start_date')}
-        endDate={plan.get('end_date')}
+        startDate={plan.start_date}
+        endDate={plan.end_date}
         maxWeeks={5}
       />
       <SW.TextWrapper>
-        <SW.Title>{plan.get('title')}</SW.Title>
-        <SW.Subtitle>{orgGetBelonging(plan.get('owned_by'))}</SW.Subtitle>
+        <SW.Title>{plan.title}</SW.Title>
+        <SW.Subtitle>{orgGetBelonging(plan.owned_by)}</SW.Subtitle>
       </SW.TextWrapper>
     </SW.Wrapper>
   );

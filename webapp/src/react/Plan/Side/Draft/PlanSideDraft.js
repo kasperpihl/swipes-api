@@ -12,7 +12,7 @@ export default function PlanSideDraft({ plan }) {
   const handleStart = async () => {
     loader.set('StartButton');
     const res = await request('plan.start', {
-      plan_id: plan.get('plan_id')
+      plan_id: plan.plan_id
     });
     if (res.ok) {
       loader.clear('StartButton');
@@ -22,7 +22,7 @@ export default function PlanSideDraft({ plan }) {
   };
   return (
     <>
-      <SideHeader title={plan.get('task_counter')} subtitle="Tasks selected" />
+      <SideHeader title={plan.task_counter} subtitle="Tasks selected" />
       <PlanSidePicker plan={plan} />
       <PlanSideAlert
         type="draft"

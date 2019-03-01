@@ -1,8 +1,11 @@
+import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import sqlCheckPermissions from 'src/utils/sql/sqlCheckPermissions';
 import { query } from 'src/utils/db/db';
 
-const expectedInput = {};
+const expectedInput = {
+  owned_by: string
+};
 
 export default endpointCreate(
   {
@@ -10,9 +13,22 @@ export default endpointCreate(
   },
   async (req, res) => {
     const { user_id, input } = res.locals;
+    const { owned_by } = input;
 
     const skip = input.skip || 0;
     const limit = input.limit || 20;
+
+    const values = [user_id, limit + 1, skip];
+    let orderBy = `
+      po.opened_at DESC NULLS FIRST,
+      p.created_at DESC
+    `;
+    let ownedByFilter = '';
+    if (owned_by) {
+      ownedByFilter = 'AND p.owned_by = $4';
+      // orderBy = 'p.name ASC';
+      values.push(owned_by);
+    }
 
     const projectQuery = {
       text: `
@@ -23,14 +39,13 @@ export default endpointCreate(
         LEFT OUTER JOIN project_opens as po
         ON p.project_id = po.project_id AND po.user_id = $1
         WHERE ${sqlCheckPermissions('per.granted_to', user_id)}
+        ${ownedByFilter}
         AND p.deleted=FALSE
-        ORDER BY
-          po.opened_at DESC NULLS FIRST,
-          p.created_at DESC
+        ORDER BY ${orderBy}
         LIMIT $2
         OFFSET $3
       `,
-      values: [user_id, limit + 1, skip]
+      values
     };
     const projectRes = await query(projectQuery);
 
