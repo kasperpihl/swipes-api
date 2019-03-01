@@ -14,6 +14,7 @@ export default memo(ProjectTask);
 
 function ProjectTask({ taskId }) {
   const stateManager = useContext(ProjectContext);
+
   const [indention, isSelected] = useProjectSlice(
     stateManager,
     (clientState, localState) => [
@@ -21,6 +22,7 @@ function ProjectTask({ taskId }) {
       localState.get('selectedId') === taskId
     ]
   );
+
   if (typeof indention === 'undefined') return null;
 
   return (

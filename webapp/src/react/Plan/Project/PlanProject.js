@@ -10,7 +10,7 @@ import { ProjectContext } from 'src/react/contexts';
 import SW from './PlanProject.swiss';
 
 export default memo(PlanProject);
-function PlanProject({ projectId }) {
+function PlanProject({ projectId, hidden }) {
   const stateManager = useSyncedProject(projectId);
 
   useBeforeUnload(() => {
@@ -26,8 +26,10 @@ function PlanProject({ projectId }) {
   }
 
   return (
-    <ProjectContext.Provider value={stateManager}>
-      <ProjectTaskList />
-    </ProjectContext.Provider>
+    <SW.Wrapper hidden={hidden}>
+      <ProjectContext.Provider value={stateManager}>
+        <ProjectTaskList />
+      </ProjectContext.Provider>
+    </SW.Wrapper>
   );
 }

@@ -3,9 +3,8 @@ import React, { Fragment, useReducer } from 'react';
 import cachedCallback from 'src/utils/cachedCallback';
 import usePaginationRequest from 'core/react/_hooks/usePaginationRequest';
 import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
-import SectionHeader from 'src/react/_components/SectionHeader/SectionHeader';
+
 import PlanProject from 'src/react/Plan/Project/PlanProject';
-import Button from 'src/react/_components/Button/Button';
 
 import SW from './PlanFilter.swiss';
 
@@ -25,7 +24,7 @@ export default function PlanFilter({ plan }) {
   const [expanded, toggleKey] = useReducer((state, key) => {
     const newState = { ...state };
     if (state[key]) {
-      delete newState[key];
+      newState[key] = false;
     } else {
       newState[key] = true;
     }
@@ -42,16 +41,16 @@ export default function PlanFilter({ plan }) {
     <SW.Wrapper>
       {req.items.map(({ name, project_id }) => (
         <Fragment key={project_id}>
-          <SectionHeader>
+          <SW.SectionHeader onClick={handleClickCached(project_id)}>
             {name}
-            <SW.ButtonWrapper expanded={expanded[project_id]}>
-              <Button
-                icon="ArrowRightFull"
-                onClick={handleClickCached(project_id)}
-              />
-            </SW.ButtonWrapper>
-          </SectionHeader>
-          {expanded[project_id] && <PlanProject projectId={project_id} />}
+            <SW.Icon icon="ArrowRightFull" expanded={expanded[project_id]} />
+          </SW.SectionHeader>
+          {typeof expanded[project_id] !== 'undefined' && (
+            <PlanProject
+              projectId={project_id}
+              hidden={!expanded[project_id]}
+            />
+          )}
         </Fragment>
       ))}
     </SW.Wrapper>
