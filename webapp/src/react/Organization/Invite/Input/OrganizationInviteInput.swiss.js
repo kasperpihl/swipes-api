@@ -9,7 +9,8 @@ export default styleSheet('OrganizationInviteInput', {
 
   InviteText: {
     _el: 'p',
-    _textStyle: 'bodyMedium',
+    _textStyle: 'body',
+    fontWeight: '500',
     color: '$sw1'
   },
 

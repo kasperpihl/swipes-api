@@ -9,7 +9,7 @@ export default styleSheet('OrganizationHeader', {
 
   Title: {
     _el: 'h1',
-    _textStyle: 'cardTitle'
+    _textStyle: 'H1'
   },
 
   Button: {

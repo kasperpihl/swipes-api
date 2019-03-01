@@ -5,7 +5,8 @@ export default styleSheet('OrganizationUser', {
   Wrapper: {
     _size: ['100%', 'auto'],
     _flex: ['row', 'flex-start', 'center'],
-    _textStyle: 'bodyMedium',
+    _textStyle: 'body',
+    fontWeight: '500',
     color: '$sw1',
     borderBottom: '1px solid $sw3',
     padding: '12px 0',

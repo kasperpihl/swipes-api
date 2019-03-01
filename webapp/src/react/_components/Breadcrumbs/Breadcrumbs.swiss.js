@@ -9,6 +9,13 @@ export default styleSheet('Breadcrumbs', {
     _flex: '',
     paddingTop: '4px'
   },
+
+  ButtonWrapper: {
+    _flex: ['row', 'left', 'center'],
+    flex: 'none',
+    marginLeft: 'auto'
+  },
+
   Crumb: {
     _size: ['auto', '100%'],
     _flex: ['row', 'left', 'center'],

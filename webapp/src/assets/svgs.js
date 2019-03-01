@@ -16,12 +16,14 @@ export { default as Close } from './icons/close.svg';
 export { default as CloseThick } from './icons/close-thick.svg';
 export { default as Comment } from './icons/comment.svg';
 export { default as Complete } from './icons/complete.svg'; // new
+export { default as Cross } from './icons/cross.svg'; // new
 export { default as Delete } from './icons/delete.svg';
 export { default as Earth } from './icons/earth.svg';
 export { default as Earth2x } from './icons/earth2x.svg';
 export { default as Enter } from './icons/enter.svg';
 export { default as Eye } from './icons/eye.svg';
 export { default as File } from './icons/file.svg';
+export { default as Fullscreen } from './icons/full_screen.svg'; // new
 export { default as Search } from './icons/search.svg';
 
 export { default as Hashtag } from './icons/hashtag.svg';
@@ -36,6 +38,7 @@ export { default as Minus } from './icons/minus.svg';
 export { default as Note } from './icons/note.svg';
 export { default as OrderedList } from './icons/ordered-list.svg';
 export { default as Person } from './icons/person.svg';
+export { default as Pin } from './icons/pin.svg';
 export { default as Plus } from './icons/plus.svg';
 export { default as Project } from './icons/project.svg';
 export { default as Reload } from './icons/reload.svg';

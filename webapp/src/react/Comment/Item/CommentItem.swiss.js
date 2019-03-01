@@ -6,10 +6,15 @@ export default styleSheet('CommentItem', {
   Wrapper: {
     _flex: ['row', 'left', 'center'],
     width: '100%',
+    padding: '6px 0',
 
     '&:hover': {
       background: '$green3',
       borderRadius: '2px'
+    },
+
+    isSingleLine: {
+      padding: '0'
     }
   },
   Picture: {
@@ -54,7 +59,7 @@ export default styleSheet('CommentItem', {
     flexWrap: 'wrap',
 
     isSingleLine: {
-      padding: '12px 0'
+      padding: '6px 0'
     }
   },
   Attachments: {
@@ -64,7 +69,6 @@ export default styleSheet('CommentItem', {
   Time: {
     _flex: ['row', 'center', 'bottom'],
     _textStyle: 'caption',
-    height: '100%',
     color: '$sw2',
     marginLeft: '6px'
   },

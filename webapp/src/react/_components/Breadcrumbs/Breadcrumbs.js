@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+
 import * as navigationActions from 'src/redux/navigation/navigationActions';
+
+import Button from 'src/react/_components/Button/Button';
+
 import SW from './Breadcrumbs.swiss';
 
 @connect(

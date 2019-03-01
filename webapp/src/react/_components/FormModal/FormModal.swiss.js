@@ -13,7 +13,7 @@ export default styleSheet('FormModal', {
 
   Title: {
     _el: 'h1',
-    _textStyle: 'cardTitle'
+    _textStyle: 'H1'
   },
 
   Subtitle: {

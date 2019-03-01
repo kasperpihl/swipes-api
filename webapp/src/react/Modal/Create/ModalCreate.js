@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import { fromJS } from 'immutable';
 import request from 'core/utils/request';
 import withLoader from 'src/react/_hocs/withLoader';
 import OrgPicker from 'src/react/_components/OrgPicker/OrgPicker';
@@ -10,7 +11,6 @@ import Button from 'src/react/_components/Button/Button';
 import SW from './ModalCreate.swiss';
 import FMSW from 'src/react/_components/FormModal/FormModal.swiss';
 import contextMenu from 'src/utils/contextMenu';
-import { fromJS } from 'immutable';
 
 @withLoader
 @connect(state => ({

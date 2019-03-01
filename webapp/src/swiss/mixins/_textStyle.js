@@ -4,7 +4,7 @@ addMixin('textStyle', (style = 'item') => {
   switch (style) {
     case 'body':
       return {
-        _font: ['13px', '18px', 400],
+        _font: ['13px', '15px', 400],
         color: '$dark'
       };
     case 'caption':
@@ -14,12 +14,12 @@ addMixin('textStyle', (style = 'item') => {
       };
     case 'H3':
       return {
-        _font: ['14px', '18px', 400],
+        _font: ['14px', '16px', 400],
         color: '$dark'
       };
     case 'H2':
       return {
-        _font: ['16px', '19px', 400],
+        _font: ['16px', '18px', 400],
         color: '$dark'
       };
     case 'H1':
@@ -39,7 +39,7 @@ addMixin('textStyle', (style = 'item') => {
         `unsupported textStyle: ${style}. Check _textStyle.js for support`
       );
       return {
-        _font: ['13px', '18px', 400],
+        _font: ['13px', '15px', 400],
         color: '$red'
       };
   }

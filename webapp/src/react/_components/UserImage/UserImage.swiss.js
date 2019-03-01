@@ -41,7 +41,8 @@ export default styleSheet('UserImage', {
     color: '$sw5',
 
     'size>=30': {
-      _textStyle: 'bodyMedium'
+      _textStyle: 'body',
+      fontWeight: '500'
     }
   }
 });

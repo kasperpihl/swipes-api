@@ -27,7 +27,6 @@ export default function PlanListItem({ plan }) {
       <SW.TextWrapper>
         <SW.Title>{plan.get('title')}</SW.Title>
         <SW.Subtitle>{orgGetBelonging(plan.get('owned_by'))}</SW.Subtitle>
-        <SW.TaskCounter>{plan.get('task_counter')}</SW.TaskCounter>
       </SW.TextWrapper>
     </SW.Wrapper>
   );

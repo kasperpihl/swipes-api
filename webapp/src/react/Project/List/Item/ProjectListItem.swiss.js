@@ -13,10 +13,10 @@ export default styleSheet('ProjectListItem', {
     _flex: ['column', 'left', 'top']
   },
   Title: {
-    _textStyle: 'item'
+    _textStyle: 'H3'
   },
   Subtitle: {
-    _textStyle: 'labelLight'
+    _textStyle: 'body'
   },
   LeftSideWrapper: {
     _size: ['60px', '54px'],
@@ -32,7 +32,7 @@ export default styleSheet('ProjectListItem', {
     borderRadius: '6px',
     color: '$sw1',
     _flex: 'center',
-    _textStyle: 'tabActive',
+    _textStyle: 'caption',
     display: 'none',
     '.ProjectListItem_Wrapper:hover &': {
       display: 'flex'

@@ -4,18 +4,22 @@ export default styleSheet('PlanListItem', {
   Wrapper: {
     _flex: ['row', 'left', 'top'],
     width: '50%',
-    padding: '12px'
+    padding: '12px',
+    borderRadius: '4px',
+
+    '&:hover': {
+      backgroundColor: '$green3'
+    }
   },
   TextWrapper: {
-    _flex: ['column', 'left', 'between']
+    _flex: ['column', 'left', 'top'],
+    marginLeft: '16px'
   },
   Title: {
-    _textStyle: 'body'
+    _textStyle: 'H2',
+    marginBottom: '6px'
   },
   Subtitle: {
-    _textStyle: 'body'
-  },
-  TaskCounter: {
-    _textStyle: 'body'
+    _textStyle: 'caption'
   }
 });

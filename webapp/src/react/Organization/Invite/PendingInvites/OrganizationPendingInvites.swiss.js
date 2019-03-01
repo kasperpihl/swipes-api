@@ -11,7 +11,8 @@ export default styleSheet('OrganizationPendingInvites', {
 
   SectionTitle: {
     _el: 'h1',
-    _textStyle: 'bodyMedium',
+    _textStyle: 'body',
+    fontWeight: '500',
     color: '$sw1',
     _flex: ['row', 'flex-start', 'center'],
     userSelect: 'none',

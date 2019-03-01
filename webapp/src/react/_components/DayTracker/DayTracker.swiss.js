@@ -32,7 +32,7 @@ export default styleSheet('DayTrack', {
     _size: '8px',
     borderRadius: '50%',
     _flex: ['row', 'center', 'center'],
-    _textStyle: 'small',
+    _textStyle: 'caption',
     color: '$sw2',
     compact: {
       _size: '6px'

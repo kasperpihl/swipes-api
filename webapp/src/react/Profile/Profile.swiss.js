@@ -17,7 +17,8 @@ export default styleSheet('Profile', {
 
   Title: {
     _el: 'h1',
-    _textStyle: 'bodyLarge',
+    _textStyle: 'body',
+    fontWeight: '800',
     _flex: 'center'
   }
 });
