@@ -1,5 +1,4 @@
 import { styleSheet } from 'swiss-react';
-import LinesEllipsis from 'react-lines-ellipsis';
 
 export default styleSheet('DiscussionListItem', {
   Wrapper: {
@@ -26,7 +25,8 @@ export default styleSheet('DiscussionListItem', {
     flex: 'none'
   },
   Subtitle: {
-    _el: LinesEllipsis,
+    _el: 'p',
+    _truncateString: '',
     _textStyle: 'body',
     color: '$sw2',
     width: '100%',

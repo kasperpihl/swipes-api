@@ -45,12 +45,7 @@ export default class DiscussionListItem extends PureComponent {
             <SW.OrganizationName>
               {orgGetBelonging(item.owned_by)}
             </SW.OrganizationName>
-            <SW.Subtitle
-              text={subtitle}
-              maxLine="2"
-              ellipsis="..."
-              basedOn="letters"
-            />
+            <SW.Subtitle>{subtitle}</SW.Subtitle>
           </SW.MiddleWrapper>
           <SW.Time>{timeGetDayOrTime(item.last_comment_at)}</SW.Time>
         </SW.Wrapper>

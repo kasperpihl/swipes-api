@@ -33,12 +33,12 @@ export default styleSheet('CommentItem', {
   },
   Center: {
     _flex: ['column', 'left', 'center'],
-    width: '100%',
-    maxWidth: '450px',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
+    width: '100%'
   },
   RightSide: {
     _flex: ['row', 'center', 'center'],
+    marginLeft: 'auto',
     flex: 'none'
   },
   TopWrapper: {
@@ -54,9 +54,10 @@ export default styleSheet('CommentItem', {
     fontWeight: '500'
   },
   Message: {
-    _flex: ['row', 'left', 'top'],
+    _el: 'p',
     _textStyle: 'body',
-    flexWrap: 'wrap',
+    wordBreak: 'break-all',
+    maxWidth: '100%',
 
     isSingleLine: {
       padding: '6px 0'
