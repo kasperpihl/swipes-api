@@ -40,7 +40,6 @@ export default function PlanOverview({ planId }) {
       header={
         <CardHeader padding={30} title={plan.get('title')} subtitle={subtitle}>
           <Button title="See my tasks" />
-          <Button icon="Chat" />
           <Button icon="ThreeDots" />
         </CardHeader>
       }

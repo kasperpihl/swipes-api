@@ -28,7 +28,8 @@ export default endpointCreate(
         AND p.deleted=FALSE
         ORDER BY 
           completed_at DESC NULLS FIRST,
-          started_at DESC NULLS LAST
+          started_at DESC NULLS LAST,
+          created_at DESC
         LIMIT $1
         OFFSET $2
       `,

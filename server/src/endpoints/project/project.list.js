@@ -24,7 +24,9 @@ export default endpointCreate(
         ON p.project_id = po.project_id AND po.user_id = $1
         WHERE ${sqlCheckPermissions('per.granted_to', user_id)}
         AND p.deleted=FALSE
-        ORDER BY po.opened_at DESC NULLS FIRST
+        ORDER BY
+          po.opened_at DESC NULLS FIRST,
+          p.created_at DESC
         LIMIT $2
         OFFSET $3
       `,
