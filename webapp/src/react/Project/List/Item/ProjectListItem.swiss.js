@@ -4,7 +4,7 @@ export default styleSheet('ProjectListItem', {
   Wrapper: {
     _flex: ['row', 'left', 'center'],
     '&:hover': {
-      background: '$sw4'
+      background: '$green2'
     },
     borderRadius: '6px'
   },
@@ -29,7 +29,7 @@ export default styleSheet('ProjectListItem', {
     top: 0,
     width: '100%',
     height: '100%',
-    background: '$sw4',
+    background: '$green2',
     borderRadius: '6px',
     color: '$sw1',
     _flex: 'center',
