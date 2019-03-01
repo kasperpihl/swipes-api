@@ -43,7 +43,7 @@ export default styleSheet('DiscussionListItem', {
     color: '$sw2'
   },
   OrganizationName: {
-    _textStyle: 'body',
+    _textStyle: 'caption',
     flex: 'none'
   },
   UnreadCircle: {
