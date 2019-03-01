@@ -33,7 +33,6 @@
     "react": "^16.8.3",
     "react-delegate": "1.0.3",
     "react-dom": "^16.8.3",
-    "react-lines-ellipsis": "^0.13.2",
     "react-measure": "1.4.7",
     "react-optimist": "^0.1.5",
     "react-pdf": "^3.0.6",
