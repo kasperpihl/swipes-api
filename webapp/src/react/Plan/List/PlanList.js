@@ -28,15 +28,33 @@ export default function PlanList() {
     }
   );
 
-  if (!req.items) {
-    return <RequestLoader req={req} />;
-  }
-
-  const handleNewProject = () => {
+  const handleNewPlan = () => {
     nav.openModal(ModalCreate, {
       type: 'plan'
     });
   };
+
+  const ContentWrapper = ({ children }) => (
+    <CardContent
+      noframe
+      header={
+        <CardHeader padding={30} title="Plans">
+          <Button icon="Plus" onClick={handleNewPlan} />
+        </CardHeader>
+      }
+    >
+      {children}
+    </CardContent>
+  );
+
+  if (!req.items) {
+    return (
+      <ContentWrapper>
+        <RequestLoader req={req} />
+      </ContentWrapper>
+    );
+  }
+
   const sections = fromJS(req.items).groupBy(p => {
     if (p.get('completed_at')) return 'Completed';
     if (!p.get('started_at')) return 'Drafts';
@@ -46,14 +64,7 @@ export default function PlanList() {
   });
 
   return (
-    <CardContent
-      noframe
-      header={
-        <CardHeader padding={30} title="Plans">
-          <Button icon="Plus" onClick={handleNewProject} />
-        </CardHeader>
-      }
-    >
+    <ContentWrapper>
       <SW.Wrapper>
         {['Current', 'Drafts', 'Upcoming', 'Completed'].map(
           sec =>
@@ -70,6 +81,6 @@ export default function PlanList() {
         )}
         <PaginationScrollToMore req={req} errorLabel="Couldn't get plans." />
       </SW.Wrapper>
-    </CardContent>
+    </ContentWrapper>
   );
 }

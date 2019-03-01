@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { memo } from 'react';
 import SW from './ProjectOverview.swiss';
 // import withRequests from 'core/components/withRequests';
 
 import Loader from 'src/react/_components/loaders/Loader';
-import ProjectProvider from 'core/react/_hocs/Project/ProjectProvider';
 import ProjectTask from 'src/react/Project/Task/ProjectTask';
 import CardContent from 'src/react/_components/Card/Content/CardContent';
 import CardHeader from 'src/react/_components/Card/Header/CardHeader';
@@ -14,10 +13,13 @@ import useProjectKeyboard from 'src/react/Project/useProjectKeyboard';
 import useProjectSlice from 'core/react/_hooks/useProjectSlice';
 
 import useBeforeUnload from 'src/react/_hooks/useBeforeUnload';
+import { ProjectContext } from 'src/react/contexts';
 
 ProjectOverview.sizes = [750];
 
-export default function ProjectOverview({ projectId }) {
+export default memo(ProjectOverview);
+
+function ProjectOverview({ projectId }) {
   const stateManager = useSyncedProject(projectId);
 
   useProjectKeyboard(stateManager);
@@ -43,7 +45,7 @@ export default function ProjectOverview({ projectId }) {
       noframe
       header={<CardHeader padding={30} title={projectName} />}
     >
-      <ProjectProvider stateManager={stateManager}>
+      <ProjectContext.Provider value={stateManager}>
         <SW.Wrapper>
           <ProjectSide stateManager={stateManager} />
           <SW.TasksWrapper>
@@ -52,7 +54,7 @@ export default function ProjectOverview({ projectId }) {
             ))}
           </SW.TasksWrapper>
         </SW.Wrapper>
-      </ProjectProvider>
+      </ProjectContext.Provider>
     </CardContent>
   );
 }

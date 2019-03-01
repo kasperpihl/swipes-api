@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import SideHeader from 'src/react/_components/SideHeader/SideHeader';
 import useProjectSlice from 'core/react/_hooks/useProjectSlice';
 
 import SW from './ProjectSide.swiss';
 
-export default function ProjectSide({ stateManager }) {
+export default memo(ProjectSide);
+function ProjectSide({ stateManager }) {
   const [sliderValue, setSliderValue] = useState(0);
 
   const [
