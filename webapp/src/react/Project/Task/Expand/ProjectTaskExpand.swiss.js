@@ -17,6 +17,7 @@ export default styleSheet('ProjectTaskExpand', {
     _size: '24px',
     _svgColor: '$sw2',
     pointerEvents: 'none',
+    transition: '.1s',
     expanded: {
       transform: 'rotate(90deg)'
     }

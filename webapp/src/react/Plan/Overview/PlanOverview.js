@@ -1,11 +1,11 @@
 import React from 'react';
-import { fromJS } from 'immutable';
 import SW from './PlanOverview.swiss';
 import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
 import CardContent from 'src/react/_components/Card/Content/CardContent';
 import CardHeader from 'src/react/_components/Card/Header/CardHeader';
 import Button from 'src/react/_components/Button/Button';
 import PlanSide from 'src/react/Plan/Side/PlanSide';
+import PlanFilter from 'src/react/Plan/Filter/PlanFilter';
 import useUpdate from 'core/react/_hooks/useUpdate';
 import useRequest from 'core/react/_hooks/useRequest';
 
@@ -46,6 +46,7 @@ export default function PlanOverview({ planId }) {
     >
       <SW.Wrapper>
         <PlanSide plan={plan} />
+        <PlanFilter plan={plan} />
       </SW.Wrapper>
     </CardContent>
   );

@@ -9,7 +9,7 @@ import SW from './Card.swiss';
 
 export default connect()(Card);
 
-function Card({ children, top, left, isOverlay, isUnderlay, dispatch }) {
+function Card({ children, left, isOverlay, isUnderlay, dispatch }) {
   const nav = useNav();
   const handleClick = () => {
     if (isUnderlay) {
@@ -19,7 +19,7 @@ function Card({ children, top, left, isOverlay, isUnderlay, dispatch }) {
   return (
     <SW.Wrapper
       width={nav.width}
-      left={left}
+      left={Math.round(left)}
       isOverlay={isOverlay}
       isUnderlay={isUnderlay}
       onClick={handleClick}
