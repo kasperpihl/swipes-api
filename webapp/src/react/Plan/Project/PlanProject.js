@@ -47,7 +47,6 @@ function PlanProject({ projectId, hidden, selectedTasks, onToggleTask }) {
         {visibleOrder.map(taskId => {
           let isSelected =
             selectedTasks.indexOf(`${projectId}_-_${taskId}`) > -1;
-          let toggleTaskId = taskId;
 
           if (isSelected) {
             lastSelectedTaskId = taskId;
@@ -56,29 +55,30 @@ function PlanProject({ projectId, hidden, selectedTasks, onToggleTask }) {
 
           if (!isSelected && lastSelectedTaskId) {
             isSelected = indention.get(taskId) > lastSelectedIndention;
-            if (isSelected) {
-              toggleTaskId = lastSelectedTaskId;
+            if (!isSelected) {
+              lastSelectedTaskId = null;
+              lastSelectedIndention = -1;
             }
-          }
-          if (!isSelected) {
-            lastSelectedTaskId = null;
-            lastSelectedIndention = -1;
           }
 
           let handlePlanSelect;
-          if (onToggleTask) {
+          if (!isSelected || taskId === lastSelectedTaskId) {
             handlePlanSelect = () => {
-              onToggleTask(projectId, toggleTaskId);
+              onToggleTask(projectId, taskId);
             };
           }
 
           return (
-            <ProjectTask
-              taskId={taskId}
-              key={taskId}
-              isSelectedInPlan={isSelected}
-              onPlanSelect={handlePlanSelect}
-            />
+            <SW.TaskWrapper key={taskId}>
+              <SW.ButtonWrapper forceHide={!handlePlanSelect}>
+                <SW.Button
+                  icon="Plus"
+                  onClick={handlePlanSelect}
+                  selected={isSelected}
+                />
+              </SW.ButtonWrapper>
+              <ProjectTask taskId={taskId} selected={isSelected} />
+            </SW.TaskWrapper>
           );
         })}
       </ProjectContext.Provider>

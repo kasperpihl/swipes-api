@@ -1,4 +1,4 @@
-import React, { Fragment, useReducer } from 'react';
+import React, { Fragment, useReducer, useMemo } from 'react';
 
 import cachedCallback from 'src/utils/cachedCallback';
 import usePaginationRequest from 'core/react/_hooks/usePaginationRequest';
@@ -11,7 +11,7 @@ import PlanSideDraft from 'src/react/Plan/Side/Draft/PlanSideDraft';
 
 import SW from './PlanSelect.swiss';
 
-export default function PlanSelect({ plan, editing }) {
+export default function PlanSelect({ plan }) {
   const req = usePaginationRequest(
     'project.list',
     {
@@ -24,6 +24,14 @@ export default function PlanSelect({ plan, editing }) {
     }
   );
 
+  const defaultObject = useMemo(() => {
+    const defaultExpanded = {};
+    plan.tasks.forEach(({ project_id }) => {
+      defaultExpanded[project_id] = true;
+    });
+    return defaultExpanded;
+  }, []);
+
   const [expanded, toggleExpanded] = useReducer((state, key) => {
     const newState = { ...state };
     if (state[key]) {
@@ -32,7 +40,7 @@ export default function PlanSelect({ plan, editing }) {
       newState[key] = true;
     }
     return newState;
-  }, {});
+  }, defaultObject);
 
   const [selectedTasks, toggleSelectedTask] = useReducer((state, action) => {
     const newState = [].concat(state);
@@ -101,7 +109,7 @@ export default function PlanSelect({ plan, editing }) {
                 <PlanProject
                   projectId={project_id}
                   selectedTasks={selectedTasks}
-                  onToggleTask={editing ? undefined : handleToggleTask}
+                  onToggleTask={handleToggleTask}
                   hidden={!expanded[project_id]}
                 />
               )}

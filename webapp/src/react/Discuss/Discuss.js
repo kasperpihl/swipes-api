@@ -52,7 +52,7 @@ export default class Discuss extends PureComponent {
     return (
       <SW.LeftHeaderWrapper>
         <CardHeader title="Chat">
-          <Button onClick={this.handleNewDiscussion} icon="Plus" />
+          <Button onClick={this.handleNewDiscussion} icon="CircledPlus" />
         </CardHeader>
         <TabBar tabs={tabs} onChange={this.handleTabChange} value={tabIndex} />
       </SW.LeftHeaderWrapper>

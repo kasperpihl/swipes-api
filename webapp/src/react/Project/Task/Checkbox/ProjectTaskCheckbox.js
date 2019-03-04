@@ -17,7 +17,7 @@ export default compose(
   memo
 )(ProjectTaskCheckbox);
 
-function ProjectTaskCheckbox({ taskId, successGradient, disabled }) {
+function ProjectTaskCheckbox({ taskId, successGradient }) {
   const stateManager = useContext(ProjectContext);
   const [completion] = useProjectSlice(stateManager, clientState => [
     clientState.getIn(['completion', taskId])
@@ -36,7 +36,7 @@ function ProjectTaskCheckbox({ taskId, successGradient, disabled }) {
   );
 
   return (
-    <SW.Wrapper onClick={handleComplete} disabled={disabled}>
+    <SW.Wrapper onClick={handleComplete}>
       <SW.Checkbox checked={completion}>
         {completion && <Icon icon="Checkmark" fill="#FFFFFF" width="18" />}
       </SW.Checkbox>

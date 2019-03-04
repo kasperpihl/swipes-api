@@ -3,14 +3,10 @@ import { styleSheet } from 'swiss-react';
 export default styleSheet('ProjectTaskInput', {
   Input: {
     _el: 'input',
-    height: '30px',
-    _font: ['15px', '30px', '$regular'],
+    height: '24px',
+    _textStyle: 'H3',
     width: '100%',
     borderRadius: '3px',
-    paddingLeft: '6px',
-    disabled: {
-      pointerEvents: 'none',
-      userSelect: 'none'
-    }
+    paddingLeft: '6px'
   }
 });

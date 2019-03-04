@@ -109,10 +109,9 @@ export default class DiscussionHeader extends PureComponent {
   render() {
     const {
       discussion,
-      myId,
       loader,
       onClickAttachments,
-      viewAttachments
+      attachmentsOnly
     } = this.props;
     const topic = discussion.topic;
     const subtitle = {
@@ -127,8 +126,7 @@ export default class DiscussionHeader extends PureComponent {
           <SW.Button
             title={'See attachments'}
             onClick={onClickAttachments}
-            icon={viewAttachments ? 'Eye' : undefined}
-            viewAttachments={viewAttachments}
+            selected={attachmentsOnly}
           />
           <SW.Button
             icon="ThreeDots"

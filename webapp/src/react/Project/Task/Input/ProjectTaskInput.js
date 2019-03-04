@@ -14,7 +14,7 @@ import SW from './ProjectTaskInput.swiss';
 
 export default memo(ProjectTaskInput);
 
-function ProjectTaskInput({ taskId, disabled }) {
+function ProjectTaskInput({ taskId }) {
   const stateManager = useContext(ProjectContext);
   const unmountedRef = useUnmountedRef();
   const inputRef = useRef();
@@ -65,7 +65,6 @@ function ProjectTaskInput({ taskId, disabled }) {
 
   return (
     <SW.Input
-      disabled={disabled}
       onFocus={handleFocus}
       onBlur={handleBlur}
       value={title}

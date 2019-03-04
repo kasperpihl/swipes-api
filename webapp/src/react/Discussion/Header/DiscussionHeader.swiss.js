@@ -62,20 +62,6 @@ export default styleSheet('DiscussionHeader', {
   },
 
   Button: {
-    _el: Button,
-    pointerEvents: 'auto',
-    leftAlign: {
-      marginRight: 'auto'
-    },
-
-    viewAttachments: {
-      borderRadius: '2px',
-      backgroundColor: 'black',
-      color: 'black',
-
-      '& > svg': {
-        _svgColor: '$sw5'
-      }
-    }
+    _el: Button
   }
 });

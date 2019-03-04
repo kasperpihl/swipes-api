@@ -39,11 +39,14 @@ function ProjectTaskAssignees({ taskId }) {
   );
 
   return (
-    <SW.Wrapper hide={!assignees.size && !isSelected}>
+    <SW.Wrapper
+      hide={!assignees.size && !isSelected}
+      onClick={handleAssignClick}
+    >
       <Assignees
         userIds={assignees}
         organizationId={ownedBy}
-        size={24}
+        size={18}
         maxImages={4}
         onClick={handleAssignClick}
       >

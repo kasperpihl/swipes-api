@@ -3,7 +3,7 @@ import Icon from 'src/react/_components/Icon/Icon';
 
 export default styleSheet('ProjectTaskExpand', {
   Wrapper: {
-    _size: ['24px', '30px'],
+    _size: ['24px', '24px'],
     _flex: ['row', 'center', 'center'],
     flex: 'none',
     cursor: 'pointer',

@@ -12,7 +12,7 @@ import SW from './ProjectTask.swiss';
 
 export default memo(ProjectTask);
 
-function ProjectTask({ taskId, isSelectedInPlan, onPlanSelect }) {
+function ProjectTask({ taskId, selected }) {
   const stateManager = useContext(ProjectContext);
 
   const [indention, isSelected] = useProjectSlice(
@@ -27,15 +27,10 @@ function ProjectTask({ taskId, isSelectedInPlan, onPlanSelect }) {
 
   return (
     <SW.ProvideContext>
-      <SW.Wrapper
-        onClick={onPlanSelect}
-        indention={indention}
-        selectedInPlan={isSelectedInPlan}
-        selected={isSelected}
-      >
+      <SW.Wrapper indention={indention} selected={selected || isSelected}>
         <ProjectTaskExpand taskId={taskId} />
-        <ProjectTaskCheckbox taskId={taskId} disabled={!!onPlanSelect} />
-        <ProjectTaskInput taskId={taskId} disabled={!!onPlanSelect} />
+        <ProjectTaskCheckbox taskId={taskId} />
+        <ProjectTaskInput taskId={taskId} />
         <ProjectTaskAssignees taskId={taskId} />
       </SW.Wrapper>
     </SW.ProvideContext>

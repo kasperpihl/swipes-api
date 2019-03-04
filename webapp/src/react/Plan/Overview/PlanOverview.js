@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
 import CardContent from 'src/react/_components/Card/Content/CardContent';
 import CardHeader from 'src/react/_components/Card/Header/CardHeader';
@@ -13,7 +13,6 @@ export default function PlanOverview({ planId }) {
     plan_id: planId
   });
 
-  const [editing, setEditing] = useState(false);
   useUpdate('plan', plan => {
     if (plan.plan_id === planId) {
       req.merge('plan', plan);
@@ -37,16 +36,11 @@ export default function PlanOverview({ planId }) {
       noframe
       header={
         <CardHeader padding={30} title={plan.title} subtitle={subtitle}>
-          <Button
-            title="Edit tasks"
-            onClick={() => setEditing(c => !c)}
-            selected={editing}
-          />
           <Button icon="ThreeDots" />
         </CardHeader>
       }
     >
-      <PlanSelect plan={plan} editing={editing} />
+      <PlanSelect plan={plan} />
     </CardContent>
   );
 }
