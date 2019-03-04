@@ -15,7 +15,14 @@ Button.propTypes = {
   })
 };
 
-export default function Button({ icon, title, status, onClick, ...rest }) {
+export default function Button({
+  icon,
+  title,
+  status,
+  onClick,
+  selected,
+  ...rest
+}) {
   const parsedStatus = buttonParseStatus(status);
   const parsedTitle = buttonParseTitle(title, status);
 
@@ -23,6 +30,7 @@ export default function Button({ icon, title, status, onClick, ...rest }) {
     <SW.ProvideContext
       hasIcon={!!(icon || parsedStatus !== 'Standard')}
       status={parsedStatus}
+      selected={selected}
     >
       <SW.Wrapper
         {...rest}

@@ -37,7 +37,6 @@ export default endpointCreate(
     if (!foundProjectRes.rows.length) {
       throw Error('Not found').code(404);
     }
-    console.log(foundProjectRes.rows);
 
     await transaction([
       sqlInsertQuery(
@@ -50,15 +49,7 @@ export default endpointCreate(
         {
           upsert: 'plan_project_tasks_pkey'
         }
-      ),
-      {
-        text: `
-          UPDATE plans
-          SET tasks_count = tasks_count + 1
-          WHERE plan_id = $1
-        `,
-        values: [plan_id]
-      }
+      )
     ]);
   }
 );

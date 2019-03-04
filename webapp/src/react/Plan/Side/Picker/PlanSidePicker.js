@@ -64,7 +64,7 @@ export default function PlanSidePicker({ plan }) {
           <SW.InputText checked={twoWeekState}>2 weeks</SW.InputText>
         </SW.InputWrapper>
       </SW.InputContainer>
-      {/* <DayTracker startDate={plan.start_date} endDate={endDate} /> */}
+      <DayTracker startDate={plan.start_date} endDate={endDate} />
     </SW.Wrapper>
   );
 }

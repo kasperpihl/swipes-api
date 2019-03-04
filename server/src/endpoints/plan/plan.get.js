@@ -23,11 +23,24 @@ export default endpointCreate(
       [plan_id]
     );
 
+    const planProjectTasksRes = await query(
+      `
+        SELECT project_id, task_id
+        FROM plan_project_tasks
+        WHERE plan_id = $1
+      `,
+      [plan_id]
+    );
+
     if (!planRes || !planRes.rows.length) {
-      throw Error('project_not_found').code(404);
+      throw Error('Not found').code(404);
     }
+
+    const plan = planRes.rows[0];
+    plan.tasks = planProjectTasksRes.rows;
+
     res.locals.output = {
-      plan: planRes.rows[0]
+      plan
     };
   }
 );

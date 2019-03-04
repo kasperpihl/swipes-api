@@ -8,6 +8,7 @@ import CardHeader from 'src/react/_components/Card/Header/CardHeader';
 import ProjectSide from 'src/react/Project/Side/ProjectSide';
 import ProjectTaskList from 'src/react/Project/Task/List/ProjectTaskList';
 
+import useRequest from 'core/react/_hooks/useRequest';
 import useSyncedProject from 'core/react/_hooks/useSyncedProject';
 import useProjectSlice from 'core/react/_hooks/useProjectSlice';
 import useBeforeUnload from 'src/react/_hooks/useBeforeUnload';
@@ -27,6 +28,7 @@ function ProjectOverview({ projectId }) {
   const [projectTitle] = useProjectSlice(stateManager, clientState => [
     clientState.get('title')
   ]);
+  useRequest('project.mark', { project_id: projectId });
 
   if (!projectTitle) {
     return <Loader center />;

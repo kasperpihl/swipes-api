@@ -26,7 +26,7 @@ export default endpointCreate(
     let ownedByFilter = '';
     if (owned_by) {
       ownedByFilter = 'AND p.owned_by = $4';
-      // orderBy = 'p.title ASC';
+      orderBy = 'p.title ASC';
       values.push(owned_by);
     }
 

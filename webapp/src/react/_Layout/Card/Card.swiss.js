@@ -37,7 +37,8 @@ export default styleSheet('Card', {
   },
   Actions: {
     _size: ['auto', '100%'],
-    _flex: 'row',
+    paddingTop: '12px',
+    _flex: ['row', 'left', 'center'],
     position: 'absolute',
     right: 0,
     top: 0

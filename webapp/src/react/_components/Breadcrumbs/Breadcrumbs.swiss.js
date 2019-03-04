@@ -1,13 +1,13 @@
 import { styleSheet } from 'swiss-react';
 import Icon from 'src/react/_components/Icon/Icon';
 
-const navbarH = '48px';
+const navbarH = '36px';
 
 export default styleSheet('Breadcrumbs', {
   Wrapper: {
     _size: ['100%', navbarH],
     _flex: '',
-    paddingTop: '4px'
+    paddingTop: '12px'
   },
 
   ButtonWrapper: {

@@ -6,9 +6,14 @@ export default styleSheet('ProjectTask', {
     _flex: ['row', 'left', 'center'],
     paddingLeft: get => `${get('indention') * 24}px`,
     paddingRight: '6px',
-    selected: {
-      backgroundColor: '$sw4'
+    selectedInPlan: {
+      backgroundColor: '$green2'
     },
+    selected: {
+      backgroundColor: '$green3'
+    },
+
+    cursor: 'pointer',
     borderRadius: '4px'
   }
 });

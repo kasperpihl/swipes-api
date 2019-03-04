@@ -5,7 +5,10 @@ export default styleSheet('ProjectTaskCheckbox', {
     _size: ['24px', '30px'],
     _flex: 'center',
     flex: 'none',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    disabled: {
+      pointerEvents: 'none'
+    }
   },
   Checkbox: {
     _size: '20px',

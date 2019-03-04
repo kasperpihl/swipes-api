@@ -17,9 +17,13 @@ function ProjectTaskExpand({ taskId }) {
     ]
   );
 
-  const handleExpandClick = useCallback(() => {
-    stateManager.expandHandler[expanded ? 'collapse' : 'expand'](taskId);
-  }, [expanded]);
+  const handleExpandClick = useCallback(
+    e => {
+      e.stopPropagation();
+      stateManager.expandHandler[expanded ? 'collapse' : 'expand'](taskId);
+    },
+    [expanded]
+  );
 
   return (
     <SW.Wrapper onClick={handleExpandClick}>

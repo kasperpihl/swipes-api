@@ -38,7 +38,7 @@ export default function valPermissions({ permissionKey, permissionCreateKey }) {
       );
 
       if (!permissionRes || !permissionRes.rows.length) {
-        throw Error('not_found').code(404);
+        throw Error('Not found').code(404);
       }
     }
 

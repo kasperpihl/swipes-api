@@ -24,7 +24,7 @@ export default endpointCreate(
     );
 
     if (!projectRes || !projectRes.rows.length) {
-      throw Error('project_not_found').code(404);
+      throw Error('Not found').code(404);
     }
 
     const tasksRes = await query(
@@ -47,21 +47,4 @@ export default endpointCreate(
     };
     res.locals.backgroundInput = { project_id };
   }
-).background(async (req, res) => {
-  const { user_id } = res.locals;
-  const { project_id } = res.locals.input;
-
-  const openedRes = await query(
-    `
-      INSERT INTO project_opens (user_id, project_id, opened_at)
-      VALUES ($1, $2, NOW())
-      ON CONFLICT
-        ON CONSTRAINT project_opens_pkey
-        DO UPDATE
-          SET opened_at = NOW()
-      RETURNING opened_at
-    `,
-    [user_id, project_id]
-  );
-  // console.log(openedRes.rows[0].opened_at);
-});
+);

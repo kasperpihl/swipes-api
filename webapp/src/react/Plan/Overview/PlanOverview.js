@@ -1,10 +1,8 @@
-import React from 'react';
-import SW from './PlanOverview.swiss';
+import React, { useState } from 'react';
 import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
 import CardContent from 'src/react/_components/Card/Content/CardContent';
 import CardHeader from 'src/react/_components/Card/Header/CardHeader';
 import Button from 'src/react/_components/Button/Button';
-import PlanSide from 'src/react/Plan/Side/PlanSide';
 import PlanSelect from 'src/react/Plan/Select/PlanSelect';
 import useUpdate from 'core/react/_hooks/useUpdate';
 import useRequest from 'core/react/_hooks/useRequest';
@@ -15,6 +13,7 @@ export default function PlanOverview({ planId }) {
     plan_id: planId
   });
 
+  const [editing, setEditing] = useState(false);
   useUpdate('plan', plan => {
     if (plan.plan_id === planId) {
       req.merge('plan', plan);
@@ -33,21 +32,21 @@ export default function PlanOverview({ planId }) {
     privacy: 'public'
   };
 
-  console.log(req.result.plan);
   return (
     <CardContent
       noframe
       header={
         <CardHeader padding={30} title={plan.title} subtitle={subtitle}>
-          <Button title="See my tasks" />
+          <Button
+            title="Edit tasks"
+            onClick={() => setEditing(c => !c)}
+            selected={editing}
+          />
           <Button icon="ThreeDots" />
         </CardHeader>
       }
     >
-      <SW.Wrapper>
-        <PlanSide plan={plan} />
-        <PlanSelect plan={plan} />
-      </SW.Wrapper>
+      <PlanSelect plan={plan} editing={editing} />
     </CardContent>
   );
 }

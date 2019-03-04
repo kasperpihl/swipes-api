@@ -1,6 +1,6 @@
 import { styleSheet } from 'swiss-react';
 
-export default styleSheet('ButtonStandard', {
+export default styleSheet('Button', {
   Wrapper: {
     _el: 'a',
     _size: ['auto', '24px'],
@@ -9,16 +9,25 @@ export default styleSheet('ButtonStandard', {
     display: 'inline-flex',
     flex: 'none',
     userSelect: 'none',
-
+    borderRadius: '2px',
     '&:hover': {
-      backgroundColor: '$sw4',
-      borderRadius: '2px'
+      backgroundColor: '$sw4'
+    },
+    selected: {
+      backgroundColor: '$dark',
+      '&:hover': {
+        backgroundColor: '$sw1'
+      }
     }
   },
 
   Title: {
     _el: 'p',
     padding: '0 6px',
+    color: '$dark',
+    selected: {
+      color: '$base'
+    },
     'status=Success': {
       color: '$green1'
     },
