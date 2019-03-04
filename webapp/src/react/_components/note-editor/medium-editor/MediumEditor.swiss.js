@@ -7,17 +7,17 @@ export default styleSheet('MediumEditor', {
       maxWidth: '650px',
       margin: '0 auto',
       position: 'relative',
-      textAlign: 'initial',
+      textAlign: 'initial'
     },
     '& .DraftEditor-root *': {
-      cursor: 'text',
+      cursor: 'text'
     },
 
     '& .DraftEditor-editorContainer': {
       height: 'inherit',
       position: 'relative',
       textAlign: 'initial',
-      zIndex: 1,
+      zIndex: 1
     },
 
     '& .public-DraftEditor-content': {
@@ -27,25 +27,25 @@ export default styleSheet('MediumEditor', {
       minHeight: '49vh',
       textAlign: 'initial',
       padding: '45px 0',
-      paddingTop: '21px',
+      paddingTop: '21px'
     },
     '& .public-DraftEditor-content[contenteditable="true"]': {
-      WebkitUserModify: 'read-write-plaintext-only',
+      WebkitUserModify: 'read-write-plaintext-only'
     },
     '& h1': {
-      _font: ['24px', '42px', 400],
+      _font: ['24px', '42px', '$regular']
     },
     '& h2': {
-      _font: ['18px', '57px', 400],
+      _font: ['18px', '57px', '$regular']
     },
     '& ul': {
       display: 'block',
       listStyleType: 'disc',
       margin: '3px 0',
-      paddingLeft: '3px',
+      paddingLeft: '3px'
     },
     '& ol': {
-      paddingLeft: '3px',
+      paddingLeft: '3px'
     },
 
     '& .public-DraftEditorPlaceholder-root': {
@@ -53,11 +53,11 @@ export default styleSheet('MediumEditor', {
       position: 'absolute',
       zIndex: 0,
       left: '1px',
-      top: '21px',
+      top: '21px'
     },
 
     '& ::selection': {
-      background: '$yellow',
-    },
+      background: '$yellow'
+    }
   }
 });

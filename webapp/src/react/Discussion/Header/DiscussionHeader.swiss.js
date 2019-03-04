@@ -15,7 +15,7 @@ export default styleSheet('DiscussionHeader', {
     _flex: ['column']
   },
   Subtitle: {
-    _font: ['12px', '18px', 400],
+    _font: ['12px', '18px', '$regular'],
     color: '$sw2'
   },
   Actions: {
@@ -42,7 +42,7 @@ export default styleSheet('DiscussionHeader', {
     color: '$sw2'
   },
   Label: {
-    _font: ['12px', '12px', 500],
+    _font: ['12px', '12px', '$medium'],
     color: '$sw2',
     paddingLeft: '6px',
     paddingRight: '12px',

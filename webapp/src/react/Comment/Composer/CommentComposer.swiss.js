@@ -16,7 +16,7 @@ export default styleSheet('CommentComposer', {
     _flex: ['column', 'left', 'top'],
     width: '100%',
     '& .public-DraftEditor-content, & .public-DraftEditorPlaceholder-root': {
-      _font: ['13px', '18px', 400],
+      _font: ['13px', '18px', '$regular'],
       color: '$sw1',
       padding: '18px 12px'
     },

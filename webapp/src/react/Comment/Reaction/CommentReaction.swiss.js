@@ -33,7 +33,7 @@ export default styleSheet('CommentReaction', {
     }
   },
   LikeString: {
-    _font: ['12px', '18px', 400],
+    _font: ['12px', '18px', '$regular'],
     display: 'none',
     color: '$sw1',
     show: {

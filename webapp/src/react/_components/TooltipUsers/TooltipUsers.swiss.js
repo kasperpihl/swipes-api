@@ -22,7 +22,7 @@ export default styleSheet('TooltipUsers', {
     overflow: 'hidden'
   },
   Name: {
-    _font: ['12px', '18px', 500],
+    _font: ['12px', '18px', '$medium'],
     _truncateString: '',
     paddingLeft: '15px'
   }

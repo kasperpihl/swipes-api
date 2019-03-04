@@ -5,7 +5,7 @@ export default styleSheet('ProfileOrg', {
     _size: ['100%', 'auto'],
     _flex: ['row', 'flex-start', 'center'],
     _textStyle: 'body',
-    fontWeight: '500',
+    fontWeight: '$medium',
     color: '$sw1',
     borderBottom: '1px solid $sw3',
     padding: '12px 0',

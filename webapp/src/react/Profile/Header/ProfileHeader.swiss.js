@@ -6,7 +6,7 @@ export default styleSheet('ProfileHeader', {
   Wrapper: {
     _size: ['100%', 'auto'],
     _flex: ['row', 'flex-start', 'center'],
-    _font: ['27px', '27px', '400']
+    _font: ['27px', '27px', '$regular']
   },
 
   NameField: {
@@ -39,7 +39,7 @@ export default styleSheet('ProfileHeader', {
   HeaderInitials: {
     _size: '72px',
     _flex: ['row', 'center', 'center'],
-    _font: ['21px', '500'],
+    _font: ['21px', '$medium'],
     color: 'white',
     borderRadius: '50%'
   },

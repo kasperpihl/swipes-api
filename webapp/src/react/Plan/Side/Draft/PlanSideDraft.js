@@ -27,17 +27,12 @@ export default function PlanSideDraft({ plan }) {
     <>
       <SideHeader title={plan.task_counter} subtitle="Tasks selected" />
       <PlanSidePicker plan={plan} />
-      <PlanSideAlert
-        type="draft"
-        title="This is a draft - Select some tasks and press start"
-      >
-        <Button
-          title="Start"
-          icon="Comment"
-          onClick={handleStart}
-          status={loader.get('StartButton')}
-        />
-      </PlanSideAlert>
+      <Button
+        title="Start"
+        icon="Comment"
+        onClick={handleStart}
+        status={loader.get('StartButton')}
+      />
     </>
   );
 }

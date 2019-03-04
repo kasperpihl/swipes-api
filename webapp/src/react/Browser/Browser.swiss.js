@@ -6,22 +6,22 @@ export default styleSheet('Browser', {
     position: 'absolute',
     left: '50%',
     top: '50%',
-    transform: 'translateX(-50%) translateY(-50%)',
+    transform: 'translateX(-50%) translateY(-50%)'
   },
 
   BrowserOverlay: {
     _size: ['100%'],
-    overflow: 'hidden',
+    overflow: 'hidden'
   },
 
   BrowserWebView: {
     _size: ['100%', 'calc(100% - 60px)'],
-    paddingTop: '5px',
+    paddingTop: '5px'
   },
 
   BrowserNavBar: {
     _size: ['100%', '60px'],
-    _flex: ['row','center', 'center'],
+    _flex: ['row', 'center', 'center'],
     background: 'white',
     padding: '0 30px',
     position: 'relative',
@@ -32,43 +32,41 @@ export default styleSheet('Browser', {
       content: '',
       position: 'absolute',
       left: '0',
-      top: '0',
-    },
+      top: '0'
+    }
   },
 
-  Left: {
-  },
+  Left: {},
 
-  Right: {
-  },
+  Right: {},
 
   BackButton: {
     _el: Button,
     zIndex: '9',
-    margin: '0 6px',
+    margin: '0 6px'
   },
 
   ForwardButton: {
     _el: Button,
     zIndex: '9',
-    margin: '0 6px',
+    margin: '0 6px'
   },
 
   ReloadButton: {
     _el: Button,
     zIndex: '9',
-    margin: '0 6px',
+    margin: '0 6px'
   },
 
   BrowserButton: {
     _el: Button,
     zIndex: '9',
-    margin: '0 6px',
+    margin: '0 6px'
   },
 
   TitleWrapper: {
     _size: ['auto', '100%'],
-    _font: ['12px', '15px', '500'],
+    _font: ['12px', '15px', '$medium'],
     color: '$sw2',
     minWidth: '300px',
     padding: '0 30px',
@@ -81,7 +79,7 @@ export default styleSheet('Browser', {
       left: '0',
       top: '50%',
       transform: 'translateY(-50%)',
-      backgroundColor: '$sw3',
+      backgroundColor: '$sw3'
     },
 
     '&:after': {
@@ -91,17 +89,17 @@ export default styleSheet('Browser', {
       right: '0',
       top: '50%',
       transform: 'translateY(-50%)',
-      backgroundColor: '$sw3',
-    },
+      backgroundColor: '$sw3'
+    }
   },
 
   Title: {
-      _size: ['100%'],
-      _font: ['16px', '18px', '400'],
-      color: '$sw1',
-      margin: ' 20px 0',
-      textAlign: 'center',
-      pointerEvents: 'none',
-      userSelect: 'none',
-  },
-})
+    _size: ['100%'],
+    _font: ['16px', '18px', '$regular'],
+    color: '$sw1',
+    margin: ' 20px 0',
+    textAlign: 'center',
+    pointerEvents: 'none',
+    userSelect: 'none'
+  }
+});

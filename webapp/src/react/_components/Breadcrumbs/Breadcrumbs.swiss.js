@@ -43,7 +43,7 @@ export default styleSheet('Breadcrumbs', {
   },
   Title: {
     color: '$sw2',
-    _font: ['10px', '24px', 500],
+    _font: ['10px', '24px', '$medium'],
     letterSpacing: '0.6px',
     textTransform: 'uppercase',
     '.crumb:hover &': {

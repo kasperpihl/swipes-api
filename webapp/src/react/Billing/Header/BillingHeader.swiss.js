@@ -6,13 +6,13 @@ export default styleSheet('BillingHeader', {
   },
 
   StatusLabel: {
-    _font: ['12px', '21px', '500'],
+    _font: ['12px', '21px', '$medium'],
     color: '$sw2',
     _size: ['160px', 'auto']
   },
 
   Status: {
-    _font: ['12px', '21px', '500'],
+    _font: ['12px', '21px', '$medium'],
     color: '$blue',
     borderRadius: '2px',
     marginLeft: '6px',

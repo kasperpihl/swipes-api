@@ -51,7 +51,7 @@ export default styleSheet('CommentItem', {
   },
   Name: {
     _textStyle: 'body',
-    fontWeight: '500'
+    fontWeight: '$medium'
   },
   Message: {
     _el: 'p',

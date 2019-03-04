@@ -31,7 +31,7 @@ export default styleSheet('UserImage', {
     flexShrink: '0',
 
     'size>=30': {
-      _font: ['12px', '18px', 500]
+      _font: ['12px', '18px', '$medium']
     }
   },
 
@@ -42,7 +42,7 @@ export default styleSheet('UserImage', {
 
     'size>=30': {
       _textStyle: 'body',
-      fontWeight: '500'
+      fontWeight: '$medium'
     }
   }
 });

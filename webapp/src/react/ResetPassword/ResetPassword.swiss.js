@@ -53,7 +53,7 @@ export default styleSheet('ResetPassword', {
   Button: {
     marginTop: '24px',
     _size: ['auto', '36px'],
-    _font: ['12px', '36px', '500'],
+    _font: ['12px', '36px', '$medium'],
     color: 'white',
     backgroundColor: '$blue',
     borderRadius: '100px',

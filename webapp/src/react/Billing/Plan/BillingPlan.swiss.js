@@ -38,13 +38,13 @@ export default styleSheet('BillingPlan', {
   },
 
   PriceLabel: {
-    _font: ['18px', '24px', '400'],
+    _font: ['18px', '24px', '$regular'],
     paddingLeft: '21px',
     paddingTop: '9px'
   },
 
   Subtitle: {
-    _font: ['12px', '15px', '500'],
+    _font: ['12px', '15px', '$medium'],
     paddingTop: '57px',
     paddingLeft: '21px'
   },

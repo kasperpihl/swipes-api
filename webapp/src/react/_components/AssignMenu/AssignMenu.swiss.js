@@ -9,7 +9,7 @@ export default styleSheet('AssignMenu', {
 
   Text: {
     _el: 'p',
-    _font: ['12px', '18px', '400']
+    _font: ['12px', '18px', '$regular']
   },
 
   Dropdown: {
@@ -50,14 +50,14 @@ export default styleSheet('AssignMenu', {
 
   TeamName: {
     _el: 'h3',
-    _font: ['16px', '18px', '400'],
+    _font: ['16px', '18px', '$regular'],
     userSelect: 'none'
   },
 
   UserName: {
     _el: 'p',
     _size: '100%',
-    _font: ['12px', '18px', '400'],
+    _font: ['12px', '18px', '$regular'],
     _flex: ['column', 'flex-start', 'center'],
     paddingLeft: '6px',
     userSelect: 'none'
@@ -65,7 +65,7 @@ export default styleSheet('AssignMenu', {
 
   SelectedAmount: {
     _el: 'p',
-    _font: ['16px', '18px', '400'],
+    _font: ['16px', '18px', '$regular'],
     marginLeft: '6px',
     marginRight: 'auto',
     userSelect: 'none'

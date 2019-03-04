@@ -1,4 +1,5 @@
 import './constants/colors';
+import './constants/fontSizes';
 import './constants/screenSizes';
 
 import './plugins/hexToRGB';

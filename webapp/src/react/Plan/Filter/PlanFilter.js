@@ -5,6 +5,7 @@ import usePaginationRequest from 'core/react/_hooks/usePaginationRequest';
 import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
 
 import PlanProject from 'src/react/Plan/Project/PlanProject';
+import PlanAlert from 'src/react/Plan/Alert/PlanAlert';
 
 import SW from './PlanFilter.swiss';
 
@@ -39,6 +40,11 @@ export default function PlanFilter({ plan }) {
 
   return (
     <SW.Wrapper>
+      <PlanAlert
+        title="Plan draft"
+        message="Select tasks and click start"
+        type="draft"
+      />
       {req.items.map(({ title, project_id }) => (
         <Fragment key={project_id}>
           <SW.SectionHeader onClick={handleClickCached(project_id)}>

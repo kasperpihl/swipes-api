@@ -38,12 +38,12 @@ export default styleSheet('Authentication', {
   },
 
   Switch: {
-    _font: ['12px', '18px', '500'],
+    _font: ['12px', '18px', '$medium'],
     padding: '0 12px',
     color: '$sw2',
 
     '& a': {
-      _font: ['12px', '18px', '500'],
+      _font: ['12px', '18px', '$medium'],
       cursor: 'pointer',
       '&:hover': {
         textDecoration: 'underline'
@@ -57,13 +57,13 @@ export default styleSheet('Authentication', {
   },
 
   Footer: {
-    _font: ['12px', '18px', '500'],
+    _font: ['12px', '18px', '$medium'],
     marginTop: '30px',
     textAlign: 'left',
     color: '$sw2',
 
     '& a': {
-      _font: ['12px', '18px', '500'],
+      _font: ['12px', '18px', '$medium'],
       cursor: 'pointer',
       color: '$blue',
 

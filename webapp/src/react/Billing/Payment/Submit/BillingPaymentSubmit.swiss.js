@@ -11,7 +11,7 @@ export default styleSheet('BillingPaymentSubmit', {
     marginTop: '20px'
   },
   Subtitle: {
-    _font: ['12px', '15px', '500'],
+    _font: ['12px', '15px', '$medium'],
     color: '$sw2',
     marginTop: '9px'
   },

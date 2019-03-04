@@ -19,7 +19,7 @@ export default styleSheet('Dropdown', {
   },
 
   Text: {
-    _font: ['12px', '18px', 400],
+    _font: ['12px', '18px', '$regular'],
     color: '$sw1',
     padding: '9px 12px',
     hasIcon: {
@@ -75,7 +75,7 @@ export default styleSheet('Dropdown', {
 
   RowText: {
     _el: 'p',
-    _font: ['12px', '18px', 400],
+    _font: ['12px', '18px', '$regular'],
     color: 'black',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',

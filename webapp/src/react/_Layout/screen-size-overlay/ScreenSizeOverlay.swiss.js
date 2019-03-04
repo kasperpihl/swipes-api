@@ -9,23 +9,23 @@ export default styleSheet('ScreenSizeOverlay', {
     top: 0,
     padding: '0 60px',
     position: 'fixed',
-    zIndex: 99999999,
+    zIndex: 99999999
   },
   Title: {
-    _font: ['36px', '48px', 400],
+    _font: ['36px', '48px', '$regular'],
     display: 'block',
     color: 'white',
-    textAlign: 'center',
+    textAlign: 'center'
   },
   Subtitle: {
-    _font: ['15px', '24px', 400],
+    _font: ['15px', '24px', '$regular'],
     marginTop: '12px',
     display: 'block',
     color: 'white',
-    textAlign: 'center',
+    textAlign: 'center'
   },
   CurrentSize: {
-    _font: ['15px', '24px', 400],
+    _font: ['15px', '24px', '$regular'],
     backgroundColor: '$red',
     color: 'white',
     marginTop: '12px',
@@ -33,6 +33,6 @@ export default styleSheet('ScreenSizeOverlay', {
     position: 'fixed',
     right: 0,
     top: 0,
-    padding: '9px 15px',
-  },
+    padding: '9px 15px'
+  }
 });

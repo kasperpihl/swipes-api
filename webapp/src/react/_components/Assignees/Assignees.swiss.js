@@ -29,12 +29,12 @@ export default styleSheet('Assignees', {
   },
 
   ExtraNumber: {
-    _font: ['11px', '18px', 500],
+    _font: ['11px', '18px', '$medium'],
     'size>=30': {
-      _font: ['12px', '18px', 500]
+      _font: ['12px', '18px', '$medium']
     },
     'size>=36': {
-      _font: ['13px', '18px', 500]
+      _font: ['13px', '18px', '$medium']
     },
     color: '$sw2',
     letterSpacing: '-0.3px',
