@@ -42,7 +42,7 @@ export default function PlanSelect({ plan }) {
     <SW.Wrapper>
       <PlanAlert
         title="Plan draft"
-        message="Select tasks and click start"
+        message="Select tasks from projects and start plan."
         type="draft"
       />
       {req.items.map(({ title, project_id }) => (
