@@ -17,7 +17,7 @@ export default function ProjectListItem({ project }) {
       }
     });
   };
-  console.log(project);
+
   const isNew = !project.opened_at;
   let openedAt;
   if (project.opened_at) {
