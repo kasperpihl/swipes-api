@@ -35,7 +35,12 @@ export default function PlanOverview({ planId }) {
     <CardContent
       noframe
       header={
-        <CardHeader padding={30} title={plan.title} subtitle={subtitle}>
+        <CardHeader
+          padding={30}
+          title={plan.title}
+          subtitle={subtitle}
+          separator
+        >
           <Button icon="ThreeDots" />
         </CardHeader>
       }

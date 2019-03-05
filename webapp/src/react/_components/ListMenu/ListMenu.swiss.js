@@ -8,6 +8,20 @@ export default styleSheet('ListMenu', {
     backgroundColor: '$sw5'
   },
 
+  Item: {
+    _size: ['100%', 'auto'],
+    _flex: ['column', 'flex-start', 'flex-start'],
+    _textStyle: 'body',
+
+    '&:hover': {
+      backgroundColor: '$green2'
+    },
+
+    '&:not(:last-child)': {
+      borderBottom: '1px solid $sw4'
+    }
+  },
+
   ItemRow: {
     _size: ['100%', 'auto'],
     _flex: ['column', 'flex-start', 'flex-start'],
@@ -16,7 +30,7 @@ export default styleSheet('ListMenu', {
     userSelect: 'none',
 
     '&:hover': {
-      backgroundColor: 'rgba($blue, 0.25)'
+      backgroundColor: '$green2'
     },
 
     disabled: {

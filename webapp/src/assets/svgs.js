@@ -1,6 +1,7 @@
 export { default as SwipesLogoEmpty } from './icons/swipes-logo-empty.svg';
 
 export { default as Assign } from './icons/assign.svg'; // new
+export { default as ArrowDown } from './icons/arrow-down.svg'; // new
 export { default as ArrowLeftLine } from './icons/arrow-left-line.svg';
 export { default as ArrowRightFull } from './icons/arrow-right-full.svg';
 export { default as ArrowRightLine } from './icons/arrow-right-line.svg';
