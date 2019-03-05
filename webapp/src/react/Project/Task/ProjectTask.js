@@ -27,7 +27,11 @@ function ProjectTask({ taskId, selected }) {
 
   return (
     <SW.ProvideContext>
-      <SW.Wrapper indention={indention} selected={selected || isSelected}>
+      <SW.Wrapper
+        indention={indention}
+        selected={isSelected}
+        isPlanSelected={selected}
+      >
         <ProjectTaskExpand taskId={taskId} />
         <ProjectTaskCheckbox taskId={taskId} />
         <ProjectTaskInput taskId={taskId} />
