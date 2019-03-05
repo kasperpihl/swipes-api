@@ -6,9 +6,9 @@ import SW from './Sidebar.swiss';
 import UserImage from 'src/react/_components/UserImage/UserImage';
 
 const kNavItems = [
-  { screenId: 'PlanList', svg: 'Messages', title: 'Plans' },
-  { screenId: 'ProjectList', svg: 'Milestones', title: 'Projects' },
-  { screenId: 'Chat', svg: 'Messages' },
+  { screenId: 'ProjectList', svg: 'Project', title: 'Projects' },
+  { screenId: 'PlanList', svg: 'Plan', title: 'Plans' },
+  { screenId: 'Chat', svg: 'Chat' },
   { screenId: 'Profile' }
 ];
 

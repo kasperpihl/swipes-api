@@ -39,6 +39,7 @@ export { default as Note } from './icons/note.svg';
 export { default as OrderedList } from './icons/ordered-list.svg';
 export { default as Person } from './icons/person.svg';
 export { default as Pin } from './icons/pin.svg';
+export { default as Plan } from './icons/plan.svg';
 export { default as Plus } from './icons/plus.svg';
 export { default as CircledPlus } from './icons/circled-plus.svg';
 export { default as Project } from './icons/project.svg';

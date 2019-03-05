@@ -113,7 +113,7 @@ export default styleSheet('Sidebar', {
   },
   Icon: {
     _el: Icon,
-    _size: '24px',
+    _size: '36px',
     _svgColor: '$sw2',
     transition: '.3s ease',
     pointerEvents: 'none',
