@@ -17,6 +17,7 @@ export default styleSheet('ProjectListItem', {
   },
   Subtitle: {
     _textStyle: 'body',
+    width: '160px',
     color: '$sw2'
   },
   LeftSideWrapper: {
@@ -38,5 +39,11 @@ export default styleSheet('ProjectListItem', {
     '.ProjectListItem_Wrapper:hover &': {
       display: 'flex'
     }
+  },
+
+  DateOpened: {
+    _flex: ['row', 'left', 'center'],
+    _textStyle: 'body',
+    color: '$sw2'
   }
 });

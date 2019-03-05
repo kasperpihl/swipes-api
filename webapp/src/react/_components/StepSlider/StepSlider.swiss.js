@@ -7,65 +7,13 @@ export default styleSheet('StepSlider', {
     position: 'relative'
   },
 
-  InputButton: {
-    _el: 'button',
-    _size: '25px',
-    cursor: 'pointer',
-    flex: 'none',
-
-    '&:before': {
-      content: '',
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      transform: 'translateX(-50%) translateY(-50%)',
-      width: '8px',
-      height: '1px',
-      backgroundColor: '$dark'
-    },
-
-    right: {
-      _size: '25px',
-      flex: 'none',
-
-      '&:before': {
-        content: '',
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translateX(-50%) translateY(-50%)',
-        width: '8px',
-        height: '1px',
-        backgroundColor: '$dark'
-      },
-
-      '&:after': {
-        content: '',
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translateX(-50%) translateY(-50%)',
-        height: '8px',
-        width: '1px',
-        backgroundColor: '$dark'
-      },
-
-      deactivated: {
-        '&:before': {
-          opacity: '0.5'
-        },
-
-        '&:after': {
-          opacity: '0.5'
-        }
-      }
-    },
-
-    deactivated: {
-      '&:before': {
-        opacity: '0.5'
-      }
-    }
+  StepCounter: {
+    _textStyle: 'caption',
+    _flex: ['row', 'center', 'center'],
+    border: '1px solid $sw3',
+    borderRadius: '2px',
+    color: '$sw2',
+    padding: '1px 12px'
   },
 
   Input: {

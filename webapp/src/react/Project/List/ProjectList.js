@@ -56,6 +56,7 @@ export default function ProjectList() {
         <SectionHeader>
           <SW.Name>Name</SW.Name>
           <SW.Team>Team</SW.Team>
+          <SW.LastOpened>Last Opened</SW.LastOpened>
         </SectionHeader>
         {req.items.map(project => (
           <ProjectListItem key={project.project_id} project={project} />

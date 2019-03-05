@@ -44,8 +44,10 @@ export default function ProjectListItem({ project }) {
       <SW.TextWrapper>
         <SW.Title>{project.title}</SW.Title>
         <SW.Subtitle>{orgGetBelonging(project.owned_by)}</SW.Subtitle>
-        {isNew && <span>New</span>}
-        {!isNew && <span>{openedAt}</span>}
+        <SW.DateOpened>
+          {isNew && <span>New</span>}
+          {!isNew && <span>{openedAt}</span>}
+        </SW.DateOpened>
       </SW.TextWrapper>
     </SW.Wrapper>
   );

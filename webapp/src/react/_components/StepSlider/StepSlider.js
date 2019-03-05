@@ -11,26 +11,17 @@ export default class stepSlider extends Component {
       increase,
       decrease
     } = this.props;
+    const sliderBackground = (sliderValue / max) * 100;
     return (
       <SW.InputPackage>
-        <SW.InputButton
-          deactivated={sliderValue === min}
-          disabled={sliderValue === min}
-          onClick={decrease}
-        />
+        <SW.StepCounter>{sliderValue + 1}</SW.StepCounter>
         <SW.Input
           type="range"
           onChange={onSliderChange}
           min={min}
           max={max}
           value={sliderValue}
-          colorValue={sliderValue} //TODO: once onChange handler is wired up, remove hard coded value and set it to sliderValue
-        />
-        <SW.InputButton
-          right
-          deactivated={sliderValue === max}
-          disabled={sliderValue === max}
-          onClick={increase}
+          colorValue={sliderBackground} //TODO: once onChange handler is wired up, remove hard coded value and set it to sliderValue
         />
       </SW.InputPackage>
     );
