@@ -100,7 +100,7 @@ export default function PlanSidePicker({ plan }) {
 
   return (
     <SW.Wrapper>
-      <SW.Title>Start date</SW.Title>
+      <SW.Title>Start time</SW.Title>
       <SW.Day onClick={openWeeksList}>
         <SW.WeekNumber compact>W{startDate.week()}</SW.WeekNumber>
         {startDateText}

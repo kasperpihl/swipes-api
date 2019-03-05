@@ -14,7 +14,6 @@ export default styleSheet('PlanSidePicker', {
     _textStyle: 'body',
     _flex: ['row', 'left', 'center'],
     _size: ['100%', '30px'],
-    fontWeight: '$bold',
     margin: '8px 0 18px 0',
     border: '1px solid $sw3'
   },
@@ -60,7 +59,7 @@ export default styleSheet('PlanSidePicker', {
 
   WeekNumber: {
     _size: '30px',
-    _font: ['8px', '12px', '400'],
+    _font: ['8px', '12px', '$regular'],
     _flex: ['row', 'center', 'center'],
     color: '$dark',
     margin: '6px 6px 6px 9px',
@@ -113,7 +112,6 @@ export default styleSheet('PlanSidePicker', {
 
   InputText: {
     _textStyle: 'body',
-    fontWeight: 'bold',
 
     checked: {
       color: 'white'
