@@ -15,7 +15,10 @@ addGlobalStyles({
 
 export default styleSheet('ButtonIcon', {
   LoaderCircle: {
-    _size: '36px',
+    _size: '30px',
+    small: {
+      _size: '24px'
+    },
     backgroundColor: '$sw1',
     borderRadius: '100%',
     animation: 'button-loader 1.0s infinite ease-in-out'
@@ -24,13 +27,18 @@ export default styleSheet('ButtonIcon', {
   IconWrapper: {
     _size: '24px',
     _flex: ['row', 'center', 'center'],
-    flex: 'none'
+    flex: 'none',
+    '&:not(:only-child)': {
+      paddingLeft: '6px'
+    }
   },
 
   Icon: {
     _el: Icon,
     _size: '24px',
-
+    selected: {
+      _svgColor: '$base'
+    },
     'status=Success': {
       _svgColor: '$green1'
     },

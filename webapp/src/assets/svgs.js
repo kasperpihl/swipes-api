@@ -44,7 +44,6 @@ export { default as Plus } from './icons/plus.svg';
 export { default as CircledPlus } from './icons/circled-plus.svg';
 export { default as Project } from './icons/project.svg';
 export { default as Reload } from './icons/reload.svg';
-export { default as Reorder } from './icons/reorder.svg';
 export { default as ThreeDots } from './icons/three-dots.svg';
 export { default as Underline } from './icons/underline.svg';
 export { default as UnorderedList } from './icons/unordered-list.svg';

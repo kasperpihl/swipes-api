@@ -145,7 +145,11 @@ export default class ModalCreate extends PureComponent {
           </FMSW.InputWrapper>
           <FMSW.InputWrapper>
             <FMSW.Label>2. Choose belonging</FMSW.Label>
-            <OrgPicker value={ownedBy} onChange={this.handleOrgChange} />
+            <OrgPicker
+              value={ownedBy}
+              onChange={this.handleOrgChange}
+              disablePersonal={type === 'discussion'}
+            />
           </FMSW.InputWrapper>
           {ownedBy !== myId && (
             <>

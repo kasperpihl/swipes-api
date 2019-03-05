@@ -50,7 +50,7 @@ function ProjectTaskAssignees({ taskId }) {
         maxImages={4}
         onClick={handleAssignClick}
       >
-        <Button icon="Person" onClick={handleAssignClick} />
+        <Button icon="Person" onClick={handleAssignClick} small />
       </Assignees>
     </SW.Wrapper>
   );

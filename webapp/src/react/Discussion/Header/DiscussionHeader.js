@@ -125,6 +125,7 @@ export default class DiscussionHeader extends PureComponent {
         <CardHeader title={topic} subtitle={subtitle}>
           <SW.Button
             title={'See attachments'}
+            icon="Eye"
             onClick={onClickAttachments}
             selected={attachmentsOnly}
           />

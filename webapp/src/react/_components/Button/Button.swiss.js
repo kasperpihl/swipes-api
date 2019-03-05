@@ -3,13 +3,18 @@ import { styleSheet } from 'swiss-react';
 export default styleSheet('Button', {
   Wrapper: {
     _el: 'a',
-    _size: ['auto', '24px'],
     _flex: ['row', 'center', 'center'],
     _textStyle: 'body',
     display: 'inline-flex',
     flex: 'none',
     userSelect: 'none',
     borderRadius: '2px',
+    height: '30px',
+    minWidth: '30px',
+    small: {
+      minWidth: '24px',
+      height: '24px'
+    },
     '&:hover': {
       backgroundColor: '$sw4'
     },

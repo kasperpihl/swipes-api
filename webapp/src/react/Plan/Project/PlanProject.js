@@ -75,6 +75,7 @@ function PlanProject({ projectId, hidden, selectedTasks, onToggleTask }) {
                   icon="Plus"
                   onClick={handlePlanSelect}
                   selected={isSelected}
+                  small
                 />
               </SW.ButtonWrapper>
               <ProjectTask taskId={taskId} selected={isSelected} />
