@@ -52,7 +52,7 @@ export default styleSheet('DiscussionListItem', {
     visibility: 'hidden',
     position: 'absolute',
     top: '14px',
-    left: '-19px',
+    left: '9px',
     borderRadius: '50%',
     backgroundColor: '$blue',
     unread: {
