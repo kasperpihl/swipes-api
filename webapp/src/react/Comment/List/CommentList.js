@@ -4,9 +4,9 @@ import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
 import usePaginationRequest from 'core/react/_hooks/usePaginationRequest';
 import PaginationScrollToMore from 'src/react/_components/pagination/PaginationScrollToMore';
 import CommentItem from 'src/react/Comment/Item/CommentItem';
-import EmptyState from 'src/react/_components/EmptyState/EmptyState';
 import SectionHeader from 'src/react/_components/SectionHeader/SectionHeader';
 import useUpdate from 'core/react/_hooks/useUpdate';
+import SW from './CommentList.swiss';
 
 export default function CommentList({ attachmentsOnly, discussion }) {
   const req = usePaginationRequest(
@@ -38,7 +38,7 @@ export default function CommentList({ attachmentsOnly, discussion }) {
 
   if (!req.items || !req.items.length) {
     return (
-      <EmptyState
+      <SW.EmptyState
         showIcon
         title="IT’S STILL AND QUIET"
         description={`Whenever someone comments on this discussion \n it will show up here.`}

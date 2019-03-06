@@ -4,14 +4,16 @@ import Button from 'src/react/_components/Button/Button';
 export default styleSheet('OrganizationInviteInput', {
   Wrapper: {
     _size: ['100%', 'auto'],
-    _flex: ['column', 'flex-start', 'flex-start']
+    _flex: ['column', 'flex-start', 'flex-start'],
+    marginTop: '12px'
   },
 
   InviteText: {
     _el: 'p',
     _textStyle: 'body',
     fontWeight: '$medium',
-    color: '$sw1'
+    color: '$sw1',
+    padding: '3px 0'
   },
 
   InputWrapper: {

@@ -55,5 +55,9 @@ export default styleSheet('Card', {
       opacity: '0',
       visibility: 'hidden'
     }
+  },
+  PinButton: {
+    _el: Button,
+    borderRadius: '50% !important'
   }
 });

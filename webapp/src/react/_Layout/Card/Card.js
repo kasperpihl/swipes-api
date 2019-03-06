@@ -28,9 +28,10 @@ function Card({ children, left, isOverlay, isUnderlay, dispatch }) {
         <Breadcrumbs side={nav.side} />
         <SW.Actions>
           {nav.side !== 'left' && (
-            <Button
+            <SW.PinButton
               onClick={nav.toggleLock}
               icon={nav.isLocked ? 'Pin' : 'Pin'}
+              selected={nav.isLocked}
             />
           )}
           {nav.side !== 'left' && (

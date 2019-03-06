@@ -20,6 +20,7 @@ export default styleSheet('ProgressBar', {
     borderRadius: '3px',
     position: 'absolute',
     top: '0',
-    left: '0'
+    left: '0',
+    transition: '.25s ease'
   }
 });

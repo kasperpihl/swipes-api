@@ -25,6 +25,7 @@ export default styleSheet('CommentItem', {
     _flex: ['column', 'center', 'center'],
     width: '54px',
     height: '100%',
+    marginBottom: 'auto',
     flex: 'none',
 
     isSingleLine: {

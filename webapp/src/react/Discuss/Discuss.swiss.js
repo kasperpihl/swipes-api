@@ -18,7 +18,7 @@ export default styleSheet('Discuss', {
     width: '348px'
   },
   RightSide: {
-    _flex: ['center'],
+    _flex: ['column', 'center', 'center'],
     height: '100%',
     fontSize: '24px',
     width: '452px',

@@ -6,7 +6,7 @@ import SW from './EmptyState.swiss';
 const EmptyState = props => {
   return (
     <SW.ProvideContext large={!!props.large} fill={!!props.fill}>
-      <SW.Wrapper>
+      <SW.Wrapper className={props.className}>
         {props.showIcon && (
           <SW.ImageWrapper>
             <SW.Image icon="EmptyState" />

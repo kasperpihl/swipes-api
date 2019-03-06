@@ -6,7 +6,6 @@ export default styleSheet('EmptyState', {
     _size: ['100%', 'auto'],
     _flex: ['column', 'center', 'center'],
     pointerEvents: 'none',
-    margin: 'auto',
     fill: {
       height: '100%'
     }

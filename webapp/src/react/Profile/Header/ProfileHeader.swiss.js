@@ -62,7 +62,7 @@ export default styleSheet('ProfileHeader', {
     backgroundColor: 'transparent',
 
     '&:hover': {
-      backgroundColor: '$blue',
+      backgroundColor: '$green1',
       opacity: '0.6',
       transition: '.25s ease',
       cursor: 'pointer'
