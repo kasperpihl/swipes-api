@@ -17,7 +17,7 @@ function OrgPicker({ organizations, value, onChange, disablePersonal }) {
   });
 
   useEffect(() => {
-    if (!foundCheckedRef.current) {
+    if (!foundCheckedRef.current && organizations.size) {
       onChange(organizations.first().get('organization_id'));
     }
   });
