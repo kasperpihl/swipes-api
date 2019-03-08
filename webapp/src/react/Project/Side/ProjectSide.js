@@ -1,6 +1,8 @@
 import React, { useState, useEffect, memo } from 'react';
 import useProjectSlice from 'core/react/_hooks/useProjectSlice';
+import contextMenu from 'src/utils/contextMenu';
 
+import AssignMenu from 'src/react/_components/AssignMenu/AssignMenu';
 import SideHeader from 'src/react/_components/SideHeader/SideHeader';
 import ProgressBar from 'src/react/_components/ProgressBar/ProgressBar';
 
@@ -9,6 +11,8 @@ import SW from './ProjectSide.swiss';
 export default memo(ProjectSide);
 function ProjectSide({ stateManager }) {
   const [sliderValue, setSliderValue] = useState(0);
+
+  const [followers, handleAssignSelect] = useState([]);
 
   const [
     totalAmountOfTasks,
@@ -46,6 +50,18 @@ function ProjectSide({ stateManager }) {
 
   const progressBarWidth = (completedTasksAmount / totalAmountOfTasks) * 100;
 
+  const openAssignMenu = e => {
+    const ownedBy = stateManager.getClientState().get('owned_by');
+    contextMenu(AssignMenu, e, {
+      excludeMe: true,
+      selectedIds: followers,
+      organizationId: ownedBy,
+      onSelect: followers => handleAssignSelect(followers)
+    });
+  };
+
+  console.log(followers);
+
   return (
     <SW.Wrapper>
       <SideHeader
@@ -56,7 +72,7 @@ function ProjectSide({ stateManager }) {
       <ProgressBar progress={progressBarWidth} />
       <SW.ButtonWrapper>
         <SW.Button title="Complete project" icon="Complete" />
-        <SW.Button title="Add people" icon="Person" />
+        <SW.Button title="Add people" icon="Person" onClick={openAssignMenu} />
       </SW.ButtonWrapper>
       {maxIndention > 0 && (
         <SW.StepSlider
