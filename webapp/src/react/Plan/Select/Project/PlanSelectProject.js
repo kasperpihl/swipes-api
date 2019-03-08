@@ -10,10 +10,11 @@ import useBeforeUnload from 'src/react/_hooks/useBeforeUnload';
 
 import { ProjectContext } from 'src/react/contexts';
 
-import SW from './PlanProject.swiss';
+import SW from './PlanSelectProject.swiss';
 
-export default memo(PlanProject);
-function PlanProject({ projectId, hidden, selectedTasks, onToggleTask }) {
+export default memo(PlanSelectProject);
+
+function PlanSelectProject({ projectId, hidden, selectedTasks, onToggleTask }) {
   const stateManager = useSyncedProject(projectId);
 
   useProjectKeyboard(stateManager);

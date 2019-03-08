@@ -1,64 +1,37 @@
-import React, { Fragment, useReducer } from 'react';
+import React from 'react';
 
-import cachedCallback from 'src/utils/cachedCallback';
-import usePaginationRequest from 'core/react/_hooks/usePaginationRequest';
-import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
-
-import PlanProject from 'src/react/Plan/Project/PlanProject';
-import PlanAlert from 'src/react/Plan/Alert/PlanAlert';
+import PlanFilterProject from './Project/PlanFilterProject';
+import PlanSideRunning from 'src/react/Plan/Side/Running/PlanSideRunning';
 
 import SW from './PlanFilter.swiss';
 
 export default function PlanFilter({ plan }) {
-  const req = usePaginationRequest(
-    'project.list',
-    {
-      owned_by: plan.owned_by
-    },
-    {
-      cursorKey: 'skip',
-      idAttribute: 'project_id',
-      resultPath: 'projects'
+  const projects = {};
+  plan.tasks.forEach(({ project_id, title, task_id }) => {
+    if (!projects[project_id]) {
+      projects[project_id] = {
+        title,
+        taskIds: []
+      };
     }
+    projects[project_id].taskIds.push(task_id);
+  });
+  const sortedProjectIds = Object.keys(projects).sort((a, b) =>
+    projects[a].title.localeCompare(projects[b].title)
   );
-
-  const [expanded, toggleKey] = useReducer((state, key) => {
-    const newState = { ...state };
-    if (state[key]) {
-      newState[key] = false;
-    } else {
-      newState[key] = true;
-    }
-    return newState;
-  }, {});
-
-  if (!req.items) {
-    return <RequestLoader req={req} />;
-  }
-
-  const handleClickCached = cachedCallback(key => toggleKey(key));
 
   return (
     <SW.Wrapper>
-      <PlanAlert
-        title="Plan draft"
-        message="Select tasks and click start"
-        type="draft"
-      />
-      {req.items.map(({ title, project_id }) => (
-        <Fragment key={project_id}>
-          <SW.SectionHeader onClick={handleClickCached(project_id)}>
-            {title}
-            <SW.Icon icon="ArrowRightFull" expanded={expanded[project_id]} />
-          </SW.SectionHeader>
-          {typeof expanded[project_id] !== 'undefined' && (
-            <PlanProject
-              projectId={project_id}
-              hidden={!expanded[project_id]}
-            />
-          )}
-        </Fragment>
-      ))}
+      <PlanSideRunning plan={plan} />
+      <SW.Content>
+        {sortedProjectIds.map(project_id => (
+          <PlanFilterProject
+            key={project_id}
+            projectId={project_id}
+            project={projects[project_id]}
+          />
+        ))}
+      </SW.Content>
     </SW.Wrapper>
   );
 }

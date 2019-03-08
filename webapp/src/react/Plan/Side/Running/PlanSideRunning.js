@@ -14,7 +14,7 @@ export default function PlanSideRunning({ plan }) {
       <SW.ButtonWrapper>
         <SW.Button title="End plan" icon="Complete" />
       </SW.ButtonWrapper>
-      <StepSlider />
+      {/* <StepSlider /> */}
     </SW.Wrapper>
   );
 }

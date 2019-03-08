@@ -44,8 +44,6 @@ function ProjectSide({ stateManager }) {
     (completionPercentage / 100) * totalAmountOfTasks
   );
 
-  const progressBarWidth = (completedTasksAmount / totalAmountOfTasks) * 100;
-
   return (
     <SW.Wrapper>
       <SideHeader
@@ -53,7 +51,7 @@ function ProjectSide({ stateManager }) {
         smallTitle={`/${totalAmountOfTasks}`}
         subtitle="Tasks Completed"
       />
-      <ProgressBar progress={progressBarWidth} />
+      <ProgressBar progress={completionPercentage} />
       <SW.ButtonWrapper>
         <SW.Button title="Complete project" icon="Complete" />
         <SW.Button title="Add people" icon="Person" />

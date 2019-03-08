@@ -5,7 +5,7 @@ import usePaginationRequest from 'core/react/_hooks/usePaginationRequest';
 import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
 import request from 'core/utils/request';
 
-import PlanProject from 'src/react/Plan/Project/PlanProject';
+import PlanSelectProject from './Project/PlanSelectProject';
 import PlanAlert from 'src/react/Plan/Alert/PlanAlert';
 import PlanSideDraft from 'src/react/Plan/Side/Draft/PlanSideDraft';
 
@@ -106,7 +106,7 @@ export default function PlanSelect({ plan }) {
                 />
               </SW.SectionHeader>
               {typeof expanded[project_id] !== 'undefined' && (
-                <PlanProject
+                <PlanSelectProject
                   projectId={project_id}
                   selectedTasks={selectedTasks}
                   onToggleTask={handleToggleTask}

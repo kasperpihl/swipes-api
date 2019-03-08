@@ -1,7 +1,7 @@
 import { styleSheet } from 'swiss-react';
 import Button from 'src/react/_components/Button/Button';
 
-export default styleSheet('PlanProject', {
+export default styleSheet('PlanSelectProject', {
   Wrapper: {
     hidden: {
       display: 'none'

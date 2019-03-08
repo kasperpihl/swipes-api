@@ -4,6 +4,7 @@ import CardContent from 'src/react/_components/Card/Content/CardContent';
 import CardHeader from 'src/react/_components/Card/Header/CardHeader';
 import Button from 'src/react/_components/Button/Button';
 import PlanSelect from 'src/react/Plan/Select/PlanSelect';
+import PlanFilter from 'src/react/Plan/Filter/PlanFilter';
 import useUpdate from 'core/react/_hooks/useUpdate';
 import useRequest from 'core/react/_hooks/useRequest';
 
@@ -45,7 +46,11 @@ export default function PlanOverview({ planId }) {
         </CardHeader>
       }
     >
-      <PlanSelect plan={plan} />
+      {plan.started_at ? (
+        <PlanFilter plan={plan} />
+      ) : (
+        <PlanSelect plan={plan} />
+      )}
     </CardContent>
   );
 }

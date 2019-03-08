@@ -4,6 +4,10 @@ import SectionHeader from 'src/react/_components/SectionHeader/SectionHeader';
 
 export default styleSheet('PlanFilter', {
   Wrapper: {
+    _flex: ['row', 'flex-start', 'flex-start'],
+    padding: '30px 30px 0 30px'
+  },
+  Content: {
     width: '100%'
   },
   SectionHeader: {

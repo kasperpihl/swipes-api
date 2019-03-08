@@ -25,9 +25,11 @@ export default endpointCreate(
 
     const planProjectTasksRes = await query(
       `
-        SELECT project_id, task_id
-        FROM plan_project_tasks
-        WHERE plan_id = $1
+        SELECT ppt.project_id, ppt.task_id, pr.title
+        FROM plan_project_tasks ppt
+        INNER JOIN projects pr
+        ON ppt.project_id = pr.project_id
+        WHERE ppt.plan_id = $1
       `,
       [plan_id]
     );
