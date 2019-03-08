@@ -6,7 +6,8 @@ export default styleSheet('CardHeader', {
     _flex: ['column', 'left', 'top'],
     padding: get => `0 ${get('padding')}px`,
     separator: {
-      borderBottom: '1px solid $sw4'
+      borderBottom: '1px solid $sw4',
+      paddingBottom: '6px'
     },
 
     subtitle: {

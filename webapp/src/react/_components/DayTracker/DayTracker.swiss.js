@@ -1,4 +1,5 @@
 import { styleSheet } from 'swiss-react';
+import Icon from 'src/react/_components/Icon/Icon';
 
 export default styleSheet('DayTrack', {
   Wrapper: {},
@@ -17,7 +18,7 @@ export default styleSheet('DayTrack', {
 
   DayWrapper: {
     _size: ['24px', '24px'],
-    _flex: ['row', 'center', 'center'],
+    _flex: ['column', 'center', 'center'],
     flex: 'none',
 
     compact: {
@@ -25,6 +26,19 @@ export default styleSheet('DayTrack', {
     },
     '&:not(:last-child)': {
       marginRight: '3px'
+    }
+  },
+
+  Icon: {
+    _el: Icon,
+    _svgColor: '$green1',
+    position: 'absolute',
+    top: '0',
+    left: '50%',
+    transform: 'translateX(-50%)',
+
+    overdue: {
+      _svgColor: '$red'
     }
   },
 

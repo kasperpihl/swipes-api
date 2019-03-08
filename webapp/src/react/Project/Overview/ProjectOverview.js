@@ -4,6 +4,7 @@ import SW from './ProjectOverview.swiss';
 import Loader from 'src/react/_components/loaders/Loader';
 import CardContent from 'src/react/_components/Card/Content/CardContent';
 import CardHeader from 'src/react/_components/Card/Header/CardHeader';
+import Button from 'src/react/_components/Button/Button';
 
 import ProjectSide from 'src/react/Project/Side/ProjectSide';
 import ProjectTaskList from 'src/react/Project/Task/List/ProjectTaskList';
@@ -34,10 +35,25 @@ function ProjectOverview({ projectId }) {
     return <Loader center />;
   }
 
+  const subtitle = {
+    ownedBy: stateManager.getClientState().get('owned_by'),
+    members: ['me'], // TODO: Wire up members for project header
+    privacy: 'public'
+  };
+
   return (
     <CardContent
       noframe
-      header={<CardHeader padding={30} title={projectTitle} />}
+      header={
+        <CardHeader
+          padding={30}
+          title={projectTitle}
+          subtitle={subtitle}
+          separator
+        >
+          <Button icon="ThreeDots" />
+        </CardHeader>
+      }
     >
       <ProjectContext.Provider value={stateManager}>
         <SW.Wrapper>

@@ -15,7 +15,7 @@ export default styleSheet('ProfileOrg', {
     },
 
     '&:hover': {
-      backgroundColor: '$sw4'
+      backgroundColor: '$green2'
     }
   },
 

@@ -18,6 +18,7 @@ export { default as CloseThick } from './icons/close-thick.svg';
 export { default as Comment } from './icons/comment.svg';
 export { default as Complete } from './icons/complete.svg'; // new
 export { default as Cross } from './icons/cross.svg'; // new
+export { default as DayTrackerArrow } from './icons/day-tracker-arrow.svg'; // new
 export { default as Delete } from './icons/delete.svg';
 export { default as Earth } from './icons/earth.svg';
 export { default as Earth2x } from './icons/earth2x.svg';

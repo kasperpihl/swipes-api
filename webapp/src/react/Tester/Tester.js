@@ -1,19 +1,16 @@
 import React, { Component } from 'react';
-import CardHeader from 'src/react/_components/Card/Header/CardHeader';
-import Button from '../_components/Button/Button';
+import DayTracker from '../_components/DayTracker/DayTracker';
 export default class Tester extends Component {
   render() {
-    const subtitle = {
-      ownedBy: 'UT5UFVX2I',
-      members: ['me'],
-      privacy: 'public'
-    };
+    const startDate = '2019-02-20';
+    const endDate = '2019-02-25';
     return (
       <div style={{ width: '100%' }}>
-        <CardHeader title="test" separator>
-          <Button icon="Messages" title="Test" />
-          <Button icon="ThreeDots" />
-        </CardHeader>
+        <DayTracker
+          startDate={startDate}
+          endDate={endDate}
+          showCurrentDateMarker
+        />
       </div>
     );
   }

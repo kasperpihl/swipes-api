@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import moment from 'moment';
+
 import SW from './DayTracker.swiss';
 
 export default class DayTracker extends PureComponent {
@@ -19,12 +20,27 @@ export default class DayTracker extends PureComponent {
           deltaIndex++;
         }
         const deltaWeek = weekArr[deltaIndex];
-        let state = 'completed';
+        let state = {
+          currentDate: false,
+          status: 'completed'
+        };
         if (deltaDate.isAfter(currentDate)) {
-          state = 'upcoming';
+          state = {
+            ...state,
+            status: 'upcoming'
+          };
         }
         if (deltaDate.isAfter(mEndDate)) {
-          state = 'overdue';
+          state = {
+            ...state,
+            status: 'overdue'
+          };
+        }
+        if (deltaDate.isSame(moment(), 'day')) {
+          state = {
+            ...state,
+            currentDate: true
+          };
         }
         deltaWeek.push(state);
       }
@@ -52,7 +68,8 @@ export default class DayTracker extends PureComponent {
   };
 
   render() {
-    const { compact } = this.props;
+    const { compact, showCurrentDateMarker } = this.props;
+
     return (
       <SW.ProvideContext compact={compact}>
         <SW.Wrapper>
@@ -61,9 +78,16 @@ export default class DayTracker extends PureComponent {
               {week.map((state, j) => {
                 return (
                   <SW.DayWrapper key={j}>
-                    <SW.Day state={state}>
+                    {showCurrentDateMarker && state.currentDate && (
+                      <SW.Icon
+                        icon="DayTrackerArrow"
+                        size={8}
+                        overdue={state.status === 'overdue'}
+                      />
+                    )}
+                    <SW.Day state={state.status}>
                       {!compact &&
-                        state === 'upcoming' &&
+                        state.status === 'upcoming' &&
                         this.getWeekDayForNumber(j)}
                     </SW.Day>
                   </SW.DayWrapper>
