@@ -20,27 +20,17 @@ export default class DayTracker extends PureComponent {
           deltaIndex++;
         }
         const deltaWeek = weekArr[deltaIndex];
-        let state = {
-          currentDate: false,
+        const state = {
           status: 'completed'
         };
         if (deltaDate.isAfter(currentDate)) {
-          state = {
-            ...state,
-            status: 'upcoming'
-          };
+          state.status = 'upcoming';
         }
         if (deltaDate.isAfter(mEndDate)) {
-          state = {
-            ...state,
-            status: 'overdue'
-          };
+          state.status = 'overdue';
         }
         if (deltaDate.isSame(moment(), 'day')) {
-          state = {
-            ...state,
-            currentDate: true
-          };
+          state.currentDate = true;
         }
         deltaWeek.push(state);
       }
