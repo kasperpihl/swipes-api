@@ -53,7 +53,7 @@ export default styleSheet('Sidebar', {
 
   Item: {
     _size: '54px',
-    zIndex: '3',
+    zIndex: '4',
     // overflow: 'hidden',
     backgroundColor: 'rgba(255, 255, 255, .3)',
     transition: '.3s ease',
@@ -147,11 +147,11 @@ export default styleSheet('Sidebar', {
     whiteSpace: 'nowrap',
     backgroundColor: '$sw5',
     borderRadius: '2px',
-    boxShadow: '0 6px 6px 1px rgba(0, 12, 47, 0.1)',
+    boxShadow: '1px 1px 1px 1px rgba(0, 12, 47, 0.3)',
     opacity: '0',
     padding: '9px 15px',
     position: 'absolute',
-    right: '-9px',
+    right: '-11px',
     top: '50%',
     transform: 'translateX(110%) translateY(-50%)',
     transition: '.3s ease',
@@ -159,14 +159,16 @@ export default styleSheet('Sidebar', {
       '.Sidebar_Item:hover &': {
         opacity: '1',
         transform: 'translateX(100%) translateY(-50%)',
-        transition: '.3s ease'
+        transition: '.3s ease',
+        transitionDelay: '.3s'
       }
     },
     '!expanded': {
-      '.Sidebar_Item:hover &': {
+      '.Sidebar_Wrapper:hover &': {
         opacity: '1',
         transform: 'translateX(100%) translateY(-50%)',
-        transition: '.3s ease'
+        transition: '.3s ease',
+        transitionDelay: '.3s'
       }
     }
   }

@@ -15,7 +15,7 @@ export default endpointCreate(
     const { plan_id } = res.locals.input;
     const planRes = await query(
       `
-        SELECT plan_id, title, start_date, end_date, owned_by, task_counter, started_at, completed_at
+        SELECT plan_id, title, start_date, end_date, owned_by, started_at, completed_at
         FROM plans
         WHERE plan_id = $1
         AND deleted = FALSE

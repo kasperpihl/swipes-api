@@ -20,7 +20,7 @@ export default endpointCreate(
 
     const planRes = await query(
       `
-        SELECT p.plan_id, p.title, p.start_date, p.end_date, p.owned_by, p.started_at, p.completed_at, task_counter
+        SELECT p.plan_id, p.title, p.start_date, p.end_date, p.owned_by, p.started_at, p.completed_at
         FROM permissions as per
         INNER JOIN plans as p
         ON p.plan_id = per.permission_from

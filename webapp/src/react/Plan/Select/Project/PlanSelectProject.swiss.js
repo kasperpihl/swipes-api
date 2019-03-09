@@ -5,7 +5,8 @@ export default styleSheet('PlanSelectProject', {
   Wrapper: {
     hidden: {
       display: 'none'
-    }
+    },
+    paddingBottom: '18px'
   },
   TaskWrapper: {},
   ButtonWrapper: {

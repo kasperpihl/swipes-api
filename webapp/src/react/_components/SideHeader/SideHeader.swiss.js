@@ -1,9 +1,7 @@
 import { styleSheet } from 'swiss-react';
 
 export default styleSheet('SideHeader', {
-  Wrapper: {
-    paddingBottom: '16px'
-  },
+  Wrapper: {},
 
   TitleWrapper: {
     _flex: ['row', 'flex-start', 'flex-start'],

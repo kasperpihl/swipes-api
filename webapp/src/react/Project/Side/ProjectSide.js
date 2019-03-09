@@ -58,6 +58,10 @@ function ProjectSide({ stateManager }) {
     });
   };
 
+  const handleCompleteAll = () => {
+    stateManager.completeHandler.completeAll(completionPercentage < 100);
+  };
+
   console.log(followers);
 
   return (
@@ -69,7 +73,13 @@ function ProjectSide({ stateManager }) {
       />
       <ProgressBar progress={completionPercentage} />
       <SW.ButtonWrapper>
-        <SW.Button title="Complete project" icon="Complete" />
+        <SW.Button
+          title={
+            completionPercentage === 100 ? 'Redo project' : 'Complete project'
+          }
+          icon="Complete"
+          onClick={handleCompleteAll}
+        />
         <SW.Button title="Add people" icon="Person" onClick={openAssignMenu} />
       </SW.ButtonWrapper>
       {maxIndention > 0 && (

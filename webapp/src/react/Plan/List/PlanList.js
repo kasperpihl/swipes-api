@@ -67,7 +67,6 @@ export default function PlanList() {
     if (p.completed_at) return 'Completed';
     if (!p.started_at) return 'Drafts';
     if (p.start_date > currDate) return 'Upcoming';
-    if (p.end_date < currDate) return 'Overdue';
     return 'Current';
   });
 
