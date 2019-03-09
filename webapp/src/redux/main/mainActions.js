@@ -77,10 +77,3 @@ export const browser = (from, url, onLoad) => (dp, getState) => {
     })
   );
 };
-
-// ======================================================
-// Success gradient
-// ======================================================
-export function successGradient(color) {
-  return { type: types.SUCCESS_GRADIENT, payload: { color } };
-}

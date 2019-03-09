@@ -1,21 +1,38 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
+import moment from 'moment';
 
 import SideHeader from 'src/react/_components/SideHeader/SideHeader';
 import ProgressBar from 'src/react/_components/ProgressBar/ProgressBar';
-// import StepSlider from 'src/react/_components/StepSlider/StepSlider';
+import StepSlider from 'src/react/_components/StepSlider/StepSlider';
 import DayTracker from 'src/react/_components/DayTracker/DayTracker';
 import Spacing from '_shared/Spacing/Spacing';
 
 import SW from './PlanSideRunning.swiss';
 
 export default function PlanSideRunning({ plan, hasPending, planState }) {
+  const [sliderValue, setSliderValue] = useState(0);
+
   if (hasPending) return <SW.Wrapper />;
   const totalTasks = plan.tasks.length;
   let totalCompleted = 0;
-  Object.values(planState).forEach(({ numberOfCompleted }) => {
+  let maxDepth = 0;
+  Object.values(planState).forEach(({ numberOfCompleted, maxIndention }) => {
+    maxDepth = Math.max(maxDepth, maxIndention);
     totalCompleted += numberOfCompleted;
   });
   const percentage = Math.round((totalCompleted / totalTasks) * 100);
+
+  // const workdaysObj = useMemo(() => {
+  //   const moment
+  // }, [plan.start_date, plan.end_date]);
+
+  const handleSliderChange = e => {
+    const depth = parseInt(e.target.value, 10);
+    setSliderValue(depth);
+    Object.values(planState).forEach(({ stateManager }) => {
+      stateManager.expandHandler.setDepth(depth);
+    });
+  };
 
   return (
     <SW.Wrapper>
@@ -38,7 +55,14 @@ export default function PlanSideRunning({ plan, hasPending, planState }) {
       <SW.ButtonWrapper>
         <SW.Button title="End plan" icon="Complete" />
       </SW.ButtonWrapper>
-      {/* <StepSlider /> */}
+      <Spacing height={6} />
+      {maxDepth > 0 && (
+        <StepSlider
+          max={maxDepth}
+          sliderValue={sliderValue}
+          onSliderChange={handleSliderChange}
+        />
+      )}
     </SW.Wrapper>
   );
 }

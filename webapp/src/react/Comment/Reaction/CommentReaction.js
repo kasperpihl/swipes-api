@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
+import successGradient from 'src/utils/successGradient';
 import { withOptimist } from 'react-optimist';
 import request from 'core/utils/request';
 import TooltipUsers from 'src/react/_components/TooltipUsers/TooltipUsers';
@@ -12,7 +13,6 @@ import SW from './CommentReaction.swiss';
     myId: state.me.get('user_id')
   }),
   {
-    successGradient: mainActions.successGradient,
     tooltip: mainActions.tooltip
   }
 )
@@ -37,7 +37,7 @@ export default class CommentReaction extends PureComponent {
     return optimist.get('like', !!reactions[myId]);
   };
   onReaction = () => {
-    const { optimist, commentId, successGradient, discussionId } = this.props;
+    const { optimist, commentId, discussionId } = this.props;
 
     successGradient('red');
     optimist.set({

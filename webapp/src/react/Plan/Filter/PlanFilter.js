@@ -48,6 +48,7 @@ export default function PlanFilter({ plan }) {
         return state;
     }
   }, initialState);
+
   const hasPending = !!Object.entries(planState).filter(
     ([key, value]) => value === 'pending'
   ).length;

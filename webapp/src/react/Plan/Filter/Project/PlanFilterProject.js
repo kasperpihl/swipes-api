@@ -16,24 +16,29 @@ import SW from './PlanFilterProject.swiss';
 export default memo(PlanFilterProject);
 
 function PlanFilterProject({ projectId, project, dispatch, hasPending }) {
-  const stateManager = useSyncedProject(projectId);
+  const stateManager = useSyncedProject(projectId, {
+    filteredTaskIds: project.taskIds
+  });
 
   useProjectKeyboard(stateManager);
-  const [visibleOrder, completion] = useProjectSlice(
+  const [visibleOrder, completion, maxIndention] = useProjectSlice(
     stateManager,
     (clientState, localState) => [
       localState.get('visibleOrder'),
-      clientState.get('completion')
+      clientState.get('completion'),
+      localState.get('maxIndention')
     ]
   );
 
   useBeforeUnload(() => {
     stateManager && stateManager.syncHandler.syncIfNeeded();
   });
+
   useEffect(() => {
     if (completion) {
       const projectState = {
         stateManager,
+        maxIndention,
         numberOfTasks: project.taskIds.length,
         numberOfCompleted: 0
       };
@@ -48,7 +53,7 @@ function PlanFilterProject({ projectId, project, dispatch, hasPending }) {
         payload: projectState
       });
     }
-  }, [completion, project]);
+  }, [completion, project, maxIndention]);
 
   if (!visibleOrder || !stateManager || hasPending) {
     return (

@@ -1,23 +1,14 @@
 import React, { useCallback, useContext, memo } from 'react';
 import SW from './ProjectTaskCheckbox.swiss';
-import { connect } from 'react-redux';
-import compose from 'src/utils/compose';
 import Icon from 'src/react/_components/Icon/Icon';
-import * as mainActions from 'src/redux/main/mainActions';
+import successGradient from 'src/utils/successGradient';
+
 import useProjectSlice from 'core/react/_hooks/useProjectSlice';
 import { ProjectContext } from 'src/react/contexts';
 
-export default compose(
-  connect(
-    null,
-    {
-      successGradient: mainActions.successGradient
-    }
-  ),
-  memo
-)(ProjectTaskCheckbox);
+export default memo(ProjectTaskCheckbox);
 
-function ProjectTaskCheckbox({ taskId, successGradient }) {
+function ProjectTaskCheckbox({ taskId }) {
   const stateManager = useContext(ProjectContext);
   const [completion] = useProjectSlice(stateManager, clientState => [
     clientState.getIn(['completion', taskId])

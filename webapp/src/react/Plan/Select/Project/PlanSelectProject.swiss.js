@@ -20,10 +20,10 @@ export default styleSheet('PlanSelectProject', {
   Button: {
     _el: Button,
     visibility: 'hidden',
-    '.PlanProject_ButtonWrapper:hover &': {
+    '.PlanSelectProject_ButtonWrapper:hover &': {
       visibility: 'visible'
     },
-    '.PlanProject_TaskWrapper:hover &': {
+    '.PlanSelectProject_TaskWrapper:hover &': {
       visibility: 'visible'
     },
     '& svg': {

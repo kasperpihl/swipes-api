@@ -3,14 +3,7 @@ import SW from './StepSlider.swiss';
 
 export default class stepSlider extends Component {
   render() {
-    const {
-      sliderValue,
-      onSliderChange,
-      min,
-      max,
-      increase,
-      decrease
-    } = this.props;
+    const { sliderValue, onSliderChange, min = 0, max } = this.props;
     const sliderBackground = (sliderValue / max) * 100;
     return (
       <SW.InputPackage>

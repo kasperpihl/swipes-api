@@ -1,14 +1,17 @@
 import React, { useState, useEffect, memo } from 'react';
 import useProjectSlice from 'core/react/_hooks/useProjectSlice';
 import contextMenu from 'src/utils/contextMenu';
+import successGradient from 'src/utils/successGradient';
 
-import AssignMenu from 'src/react/_components/AssignMenu/AssignMenu';
-import SideHeader from 'src/react/_components/SideHeader/SideHeader';
-import ProgressBar from 'src/react/_components/ProgressBar/ProgressBar';
+import AssignMenu from '_shared/AssignMenu/AssignMenu';
+import SideHeader from '_shared/SideHeader/SideHeader';
+import ProgressBar from '_shared/ProgressBar/ProgressBar';
+import Spacing from '_shared/Spacing/Spacing';
 
 import SW from './ProjectSide.swiss';
 
 export default memo(ProjectSide);
+
 function ProjectSide({ stateManager }) {
   const [sliderValue, setSliderValue] = useState(0);
 
@@ -35,14 +38,6 @@ function ProjectSide({ stateManager }) {
     stateManager.expandHandler.setDepth(depth);
     setSliderValue(depth);
   };
-  const handleIncrease = () => {
-    stateManager.expandHandler.setDepth(sliderValue + 1);
-    setSliderValue(sliderValue + 1);
-  };
-  const handleDecrease = () => {
-    stateManager.expandHandler.setDepth(sliderValue - 1);
-    setSliderValue(sliderValue - 1);
-  };
 
   const completedTasksAmount = Math.round(
     (completionPercentage / 100) * totalAmountOfTasks
@@ -59,10 +54,11 @@ function ProjectSide({ stateManager }) {
   };
 
   const handleCompleteAll = () => {
+    if (completionPercentage < 100) {
+      successGradient('green');
+    }
     stateManager.completeHandler.completeAll(completionPercentage < 100);
   };
-
-  console.log(followers);
 
   return (
     <SW.Wrapper>
@@ -71,6 +67,7 @@ function ProjectSide({ stateManager }) {
         smallTitle={`/${totalAmountOfTasks}`}
         subtitle="Tasks Completed"
       />
+      <Spacing height={18} />
       <ProgressBar progress={completionPercentage} />
       <SW.ButtonWrapper>
         <SW.Button
@@ -82,14 +79,12 @@ function ProjectSide({ stateManager }) {
         />
         <SW.Button title="Add people" icon="Person" onClick={openAssignMenu} />
       </SW.ButtonWrapper>
+      <Spacing height={6} />
       {maxIndention > 0 && (
         <SW.StepSlider
-          min={0}
           max={maxIndention}
           sliderValue={sliderValue}
           onSliderChange={handleSliderChange}
-          increase={handleIncrease}
-          decrease={handleDecrease}
         />
       )}
     </SW.Wrapper>

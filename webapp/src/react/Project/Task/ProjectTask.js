@@ -15,11 +15,12 @@ export default memo(ProjectTask);
 function ProjectTask({ taskId, selected }) {
   const stateManager = useContext(ProjectContext);
 
-  const [indention, isSelected] = useProjectSlice(
+  const [indention, isSelected, indentComp] = useProjectSlice(
     stateManager,
     (clientState, localState) => [
       clientState.getIn(['indention', taskId]),
-      localState.get('selectedId') === taskId
+      localState.get('selectedId') === taskId,
+      localState.getIn(['indentComp', taskId]) || 0
     ]
   );
 
@@ -28,7 +29,7 @@ function ProjectTask({ taskId, selected }) {
   return (
     <SW.ProvideContext>
       <SW.Wrapper
-        indention={indention}
+        indention={indention - indentComp}
         selected={isSelected}
         isPlanSelected={selected}
       >
