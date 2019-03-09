@@ -23,6 +23,7 @@ export default function PlanListItem({ plan }) {
         startDate={plan.start_date}
         endDate={plan.end_date}
         maxWeeks={5}
+        showCurrentDateMarker
       />
       <SW.TextWrapper>
         <SW.Title>{plan.title}</SW.Title>

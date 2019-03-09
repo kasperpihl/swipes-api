@@ -29,14 +29,16 @@ export default styleSheet('DayTrack', {
     }
   },
 
-  Icon: {
+  Indicator: {
     _el: Icon,
     _svgColor: '$green1',
     position: 'absolute',
     top: '0',
     left: '50%',
     transform: 'translateX(-50%)',
-
+    compact: {
+      top: '-2px'
+    },
     overdue: {
       _svgColor: '$red'
     }

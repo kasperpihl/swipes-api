@@ -12,6 +12,7 @@ export default class DayTracker extends PureComponent {
     const targetDate = moment.max(mEndDate, currentDate);
     const weekArr = [];
     let deltaIndex = -1;
+    const now = moment();
     while (deltaDate.isSameOrBefore(targetDate, 'day')) {
       const weekday = deltaDate.day();
       if (weekday > 0 && weekday < 6) {
@@ -29,8 +30,14 @@ export default class DayTracker extends PureComponent {
         if (deltaDate.isAfter(mEndDate)) {
           state.status = 'overdue';
         }
-        if (deltaDate.isSame(moment(), 'day')) {
+        if (deltaDate.isSame(now, 'day')) {
           state.currentDate = true;
+        } else if (deltaDate.day() === 5) {
+          const sunday = moment(deltaDate).add(2, 'days');
+          if (now.isBetween(deltaDate, sunday, 'days', '[]')) {
+            console.log('current!');
+            state.currentDate = true;
+          }
         }
         deltaWeek.push(state);
       }
@@ -69,7 +76,7 @@ export default class DayTracker extends PureComponent {
                 return (
                   <SW.DayWrapper key={j}>
                     {showCurrentDateMarker && state.currentDate && (
-                      <SW.Icon
+                      <SW.Indicator
                         icon="DayTrackerArrow"
                         size={8}
                         overdue={state.status === 'overdue'}
