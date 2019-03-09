@@ -59,6 +59,7 @@ export default class ModalCreate extends PureComponent {
 
     if (type === 'plan') {
       endpoint = 'plan.add';
+      delete options.title;
       analyticsEvent = 'Plan created';
     }
     if (type === 'project') {
@@ -132,17 +133,19 @@ export default class ModalCreate extends PureComponent {
       <FMSW.Wrapper>
         <FMSW.Title>{title}</FMSW.Title>
         <FMSW.InputContainer>
-          <FMSW.InputWrapper>
-            <FMSW.Label>{titleLabel}</FMSW.Label>
-            <FMSW.Input
-              value={titleVal}
-              onChange={this.handleTitleChange}
-              placeholder={titlePlaceholder}
-              type="text"
-              style={{ paddingLeft: '6px' }}
-              autoFocus
-            />
-          </FMSW.InputWrapper>
+          {type !== 'plan' && (
+            <FMSW.InputWrapper>
+              <FMSW.Label>{titleLabel}</FMSW.Label>
+              <FMSW.Input
+                value={titleVal}
+                onChange={this.handleTitleChange}
+                placeholder={titlePlaceholder}
+                type="text"
+                style={{ paddingLeft: '6px' }}
+                autoFocus
+              />
+            </FMSW.InputWrapper>
+          )}
           <FMSW.InputWrapper>
             <FMSW.Label>2. Choose belonging</FMSW.Label>
             <OrgPicker

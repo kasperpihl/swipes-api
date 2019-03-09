@@ -1,8 +1,11 @@
 import React from 'react';
-import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
-import CardContent from 'src/react/_components/Card/Content/CardContent';
-import CardHeader from 'src/react/_components/Card/Header/CardHeader';
-import Button from 'src/react/_components/Button/Button';
+import RequestLoader from '_shared/RequestLoader/RequestLoader';
+import CardContent from '_shared/Card/Content/CardContent';
+import CardHeader from '_shared/Card/Header/CardHeader';
+import Button from '_shared/Button/Button';
+
+import planGetTitle from 'core/utils/plan/planGetTitle';
+
 import PlanSelect from 'src/react/Plan/Select/PlanSelect';
 import PlanFilter from 'src/react/Plan/Filter/PlanFilter';
 import useUpdate from 'core/react/_hooks/useUpdate';
@@ -32,16 +35,13 @@ export default function PlanOverview({ planId }) {
     privacy: 'public'
   };
 
+  const title = planGetTitle(plan);
+
   return (
     <CardContent
       noframe
       header={
-        <CardHeader
-          padding={30}
-          title={plan.title}
-          subtitle={subtitle}
-          separator
-        >
+        <CardHeader padding={30} title={title} subtitle={subtitle} separator>
           <Button icon="ThreeDots" />
         </CardHeader>
       }

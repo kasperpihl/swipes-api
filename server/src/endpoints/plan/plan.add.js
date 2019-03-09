@@ -7,8 +7,8 @@ import update from 'src/utils/update';
 import { string, array, any } from 'valjs';
 
 const expectedInput = {
-  title: string.min(1).require(),
   owned_by: string.require(),
+  title: string,
   privacy: any.of('public', 'private'),
   members: array.of(string)
 };
@@ -21,7 +21,7 @@ export default endpointCreate(
   async (req, res) => {
     const { user_id } = res.locals;
     const {
-      title,
+      title = null,
       owned_by,
       members = [],
       privacy = 'public'

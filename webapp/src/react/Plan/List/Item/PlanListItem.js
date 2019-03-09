@@ -1,6 +1,7 @@
 import React from 'react';
 import useNav from 'src/react/_hooks/useNav';
 import DayTracker from 'src/react/_components/DayTracker/DayTracker';
+import planGetTitle from 'core/utils/plan/planGetTitle';
 import orgGetBelonging from 'core/utils/org/orgGetBelonging';
 import SW from './PlanListItem.swiss';
 
@@ -16,6 +17,9 @@ export default function PlanListItem({ plan }) {
       }
     });
   };
+
+  const title = planGetTitle(plan);
+
   return (
     <SW.Wrapper onClick={handleClick}>
       <DayTracker
@@ -26,7 +30,7 @@ export default function PlanListItem({ plan }) {
         showCurrentDateMarker
       />
       <SW.TextWrapper>
-        <SW.Title>{plan.title}</SW.Title>
+        <SW.Title>{title}</SW.Title>
         <SW.Subtitle>{orgGetBelonging(plan.owned_by)}</SW.Subtitle>
       </SW.TextWrapper>
     </SW.Wrapper>
