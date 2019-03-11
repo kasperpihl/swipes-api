@@ -2,8 +2,8 @@ import React, { Fragment, useReducer, useMemo } from 'react';
 
 import cachedCallback from 'src/utils/cachedCallback';
 import usePaginationRequest from 'core/react/_hooks/usePaginationRequest';
+import usePlanProjectSelect from 'src/react/Plan/usePlanProjectSelect';
 import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
-import request from 'core/utils/request';
 
 import PlanSelectProject from './Project/PlanSelectProject';
 import PlanAlert from 'src/react/Plan/Alert/PlanAlert';
@@ -42,41 +42,7 @@ export default function PlanSelect({ plan }) {
     return newState;
   }, defaultObject);
 
-  const [selectedTasks, toggleSelectedTask] = useReducer((state, action) => {
-    const newState = [].concat(state);
-    const index = state.indexOf(action.payload);
-    switch (action.type) {
-      case 'add':
-        newState.push(action.payload);
-        break;
-      case 'remove':
-        newState.splice(index, 1);
-        break;
-    }
-
-    return newState;
-  }, plan.tasks.map(({ project_id, task_id }) => `${project_id}_-_${task_id}`));
-
-  const handleToggleTask = (projectId, taskId) => {
-    let endpoint = 'plan.addTask';
-    let type = 'add';
-    const params = {
-      plan_id: plan.plan_id,
-      project_id: projectId,
-      task_id: taskId
-    };
-
-    const key = `${projectId}_-_${taskId}`;
-    if (selectedTasks.indexOf(key) > -1) {
-      endpoint = 'plan.removeTask';
-      type = 'remove';
-    }
-    toggleSelectedTask({
-      type,
-      payload: key
-    });
-    request(endpoint, params);
-  };
+  const [selectedTasks, handleToggleTask] = usePlanProjectSelect(plan);
 
   if (!req.items) {
     return <RequestLoader req={req} />;

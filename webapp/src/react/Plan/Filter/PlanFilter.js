@@ -66,6 +66,7 @@ export default function PlanFilter({ plan }) {
         {sortedProjectIds.map(project_id => (
           <PlanFilterProject
             key={project_id}
+            plan={plan}
             projectId={project_id}
             project={projects[project_id]}
             hasPending={hasPending}

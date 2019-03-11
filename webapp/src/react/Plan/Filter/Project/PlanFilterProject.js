@@ -1,24 +1,26 @@
-import React, { memo, useEffect } from 'react';
-import Loader from 'src/react/_components/loaders/Loader';
-
-import ProjectTask from 'src/react/Project/Task/ProjectTask';
+import React, { memo, useEffect, useState } from 'react';
 
 import useSyncedProject from 'core/react/_hooks/useSyncedProject';
 import useProjectSlice from 'core/react/_hooks/useProjectSlice';
 import useProjectKeyboard from 'src/react/Project/useProjectKeyboard';
 import useBeforeUnload from 'src/react/_hooks/useBeforeUnload';
-import SectionHeader from 'src/react/_components/SectionHeader/SectionHeader';
+import usePlanProjectSelect from 'src/react/Plan/usePlanProjectSelect';
+import SectionHeader from '_shared/SectionHeader/SectionHeader';
+import Button from '_shared/Button/Button';
 
-import { ProjectContext } from 'src/react/contexts';
+import PlanTaskList from 'src/react/Plan/TaskList/PlanTaskList';
 
 import SW from './PlanFilterProject.swiss';
 
 export default memo(PlanFilterProject);
 
-function PlanFilterProject({ projectId, project, dispatch, hasPending }) {
+function PlanFilterProject({ projectId, project, dispatch, hasPending, plan }) {
   const stateManager = useSyncedProject(projectId, {
     filteredTaskIds: project.taskIds
   });
+
+  const [selectable, setSelectable] = useState(false);
+  const [selectedTasks, handleToggleTask] = usePlanProjectSelect(plan);
 
   useProjectKeyboard(stateManager);
   const [visibleOrder, completion, maxIndention] = useProjectSlice(
@@ -63,14 +65,34 @@ function PlanFilterProject({ projectId, project, dispatch, hasPending }) {
     );
   }
 
+  const handleSelect = e => {
+    e.preventDefault();
+
+    stateManager.filterHandler.setFilteredTaskIds(null, project.taskIds);
+    setSelectable(true);
+  };
+
   return (
     <SW.Wrapper>
-      <SectionHeader>{project.title}</SectionHeader>
-      <ProjectContext.Provider value={stateManager}>
-        {visibleOrder.map(taskId => {
-          return <ProjectTask taskId={taskId} key={taskId} />;
-        })}
-      </ProjectContext.Provider>
+      <SectionHeader>
+        {project.title}
+        {selectable && (
+          <Button
+            title="Done"
+            onClick={() => {
+              stateManager.filterHandler.setFilteredTaskIds(project.taskIds);
+              setSelectable(false);
+            }}
+          />
+        )}
+      </SectionHeader>
+      <PlanTaskList
+        stateManager={stateManager}
+        selectable={selectable}
+        onToggleTask={handleToggleTask}
+        onInputClick={selectable ? undefined : handleSelect}
+        selectedTasks={selectedTasks}
+      />
     </SW.Wrapper>
   );
 }

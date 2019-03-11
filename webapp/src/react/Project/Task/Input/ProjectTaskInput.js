@@ -14,7 +14,7 @@ import SW from './ProjectTaskInput.swiss';
 
 export default memo(ProjectTaskInput);
 
-function ProjectTaskInput({ taskId }) {
+function ProjectTaskInput({ taskId, onClick }) {
   const stateManager = useContext(ProjectContext);
   const unmountedRef = useUnmountedRef();
   const inputRef = useRef();
@@ -65,6 +65,7 @@ function ProjectTaskInput({ taskId }) {
 
   return (
     <SW.Input
+      onClick={onClick}
       onFocus={handleFocus}
       onBlur={handleBlur}
       value={title}

@@ -6,6 +6,7 @@ import ProgressBar from 'src/react/_components/ProgressBar/ProgressBar';
 import StepSlider from 'src/react/_components/StepSlider/StepSlider';
 import DayTracker from 'src/react/_components/DayTracker/DayTracker';
 import Spacing from '_shared/Spacing/Spacing';
+import request from 'core/utils/request';
 
 import SW from './PlanSideRunning.swiss';
 
@@ -34,6 +35,12 @@ export default function PlanSideRunning({ plan, hasPending, planState }) {
     });
   };
 
+  const handleEnd = () => {
+    request('plan.end', {
+      plan_id: plan.plan_id
+    });
+  };
+
   return (
     <SW.Wrapper>
       <SideHeader title={7} subtitle="Work days left" />
@@ -53,7 +60,7 @@ export default function PlanSideRunning({ plan, hasPending, planState }) {
       <ProgressBar progress={percentage} />
 
       <SW.ButtonWrapper>
-        <SW.Button title="End plan" icon="Complete" />
+        <SW.Button title="End plan" icon="Complete" onClick={handleEnd} />
       </SW.ButtonWrapper>
       <Spacing height={6} />
       {maxDepth > 0 && (

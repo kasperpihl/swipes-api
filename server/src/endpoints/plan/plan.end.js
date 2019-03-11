@@ -20,10 +20,11 @@ export default endpointCreate(
       `
       UPDATE plans
       SET
-        completed_at = now(),
+        completed_at = null,
+        started_at = null,
         updated_at = now()
       WHERE plan_id = $1
-      RETURNING plan_id, updated_at, completed_at
+      RETURNING plan_id, updated_at, completed_at, started_at
     `,
       [plan_id]
     );
