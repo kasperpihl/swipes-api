@@ -47,9 +47,12 @@ function ProjectSide({ stateManager }) {
     const ownedBy = stateManager.getClientState().get('owned_by');
     contextMenu(AssignMenu, e, {
       excludeMe: true,
+      hideRowOnSelect: true,
       selectedIds: followers,
       organizationId: ownedBy,
-      onSelect: followers => handleAssignSelect(followers)
+      onSelect: id => {
+        console.log(id);
+      }
     });
   };
 
@@ -60,6 +63,7 @@ function ProjectSide({ stateManager }) {
     stateManager.completeHandler.completeAll(completionPercentage < 100);
   };
 
+  console.log(followers);
   return (
     <SW.Wrapper>
       <SideHeader

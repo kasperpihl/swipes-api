@@ -22,9 +22,9 @@ export default class AssignMenu extends PureComponent {
   }
 
   componentWillUnmount() {
-    const { onSelect } = this.props;
-    if (onSelect) {
-      onSelect(this.state.selectedIds);
+    const { onClose } = this.props;
+    if (onClose) {
+      onClose(this.state.selectedIds);
     }
   }
 
@@ -33,8 +33,14 @@ export default class AssignMenu extends PureComponent {
     const index = arr.indexOf(id);
     if (index !== -1) {
       arr.splice(index, 1);
+      if (typeof this.props.onDeselect === 'function') {
+        this.props.onDeselect(id);
+      }
     } else {
       arr.push(id);
+      if (typeof this.props.onSelect === 'function') {
+        this.props.onSelect(id);
+      }
     }
     this.setState({ selectedIds: [...arr] });
   });
@@ -49,7 +55,14 @@ export default class AssignMenu extends PureComponent {
 
   render() {
     const { selectedIds } = this.state;
-    const { excludeMe, organization, me, organizationId, hide } = this.props;
+    const {
+      excludeMe,
+      organization,
+      me,
+      organizationId,
+      hide,
+      hideRowOnSelect
+    } = this.props;
     const teamName = organization ? organization.get('name') : 'Personal';
     let users = organization
       ? organization.get('users').toList()
@@ -66,31 +79,37 @@ export default class AssignMenu extends PureComponent {
       <SW.Wrapper>
         <SW.OptionsRow>
           <SW.TeamName>Choose from: {teamName}</SW.TeamName>
-          {!!selectedIds.length && (
+          {!hideRowOnSelect && !!selectedIds.length && (
             <SW.SelectedAmount>({selectedIds.length})</SW.SelectedAmount>
           )}
         </SW.OptionsRow>
         <SW.Dropdown>
-          {users.map(u => (
-            <SW.Row
-              key={u.get('user_id')}
-              selected={selectedIds.indexOf(u.get('user_id')) !== -1}
-              onClick={this.handleToggleCached(u.get('user_id'))}
-            >
-              <UserImage
-                userId={u.get('user_id')}
-                size={36}
-                organizationId={organizationId}
-              />
-              <SW.UserName>{userGetFullName(u, organizationId)}</SW.UserName>
-            </SW.Row>
-          ))}
+          {users.map(u => {
+            const rowSelected = selectedIds.indexOf(u.get('user_id')) !== -1;
+            return (
+              <SW.Row
+                key={u.get('user_id')}
+                selected={rowSelected}
+                hideRow={hideRowOnSelect && rowSelected}
+                onClick={this.handleToggleCached(u.get('user_id'))}
+              >
+                <UserImage
+                  userId={u.get('user_id')}
+                  size={36}
+                  organizationId={organizationId}
+                />
+                <SW.UserName>{userGetFullName(u, organizationId)}</SW.UserName>
+              </SW.Row>
+            );
+          })}
         </SW.Dropdown>
         <SW.OptionsRow>
-          <Button
-            title={allAreSelected ? 'Deselect All' : 'Select All'}
-            onClick={() => this.toggleSelectAllCached(users, allAreSelected)}
-          />
+          {!(hideRowOnSelect && allAreSelected) && (
+            <Button
+              title={allAreSelected ? 'Deselect All' : 'Select All'}
+              onClick={() => this.toggleSelectAllCached(users, allAreSelected)}
+            />
+          )}
           <Button title="Done" onClick={hide} />
         </SW.OptionsRow>
       </SW.Wrapper>

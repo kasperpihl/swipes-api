@@ -34,7 +34,7 @@ export default class ModalCreate extends PureComponent {
       excludeMe: true,
       selectedIds: followers,
       organizationId: ownedBy,
-      onSelect: this.handleAssignSelect
+      onClose: this.handleAssignSelect
     });
   };
   handleAssignSelect = followers => {

@@ -32,7 +32,7 @@ function ProjectTaskAssignees({ taskId }) {
         excludeMe: false,
         selectedIds: assignees,
         organizationId: stateManager.getClientState().get('owned_by'),
-        onSelect: handleAssigneeSelect
+        onClose: handleAssigneeSelect
       });
     },
     [assignees]

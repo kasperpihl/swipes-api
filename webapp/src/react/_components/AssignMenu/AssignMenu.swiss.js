@@ -45,6 +45,10 @@ export default styleSheet('AssignMenu', {
       '&:hover': {
         backgroundColor: 'rgba($blue, 0.75)'
       }
+    },
+
+    hideRow: {
+      display: 'none'
     }
   },
 
