@@ -6,10 +6,13 @@ import CardContent from 'src/react/_components/Card/Content/CardContent';
 import CardHeader from 'src/react/_components/Card/Header/CardHeader';
 import Button from 'src/react/_components/Button/Button';
 import ListMenu from 'src/react/_components/ListMenu/ListMenu';
+import FormModal from 'src/react/_components/FormModal/FormModal';
 
 import ProjectSide from 'src/react/Project/Side/ProjectSide';
 import ProjectTaskList from 'src/react/Project/Task/List/ProjectTaskList';
 
+import withNav from 'src/react/_hocs/Nav/withNav';
+import request from 'core/utils/request';
 import contextMenu from 'src/utils/contextMenu';
 import useRequest from 'core/react/_hooks/useRequest';
 import useSyncedProject from 'core/react/_hooks/useSyncedProject';
@@ -20,9 +23,9 @@ import { ProjectContext } from 'src/react/contexts';
 
 ProjectOverview.sizes = [750];
 
-export default memo(ProjectOverview);
+export default withNav(memo(ProjectOverview));
 
-function ProjectOverview({ projectId }) {
+function ProjectOverview({ projectId, nav }) {
   const stateManager = useSyncedProject(projectId);
   useBeforeUnload(() => {
     stateManager && stateManager.syncHandler.syncIfNeeded();
@@ -43,8 +46,19 @@ function ProjectOverview({ projectId }) {
     privacy: 'public'
   };
 
+  const callbackDeleteProject = () => {
+    request('project.delete', {
+      project_id: projectId
+    });
+  };
+
   const handleDeleteProject = () => {
-    console.log('deleted');
+    nav.openModal(FormModal, {
+      title: 'Delete project',
+      subtitle: 'Are you sure you want to delete this project?',
+      onConfirm: callbackDeleteProject,
+      confirmLabel: 'Delete'
+    });
   };
 
   const openContextMenu = e => {

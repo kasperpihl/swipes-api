@@ -3,18 +3,24 @@ import RequestLoader from '_shared/RequestLoader/RequestLoader';
 import CardContent from '_shared/Card/Content/CardContent';
 import CardHeader from '_shared/Card/Header/CardHeader';
 import Button from '_shared/Button/Button';
+import ListMenu from 'src/react/_components/ListMenu/ListMenu';
+import FormModal from 'src/react/_components/FormModal/FormModal';
 
 import planGetTitle from 'core/utils/plan/planGetTitle';
+import request from 'core/utils/request';
 
 import PlanSelect from 'src/react/Plan/Select/PlanSelect';
 import PlanFilter from 'src/react/Plan/Filter/PlanFilter';
 import useUpdate from 'core/react/_hooks/useUpdate';
 import useRequest from 'core/react/_hooks/useRequest';
 import contextMenu from 'src/utils/contextMenu';
-import ListMenu from 'src/react/_components/ListMenu/ListMenu';
+import withNav from 'src/react/_hocs/Nav/withNav';
 
 PlanOverview.sizes = [750];
-export default function PlanOverview({ planId }) {
+
+export default withNav(PlanOverview);
+
+function PlanOverview({ planId, nav }) {
   const req = useRequest('plan.get', {
     plan_id: planId
   });
@@ -39,8 +45,19 @@ export default function PlanOverview({ planId }) {
 
   const title = planGetTitle(plan);
 
+  const callbackDeletePlan = () => {
+    request('plan.delete', {
+      plan_id: planId
+    });
+  };
+
   const handleDeletePlan = () => {
-    console.log('deleted');
+    nav.openModal(FormModal, {
+      title: 'Delete plan',
+      subtitle: 'Are you sure you want to delete this plan?',
+      onConfirm: callbackDeletePlan,
+      confirmLabel: 'Delete'
+    });
   };
 
   const openContextMenu = e => {
