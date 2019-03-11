@@ -12,7 +12,6 @@ import SW from './PlanSideRunning.swiss';
 export default function PlanSideRunning({ plan, hasPending, planState }) {
   const [sliderValue, setSliderValue] = useState(0);
 
-  if (hasPending) return <SW.Wrapper />;
   const totalTasks = plan.tasks.length;
   let totalCompleted = 0;
   let maxDepth = 0;
@@ -22,9 +21,32 @@ export default function PlanSideRunning({ plan, hasPending, planState }) {
   });
   const percentage = Math.round((totalCompleted / totalTasks) * 100);
 
-  // const workdaysObj = useMemo(() => {
-  //   const moment
-  // }, [plan.start_date, plan.end_date]);
+  const workdaysLeft = useMemo(() => {
+    const currentDate = moment();
+    const endDate = moment(plan.end_date);
+    let daysObj = {
+      amount: 0,
+      text: 'left'
+    };
+    let startDate = currentDate;
+    let targetDate = endDate;
+    if (currentDate.isBefore(plan.start_date, 'day')) {
+      targetDate = moment(plan.start_date);
+      daysObj.text = 'until start';
+    } else if (currentDate.isAfter(endDate, 'day')) {
+      startDate = endDate;
+      targetDate = currentDate;
+      daysObj.text = 'overdue';
+    }
+
+    while (startDate.isBefore(targetDate, 'day')) {
+      if (startDate.day() > 0 && startDate.day() < 6) {
+        daysObj.amount++;
+      }
+      startDate.add(1, 'day');
+    }
+    return daysObj;
+  }, [plan.start_date, plan.end_date]);
 
   const handleSliderChange = e => {
     const depth = parseInt(e.target.value, 10);
@@ -34,9 +56,16 @@ export default function PlanSideRunning({ plan, hasPending, planState }) {
     });
   };
 
+  if (hasPending) return <SW.Wrapper />;
+
   return (
     <SW.Wrapper>
-      <SideHeader title={7} subtitle="Work days left" />
+      <SideHeader
+        title={workdaysLeft.amount}
+        subtitle={`Work day${workdaysLeft.amount === 1 ? '' : 's'} ${
+          workdaysLeft.text
+        }`}
+      />
       <Spacing height={12} />
       <DayTracker
         startDate={plan.start_date}
