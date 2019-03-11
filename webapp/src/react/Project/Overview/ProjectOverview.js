@@ -5,10 +5,12 @@ import Loader from 'src/react/_components/loaders/Loader';
 import CardContent from 'src/react/_components/Card/Content/CardContent';
 import CardHeader from 'src/react/_components/Card/Header/CardHeader';
 import Button from 'src/react/_components/Button/Button';
+import ListMenu from 'src/react/_components/ListMenu/ListMenu';
 
 import ProjectSide from 'src/react/Project/Side/ProjectSide';
 import ProjectTaskList from 'src/react/Project/Task/List/ProjectTaskList';
 
+import contextMenu from 'src/utils/contextMenu';
 import useRequest from 'core/react/_hooks/useRequest';
 import useSyncedProject from 'core/react/_hooks/useSyncedProject';
 import useProjectSlice from 'core/react/_hooks/useProjectSlice';
@@ -41,6 +43,17 @@ function ProjectOverview({ projectId }) {
     privacy: 'public'
   };
 
+  const handleDeleteProject = () => {
+    console.log('deleted');
+  };
+
+  const openContextMenu = e => {
+    contextMenu(ListMenu, e, {
+      onClick: handleDeleteProject,
+      buttons: ['Delete Project']
+    });
+  };
+
   return (
     <CardContent
       noframe
@@ -51,7 +64,7 @@ function ProjectOverview({ projectId }) {
           subtitle={subtitle}
           separator
         >
-          <Button icon="ThreeDots" />
+          <Button icon="ThreeDots" onClick={openContextMenu} />
         </CardHeader>
       }
     >

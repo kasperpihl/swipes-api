@@ -10,6 +10,8 @@ import PlanSelect from 'src/react/Plan/Select/PlanSelect';
 import PlanFilter from 'src/react/Plan/Filter/PlanFilter';
 import useUpdate from 'core/react/_hooks/useUpdate';
 import useRequest from 'core/react/_hooks/useRequest';
+import contextMenu from 'src/utils/contextMenu';
+import ListMenu from 'src/react/_components/ListMenu/ListMenu';
 
 PlanOverview.sizes = [750];
 export default function PlanOverview({ planId }) {
@@ -37,12 +39,23 @@ export default function PlanOverview({ planId }) {
 
   const title = planGetTitle(plan);
 
+  const handleDeletePlan = () => {
+    console.log('deleted');
+  };
+
+  const openContextMenu = e => {
+    contextMenu(ListMenu, e, {
+      onClick: handleDeletePlan,
+      buttons: ['Delete Plan']
+    });
+  };
+
   return (
     <CardContent
       noframe
       header={
         <CardHeader padding={30} title={title} subtitle={subtitle} separator>
-          <Button icon="ThreeDots" />
+          <Button icon="ThreeDots" onClick={openContextMenu} />
         </CardHeader>
       }
     >
