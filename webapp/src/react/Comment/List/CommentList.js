@@ -25,7 +25,7 @@ export default function CommentList({ attachmentsOnly, discussion }) {
   useUpdate('comment', comment => {
     if (comment.discussion_id === discussion.discussion_id) {
       if (comment.sent_at) {
-        req.appendItem(comment);
+        req.prependItem(comment);
       } else {
         req.mergeItem(comment);
       }
@@ -54,28 +54,31 @@ export default function CommentList({ attachmentsOnly, discussion }) {
         req={req}
         errorLabel="Couldn't get discussions."
       />
-      {req.items.map(comment => {
-        const currentDate = moment(comment.sent_at);
-        const showSectionHeader = currentDate.isAfter(deltaDate, 'days');
-        const isSingleLine =
-          !showSectionHeader && deltaSentBy === comment.sent_by;
-        deltaDate = currentDate;
-        deltaSentBy = comment.sent_by;
+      {req.items
+        .slice()
+        .reverse()
+        .map(comment => {
+          const currentDate = moment(comment.sent_at);
+          const showSectionHeader = currentDate.isAfter(deltaDate, 'days');
+          const isSingleLine =
+            !showSectionHeader && deltaSentBy === comment.sent_by;
+          deltaDate = currentDate;
+          deltaSentBy = comment.sent_by;
 
-        return (
-          <Fragment key={comment.comment_id}>
-            {showSectionHeader && (
-              <SectionHeader>{currentDate.format('MMM D')}</SectionHeader>
-            )}
-            <CommentItem
-              comment={comment}
-              discussionId={discussion.discussion_id}
-              ownedBy={discussion.owned_by}
-              isSingleLine={isSingleLine}
-            />
-          </Fragment>
-        );
-      })}
+          return (
+            <Fragment key={comment.comment_id}>
+              {showSectionHeader && (
+                <SectionHeader>{currentDate.format('MMM D')}</SectionHeader>
+              )}
+              <CommentItem
+                comment={comment}
+                discussionId={discussion.discussion_id}
+                ownedBy={discussion.owned_by}
+                isSingleLine={isSingleLine}
+              />
+            </Fragment>
+          );
+        })}
     </>
   );
 }
