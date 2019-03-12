@@ -9,7 +9,6 @@ export default class EmojiPicker extends PureComponent {
       <div>
         <Picker
           style={{
-            width: '250px',
             height: '355px'
           }}
           sheetSize={32}
