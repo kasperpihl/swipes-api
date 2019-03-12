@@ -13,6 +13,7 @@ export default class EmojiPicker extends PureComponent {
             height: '355px'
           }}
           sheetSize={32}
+          autoFocus={true}
           onSelect={onSelect}
           showPreview={false}
           title=""
