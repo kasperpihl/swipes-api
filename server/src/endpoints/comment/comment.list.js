@@ -45,6 +45,7 @@ export default endpointCreate(
         )
         ${attachments_only ? 'AND attachments IS NOT NULL' : ''}
         ${pagination}
+        AND deleted = false
         ORDER BY sent_at DESC
         LIMIT $2
       `,
