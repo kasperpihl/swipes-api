@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import Loader from 'src/react/_components/loaders/Loader';
 import PlanTaskList from 'src/react/Plan/TaskList/PlanTaskList';
 import useSyncedProject from 'core/react/_hooks/useSyncedProject';
@@ -11,6 +11,7 @@ export default memo(PlanSelectProject);
 
 function PlanSelectProject({ projectId, hidden, selectedTasks, onToggleTask }) {
   const stateManager = useSyncedProject(projectId);
+  const [didEnforce, setDidEnforce] = useState(false);
 
   useProjectKeyboard(stateManager);
 
@@ -18,8 +19,19 @@ function PlanSelectProject({ projectId, hidden, selectedTasks, onToggleTask }) {
     stateManager && stateManager.syncHandler.syncIfNeeded();
   });
 
+  useEffect(() => {
+    if (stateManager) {
+      setDidEnforce(true);
+      console.log(selectedTasks);
+      stateManager.filterHandler.setFilteredTaskIds(
+        null,
+        selectedTasks.map(id => id.split('_-_')[1])
+      );
+    }
+  }, [stateManager]);
+
   if (hidden) return null;
-  if (!stateManager) {
+  if (!stateManager || !didEnforce) {
     return (
       <SW.LoaderWrapper>
         <Loader mini size={24} />
