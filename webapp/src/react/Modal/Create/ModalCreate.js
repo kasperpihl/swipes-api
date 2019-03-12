@@ -22,7 +22,7 @@ export default class ModalCreate extends PureComponent {
     this.state = {
       titleVal: '',
       privacy: 'public',
-      ownedBy: props.myId,
+      ownedBy: undefined,
       followers: fromJS([])
     };
   }
@@ -147,14 +147,16 @@ export default class ModalCreate extends PureComponent {
             </FMSW.InputWrapper>
           )}
           <FMSW.InputWrapper>
-            <FMSW.Label>2. Choose belonging</FMSW.Label>
+            <FMSW.Label>
+              {type === 'plan' ? '1' : '2'}. Choose belonging
+            </FMSW.Label>
             <OrgPicker
               value={ownedBy}
               onChange={this.handleOrgChange}
               disablePersonal={type === 'discussion'}
             />
           </FMSW.InputWrapper>
-          {ownedBy !== myId && (
+          {ownedBy !== myId && type !== 'plan' && (
             <>
               <FMSW.InputWrapper>
                 <FMSW.Label>3. Choose privacy</FMSW.Label>

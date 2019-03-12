@@ -34,7 +34,7 @@ function CardHeaderSubtitle({ ownedBy, members, privacy, children, tooltip }) {
 
   return (
     <SW.Wrapper>
-      <SW.OrganizationName>{orgGetBelonging(ownedBy)} / </SW.OrganizationName>
+      <SW.OrganizationName>{orgGetBelonging(ownedBy)}</SW.OrganizationName>
       {members && (
         <SW.FollowerLabel
           onMouseEnter={onMouseEnter}

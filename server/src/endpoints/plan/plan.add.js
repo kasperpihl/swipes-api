@@ -4,13 +4,10 @@ import idGenerate from 'src/utils/idGenerate';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
 import sqlPermissionInsertQuery from 'src/utils/sql/sqlPermissionInsertQuery';
 import update from 'src/utils/update';
-import { string, array, any } from 'valjs';
+import { string } from 'valjs';
 
 const expectedInput = {
-  owned_by: string.require(),
-  title: string,
-  privacy: any.of('public', 'private'),
-  members: array.of(string)
+  owned_by: string.require()
 };
 
 export default endpointCreate(
@@ -20,16 +17,10 @@ export default endpointCreate(
   },
   async (req, res) => {
     const { user_id } = res.locals;
-    const {
-      title = null,
-      owned_by,
-      members = [],
-      privacy = 'public'
-    } = res.locals.input;
+    const { owned_by } = res.locals.input;
 
     const planId = idGenerate('PLAN-', 8);
 
-    const userIds = [...new Set(members).add(user_id)];
     const d = new Date();
     // Setting date to monday (today if monday, or next monday).
     d.setDate(d.getDate() + ((((7 - d.getDay()) % 7) + 1) % 7));
@@ -41,13 +32,12 @@ export default endpointCreate(
     const [planRes] = await transaction([
       sqlInsertQuery('plans', {
         owned_by,
-        title,
         plan_id: planId,
         start_date: startDate,
         end_date: endDate,
         created_by: user_id
       }),
-      sqlPermissionInsertQuery(planId, privacy, owned_by, userIds)
+      sqlPermissionInsertQuery(planId, 'public', owned_by)
     ]);
 
     res.locals.update = update.prepare(planId, [

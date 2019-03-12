@@ -38,9 +38,7 @@ function PlanOverview({ planId, nav }) {
   const plan = req.result.plan;
 
   const subtitle = {
-    ownedBy: req.result.plan.owned_by,
-    members: ['U5JXWRUJE'],
-    privacy: 'public'
+    ownedBy: req.result.plan.owned_by
   };
 
   const title = planGetTitle(plan);

@@ -11,6 +11,7 @@ export default styleSheet('CardHeaderSubtitle', {
     _flex: ['row', 'flex-start', 'center'],
     _textStyle: 'caption',
     lineHeight: '24px',
+    marginLeft: '6px',
     color: '$sw2'
   },
   Icon: {

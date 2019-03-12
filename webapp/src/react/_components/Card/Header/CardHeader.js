@@ -7,8 +7,8 @@ CardHeader.propTypes = {
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.shape({
     ownedBy: PropTypes.string.isRequired,
-    members: PropTypes.arrayOf(PropTypes.string).isRequired,
-    privacy: PropTypes.oneOf(['public', 'private']).isRequired
+    members: PropTypes.arrayOf(PropTypes.string),
+    privacy: PropTypes.oneOf(['public', 'private'])
   }),
   separator: PropTypes.bool
 };
