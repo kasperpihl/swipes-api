@@ -35,7 +35,9 @@ export default endpointCreate(
     );
 
     if (!planRes || !planRes.rows.length) {
-      throw Error('Not found').code(404);
+      throw Error('Not found')
+        .code(404)
+        .toClient();
     }
 
     const plan = planRes.rows[0];

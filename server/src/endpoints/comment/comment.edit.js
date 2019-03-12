@@ -49,7 +49,9 @@ export default endpointCreate(
     );
 
     if (!commentRes.rows.length) {
-      throw Error('Not found').code(404);
+      throw Error('Not found')
+        .code(404)
+        .toClient();
     }
 
     // Create response data.

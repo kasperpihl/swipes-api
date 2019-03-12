@@ -17,7 +17,9 @@ export default async (user_id, organization_id, options) => {
   );
 
   if (!userRes || !userRes.rows.length) {
-    throw Error('Not found').code(404);
+    throw Error('Not found')
+      .code(404)
+      .toClient();
   }
 
   const user = userRes.rows[0];

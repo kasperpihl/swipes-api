@@ -86,7 +86,9 @@ export default endpointCreate(
         values,
         onSuccess: result => {
           if (!result.rows.length) {
-            throw Error('Not found').code(404);
+            throw Error('Not found')
+              .code(404)
+              .toClient();
           }
           if (result.rows[0].rev !== rev + 1) {
             throw Error('Out of sync')

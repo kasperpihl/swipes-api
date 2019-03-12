@@ -32,7 +32,9 @@ export default endpointCreate(
       [discussion_id, comment_id, user_id]
     );
     if (!commentRes.rows.length) {
-      throw Error('Not found').code(404);
+      throw Error('Not found')
+        .code(404)
+        .toClient();
     }
 
     // Create response data.

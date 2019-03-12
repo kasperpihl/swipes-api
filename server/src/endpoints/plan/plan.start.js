@@ -28,7 +28,9 @@ export default endpointCreate(
       [plan_id]
     );
     if (!planRes.rows.length) {
-      throw Error('Not found').code(404);
+      throw Error('Not found')
+        .code(404)
+        .toClient();
     }
 
     // Create response data.

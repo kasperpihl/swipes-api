@@ -35,7 +35,9 @@ export default endpointCreate(
     );
 
     if (!foundProjectRes.rows.length) {
-      throw Error('Not found').code(404);
+      throw Error('Not found')
+        .code(404)
+        .toClient();
     }
 
     await transaction([

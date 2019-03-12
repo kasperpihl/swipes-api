@@ -16,7 +16,8 @@ const expectedOutput = {
 export default endpointCreate(
   {
     expectedInput,
-    expectedOutput
+    expectedOutput,
+    permissionKey: 'discussion_id'
   },
   async (req, res) => {
     // Get inputs
@@ -53,7 +54,7 @@ export default endpointCreate(
     );
 
     const has_more = commentRes.rows.length > limit;
-    const comments = commentRes.rows.slice(0, limit).reverse();
+    const comments = commentRes.rows.slice(0, limit);
 
     res.locals.output = {
       comments,

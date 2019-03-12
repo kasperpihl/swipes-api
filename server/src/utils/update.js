@@ -24,7 +24,9 @@ export default {
       );
 
       if (!receiverRes.rows.length) {
-        throw Error('Not found').code(404);
+        throw Error('Not found')
+          .code(404)
+          .toClient();
       }
       receivers = receiverRes.rows.map(r => r.granted_to);
     } else if (!Array.isArray(receivers)) {

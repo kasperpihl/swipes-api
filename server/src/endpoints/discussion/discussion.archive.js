@@ -29,7 +29,9 @@ export default endpointCreate(
     );
 
     if (!discussionRes || !discussionRes.rows.length) {
-      throw Error('Not found').code(404);
+      throw Error('Not found')
+        .code(404)
+        .toClient();
     }
 
     res.locals.update = update.prepare(discussion_id, [

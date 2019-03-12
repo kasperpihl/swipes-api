@@ -24,7 +24,9 @@ export default endpointCreate(
     );
 
     if (!projectRes || !projectRes.rows.length) {
-      throw Error('Not found').code(404);
+      throw Error('Not found')
+        .code(404)
+        .toClient();
     }
 
     const tasksRes = await query(
