@@ -22,6 +22,7 @@ export { default as DayTrackerArrow } from './icons/day-tracker-arrow.svg'; // n
 export { default as Delete } from './icons/delete.svg';
 export { default as Earth } from './icons/earth.svg';
 export { default as Earth2x } from './icons/earth2x.svg';
+export { default as Emoji } from './icons/emoji.svg'; // new
 export { default as Enter } from './icons/enter.svg';
 export { default as Eye } from './icons/eye.svg';
 export { default as File } from './icons/file.svg';

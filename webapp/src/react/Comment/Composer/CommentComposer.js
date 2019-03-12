@@ -1,10 +1,14 @@
 import React, { PureComponent } from 'react';
 import { fromJS } from 'immutable';
-import cachedCallback from 'src/utils/cachedCallback';
+
+import EmojiPicker from 'src/react/_components/EmojiPicker/EmojiPicker';
 import UserImage from 'src/react/_components/UserImage/UserImage';
 import AttachButton from 'src/react/_components/AttachButton/AttachButton';
+import Button from 'src/react/_components/Button/Button';
 import Attachment from 'src/react/_components/attachment/Attachment';
 
+import cachedCallback from 'src/utils/cachedCallback';
+import contextMenu from 'src/utils/contextMenu';
 import request from 'core/utils/request';
 
 import SW from './CommentComposer.swiss';
@@ -58,6 +62,16 @@ export default class CommentComposer extends PureComponent {
     this.setState({ attachments });
   };
 
+  openEmojiPicker = e => {
+    contextMenu(EmojiPicker, e, {
+      onSelect: this.selectEmoji
+    });
+  };
+
+  selectEmoji = emoji => {
+    this.setState({ commentVal: this.state.commentVal + emoji.native });
+  };
+
   renderAttachments() {
     const { attachments } = this.state;
     if (!attachments.size) {
@@ -99,6 +113,7 @@ export default class CommentComposer extends PureComponent {
               onChange={e => this.setState({ commentVal: e.target.value })}
             />
             <SW.ButtonWrapper>
+              <Button icon="Emoji" onClick={this.openEmojiPicker} />
               <AttachButton
                 onAttach={this.handleAttach}
                 ownedBy={discussion.owned_by}

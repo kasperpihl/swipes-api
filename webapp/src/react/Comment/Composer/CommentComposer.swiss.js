@@ -43,6 +43,22 @@ export default styleSheet('CommentComposer', {
     flex: 'none',
     height: '55px'
   },
+
+  EmojiPickerWrapper: {
+    position: 'absolute',
+    top: '-360px',
+    right: '0',
+    opacity: '0',
+    visibility: 'hidden',
+    transition: '.1s ease',
+
+    open: {
+      opacity: '1',
+      visibility: 'visible',
+      transition: '.1s ease'
+    }
+  },
+
   Textarea: {
     _el: Textarea,
     border: 'none',

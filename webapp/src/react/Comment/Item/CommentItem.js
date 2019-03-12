@@ -1,19 +1,58 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import moment from 'moment';
 
 import UserImage from 'src/react/_components/UserImage/UserImage';
 import Attachment from 'src/react/_components/attachment/Attachment';
+import ListMenu from 'src/react/_components/ListMenu/ListMenu';
 
 import chain from 'src/utils/chain';
 import parseNewLines from 'src/utils/parseNewLines';
 import parseLinks from 'src/utils/parseLinks';
 import parseMentions from 'src/utils/parseMentions';
+import request from 'core/utils/request';
+import withNav from 'src/react/_hocs/Nav/withNav';
+import contextMenu from 'src/utils/contextMenu';
 
 import userGetFullName from 'core/utils/user/userGetFullName';
 
 import SW from './CommentItem.swiss';
+import FormModal from 'src/react/_components/FormModal/FormModal';
 
+@withNav
+@connect(state => ({
+  me: state.me
+}))
 export default class CommentItem extends PureComponent {
+  handleListMenuClick = (i, button) => {
+    if (button === 'Delete comment') {
+      const { nav } = this.props;
+
+      nav.openModal(FormModal, {
+        title: 'Delete comment',
+        subtitle: 'Are you sure that you want to delete this comment?',
+        confirmLabel: 'Delete',
+        onConfirm: this.callbackDeleteComment
+      });
+    } else if (button === 'Edit comment') {
+      console.log('edit');
+    }
+  };
+
+  callbackDeleteComment = () => {
+    const { comment, discussionId } = this.props;
+    request('comment.delete', {
+      discussion_id: discussionId,
+      comment_id: comment.comment_id
+    });
+  };
+  openContextMenu = e => {
+    contextMenu(ListMenu, e, {
+      onClick: this.handleListMenuClick,
+      buttons: ['Delete comment', 'Edit comment']
+    });
+  };
+
   renderAttachments() {
     const { comment } = this.props;
 
@@ -61,8 +100,15 @@ export default class CommentItem extends PureComponent {
     );
   }
   render() {
-    const { comment, postId, discussionId, ownedBy, isSingleLine } = this.props;
-
+    const {
+      comment,
+      postId,
+      discussionId,
+      ownedBy,
+      isSingleLine,
+      me
+    } = this.props;
+    const commentIsSentByMe = me.get('user_id') === comment.sent_by;
     return (
       <SW.ProvideContext isSingleLine={isSingleLine}>
         <SW.Wrapper>
@@ -75,7 +121,13 @@ export default class CommentItem extends PureComponent {
             {this.renderAttachments()}
           </SW.Center>
           <SW.RightSide>
-            <SW.Button icon="ThreeDots" size={30} />
+            {commentIsSentByMe && (
+              <SW.Button
+                icon="ThreeDots"
+                size={30}
+                onClick={this.openContextMenu}
+              />
+            )}
             <SW.Reaction
               ownedBy={ownedBy}
               discussionId={discussionId}
