@@ -51,7 +51,7 @@ function ProjectSide({ stateManager }) {
       selectedIds: followers,
       organizationId: ownedBy,
       onSelect: id => {
-        console.log(id);
+        console.log(id); // TODO: Add endpoint to add people to project
       }
     });
   };
@@ -63,7 +63,6 @@ function ProjectSide({ stateManager }) {
     stateManager.completeHandler.completeAll(completionPercentage < 100);
   };
 
-  console.log(followers);
   return (
     <SW.Wrapper>
       <SideHeader

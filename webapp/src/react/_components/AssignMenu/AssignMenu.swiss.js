@@ -28,6 +28,14 @@ export default styleSheet('AssignMenu', {
     backgroundColor: '$sw5'
   },
 
+  ButtonWrapper: {
+    _flex: ['row', 'center', 'center'],
+
+    right: {
+      marginLeft: 'auto'
+    }
+  },
+
   Row: {
     _size: ['100%', '48px'],
     _flex: ['row', 'flex-start', 'center'],

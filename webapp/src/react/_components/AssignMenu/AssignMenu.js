@@ -105,12 +105,18 @@ export default class AssignMenu extends PureComponent {
         </SW.Dropdown>
         <SW.OptionsRow>
           {!(hideRowOnSelect && allAreSelected) && (
-            <Button
-              title={allAreSelected ? 'Deselect All' : 'Select All'}
-              onClick={() => this.toggleSelectAllCached(users, allAreSelected)}
-            />
+            <SW.ButtonWrapper>
+              <Button
+                title={allAreSelected ? 'Deselect All' : 'Select All'}
+                onClick={() =>
+                  this.toggleSelectAllCached(users, allAreSelected)
+                }
+              />
+            </SW.ButtonWrapper>
           )}
-          <Button title="Done" onClick={hide} />
+          <SW.ButtonWrapper right>
+            <Button title="Done" onClick={hide} />
+          </SW.ButtonWrapper>
         </SW.OptionsRow>
       </SW.Wrapper>
     );
