@@ -58,7 +58,10 @@ function DiscussionOverview({ discussionId, myId }) {
       }
       footer={
         <SW.FooterWrapper>
-          <CommentComposer discussion={discussion} />
+          <CommentComposer
+            discussionId={discussion.discussion_id}
+            ownedBy={discussion.owned_by}
+          />
         </SW.FooterWrapper>
       }
       scrollRef={c => {

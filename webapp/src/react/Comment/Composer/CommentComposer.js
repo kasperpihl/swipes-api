@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { fromJS } from 'immutable';
+import { List } from 'immutable';
 
 import EmojiPicker from 'src/react/_components/EmojiPicker/EmojiPicker';
 import UserImage from 'src/react/_components/UserImage/UserImage';
@@ -10,38 +10,72 @@ import Attachment from 'src/react/_components/attachment/Attachment';
 import cachedCallback from 'src/utils/cachedCallback';
 import contextMenu from 'src/utils/contextMenu';
 import request from 'core/utils/request';
+import withLoader from 'src/react/_hocs/withLoader';
 
 import SW from './CommentComposer.swiss';
 
+@withLoader
 export default class CommentComposer extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      attachments: fromJS([]),
-      commentVal: ''
+      attachments: List(props.initialAttachments || []),
+      commentVal: props.initialMessage || ''
     };
   }
-  onChange = e => {
+  handleChange = e => {
+    const { onChangeMessage } = this.props;
+    if (typeof onChangeMessage === 'function') {
+      onChangeMessage(e.target.value);
+    }
     this.setState({ commentVal: e.target.value });
+  };
+  handleEditComment = () => {
+    const { attachments, commentVal } = this.state;
+    const { discussionId, editCommentId, onSuccess, loader } = this.props;
+    loader.set('editing');
+    request('comment.edit', {
+      discussion_id: discussionId,
+      comment_id: editCommentId,
+      message: commentVal,
+      attachments
+    }).then(res => {
+      if (res.ok) {
+        loader.clear('editing');
+        window.analytics.sendEvent('Comment edited', {});
+        if (typeof onSuccess === 'function') {
+          onSuccess();
+        }
+      } else {
+        loader.error('editing', res.error);
+      }
+    });
   };
   handleAddComment = () => {
     const { attachments, commentVal } = this.state;
-    const { discussion } = this.props;
+    const { discussionId, editCommentId, onSuccess } = this.props;
     if (!commentVal.length) {
       return;
     }
+    if (editCommentId) {
+      return this.handleEditComment();
+    }
+
     this.setState({
-      attachments: fromJS([]),
+      attachments: List([]),
       commentVal: ''
     });
 
     request('comment.add', {
-      discussion_id: discussion.discussion_id,
+      discussion_id: discussionId,
       attachments,
       message: commentVal
     }).then(res => {
       if (res.ok) {
         window.analytics.sendEvent('Comment added', {});
+        if (typeof onSuccess === 'function') {
+          onSuccess();
+        }
       }
     });
   };
@@ -58,7 +92,8 @@ export default class CommentComposer extends PureComponent {
   });
   handleAttach = att => {
     let { attachments } = this.state;
-    attachments = attachments.push(fromJS(att));
+
+    attachments = attachments.push(att);
     this.setState({ attachments });
   };
 
@@ -93,7 +128,7 @@ export default class CommentComposer extends PureComponent {
 
   render() {
     const { commentVal } = this.state;
-    const { discussion } = this.props;
+    const { ownedBy, loader } = this.props;
     const placeholder = 'Write a comment';
 
     return (
@@ -114,14 +149,12 @@ export default class CommentComposer extends PureComponent {
             />
             <SW.ButtonWrapper>
               <Button icon="Emoji" onClick={this.openEmojiPicker} />
-              <AttachButton
-                onAttach={this.handleAttach}
-                ownedBy={discussion.owned_by}
-              />
+              <AttachButton onAttach={this.handleAttach} ownedBy={ownedBy} />
               <SW.SubmitButton
                 onClick={this.handleAddComment}
                 icon="Enter"
                 shown={!!commentVal}
+                status={loader.get('editing')}
               />
             </SW.ButtonWrapper>
           </SW.TypingRow>

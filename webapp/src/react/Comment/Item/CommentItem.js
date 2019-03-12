@@ -2,9 +2,11 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 
-import UserImage from 'src/react/_components/UserImage/UserImage';
-import Attachment from 'src/react/_components/attachment/Attachment';
-import ListMenu from 'src/react/_components/ListMenu/ListMenu';
+import UserImage from '_shared/UserImage/UserImage';
+import Attachment from '_shared/attachment/Attachment';
+import ListMenu from '_shared/ListMenu/ListMenu';
+import EditCommentModal from '_shared/EditCommentModal/EditCommentModal';
+import FormModal from '_shared/FormModal/FormModal';
 
 import chain from 'src/utils/chain';
 import parseNewLines from 'src/utils/parseNewLines';
@@ -17,7 +19,6 @@ import contextMenu from 'src/utils/contextMenu';
 import userGetFullName from 'core/utils/user/userGetFullName';
 
 import SW from './CommentItem.swiss';
-import FormModal from 'src/react/_components/FormModal/FormModal';
 
 @withNav
 @connect(state => ({
@@ -25,7 +26,7 @@ import FormModal from 'src/react/_components/FormModal/FormModal';
 }))
 export default class CommentItem extends PureComponent {
   handleListMenuClick = (i, button) => {
-    const { nav, comment } = this.props;
+    const { nav, comment, discussionId, ownedBy } = this.props;
     if (button === 'Delete comment') {
       nav.openModal(FormModal, {
         title: 'Delete comment',
@@ -34,16 +35,15 @@ export default class CommentItem extends PureComponent {
         onConfirm: this.callbackDeleteComment
       });
     } else if (button === 'Edit comment') {
+      console.log(comment);
       nav.openModal(EditCommentModal, {
-        initialValue: comment.message,
-        confirmLabel: 'Edit',
-        onConfirm: this.handleEditComment
+        initialMessage: comment.message,
+        initialAttachments: comment.attachments,
+        discussionId,
+        ownedBy,
+        commentId: comment.comment_id
       });
     }
-  };
-
-  handleEditComment = () => {
-    console.log('edited');
   };
 
   callbackDeleteComment = () => {
