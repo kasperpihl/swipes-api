@@ -25,9 +25,8 @@ import FormModal from 'src/react/_components/FormModal/FormModal';
 }))
 export default class CommentItem extends PureComponent {
   handleListMenuClick = (i, button) => {
+    const { nav, comment } = this.props;
     if (button === 'Delete comment') {
-      const { nav } = this.props;
-
       nav.openModal(FormModal, {
         title: 'Delete comment',
         subtitle: 'Are you sure that you want to delete this comment?',
@@ -35,8 +34,16 @@ export default class CommentItem extends PureComponent {
         onConfirm: this.callbackDeleteComment
       });
     } else if (button === 'Edit comment') {
-      console.log('edit');
+      nav.openModal(EditCommentModal, {
+        initialValue: comment.message,
+        confirmLabel: 'Edit',
+        onConfirm: this.handleEditComment
+      });
     }
+  };
+
+  handleEditComment = () => {
+    console.log('edited');
   };
 
   callbackDeleteComment = () => {
@@ -46,6 +53,7 @@ export default class CommentItem extends PureComponent {
       comment_id: comment.comment_id
     });
   };
+
   openContextMenu = e => {
     contextMenu(ListMenu, e, {
       onClick: this.handleListMenuClick,
