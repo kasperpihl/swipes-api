@@ -52,9 +52,6 @@ export const hideContextMenu = (...args) => (dp, getState) => {
   if (cMenu && typeof cMenu.onClose === 'function') {
     cMenu.onClose(...args);
   }
-  if (cMenu && cMenu.props && typeof cMenu.props.onClose === 'function') {
-    cMenu.props.onClose(...args);
-  }
   dp({ type: types.CONTEXT_MENU, payload: null });
 };
 

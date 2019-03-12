@@ -7,6 +7,7 @@ import useBeforeUnload from 'src/react/_hooks/useBeforeUnload';
 import usePlanProjectSelect from 'src/react/Plan/usePlanProjectSelect';
 import SectionHeader from '_shared/SectionHeader/SectionHeader';
 import Button from '_shared/Button/Button';
+import Spacing from 'src/react/_components/Spacing/Spacing';
 
 import PlanTaskList from 'src/react/Plan/TaskList/PlanTaskList';
 
@@ -76,6 +77,7 @@ function PlanFilterProject({ projectId, project, dispatch, hasPending, plan }) {
     <SW.Wrapper>
       <SectionHeader>
         {project.title}
+        <Spacing width={'100%'} />
         {selectable && (
           <Button
             title="Done"

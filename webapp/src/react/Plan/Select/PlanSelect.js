@@ -10,6 +10,7 @@ import PlanAlert from 'src/react/Plan/Alert/PlanAlert';
 import PlanSideDraft from 'src/react/Plan/Side/Draft/PlanSideDraft';
 
 import SW from './PlanSelect.swiss';
+import Spacing from 'src/react/_components/Spacing/Spacing';
 
 export default function PlanSelect({ plan }) {
   const req = usePaginationRequest(
@@ -68,6 +69,7 @@ export default function PlanSelect({ plan }) {
             <Fragment key={project_id}>
               <SW.SectionHeader onClick={handleClickCached(project_id)}>
                 {`${title}${count ? ` (${count})` : ''}`}
+                <Spacing width="100%" />
                 <SW.Icon
                   icon="ArrowRightFull"
                   expanded={expanded[project_id]}

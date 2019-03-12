@@ -23,6 +23,7 @@ function ProjectTaskAssignees({ taskId }) {
   );
 
   const handleAssigneeSelect = useCallback(newAssignees => {
+    console.log(newAssignees);
     stateManager.editHandler.updateAssignees(taskId, fromJS(newAssignees));
   });
 
