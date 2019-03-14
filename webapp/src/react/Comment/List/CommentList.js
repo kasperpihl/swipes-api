@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useLayoutEffect, useRef, useEffect } from 'react';
 import moment from 'moment';
 import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
 import usePaginationRequest from 'core/react/_hooks/usePaginationRequest';
@@ -6,9 +6,14 @@ import PaginationScrollToMore from 'src/react/_components/pagination/PaginationS
 import CommentItem from 'src/react/Comment/Item/CommentItem';
 import SectionHeader from 'src/react/_components/SectionHeader/SectionHeader';
 import useUpdate from 'core/react/_hooks/useUpdate';
+import useScrollComments from 'src/react/Comment/useScrollComments';
 import SW from './CommentList.swiss';
 
-export default function CommentList({ attachmentsOnly, discussion }) {
+export default function CommentList({
+  attachmentsOnly,
+  discussion,
+  scrollRef
+}) {
   const req = usePaginationRequest(
     'comment.list',
     {
@@ -32,6 +37,8 @@ export default function CommentList({ attachmentsOnly, discussion }) {
     }
   });
 
+  useScrollComments(scrollRef, req.items);
+
   if (req.error || req.loading) {
     return <RequestLoader req={req} />;
   }
@@ -49,7 +56,7 @@ export default function CommentList({ attachmentsOnly, discussion }) {
   let deltaSentBy;
 
   return (
-    <>
+    <SW.Wrapper>
       <PaginationScrollToMore
         req={req}
         errorLabel="Couldn't get discussions."
@@ -79,6 +86,6 @@ export default function CommentList({ attachmentsOnly, discussion }) {
             </Fragment>
           );
         })}
-    </>
+    </SW.Wrapper>
   );
 }

@@ -3,7 +3,7 @@ import EmptyState from 'src/react/_components/EmptyState/EmptyState';
 
 export default styleSheet('CommentList', {
   Wrapper: {
-    paddingBottom: '6px'
+    // paddingBottom: '6px'
   },
 
   EmptyState: {

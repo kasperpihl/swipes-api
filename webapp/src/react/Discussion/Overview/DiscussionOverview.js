@@ -45,6 +45,11 @@ function DiscussionOverview({ discussionId, myId }) {
   const handleClick = () => {
     setAttachmentsOnly(c => !c);
   };
+
+  const handleSendMessage = () => {
+    const el = scrollRef.current;
+    el.scrollTop = el.scrollHeight - el.clientHeight;
+  };
   const { discussion } = req.result;
 
   return (
@@ -61,6 +66,7 @@ function DiscussionOverview({ discussionId, myId }) {
           <CommentComposer
             discussionId={discussion.discussion_id}
             ownedBy={discussion.owned_by}
+            onSuccess={handleSendMessage}
           />
         </SW.FooterWrapper>
       }
@@ -73,6 +79,7 @@ function DiscussionOverview({ discussionId, myId }) {
         attachmentsOnly={attachmentsOnly}
         key={`${attachmentsOnly}`}
         discussion={discussion}
+        scrollRef={scrollRef}
       />
     </CardContent>
   );
