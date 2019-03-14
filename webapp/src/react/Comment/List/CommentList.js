@@ -1,4 +1,4 @@
-import React, { Fragment, useLayoutEffect, useRef, useEffect } from 'react';
+import React, { Fragment } from 'react';
 import moment from 'moment';
 import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
 import usePaginationRequest from 'core/react/_hooks/usePaginationRequest';
@@ -56,7 +56,7 @@ export default function CommentList({
   let deltaSentBy;
 
   return (
-    <SW.Wrapper>
+    <>
       <PaginationScrollToMore
         req={req}
         errorLabel="Couldn't get discussions."
@@ -86,6 +86,6 @@ export default function CommentList({
             </Fragment>
           );
         })}
-    </SW.Wrapper>
+    </>
   );
 }
