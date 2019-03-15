@@ -119,7 +119,6 @@ export default class CommentComposer extends PureComponent {
         entry.images.downsized.height
       },w:${entry.images.downsized.width}>`
     );
-    // console.log(entry.images.downsized);
     contextMenu(null);
   };
 

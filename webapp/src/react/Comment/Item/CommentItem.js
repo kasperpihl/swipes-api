@@ -12,6 +12,7 @@ import chain from 'src/utils/chain';
 import parseNewLines from 'src/utils/parseNewLines';
 import parseLinks from 'src/utils/parseLinks';
 import parseMentions from 'src/utils/parseMentions';
+import parseGiphys from 'src/utils/parseGiphys';
 import request from 'core/utils/request';
 import withNav from 'src/react/_hocs/Nav/withNav';
 import contextMenu from 'src/utils/contextMenu';
@@ -108,16 +109,6 @@ export default class CommentItem extends PureComponent {
     );
   }
 
-  renderMessage = message => {
-    let parsedMessage;
-    const match = /<!giphy*\|(.*)\|(.*)>/gm.exec(message);
-    if (message && match) {
-      parsedMessage = <SW.Gif src={match[1]} />;
-    } else {
-      parsedMessage = chain(parseNewLines, parseMentions, parseLinks)(message);
-    }
-    return parsedMessage;
-  };
   render() {
     const {
       comment,
@@ -128,13 +119,18 @@ export default class CommentItem extends PureComponent {
       me
     } = this.props;
     const commentIsSentByMe = me.get('user_id') === comment.sent_by;
+
     return (
       <SW.ProvideContext isSingleLine={isSingleLine}>
         <SW.Wrapper>
           <SW.LeftSide>{this.renderLeftSide()}</SW.LeftSide>
           <SW.Center>
             {this.renderTopSide()}
-            <SW.Message>{this.renderMessage(comment.message)}</SW.Message>
+            <SW.Message>
+              {chain(parseGiphys, parseNewLines, parseMentions, parseLinks)(
+                comment.message
+              )}
+            </SW.Message>
             {this.renderAttachments()}
           </SW.Center>
           <SW.RightSide>
