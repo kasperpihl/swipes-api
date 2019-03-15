@@ -11,6 +11,8 @@ export const query = (text, params) => {
   return pool.query(text, params);
 };
 
+export const getClient = async () => await pool.connect();
+
 export const transaction = async queries => {
   if (!Array.isArray(queries)) {
     throw 'db.transaction expects an array of queries';

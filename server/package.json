@@ -19,6 +19,7 @@
     "randomstring": "^1.1.5",
     "redis": "^2.8.0",
     "request": "~2.88.0",
+    "rethinkdb": "^2.3.3",
     "sha1": "^1.1.1",
     "sharp": "^0.21.3",
     "slug": "^0.9.4",

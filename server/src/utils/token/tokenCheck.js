@@ -16,7 +16,7 @@ export default async token => {
   );
 
   if (!tokenRes || !tokenRes.rows.length) {
-    throw Error('not_authed');
+    throw Error('not_authed').toClient();
   }
 
   return tokenRes.rows[0].user_id;
