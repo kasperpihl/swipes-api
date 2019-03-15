@@ -2,6 +2,10 @@ import storeGet from 'core/utils/store/storeGet';
 import * as mainActions from 'src/redux/main/mainActions';
 
 export default (component, options, props) => {
+  const store = storeGet();
+  if (!component) {
+    return store.dispatch(mainActions.contextMenu(null));
+  }
   if (
     options &&
     options.target &&
@@ -12,7 +16,7 @@ export default (component, options, props) => {
       excludeY: true
     };
   }
-  const store = storeGet();
+
   store.dispatch(
     mainActions.contextMenu({
       options,
