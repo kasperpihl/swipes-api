@@ -5,7 +5,7 @@ import update from 'src/utils/update';
 
 const expectedInput = {
   discussion_id: string.require(),
-  topic: string.min(1).require()
+  title: string.min(1).require()
 };
 
 export default endpointCreate(
@@ -15,18 +15,18 @@ export default endpointCreate(
   },
   async (req, res) => {
     // Get inputs
-    const { discussion_id, topic } = res.locals.input;
+    const { discussion_id, title } = res.locals.input;
 
     const discussionRes = await query(
       `
         UPDATE discussions
         SET
           updated_at = now()
-          topic = $1
+          title = $1
         WHERE discussion_id = $2
-        RETURNING discussion_id, updated_at, topic
+        RETURNING discussion_id, updated_at, title
       `,
-      [topic, discussion_id]
+      [title, discussion_id]
     );
 
     // Create response data.

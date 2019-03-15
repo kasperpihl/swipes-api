@@ -96,7 +96,7 @@ export default class IpcListener {
         target: {
           id: comment.discussion_id
         },
-        title: discussion.topic,
+        title: discussion.title,
         message: `${userGetFirstName(comment.sent_by)}: ${strippedMessage}`
       });
     }

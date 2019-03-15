@@ -50,15 +50,15 @@ export default class DiscussionHeader extends PureComponent {
       inputs: [
         {
           placeholder: 'Title of discussion',
-          initialValue: discussion.topic
+          initialValue: discussion.title
         }
       ],
       confirmLabel: 'Rename',
       onConfirm: ([text]) => {
-        if (text !== discussion.topic && text.length) {
+        if (text !== discussion.title && text.length) {
           request('discussion.rename', {
             discussion_id: discussion.discussion_id,
-            topic: text
+            title: text
           });
         }
       }
@@ -113,7 +113,7 @@ export default class DiscussionHeader extends PureComponent {
       onClickAttachments,
       attachmentsOnly
     } = this.props;
-    const topic = discussion.topic;
+
     const subtitle = {
       ownedBy: discussion.owned_by,
       members: Object.keys(discussion.followers),
@@ -122,7 +122,7 @@ export default class DiscussionHeader extends PureComponent {
 
     return (
       <SW.Wrapper>
-        <CardHeader title={topic} subtitle={subtitle}>
+        <CardHeader title={discussion.title} subtitle={subtitle}>
           <SW.Button
             title={'See attachments'}
             icon="Eye"

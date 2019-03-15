@@ -49,7 +49,7 @@ export default endpointCreate(
             last_comment = $3,
             followers = followers || jsonb_build_object('${user_id}', '${results[0].rows[0].updated_at.toISOString()}')
           WHERE discussion_id = $4
-          RETURNING last_comment_at, last_comment_by, last_comment, followers, discussion_id, updated_at, topic
+          RETURNING last_comment_at, last_comment_by, last_comment, followers, discussion_id, updated_at, title
         `,
         values: [
           results[0].rows[0].updated_at,
@@ -109,7 +109,7 @@ export default endpointCreate(
         content: `${sender.first_name} loved your comment: ${mentionsClean(
           comment.message
         ).slice(0, 60)}`,
-        heading: discussion.topic
+        heading: discussion.title
       }
     );
   }

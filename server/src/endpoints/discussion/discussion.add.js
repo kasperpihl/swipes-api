@@ -8,7 +8,7 @@ import sqlPermissionInsertQuery from 'src/utils/sql/sqlPermissionInsertQuery';
 import update from 'src/utils/update';
 
 const expectedInput = {
-  topic: string.min(1).require(),
+  title: string.min(1).require(),
   owned_by: string.require(),
   privacy: any.of('public', 'private'),
   followers: array.of(string)
@@ -23,12 +23,12 @@ export default endpointCreate(
     // Get inputs
     const { user_id } = res.locals;
     const {
-      topic,
+      title,
       followers = [],
       owned_by,
       privacy = 'public'
     } = res.locals.input;
-    const discussionId = idGenerate('CHAT-', 15);
+    const discussionId = idGenerate('C-', 15);
 
     const uniqueFollowers = [...new Set(followers).add(user_id)];
 
@@ -47,7 +47,7 @@ export default endpointCreate(
         {
           discussion_id: discussionId,
           owned_by,
-          topic,
+          title,
           created_by: user_id,
           last_comment_by: user_id,
           last_comment: 'just created this discussion.',

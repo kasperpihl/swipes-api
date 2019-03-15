@@ -41,7 +41,7 @@ export default class DiscussionListItem extends PureComponent {
         <SW.Wrapper onClick={this.onClick}>
           <SW.UnreadCircle />
           <SW.MiddleWrapper>
-            <SW.Topic>{item.topic}</SW.Topic>
+            <SW.Topic>{item.title}</SW.Topic>
             <SW.OrganizationName>
               {orgGetBelonging(item.owned_by)}
             </SW.OrganizationName>
