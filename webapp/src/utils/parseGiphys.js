@@ -1,7 +1,6 @@
 import React from 'react';
 const regEx = /<!giphy*\|(.*)\|(.*)>/gm;
 export default function(string) {
-  console.log(string);
   let parsedMessage;
   const match = regEx.exec(string);
   if (string && match) {

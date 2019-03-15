@@ -1,7 +1,6 @@
 import React from 'react';
 
 export default function(string) {
-  console.log(string);
   if (typeof string === 'string' && string.indexOf('\n') === -1) {
     return string;
   }

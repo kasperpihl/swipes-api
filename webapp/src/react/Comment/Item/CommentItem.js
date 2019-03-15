@@ -127,7 +127,7 @@ export default class CommentItem extends PureComponent {
           <SW.Center>
             {this.renderTopSide()}
             <SW.Message>
-              {chain(parseGiphys, parseNewLines, parseMentions, parseLinks)(
+              {chain(parseNewLines, parseGiphys, parseMentions, parseLinks)(
                 comment.message
               )}
             </SW.Message>
