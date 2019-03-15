@@ -107,6 +107,17 @@ export default class CommentItem extends PureComponent {
       </SW.TopWrapper>
     );
   }
+
+  renderMessage = message => {
+    let parsedMessage;
+    const match = /<!giphy*\|(.*)\|(.*)>/gm.exec(message);
+    if (message && match) {
+      parsedMessage = <SW.Gif src={match[1]} />;
+    } else {
+      parsedMessage = chain(parseNewLines, parseMentions, parseLinks)(message);
+    }
+    return parsedMessage;
+  };
   render() {
     const {
       comment,
@@ -123,9 +134,7 @@ export default class CommentItem extends PureComponent {
           <SW.LeftSide>{this.renderLeftSide()}</SW.LeftSide>
           <SW.Center>
             {this.renderTopSide()}
-            <SW.Message>
-              {chain(parseNewLines, parseMentions, parseLinks)(comment.message)}
-            </SW.Message>
+            <SW.Message>{this.renderMessage(comment.message)}</SW.Message>
             {this.renderAttachments()}
           </SW.Center>
           <SW.RightSide>

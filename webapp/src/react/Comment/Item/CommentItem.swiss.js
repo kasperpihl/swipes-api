@@ -112,5 +112,10 @@ export default styleSheet('CommentItem', {
       opacity: '1',
       visibility: 'visible'
     }
+  },
+
+  Gif: {
+    _el: 'img',
+    width: '200px'
   }
 });

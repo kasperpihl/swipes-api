@@ -13,6 +13,7 @@ import request from 'core/utils/request';
 import withLoader from 'src/react/_hocs/withLoader';
 
 import SW from './CommentComposer.swiss';
+import GiphySelector from 'src/react/_components/GiphySelector/GiphySelector';
 
 @withLoader
 export default class CommentComposer extends PureComponent {
@@ -51,16 +52,15 @@ export default class CommentComposer extends PureComponent {
       }
     });
   };
-  handleAddComment = () => {
+  handleAddComment = message => {
     const { attachments, commentVal } = this.state;
     const { discussionId, editCommentId, onSuccess } = this.props;
-    if (!commentVal.length) {
+    if (!message) {
       return;
     }
     if (editCommentId) {
       return this.handleEditComment();
     }
-
     this.setState({
       attachments: List([]),
       commentVal: ''
@@ -69,7 +69,7 @@ export default class CommentComposer extends PureComponent {
     request('comment.add', {
       discussion_id: discussionId,
       attachments,
-      message: commentVal
+      message
     }).then(res => {
       if (res.ok) {
         window.analytics.sendEvent('Comment added', {});
@@ -82,7 +82,7 @@ export default class CommentComposer extends PureComponent {
   handleKeyDown = e => {
     if (e.keyCode === 13 && !e.shiftKey) {
       e.preventDefault();
-      this.handleAddComment();
+      this.handleAddComment(this.state.commentVal);
     }
   };
   handleCloseAttachmentCached = cachedCallback(i => {
@@ -105,6 +105,22 @@ export default class CommentComposer extends PureComponent {
 
   selectEmoji = emoji => {
     this.setState({ commentVal: this.state.commentVal + emoji.native });
+  };
+
+  openGiphySelector = e => {
+    contextMenu(GiphySelector, e, {
+      onEntrySelect: this.onEntrySelect
+    });
+  };
+
+  onEntrySelect = entry => {
+    this.handleAddComment(
+      `<!giphy|${entry.images.downsized.url}|h:${
+        entry.images.downsized.height
+      },w:${entry.images.downsized.width}>`
+    );
+    // console.log(entry.images.downsized);
+    contextMenu(null);
   };
 
   renderAttachments() {
@@ -148,10 +164,11 @@ export default class CommentComposer extends PureComponent {
               onChange={e => this.setState({ commentVal: e.target.value })}
             />
             <SW.ButtonWrapper>
+              <Button icon="Emoji" onClick={this.openGiphySelector} />
               <Button icon="Emoji" onClick={this.openEmojiPicker} />
               <AttachButton onAttach={this.handleAttach} ownedBy={ownedBy} />
               <SW.SubmitButton
-                onClick={this.handleAddComment}
+                onClick={() => this.handleAddComment(commentVal)}
                 icon="Enter"
                 shown={!!commentVal}
                 status={loader.get('editing')}
