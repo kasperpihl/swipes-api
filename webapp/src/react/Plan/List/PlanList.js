@@ -37,7 +37,17 @@ export default function PlanList() {
 
   const handleNewPlan = () => {
     nav.openModal(ModalCreate, {
-      type: 'plan'
+      type: 'plan',
+      onSuccess: res => {
+        nav.push({
+          screenId: 'PlanOverview',
+          crumbTitle: 'Plan',
+          uniqueId: res.plan_id,
+          props: {
+            planId: res.plan_id
+          }
+        });
+      }
     });
   };
 

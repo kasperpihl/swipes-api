@@ -47,6 +47,9 @@ export default endpointCreate(
     res.locals.update = update.prepare(projectId, [
       { type: 'project', data: projectRes.rows[0] }
     ]);
+    res.locals.output = {
+      project_id: projectId
+    };
   }
 ).background(async (req, res) => {
   await update.send(res.locals.update);

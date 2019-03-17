@@ -43,6 +43,9 @@ export default endpointCreate(
     res.locals.update = update.prepare(planId, [
       { type: 'plan', data: planRes.rows[0] }
     ]);
+    res.locals.output = {
+      plan_id: planId
+    };
   }
 ).background(async (req, res) => {
   await update.send(res.locals.update);

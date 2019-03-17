@@ -42,7 +42,7 @@ export default class ModalCreate extends PureComponent {
   };
 
   handleCreate = async () => {
-    const { hideModal, loader, myId, type } = this.props;
+    const { hideModal, loader, myId, type, onSuccess } = this.props;
     const { followers, titleVal, privacy, ownedBy } = this.state;
 
     let endpoint = 'discussion.add';
@@ -69,6 +69,9 @@ export default class ModalCreate extends PureComponent {
 
     request(endpoint, options).then(res => {
       if (res.ok) {
+        if (typeof onSuccess === 'function') {
+          onSuccess(res);
+        }
         hideModal();
         window.analytics.sendEvent(analyticsEvent, {
           Privacy: privacy,

@@ -35,7 +35,17 @@ export default function ProjectList() {
 
   const handleNewProject = () => {
     nav.openModal(ModalCreate, {
-      type: 'project'
+      type: 'project',
+      onSuccess: res => {
+        nav.push({
+          screenId: 'ProjectOverview',
+          crumbTitle: 'Project',
+          uniqueId: res.project_id,
+          props: {
+            projectId: res.project_id
+          }
+        });
+      }
     });
   };
 
