@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import DiscussionListItems from 'src/react/Discussion/List/Items/DiscussionListItems';
 import PaginationScrollToMore from 'src/react/_components/pagination/PaginationScrollToMore';
 
@@ -22,6 +22,14 @@ export default function DiscussionList({ type, onSelectItemId }) {
       resultPath: 'discussions'
     }
   );
+
+  const didSelectRef = useRef();
+  useEffect(() => {
+    if (!didSelectRef.current && req.items) {
+      onSelectItemId(req.items[0].discussion_id);
+      didSelectRef.current = true;
+    }
+  });
 
   useUpdate('discussion', update => {
     if (!update.last_comment) {
