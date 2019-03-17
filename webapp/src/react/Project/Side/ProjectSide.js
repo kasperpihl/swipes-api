@@ -28,6 +28,13 @@ function ProjectSide({ stateManager }) {
   ]);
 
   useEffect(() => {
+    if (stateManager && maxIndention > 0) {
+      setSliderValue(1);
+      stateManager.expandHandler.setDepth(1);
+    }
+  }, [stateManager]);
+
+  useEffect(() => {
     if (sliderValue > maxIndention) {
       setSliderValue(maxIndention);
     }
