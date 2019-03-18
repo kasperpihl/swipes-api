@@ -73,7 +73,7 @@ export default (options, middleware) => {
   }
 
   endpointCreate.background = function(mw) {
-    endpointCreate.queueJob = queueCreateJob({ eventName: endpointName }, mw);
+    endpointCreate.queueJob = queueCreateJob(mw, endpointName);
     addToQueue = true;
     return endpointCreate;
   };
