@@ -17,3 +17,4 @@ import './mixins/_styleIfNumberOfElements';
 import './mixins/_drawProgress';
 
 import './global-styles/default-draft-styles';
+import './global-styles/global-styles';

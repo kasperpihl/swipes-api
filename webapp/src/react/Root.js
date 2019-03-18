@@ -19,7 +19,7 @@ import Topbar from 'src/react/_Layout/topbar/Topbar';
 import ContextMenu from 'src/react/_Layout/ContextMenu/ContextMenu';
 import Gradient from 'src/react/_Layout/gradient/Gradient';
 import * as invitationActions from 'src/redux/invitation/invitationActions';
-import HOCDragAndDrop from 'src/react/_components/drag-and-drop/HOCDragAndDrop';
+// import HOCDragAndDrop from 'src/react/_components/drag-and-drop/HOCDragAndDrop';
 import { MyIdContext } from 'src/react/contexts';
 import 'src/scss/reset.scss';
 import 'src/scss/app.scss';
@@ -102,10 +102,10 @@ export default class Root extends PureComponent {
           <ContextMenu />
           {/* <HOCAutoCompleting /> */}
           <Tooltip />
-          <HOCDragAndDrop>
-            <Topbar />
-            {this.renderRoutes()}
-          </HOCDragAndDrop>
+          {/* <HOCDragAndDrop> */}
+          <Topbar />
+          {this.renderRoutes()}
+          {/* </HOCDragAndDrop> */}
         </div>
       </MyIdContext.Provider>
     );

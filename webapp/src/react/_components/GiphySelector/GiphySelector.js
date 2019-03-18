@@ -6,13 +6,16 @@ import SW from './GiphySelector.swiss.js';
 export default class GiphySelector extends PureComponent {
   render() {
     const theme = {
-      select: 'test'
+      select: 'wrapper',
+      selectInput: 'input',
+      attribution: 'attribution'
     };
     const { onEntrySelect } = this.props;
     return (
       <SW.Wrapper>
         <GiphySelect
           requestKey="dc6zaTOxFJmzC"
+          requestRating="r"
           onEntrySelect={onEntrySelect}
           theme={theme}
         />

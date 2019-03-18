@@ -38,6 +38,7 @@ export default function CommentList({
   });
 
   useScrollComments(scrollRef, req.items);
+  console.log(scrollRef.current);
 
   if (req.error || req.loading) {
     return <RequestLoader req={req} />;

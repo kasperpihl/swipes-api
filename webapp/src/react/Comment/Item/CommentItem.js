@@ -11,7 +11,6 @@ import FormModal from '_shared/FormModal/FormModal';
 import chain from 'src/utils/chain';
 import parseNewLines from 'src/utils/parseNewLines';
 import parseLinks from 'src/utils/parseLinks';
-import parseMentions from 'src/utils/parseMentions';
 import parseGiphys from 'src/utils/parseGiphys';
 import request from 'core/utils/request';
 import withNav from 'src/react/_hocs/Nav/withNav';
@@ -109,6 +108,16 @@ export default class CommentItem extends PureComponent {
     );
   }
 
+  parseMessage(message) {
+    const checkGiphyRegEx = /<!giphy\|(.*)\|(.*)>/gim;
+    const match = checkGiphyRegEx.exec(message);
+    if (match) {
+      return <SW.Gif src={match[1]} />;
+    } else {
+      return chain(parseNewLines, parseLinks)(message);
+    }
+  }
+
   render() {
     const {
       comment,
@@ -126,11 +135,7 @@ export default class CommentItem extends PureComponent {
           <SW.LeftSide>{this.renderLeftSide()}</SW.LeftSide>
           <SW.Center>
             {this.renderTopSide()}
-            <SW.Message>
-              {chain(parseNewLines, parseGiphys, parseMentions, parseLinks)(
-                comment.message
-              )}
-            </SW.Message>
+            <SW.Message>{this.parseMessage(comment.message)}</SW.Message>
             {this.renderAttachments()}
           </SW.Center>
           <SW.RightSide>

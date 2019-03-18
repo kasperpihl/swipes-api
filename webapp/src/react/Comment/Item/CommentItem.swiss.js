@@ -57,7 +57,7 @@ export default styleSheet('CommentItem', {
   Message: {
     _el: 'p',
     _textStyle: 'body',
-    wordBreak: 'break-all',
+    wordBreak: 'break-word',
     maxWidth: '100%',
 
     isSingleLine: {

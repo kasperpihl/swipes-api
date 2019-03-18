@@ -33,9 +33,10 @@ textarea {
   padding: 0;
   text-decoration: none;
   position: relative;
+  font-family: 'Aktiv-Grotesk';
 
   &::-webkit-input-placeholder {
-    font-family: inherit;
+    font-family: 'Aktiv-Grotesk';
   }
 
   &:focus {
