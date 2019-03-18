@@ -13,8 +13,6 @@ export default (options, middleware) => {
     );
   }
 
-  endpointName = `/${endpointName}`;
-
   if (typeof options === 'function') {
     middleware = options;
   }
@@ -48,7 +46,7 @@ export default (options, middleware) => {
       }
     }
     routers[options.type || 'authed'][method](
-      endpointName,
+      `/${endpointName}`,
       valInput(options.expectedInput),
       valPermissions(options),
       middleware,
