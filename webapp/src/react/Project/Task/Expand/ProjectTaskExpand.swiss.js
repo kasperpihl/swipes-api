@@ -7,6 +7,7 @@ export default styleSheet('ProjectTaskExpand', {
     _flex: ['row', 'center', 'center'],
     flex: 'none',
     cursor: 'pointer',
+    userSelect: 'none',
     opacity: 0.8,
     '&:hover': {
       opacity: 1
