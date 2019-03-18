@@ -62,6 +62,14 @@ export default styleSheet('CommentItem', {
 
     isSingleLine: {
       padding: '6px 0'
+    },
+
+    '& > a': {
+      color: '$blue'
+    },
+
+    '& > a:hover': {
+      textDecoration: 'underline'
     }
   },
   Attachments: {

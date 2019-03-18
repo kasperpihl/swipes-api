@@ -108,16 +108,6 @@ export default class CommentItem extends PureComponent {
     );
   }
 
-  parseMessage(message) {
-    const checkGiphyRegEx = /<!giphy\|(.*)\|(.*)>/gim;
-    const match = checkGiphyRegEx.exec(message);
-    if (match) {
-      return <SW.Gif src={match[1]} />;
-    } else {
-      return chain(parseNewLines, parseLinks)(message);
-    }
-  }
-
   render() {
     const {
       comment,
@@ -135,7 +125,9 @@ export default class CommentItem extends PureComponent {
           <SW.LeftSide>{this.renderLeftSide()}</SW.LeftSide>
           <SW.Center>
             {this.renderTopSide()}
-            <SW.Message>{this.parseMessage(comment.message)}</SW.Message>
+            <SW.Message>
+              {chain(parseGiphys, parseNewLines, parseLinks)(comment.message)}
+            </SW.Message>
             {this.renderAttachments()}
           </SW.Center>
           <SW.RightSide>
