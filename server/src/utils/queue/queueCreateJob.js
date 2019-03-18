@@ -1,22 +1,19 @@
 import logger from 'src/utils/logger';
 import logGetObject from 'src/utils/log/logGetObject';
+import endpointDetermineName from 'src/utils//endpoint/endpointDetermineName';
 
-export default (options, middleware) => {
+export default (middleware, eventName) => {
+  if (typeof eventName !== 'string') {
+    eventName = endpointDetermineName();
+  }
   // FUNCTION MUST BE NAMED queueCreateJob. Dont change!
   return function queueCreateJob(router) {
-    if (typeof options !== 'object') {
-      options = { eventName: options };
-    }
-    if (typeof options.eventName !== 'string') {
-      throw Error(`queueCreateJob must include options.eventName`);
-    }
-
     if (typeof middleware !== 'function') {
       throw Error('queueCreateJob second parameter must be a middleware');
     }
 
     router.use(async (req, res, next) => {
-      if (!req.body.eventName || req.body.eventName !== options.eventName) {
+      if (!req.body.eventName || req.body.eventName !== eventName) {
         return next();
       }
 

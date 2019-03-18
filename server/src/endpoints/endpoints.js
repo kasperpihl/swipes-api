@@ -20,6 +20,10 @@ const readFileOrDir = pathname => {
   } else {
     // If it's a file, require it and see if it's a function endpointCreate
     const route = require(pathname).default;
+    if (typeof route === 'function' && route.name === 'queueCreateJob') {
+      console.log(route, pathname);
+      route(routers.queue);
+    }
     if (typeof route === 'function' && route.name === 'endpointCreate') {
       // Then call the function with the different routers.
       route(routers);

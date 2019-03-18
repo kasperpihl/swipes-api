@@ -6,20 +6,18 @@ import request from 'request';
 const env = config.get('env');
 const { region, queueUrl } = config.get('aws');
 
-export default (options, payload, messageGroupId = null) => {
+export default (eventName, payload, messageGroupId = null) => {
   return new Promise((resolve, reject) => {
-    if (typeof options !== 'object') {
-      options = { eventName: options };
-    }
-    if (typeof options.eventName !== 'string') {
+    if (typeof eventName !== 'string') {
       return reject(
         'queueAddJob first parameter must be eventName string or options { eventName }'
       );
     }
+    console.log(env);
     if (env !== 'dev') {
       const sqs = new AWS.SQS({ region });
       const MessageBody = JSON.stringify({
-        eventName: options.eventName,
+        eventName: eventName,
         payload
       });
       const sqsParams = {
@@ -40,12 +38,13 @@ export default (options, payload, messageGroupId = null) => {
         resolve();
       });
     } else {
+      console.log(eventName);
       resolve(); // Resolve before calling queue, to fix the orde
       request.post({
         url: `http://localhost:6000/process`,
         method: 'POST',
         json: {
-          eventName: options.eventName,
+          eventName: eventName,
           payload
         }
       });
