@@ -42,6 +42,9 @@ function ProjectTaskInput({ taskId, onClick }) {
   });
 
   const handleChange = useCallback(e => {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+    }
     stateManager.editHandler.updateTitle(taskId, e.target.value);
   });
 
@@ -66,12 +69,12 @@ function ProjectTaskInput({ taskId, onClick }) {
   return (
     <SW.Input
       onClick={onClick}
+      onChange={handleChange}
       onFocus={handleFocus}
       onBlur={handleBlur}
-      value={title}
-      onChange={handleChange}
       placeholder="Write a task"
-      innerRef={c => (inputRef.current = c)}
+      value={title}
+      inputRef={c => (inputRef.current = c)}
     />
   );
 }

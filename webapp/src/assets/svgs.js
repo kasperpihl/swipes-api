@@ -27,6 +27,7 @@ export { default as Enter } from './icons/enter.svg';
 export { default as Eye } from './icons/eye.svg';
 export { default as File } from './icons/file.svg';
 export { default as Fullscreen } from './icons/full_screen.svg'; // new
+export { default as Gif } from './icons/gif.svg'; // new
 export { default as Search } from './icons/search.svg';
 
 export { default as Hashtag } from './icons/hashtag.svg';
