@@ -1,6 +1,7 @@
-import { object, array, string } from 'valjs';
-import { query, transaction } from 'src/utils/db/db';
+import { string } from 'valjs';
+import { transaction } from 'src/utils/db/db';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
+import update from 'src/utils/update';
 
 const expectedInput = {
   plan_id: string.require()
@@ -31,7 +32,17 @@ export default endpointCreate(
         values: [plan_id]
       }
     ]);
-    // Create response data.
-    res.locals.output = {};
+
+    res.locals.update = update.prepare(plan_id, [
+      {
+        type: 'plan',
+        data: {
+          plan_id,
+          deleted: true
+        }
+      }
+    ]);
   }
-);
+).background(async (req, res) => {
+  await update.send(res.locals.update);
+});

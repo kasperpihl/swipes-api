@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import RequestLoader from '_shared/RequestLoader/RequestLoader';
 import CardContent from '_shared/Card/Content/CardContent';
 import CardHeader from '_shared/Card/Header/CardHeader';
@@ -13,14 +13,13 @@ import PlanSelect from 'src/react/Plan/Select/PlanSelect';
 import PlanFilter from 'src/react/Plan/Filter/PlanFilter';
 import useUpdate from 'core/react/_hooks/useUpdate';
 import useRequest from 'core/react/_hooks/useRequest';
+import useNav from 'src/react/_hooks/useNav';
 import contextMenu from 'src/utils/contextMenu';
-import withNav from 'src/react/_hocs/Nav/withNav';
 
 PlanOverview.sizes = [750];
 
-export default withNav(PlanOverview);
-
-function PlanOverview({ planId, nav }) {
+export default function PlanOverview({ planId }) {
+  const nav = useNav();
   const req = useRequest('plan.get', {
     plan_id: planId
   });
@@ -31,7 +30,30 @@ function PlanOverview({ planId, nav }) {
     }
   });
 
-  if (req.error || req.loading) {
+  useUpdate('plan_project_task', planProjectTask => {
+    req.merge('plan', plan => {
+      const newPlan = { ...plan };
+      newPlan.tasks = plan.tasks.filter(
+        ({ project_id, task_id }) =>
+          !(
+            planProjectTask.task_id === task_id &&
+            planProjectTask.project_id === project_id
+          )
+      );
+      if (!planProjectTask.deleted) {
+        newPlan.tasks.push(planProjectTask);
+      }
+      return newPlan;
+    });
+  });
+
+  useEffect(() => {
+    if (req.result && req.result.plan.deleted) {
+      nav.pop();
+    }
+  });
+
+  if (req.error || req.loading || req.result.plan.deleted) {
     return <RequestLoader req={req} />;
   }
 
@@ -43,24 +65,24 @@ function PlanOverview({ planId, nav }) {
 
   const title = planGetTitle(plan);
 
-  const callbackDeletePlan = () => {
+  const handleDeletePlan = () => {
     request('plan.delete', {
       plan_id: planId
     });
   };
 
-  const handleDeletePlan = () => {
+  const handleContextSelect = () => {
     nav.openModal(FormModal, {
       title: 'Delete plan',
       subtitle: 'Are you sure you want to delete this plan?',
-      onConfirm: callbackDeletePlan,
+      onConfirm: handleDeletePlan,
       confirmLabel: 'Delete'
     });
   };
 
   const openContextMenu = e => {
     contextMenu(ListMenu, e, {
-      onClick: handleDeletePlan,
+      onClick: handleContextSelect,
       buttons: ['Delete Plan']
     });
   };
