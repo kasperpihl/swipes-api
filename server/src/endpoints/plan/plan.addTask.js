@@ -1,7 +1,8 @@
 import { string } from 'valjs';
-import { query, transaction } from 'src/utils/db/db';
+import { query } from 'src/utils/db/db';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
+import update from 'src/utils/update';
 
 const expectedInput = {
   plan_id: string.require(),
@@ -40,7 +41,7 @@ export default endpointCreate(
         .toClient();
     }
 
-    await transaction([
+    const planProjectTaskRes = await query(
       sqlInsertQuery(
         'plan_project_tasks',
         {
@@ -52,6 +53,12 @@ export default endpointCreate(
           upsert: 'plan_project_tasks_pkey'
         }
       )
+    );
+
+    res.locals.update = update.prepare(plan_id, [
+      { type: 'plan_project_task', data: planProjectTaskRes.rows[0] }
     ]);
   }
-);
+).background(async (req, res) => {
+  await update.send(res.locals.update);
+});

@@ -65,7 +65,10 @@ export default class AssignMenu extends PureComponent {
     } = this.props;
     const teamName = organization ? organization.get('name') : 'Personal';
     let users = organization
-      ? organization.get('users').toList()
+      ? organization
+          .get('users')
+          .toList()
+          .filter(u => u.get('status') === 'active')
       : fromJS([me]);
     if (excludeMe) {
       users = users.filter(u => u.get('user_id') !== me.get('user_id'));

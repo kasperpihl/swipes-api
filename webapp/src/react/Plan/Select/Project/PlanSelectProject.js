@@ -21,12 +21,11 @@ function PlanSelectProject({ projectId, hidden, selectedTasks, onToggleTask }) {
 
   useEffect(() => {
     if (stateManager) {
-      setDidEnforce(true);
-      console.log(selectedTasks);
       stateManager.filterHandler.setFilteredTaskIds(
         null,
         selectedTasks.map(id => id.split('_-_')[1])
       );
+      setDidEnforce(true);
     }
   }, [stateManager]);
 
