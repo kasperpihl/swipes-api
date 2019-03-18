@@ -11,7 +11,7 @@ import FormModal from 'src/react/_components/FormModal/FormModal';
 import ProjectSide from 'src/react/Project/Side/ProjectSide';
 import ProjectTaskList from 'src/react/Project/Task/List/ProjectTaskList';
 
-import withNav from 'src/react/_hocs/Nav/withNav';
+import useNav from 'src/react/_hooks/useNav';
 import request from 'core/utils/request';
 import contextMenu from 'src/utils/contextMenu';
 import useRequest from 'core/react/_hooks/useRequest';
@@ -23,9 +23,10 @@ import { ProjectContext } from 'src/react/contexts';
 
 ProjectOverview.sizes = [750];
 
-export default withNav(memo(ProjectOverview));
+export default memo(ProjectOverview);
 
-function ProjectOverview({ projectId, nav }) {
+function ProjectOverview({ projectId }) {
+  const nav = useNav();
   const stateManager = useSyncedProject(projectId);
   useBeforeUnload(() => {
     stateManager && stateManager.syncHandler.syncIfNeeded();

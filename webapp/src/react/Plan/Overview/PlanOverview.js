@@ -47,13 +47,16 @@ export default function PlanOverview({ planId }) {
     });
   });
 
+  console.log('render plan', req.result && req.result.plan.deleted);
   useEffect(() => {
     if (req.result && req.result.plan.deleted) {
       nav.pop();
     }
   });
-
-  if (req.error || req.loading || req.result.plan.deleted) {
+  if (req.result && req.result.plan.deleted) {
+    return null;
+  }
+  if (req.error || req.loading) {
     return <RequestLoader req={req} />;
   }
 
