@@ -67,26 +67,26 @@ export default endpointCreate(
 
   // Trial email 1 week left
   await queueScheduleJobBatch({
-    job_name: 'jobs.emails',
+    job_name: 'job.sendEmail',
     owned_by: organization_id,
     identifier: 'trial-1week',
-    time: 60 * 24 * 7
+    run_at: 60 * 24 * 7
   });
 
   // Trial 1 day left
   await queueScheduleJobBatch({
-    job_name: 'jobs.emails',
+    job_name: 'job.sendEmail',
     owned_by: organization_id,
     identifier: 'trial-1day',
-    time: 60 * 24 * 13
+    run_at: 60 * 24 * 13
   });
 
   // Trial expired
   await queueScheduleJobBatch({
-    job_name: 'jobs.emails',
+    job_name: 'job.sendEmail',
     owned_by: organization_id,
     identifier: 'trial-expired',
-    time: 60 * 24 * 15,
+    run_at: 60 * 24 * 15,
     recurring: 60 * 24 * 3 // Re-send every 3 days
   });
 });

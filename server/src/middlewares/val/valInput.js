@@ -2,6 +2,7 @@ import valjs, { object } from 'valjs';
 
 export default function valInput(schema) {
   return async (req, res, next) => {
+    if (typeof schema !== 'object') return next();
     // let's validate the params #inception! :D
     let error = valjs(
       { schema },

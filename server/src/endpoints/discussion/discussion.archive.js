@@ -37,7 +37,6 @@ export default endpointCreate(
     res.locals.update = update.prepare(discussion_id, [
       { type: 'discussion', data: discussionRes.rows[0] }
     ]);
-    res.locals.messageGroupId = discussion_id;
   }
 ).background(async (req, res) => {
   await update.send(res.locals.update);

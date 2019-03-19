@@ -2,9 +2,9 @@ import logger from 'src/utils/logger';
 import logGetObject from 'src/utils/log/logGetObject';
 import endpointDetermineName from 'src/utils//endpoint/endpointDetermineName';
 
-export default (middleware, eventName) => {
-  if (typeof eventName !== 'string') {
-    eventName = endpointDetermineName();
+export default (middleware, jobName) => {
+  if (typeof jobName !== 'string') {
+    jobName = endpointDetermineName();
   }
   // FUNCTION MUST BE NAMED queueCreateJob. Dont change!
   return function queueCreateJob(router) {
@@ -13,13 +13,13 @@ export default (middleware, eventName) => {
     }
 
     router.use(async (req, res, next) => {
-      if (!req.body.eventName || req.body.eventName !== eventName) {
+      if (!req.body.job_name || req.body.job_name !== jobName) {
         return next();
       }
 
       res.locals = {
         ...res.locals,
-        eventName: req.body.eventName,
+        job_name: req.body.job_name,
         ...req.body.payload
       };
 

@@ -12,18 +12,18 @@ export default endpointCreate(
   },
   async (req, res, next) => {
     await queueScheduleJobBatch({
-      job_name: 'jobs.emails',
+      job_name: 'job.sendEmail',
       identifier: res.locals.user_id,
       payload: {
         hi: true
       },
-      time: 1,
+      run_at: 1,
       owned_by: res.locals.user_id
     });
     console.log('scheduled job');
     await sleep(5000);
     console.log('adding job');
-    await queueSendJob('jobs.checkAndRun', {
+    await queueSendJob('job.checkAndRun', {
       testing: true
     });
   }
