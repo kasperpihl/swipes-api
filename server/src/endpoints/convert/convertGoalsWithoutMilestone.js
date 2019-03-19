@@ -24,6 +24,7 @@ export default async function convertGoalsWithoutMilestone({
   let orderCount = 0;
   let numberOfCompleted = 0;
   goalsNoMilestone.forEach(goal => {
+    if (goal.archived || goal.completed_at) return;
     const tId = randomstring.generate(6);
     tasks_by_id.push({
       project_id: projectId,
