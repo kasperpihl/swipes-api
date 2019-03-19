@@ -164,7 +164,7 @@ export default styleSheet('Sidebar', {
       }
     },
     '!expanded': {
-      '.Sidebar_Wrapper:hover &': {
+      '.Sidebar_Item:hover &': {
         opacity: '1',
         transform: 'translateX(100%) translateY(-50%)',
         transition: '.3s ease',
