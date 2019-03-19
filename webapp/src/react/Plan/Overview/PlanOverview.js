@@ -71,6 +71,10 @@ export default function PlanOverview({ planId }) {
   const handleDeletePlan = () => {
     request('plan.delete', {
       plan_id: planId
+    }).then(res => {
+      if (res.ok) {
+        nav.pop();
+      }
     });
   };
 
