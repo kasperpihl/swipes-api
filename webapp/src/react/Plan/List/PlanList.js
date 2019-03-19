@@ -72,6 +72,21 @@ export default function PlanList() {
     );
   }
 
+  console.log(req.items.length);
+  if (!req.items.length) {
+    return (
+      <ContentWrapper>
+        <SW.Wrapper>
+          <SW.EmptyState
+            showIcon
+            title="IT’S STILL AND QUIET"
+            description={`Whenever someone creates a plan \n it will show up here.`}
+          />
+        </SW.Wrapper>
+      </ContentWrapper>
+    );
+  }
+
   const currDate = new Date().toISOString().slice(0, 10);
   const sections = List(req.items).groupBy(p => {
     if (p.completed_at) return 'Completed';
