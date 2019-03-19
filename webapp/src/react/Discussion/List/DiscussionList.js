@@ -25,7 +25,7 @@ export default function DiscussionList({ type, onSelectItemId }) {
 
   const didSelectRef = useRef();
   useEffect(() => {
-    if (!didSelectRef.current && req.items) {
+    if (req.items && req.items.length && !didSelectRef.current) {
       onSelectItemId(req.items[0].discussion_id);
       didSelectRef.current = true;
     }

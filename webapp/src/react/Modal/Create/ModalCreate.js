@@ -96,6 +96,13 @@ export default class ModalCreate extends PureComponent {
     });
   };
 
+  handleKeyDown = e => {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      this.handleCreate();
+    }
+  };
+
   renderPrivacyCheckbox(iAmPrivacy) {
     const { privacy } = this.state;
     let label = 'Public - anyone in organization can find this';
@@ -142,6 +149,7 @@ export default class ModalCreate extends PureComponent {
               <FMSW.Input
                 value={titleVal}
                 onChange={this.handleTitleChange}
+                onKeyDown={this.handleKeyDown}
                 placeholder={titlePlaceholder}
                 type="text"
                 style={{ paddingLeft: '6px' }}
