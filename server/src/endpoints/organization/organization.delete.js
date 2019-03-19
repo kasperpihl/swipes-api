@@ -68,6 +68,13 @@ export default endpointCreate(
           WHERE owned_by = $1
         `,
         values: [organization_id]
+      },
+      {
+        text: `
+          DELETE FROM jobs
+          WHERE owned_by = $1
+        `,
+        values: [organization_id]
       }
     ]);
 

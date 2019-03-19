@@ -6,6 +6,7 @@ import userOrganizationCheck from 'src/utils/userOrganizationCheck';
 import stripeGetPlanId from 'src/utils/stripe/stripeGetPlanId';
 import stripeCreateOrUpdateCustomer from 'src/utils/stripe/stripeCreateOrUpdateCustomer';
 import stripeCreateSubscription from 'src/utils/stripe/stripeCreateSubscription';
+import queueCancelJobBatch from 'src/utils/queue/queueCancelJobBatch';
 
 const expectedInput = {
   stripe_token: string.require(),
@@ -72,4 +73,11 @@ export default endpointCreate(
   }
 ).background(async (req, res) => {
   update.send(res.locals.update);
+  await queueCancelJobBatch(
+    ['trial-1week', 'trial-1day', 'trial-expired'].map(identifier => ({
+      owned_by: organization_id,
+      job_name: 'jobs.emails',
+      identifier
+    }))
+  );
 });
