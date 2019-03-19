@@ -50,6 +50,10 @@ function ProjectOverview({ projectId }) {
   const callbackDeleteProject = () => {
     request('project.delete', {
       project_id: projectId
+    }).then(res => {
+      if (res.ok) {
+        nav.pop();
+      }
     });
   };
 
