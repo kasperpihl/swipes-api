@@ -28,14 +28,15 @@ export default styleSheet('ButtonIcon', {
     _size: '24px',
     _flex: ['row', 'center', 'center'],
     flex: 'none',
-    '&:not(:only-child)': {
-      paddingLeft: '6px'
-    }
+    // '&:not(:only-child)': {
+    //   paddingLeft: '6px'
+    // }
   },
 
   Icon: {
     _el: Icon,
     _size: '24px',
+    flex: 'none',
     selected: {
       _svgColor: '$base'
     },

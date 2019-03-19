@@ -23,11 +23,15 @@ export default styleSheet('Button', {
       '&:hover': {
         backgroundColor: '$sw1'
       }
-    }
+    },
+    withTitle: {
+      padding: '0 6px',
+    },
   },
 
   Title: {
     _el: 'p',
+    _textStyle: 'body',
     padding: '0 6px',
     color: '$dark',
     selected: {

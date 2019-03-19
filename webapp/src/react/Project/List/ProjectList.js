@@ -58,7 +58,7 @@ export default function ProjectList() {
       <CardContent
         noframe
         header={
-          <CardHeader padding={30} title="Projects">
+          <CardHeader padding={18} title="Projects">
             <Button icon="CircledPlus" onClick={handleNewProject} />
           </CardHeader>
         }
@@ -78,7 +78,7 @@ export default function ProjectList() {
     <CardContent
       noframe
       header={
-        <CardHeader padding={30} title="Projects">
+        <CardHeader padding={18} title="Projects">
           <Button icon="CircledPlus" onClick={handleNewProject} />
         </CardHeader>
       }

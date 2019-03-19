@@ -31,8 +31,8 @@ export default styleSheet('Card', {
     }
   },
   Header: {
-    _size: ['calc(100% - 60px)', 'auto'],
-    margin: '0 30px',
+    _size: ['calc(100% - 36px)', 'auto'],
+    margin: '0 18px',
     flex: 'none'
   },
   Actions: {

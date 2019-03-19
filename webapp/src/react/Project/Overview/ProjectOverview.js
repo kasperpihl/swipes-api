@@ -78,7 +78,7 @@ function ProjectOverview({ projectId }) {
       noframe
       header={
         <CardHeader
-          padding={30}
+          padding={18}
           title={projectTitle}
           subtitle={subtitle}
           separator

@@ -98,7 +98,7 @@ export default function PlanOverview({ planId }) {
     <CardContent
       noframe
       header={
-        <CardHeader padding={30} title={title} subtitle={subtitle} separator>
+        <CardHeader padding={18} title={title} subtitle={subtitle} separator>
           <Button icon="ThreeDots" onClick={openContextMenu} />
         </CardHeader>
       }
