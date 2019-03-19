@@ -1,7 +1,7 @@
 import { string, object } from 'valjs';
 import { transaction } from 'src/utils/db/db';
 
-export default async function queueCancelJobBatch(jobs) {
+export default async function queueCancelBatch(jobs) {
   if (!Array.isArray(jobs)) {
     jobs = [jobs];
   }
@@ -15,7 +15,7 @@ export default async function queueCancelJobBatch(jobs) {
       });
       const error = schema.test(j);
       if (error) {
-        throw Error('queueCancelJobBatch validationError').info({
+        throw Error('queueCancelBatch validationError').info({
           validationError: error,
           schema: schema.toString()
         });

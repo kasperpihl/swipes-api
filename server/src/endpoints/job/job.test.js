@@ -1,6 +1,6 @@
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import queueSendJob from 'src/utils/queue/queueSendJob';
-import queueScheduleJobBatch from 'src/utils/queue/queueScheduleJobBatch';
+import queueScheduleBatch from 'src/utils/queue/queueScheduleBatch';
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -11,7 +11,7 @@ export default endpointCreate(
     expectedInput
   },
   async (req, res, next) => {
-    await queueScheduleJobBatch({
+    await queueScheduleBatch({
       job_name: 'job.sendEmail',
       identifier: res.locals.user_id,
       payload: {

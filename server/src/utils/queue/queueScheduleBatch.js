@@ -2,7 +2,7 @@ import { string, number, object, any, date } from 'valjs';
 import { query } from 'src/utils/db/db';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
 
-export default async function queueScheduleJobBatch(jobs) {
+export default async function queueScheduleBatch(jobs) {
   if (!Array.isArray(jobs)) {
     jobs = [jobs];
   }
@@ -21,7 +21,7 @@ export default async function queueScheduleJobBatch(jobs) {
         });
         const error = schema.test(j);
         if (error) {
-          throw Error('queueScheduleJobBatch validationError').info({
+          throw Error('queueScheduleBatch validationError').info({
             validationError: error,
             schema: schema.toString()
           });

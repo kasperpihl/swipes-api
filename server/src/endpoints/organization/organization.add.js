@@ -5,7 +5,7 @@ import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
 import update from 'src/utils/update';
 import redisPublish from 'src/utils/redis/redisPublish';
 import idGenerate from 'src/utils/idGenerate';
-import queueScheduleJobBatch from 'src/utils/queue/queueScheduleJobBatch';
+import queueScheduleBatch from 'src/utils/queue/queueScheduleBatch';
 
 const expectedInput = {
   name: string.min(1).require()
@@ -66,7 +66,7 @@ export default endpointCreate(
   const { organization_id } = res.locals.input;
 
   // Trial email 1 week left
-  await queueScheduleJobBatch({
+  await queueScheduleBatch({
     job_name: 'job.sendEmail',
     owned_by: organization_id,
     identifier: 'trial-1week',
@@ -74,7 +74,7 @@ export default endpointCreate(
   });
 
   // Trial 1 day left
-  await queueScheduleJobBatch({
+  await queueScheduleBatch({
     job_name: 'job.sendEmail',
     owned_by: organization_id,
     identifier: 'trial-1day',
@@ -82,7 +82,7 @@ export default endpointCreate(
   });
 
   // Trial expired
-  await queueScheduleJobBatch({
+  await queueScheduleBatch({
     job_name: 'job.sendEmail',
     owned_by: organization_id,
     identifier: 'trial-expired',
