@@ -28,9 +28,6 @@ export default styleSheet('ButtonIcon', {
     _size: '24px',
     _flex: ['row', 'center', 'center'],
     flex: 'none'
-    // '&:not(:only-child)': {
-    //   paddingLeft: '6px'
-    // }
   },
 
   Icon: {
@@ -43,7 +40,6 @@ export default styleSheet('ButtonIcon', {
     'status=Success': {
       fill: '$green1'
     },
-
     'status=Error': {
       fill: '$red'
     }

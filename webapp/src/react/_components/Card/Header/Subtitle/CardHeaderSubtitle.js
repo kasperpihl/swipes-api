@@ -35,13 +35,11 @@ function CardHeaderSubtitle({ ownedBy, members, privacy, children, tooltip }) {
   return (
     <SW.Wrapper>
       <SW.OrganizationName>{orgGetBelonging(ownedBy)}</SW.OrganizationName>
-      {members && (
+      {members && privacy === 'private' && (
         <SW.FollowerLabel
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
         >
-          <SW.Icon icon={privacy === 'private' ? 'ThreeDots' : 'Earth'} />
-          {/* TODO: Change icon once privacy is wired up */}
           {`${members.length} follower${members.length === 1 ? '' : 's'}`}
         </SW.FollowerLabel>
       )}

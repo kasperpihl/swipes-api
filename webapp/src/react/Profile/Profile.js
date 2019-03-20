@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 import ProfileHeader from 'src/react/Profile/Header/ProfileHeader';
 import ProfileOrg from 'src/react/Profile/Org/ProfileOrg.js';
 import withLoader from 'src/react/_hocs/withLoader';
-import request from 'core/utils/request';
-import FormModal from 'src/react/_components/FormModal/FormModal';
 import withNav from 'src/react/_hocs/Nav/withNav';
 import SW from './Profile.swiss';
 import CardContent from 'src/react/_components/Card/Content/CardContent';
@@ -16,31 +14,8 @@ import CardContent from 'src/react/_components/Card/Content/CardContent';
 }))
 export default class Profile extends PureComponent {
   static sizes = [540];
-  handleCreateOrganization = () => {
-    const { nav, loader } = this.props;
-    // nav.openModal(FormModal, {
-    //   title: 'Create Organization',
-    //   subtitle:
-    //     'This will start a trial for 30 days, after which it will be $7.5/user/month.',
-    //   inputs: [
-    //     { type: 'text', placeholder: 'Name of organization', autoFocus: true }
-    //   ],
-    //   confirmLabel: 'Create',
-    //   onConfirm: ([name]) => {
-    //     if (!name.length) {
-    //       return;
-    //     }
-
-    //     loader.set('createOrg');
-    //     request('organization.add', { name }).then(res => {
-    //       if (res && res.ok) {
-    //         loader.clear('createOrg');
-    //       } else {
-    //         loader.error('createOrg', res.error, 3000);
-    //       }
-    //     });
-    //   }`
-    // });
+  openCreateOrganization = () => {
+    const { nav } = this.props;
     nav.push({
       screenId: 'OrganizationCreate',
       crumbTitle: 'Create an organization'
@@ -55,7 +30,7 @@ export default class Profile extends PureComponent {
           <SW.Title>Organizations</SW.Title>
           <SW.Button
             title="Create Organization"
-            onClick={this.handleCreateOrganization}
+            onClick={this.openCreateOrganization}
             status={loader.get('createOrg')}
           />
           {organizations
