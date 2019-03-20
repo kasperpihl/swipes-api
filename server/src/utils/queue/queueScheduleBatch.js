@@ -37,7 +37,7 @@ export default async function queueScheduleBatch(jobs) {
           owned_by,
           job_name,
           identifier,
-          next_execution_at: run_at.toISOString(),
+          next_run_at: run_at.toISOString(),
           payload: payload || null,
           recurring: recurring || 0
         };

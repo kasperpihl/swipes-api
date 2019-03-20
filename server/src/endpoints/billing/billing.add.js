@@ -76,7 +76,7 @@ export default endpointCreate(
   await queueCancelBatch(
     ['trial-1week', 'trial-1day', 'trial-expired'].map(identifier => ({
       owned_by: organization_id,
-      job_name: 'job.sendEmail',
+      job_name: 'job.sendEmail.queue',
       identifier
     }))
   );
