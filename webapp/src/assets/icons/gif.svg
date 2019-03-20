@@ -4,11 +4,11 @@
     <title>GIF</title>
     <desc>Created with Sketch.</desc>
     <g id="GIF" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect id="Rectangle" stroke="#000000" x="1.5" y="5.5" width="21" height="13" rx="2"></rect>
-        <rect id="Rectangle" fill="#000000" x="16" y="8" width="1" height="8"></rect>
-        <rect id="Rectangle-Copy-3" fill="#000000" x="13" y="8" width="1" height="8"></rect>
-        <path d="M9.94999094,13 L7,13 L7,12 L10,12 L11,12 L11,12.5 C11,14.4329966 9.43299662,16 7.5,16 C5.56700338,16 4,14.4329966 4,12.5 L4,11.5 C4,9.56700338 5.56700338,8 7.5,8 C8.89619798,8 10.1014525,8.81752633 10.6631844,10 L9.50018309,10 C9.04407993,9.39277665 8.31790892,9 7.5,9 C6.11928813,9 5,10.1192881 5,11.5 L5,12.5 C5,13.8807119 6.11928813,15 7.5,15 C8.70947896,15 9.71835578,14.1411202 9.94999094,13 Z" id="Combined-Shape" fill="#000000"></path>
-        <rect id="Rectangle-Copy" fill="#000000" x="16" y="8" width="4" height="1"></rect>
-        <rect id="Rectangle-Copy-2" fill="#000000" x="16" y="12" width="4" height="1"></rect>
+        <rect id="Rectangle" stroke="#000000" x="2.5" y="3.5" width="19" height="17" rx="2"></rect>
+        <rect id="Rectangle" fill="#000000" x="15" y="8" width="1" height="8"></rect>
+        <rect id="Rectangle-Copy-3" fill="#000000" x="12" y="8" width="1" height="8"></rect>
+        <path d="M9,13 L7,13 L7,12 L9,12 L10,12 L10,13.5 C10,14.8807119 8.88071187,16 7.5,16 C6.11928813,16 5,14.8807119 5,13.5 L5,10.5 C5,9.11928813 6.11928813,8 7.5,8 C8.70947896,8 9.71835578,8.85887984 9.94999094,10 L8.91464715,10 C8.70872894,9.41740381 8.15310941,9 7.5,9 C6.67157288,9 6,9.67157288 6,10.5 L6,13.5 C6,14.3284271 6.67157288,15 7.5,15 C8.32842712,15 9,14.3284271 9,13.5 L9,13 Z" id="Combined-Shape" fill="#000000"></path>
+        <rect id="Rectangle-Copy" fill="#000000" x="15" y="8" width="4" height="1"></rect>
+        <rect id="Rectangle-Copy-2" fill="#000000" x="15" y="12" width="4" height="1"></rect>
     </g>
 </svg>

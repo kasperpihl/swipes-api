@@ -5,10 +5,12 @@ import * as navigationActions from 'src/redux/navigation/navigationActions';
 import { Map } from 'immutable';
 import withLoader from 'src/react/_hocs/withLoader';
 import request from 'core/utils/request';
-import Card from 'src/react/_components/Card/Card';
-import Button from 'src/react/_components/Button/Button';
-import CardHeader from 'src/react/_components/Card/Header/CardHeader';
+import Card from '_shared/Card/Card';
+import Button from '_shared/Button/Button';
+import CardHeader from '_shared/Card/Header/CardHeader';
+import InputText from '_shared/Input/Text/InputText';
 import SW from './Authentication.swiss';
+import Spacing from '_shared/Spacing/Spacing';
 
 @withRouter
 @withLoader
@@ -121,7 +123,8 @@ export default class Authentication extends PureComponent {
   renderInputs() {
     return (
       <>
-        <SW.Input
+        <Spacing height={9} />
+        <InputText
           value={this.state.formData.get('email') || ''}
           onChange={this.handleChangeCached('email')}
           key={this.isLogin() ? 'login' : 'signup'}
@@ -130,16 +133,18 @@ export default class Authentication extends PureComponent {
           placeholder="Email"
           type="email"
         />
+        <Spacing height={9} />
         {!this.isLogin() && (
           <>
-            <SW.Input
+            <InputText
               value={this.state.formData.get('first_name') || ''}
               onChange={this.handleChangeCached('first_name')}
               autoComplete="given-name"
               placeholder="First name"
               type="text"
             />
-            <SW.Input
+            <Spacing height={9} />
+            <InputText
               value={this.state.formData.get('last_name') || ''}
               onChange={this.handleChangeCached('last_name')}
               autoComplete="family-name"
@@ -148,8 +153,8 @@ export default class Authentication extends PureComponent {
             />
           </>
         )}
-
-        <SW.Input
+        <Spacing height={9} />
+        <InputText
           value={this.state.formData.get('password') || ''}
           onChange={this.handleChangeCached('password')}
           onKeyDown={this.handleKeyDown}

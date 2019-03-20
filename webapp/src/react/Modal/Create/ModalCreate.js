@@ -11,6 +11,7 @@ import Button from 'src/react/_components/Button/Button';
 import SW from './ModalCreate.swiss';
 import FMSW from 'src/react/_components/FormModal/FormModal.swiss';
 import contextMenu from 'src/utils/contextMenu';
+import InputText from '_shared/Input/Text/InputText';
 
 @withLoader
 @connect(state => ({
@@ -146,7 +147,7 @@ export default class ModalCreate extends PureComponent {
           {type !== 'plan' && (
             <FMSW.InputWrapper>
               <FMSW.Label>{titleLabel}</FMSW.Label>
-              <FMSW.Input
+              <InputText
                 value={titleVal}
                 onChange={this.handleTitleChange}
                 onKeyDown={this.handleKeyDown}
