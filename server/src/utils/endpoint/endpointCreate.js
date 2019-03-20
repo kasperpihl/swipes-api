@@ -1,7 +1,7 @@
 import valInput from 'src/middlewares/val/valInput';
 import valPermissions from 'src/middlewares/val/valPermissions';
 import valResponseAndSend from 'src/middlewares/val/valResponseAndSend';
-import queueSendJob from 'src/utils/queue/queueSendJob';
+import queueRunBatch from 'src/utils/queue/queueRunBatch';
 import queueCreateJob from 'src/utils/queue/queueCreateJob';
 import endpointDetermineName from './endpointDetermineName';
 
@@ -12,8 +12,6 @@ export default (options, middleware) => {
       'endpointCreate could not determine endpoint name, make sure it is positioned in the endpoints folder and named endpoint.name.js'
     );
   }
-
-  endpointName = `/${endpointName}`;
 
   if (typeof options === 'function') {
     middleware = options;
@@ -48,23 +46,21 @@ export default (options, middleware) => {
       }
     }
     routers[options.type || 'authed'][method](
-      endpointName,
+      `/${endpointName}`,
       valInput(options.expectedInput),
       valPermissions(options),
       middleware,
       async (req, res, next) => {
         if (addToQueue) {
-          await queueSendJob(
-            endpointName,
-            {
+          await queueRunBatch({
+            job_name: endpointName,
+            payload: {
               output: res.locals.output,
               update: res.locals.update || null,
-              organization_id: res.locals.organization_id,
               user_id: res.locals.user_id,
               input: res.locals.backgroundInput
-            },
-            res.locals.messageGroupId
-          );
+            }
+          });
         }
         next();
       },

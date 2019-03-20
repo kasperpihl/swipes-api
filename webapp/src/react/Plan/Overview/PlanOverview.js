@@ -47,13 +47,16 @@ export default function PlanOverview({ planId }) {
     });
   });
 
+  console.log('render plan', req.result && req.result.plan.deleted);
   useEffect(() => {
     if (req.result && req.result.plan.deleted) {
       nav.pop();
     }
   });
-
-  if (req.error || req.loading || req.result.plan.deleted) {
+  if (req.result && req.result.plan.deleted) {
+    return null;
+  }
+  if (req.error || req.loading) {
     return <RequestLoader req={req} />;
   }
 
@@ -68,6 +71,10 @@ export default function PlanOverview({ planId }) {
   const handleDeletePlan = () => {
     request('plan.delete', {
       plan_id: planId
+    }).then(res => {
+      if (res.ok) {
+        nav.pop();
+      }
     });
   };
 
@@ -91,7 +98,7 @@ export default function PlanOverview({ planId }) {
     <CardContent
       noframe
       header={
-        <CardHeader padding={30} title={title} subtitle={subtitle} separator>
+        <CardHeader padding={18} title={title} subtitle={subtitle} separator>
           <Button icon="ThreeDots" onClick={openContextMenu} />
         </CardHeader>
       }

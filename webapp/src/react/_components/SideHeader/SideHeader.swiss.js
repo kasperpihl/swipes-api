@@ -5,7 +5,6 @@ export default styleSheet('SideHeader', {
 
   TitleWrapper: {
     _flex: ['row', 'flex-start', 'flex-start'],
-    paddingBottom: '8px'
   },
 
   BigNumber: {

@@ -2,10 +2,13 @@ export { default as SwipesLogoEmpty } from './icons/swipes-logo-empty.svg';
 
 export { default as Assign } from './icons/assign.svg'; // new
 export { default as ArrowDown } from './icons/arrow-down.svg'; // new
+export { default as ArrowLeft } from './icons/arrow-left.svg'; // new
 export { default as ArrowLeftLine } from './icons/arrow-left-line.svg';
+export { default as ArrowRight } from './icons/arrow-right.svg'; // new
 export { default as ArrowRightFull } from './icons/arrow-right-full.svg';
 export { default as ArrowRightLine } from './icons/arrow-right-line.svg';
 export { default as ArrowRightLong } from './icons/arrow-right-long.svg';
+export { default as ArrowUp } from './icons/arrow-up.svg';
 export { default as Attach } from './icons/attach.svg';
 export { default as Bold } from './icons/bold.svg';
 export { default as Breadcrumb } from './icons/breadcrumb.svg';
@@ -44,9 +47,10 @@ export { default as OrderedList } from './icons/ordered-list.svg';
 export { default as Person } from './icons/person.svg';
 export { default as Pin } from './icons/pin.svg';
 export { default as Plan } from './icons/plan.svg';
+export { default as PlanStart } from './icons/plan-start.svg';
 export { default as Plus } from './icons/plus.svg';
 export { default as CircledPlus } from './icons/circled-plus.svg';
-export { default as Project } from './icons/project.svg';
+export { default as Project } from './icons/projects.svg';
 export { default as Reload } from './icons/reload.svg';
 export { default as ThreeDots } from './icons/three-dots.svg';
 export { default as Underline } from './icons/underline.svg';

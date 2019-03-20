@@ -1,7 +1,9 @@
 import { styleSheet } from 'swiss-react';
+import EmptyState from 'src/react/_components/EmptyState/EmptyState';
 
 export default styleSheet('ProjectList', {
   Wrapper: {
+    _size: '100%',
     padding: '0 30px',
     paddingTop: '24px'
   },
@@ -27,5 +29,13 @@ export default styleSheet('ProjectList', {
     textTransform: 'uppercase',
     color: '$sw2',
     marginLeft: '60px'
+  },
+
+  EmptyState: {
+    _el: EmptyState,
+    position: 'absolute',
+    top: '45%',
+    left: '50%',
+    transform: 'translateX(-50%) translateY(-50%)'
   }
 });

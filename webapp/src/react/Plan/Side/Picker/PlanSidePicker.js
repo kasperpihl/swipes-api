@@ -8,6 +8,7 @@ import DayTracker from 'src/react/_components/DayTracker/DayTracker';
 import ListMenu from 'src/react/_components/ListMenu/ListMenu';
 
 import SW from './PlanSidePicker.swiss';
+import Spacing from 'src/react/_components/Spacing/Spacing';
 
 export default function PlanSidePicker({ plan }) {
   const defTwoWeekState =
@@ -101,12 +102,15 @@ export default function PlanSidePicker({ plan }) {
   return (
     <SW.Wrapper>
       <SW.Title>Start time</SW.Title>
+      <Spacing height={9} />
       <SW.Day onClick={openWeeksList}>
         <SW.WeekNumber compact>W{startDate.week()}</SW.WeekNumber>
         {startDateText}
         <SW.Icon icon="ArrowDown" size={24} show={showDropdown} />
       </SW.Day>
+      <Spacing height={31} />
       <SW.Title>Duration</SW.Title>
+      <Spacing height={9} />
       <SW.InputContainer>
         <SW.InputWrapper
           checked={!twoWeekState}
@@ -131,11 +135,13 @@ export default function PlanSidePicker({ plan }) {
           <SW.InputText checked={twoWeekState}>2 weeks</SW.InputText>
         </SW.InputWrapper>
       </SW.InputContainer>
+      <Spacing height={18} />
       <DayTracker
         startDate={plan.start_date}
         endDate={endDate}
         showCurrentDateMarker
       />
+      <Spacing height={24} />
     </SW.Wrapper>
   );
 }

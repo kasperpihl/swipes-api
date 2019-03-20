@@ -55,7 +55,7 @@ export default function PlanList() {
     <CardContent
       noframe
       header={
-        <CardHeader padding={30} title="Plans">
+        <CardHeader padding={18} title="Plans">
           <Button icon="CircledPlus" onClick={handleNewPlan} />
         </CardHeader>
       }
@@ -68,6 +68,21 @@ export default function PlanList() {
     return (
       <ContentWrapper>
         <RequestLoader req={req} />
+      </ContentWrapper>
+    );
+  }
+
+  console.log(req.items.length);
+  if (!req.items.length) {
+    return (
+      <ContentWrapper>
+        <SW.Wrapper>
+          <SW.EmptyState
+            showIcon
+            title="IT’S STILL AND QUIET"
+            description={`Whenever someone creates a plan \n it will show up here.`}
+          />
+        </SW.Wrapper>
       </ContentWrapper>
     );
   }

@@ -20,12 +20,6 @@ export default function useScrollComments(scrollRef, items) {
     }
   }
 
-  useEffect(() => {
-    if (items && items.length) {
-      firstCommentIdRef.current = items[items.length - 1].comment_id;
-    }
-  });
-
   useLayoutEffect(() => {
     if (scrollRef.current) {
       const el = scrollRef.current;
@@ -36,6 +30,12 @@ export default function useScrollComments(scrollRef, items) {
       } else if (keepToBottom.current) {
         el.scrollTop = el.scrollHeight - el.clientHeight;
       }
+    }
+  });
+
+  useEffect(() => {
+    if (items && items.length) {
+      firstCommentIdRef.current = items[items.length - 1].comment_id;
     }
   });
 }
