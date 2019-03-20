@@ -35,7 +35,7 @@ logger.stream = {
 
 export default (...args) => {
   try {
-    logger(...args);
+    logger.log(...args);
   } catch (e) {
     console.log('logger error', e);
   }
