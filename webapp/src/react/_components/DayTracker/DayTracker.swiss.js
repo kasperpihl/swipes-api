@@ -31,7 +31,7 @@ export default styleSheet('DayTrack', {
 
   Indicator: {
     _el: Icon,
-    _svgColor: '$green1',
+    fill: '$green1',
     position: 'absolute',
     top: '0',
     left: '50%',
@@ -40,7 +40,7 @@ export default styleSheet('DayTrack', {
       top: '-2px'
     },
     overdue: {
-      _svgColor: '$red'
+      fill: '$red'
     }
   },
 

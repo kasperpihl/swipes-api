@@ -17,7 +17,7 @@ export default styleSheet('ProjectTaskExpand', {
   ExpandIcon: {
     _el: Icon,
     _size: '24px',
-    _svgColor: '$sw2',
+    fill: '$sw2',
     pointerEvents: 'none',
     transition: '.1s',
     expanded: {

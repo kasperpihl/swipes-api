@@ -9,7 +9,6 @@ import './mixins/_size';
 import './mixins/_font';
 import './mixins/_flex';
 import './mixins/_textStyle';
-import './mixins/_svgColor';
 import './mixins/_truncateString';
 import './mixins/_alignAbsolute';
 import './mixins/_borderRadius';

@@ -3,15 +3,16 @@ import logGetObject from 'src/utils/log/logGetObject';
 import endpointDetermineName from 'src/utils//endpoint/endpointDetermineName';
 
 export default (middleware, jobName) => {
+  if (typeof middleware !== 'function') {
+    throw Error('queueCreateJob second parameter must be a middleware');
+  }
   if (typeof jobName !== 'string') {
     jobName = endpointDetermineName();
   }
+  console.log(jobName);
   // FUNCTION MUST BE NAMED queueCreateJob. Dont change!
   return function queueCreateJob(router) {
-    if (typeof middleware !== 'function') {
-      throw Error('queueCreateJob second parameter must be a middleware');
-    }
-
+    console.log(jobName, req.body.job_name);
     router.use(async (req, res, next) => {
       if (!req.body.job_name || req.body.job_name !== jobName) {
         return next();

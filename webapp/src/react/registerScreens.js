@@ -7,7 +7,12 @@ export {
 export { default as File } from './File/File';
 export { default as NotFound } from './NotFound/NotFound';
 export { default as Organization } from './Organization/Organization';
+export {
+  default as OrganizationCreate
+} from './Organization/Create/OrganizationCreate';
 export { default as PlanList } from './Plan/List/PlanList';
+export { default as Planning } from './Planning/Planning';
+
 export { default as PlanOverview } from './Plan/Overview/PlanOverview';
 export { default as Profile } from './Profile/Profile';
 export { default as ProjectList } from './Project/List/ProjectList';

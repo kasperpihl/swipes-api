@@ -70,7 +70,7 @@ export default class DiscussionHeader extends PureComponent {
       onClick: this.onOptionClick,
       buttons: [
         { title: discussion.followers[myId] ? 'Unfollow' : 'Follow' },
-        { title: 'Archive discussion' }
+        { title: 'Delete discussion' }
       ]
     });
   };
@@ -78,7 +78,7 @@ export default class DiscussionHeader extends PureComponent {
   onOptionClick = (i, e) => {
     if (e.title === 'Unfollow' || e.title === 'Follow') {
       this.onFollowClick();
-    } else if (e.title === 'Archive discussion') {
+    } else if (e.title === 'Delete discussion') {
       this.onArchiveClick();
     }
   };
@@ -104,7 +104,7 @@ export default class DiscussionHeader extends PureComponent {
         'This will delete the discussion permanently and cannot be undone.',
       onConfirm: () => {
         loader.set('dots');
-        // request('discussion.archive', {
+        // request('discussion.delete', {
         //   discussion_id: discussion.discussion_id
         // }).then(res => {
         //   if (res.ok) {

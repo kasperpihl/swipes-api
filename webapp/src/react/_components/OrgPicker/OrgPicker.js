@@ -1,6 +1,7 @@
 import React, { useContext, useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
 import cachedCallback from 'src/utils/cachedCallback';
+import InputRadio from '_shared/Input/Radio/InputRadio';
 import SW from './OrgPicker.swiss';
 import { MyIdContext } from 'src/react/contexts';
 
@@ -35,14 +36,14 @@ function OrgPicker({ organizations, value, onChange, disablePersonal }) {
     }
     return (
       <SW.InputWrapper key={myValue} onClick={handleClickCached(myValue)}>
-        <input
+        <InputRadio
           type="radio"
+          label={title}
           value={myValue}
           checked={myValue === value}
           name="org"
           onChange={handleClickCached(myValue)}
         />
-        <SW.Label>{title}</SW.Label>
       </SW.InputWrapper>
     );
   };

@@ -62,7 +62,7 @@ export default styleSheet('ProfileHeader', {
     backgroundColor: 'transparent',
 
     '&:hover': {
-      backgroundColor: '$green1',
+      backgroundColor: '$dark',
       opacity: '0.6',
       transition: '.25s ease',
       cursor: 'pointer'
@@ -72,7 +72,7 @@ export default styleSheet('ProfileHeader', {
   OverlaySVG: {
     _el: Icon,
     _size: ['24px'],
-    _svgColor: 'white',
+    fill: 'white',
     opacity: '0',
     position: 'absolute',
 

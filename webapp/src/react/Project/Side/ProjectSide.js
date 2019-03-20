@@ -70,6 +70,8 @@ function ProjectSide({ stateManager }) {
     stateManager.completeHandler.completeAll(completionPercentage < 100);
   };
 
+  const isPublic = stateManager.getClientState().get('privacy') === 'public';
+
   return (
     <SW.Wrapper>
       <SideHeader
@@ -87,7 +89,13 @@ function ProjectSide({ stateManager }) {
           icon="Complete"
           onClick={handleCompleteAll}
         />
-        <SW.Button title="Add people" icon="Person" onClick={openAssignMenu} />
+        {!isPublic && (
+          <SW.Button
+            title="Add people"
+            icon="Person"
+            onClick={openAssignMenu}
+          />
+        )}
       </SW.ButtonWrapper>
       <Spacing height={6} />
       {maxIndention > 0 && (

@@ -82,7 +82,7 @@ export default class ResetPassword extends PureComponent {
     const { newPass } = this.state;
 
     return (
-      <SW.Input
+      <InputField
         type="password"
         className="input-focus"
         placeholder="Your new password"

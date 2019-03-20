@@ -1,8 +1,14 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
+import InputField from '_shared/InputField/InputField';
 
-export default class Tester extends Component {
-  render() {
-    console.log(this.props);
-    return <div style={{ width: '100%' }} />;
-  }
+export default function Tester() {
+  return (
+    <div style={{ width: '100%' }}>
+      <InputField
+        type="text"
+        onChange={handleChangeCallback}
+        value={inputVal}
+      />
+    </div>
+  );
 }

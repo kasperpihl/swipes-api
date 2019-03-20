@@ -18,7 +18,7 @@ export default styleSheet('PlanSelect', {
   Icon: {
     _el: Icon,
     _size: '24px',
-    _svgColor: '$sw2',
+    fill: '$sw2',
     pointerEvents: 'none',
     transform: 'rotate(90deg)',
     transition: '.1s',

@@ -27,10 +27,7 @@ export default styleSheet('ButtonIcon', {
   IconWrapper: {
     _size: '24px',
     _flex: ['row', 'center', 'center'],
-    flex: 'none',
-    // '&:not(:only-child)': {
-    //   paddingLeft: '6px'
-    // }
+    flex: 'none'
   },
 
   Icon: {
@@ -38,14 +35,13 @@ export default styleSheet('ButtonIcon', {
     _size: '24px',
     flex: 'none',
     selected: {
-      _svgColor: '$base'
+      fill: '$base'
     },
     'status=Success': {
-      _svgColor: '$green1'
+      fill: '$green1'
     },
-
     'status=Error': {
-      _svgColor: '$red'
+      fill: '$red'
     }
   }
 });

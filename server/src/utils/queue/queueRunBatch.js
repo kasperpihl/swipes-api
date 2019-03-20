@@ -10,7 +10,7 @@ export default async function queueRunBatch(jobs) {
   if (!Array.isArray(jobs)) {
     jobs = [jobs];
   }
-  if (env === 'dev') {
+  if (env !== 'dev') {
     const sqs = new AWS.SQS({ region });
     jobs = jobs.map(({ job_name, payload }) => ({
       Id: randomstring.generate(12),
@@ -30,7 +30,12 @@ export default async function queueRunBatch(jobs) {
           QueueUrl: queueUrl
         },
         (err, data) => {
+<<<<<<< HEAD
           console.log(err, data);
+=======
+          console.log('added job', err, data);
+          if (err) console.log(err);
+>>>>>>> development
         }
       );
     } while (jobs.length > 0);

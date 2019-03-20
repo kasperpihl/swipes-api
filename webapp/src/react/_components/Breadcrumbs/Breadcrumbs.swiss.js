@@ -30,14 +30,14 @@ export default styleSheet('Breadcrumbs', {
   },
   CrumbIcon: {
     _el: Icon,
-    _svgColor: '$sw2',
+    fill: '$sw2',
     _size: '24px',
     '.crumb:hover &': {
-      _svgColor: '$blue'
+      fill: '$blue'
     },
     disableClick: {
       '.crumb:hover &': {
-        _svgColor: '$sw2'
+        fill: '$sw2'
       }
     }
   },

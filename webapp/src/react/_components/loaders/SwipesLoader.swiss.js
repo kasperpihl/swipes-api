@@ -15,7 +15,7 @@ export default styleSheet('SwipesLoader', {
   Icon: {
     _el: Icon,
     width: '60px',
-    _svgColor: '$sw4',
+    fill: '$sw4',
     position: 'absolute',
     left: '50%',
     top: '50%',

@@ -9,7 +9,7 @@ export default styleSheet('CardHeaderSubtitle', {
 
   FollowerLabel: {
     _flex: ['row', 'flex-start', 'center'],
-    _textStyle: 'caption',
+    _textStyle: 'body',
     lineHeight: '24px',
     marginLeft: '6px',
     color: '$sw2'
@@ -17,11 +17,11 @@ export default styleSheet('CardHeaderSubtitle', {
   Icon: {
     _el: Icon,
     _size: '14px',
-    _svgColor: '$sw2',
+    fill: '$sw2',
     margin: '0 2px'
   },
   OrganizationName: {
-    _textStyle: 'caption',
+    _textStyle: 'body',
     lineHeight: '24px',
     color: '$sw2'
   },

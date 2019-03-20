@@ -34,7 +34,6 @@ export default styleSheet('CommentItem', {
   },
   Center: {
     _flex: ['column', 'left', 'center'],
-    flexWrap: 'wrap',
     width: '100%'
   },
   RightSide: {

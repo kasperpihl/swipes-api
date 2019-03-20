@@ -7,7 +7,7 @@ import UserImage from 'src/react/_components/UserImage/UserImage';
 
 const kNavItems = [
   { screenId: 'ProjectList', svg: 'Project', title: 'Projects' },
-  { screenId: 'PlanList', svg: 'Plan', title: 'Plans' },
+  { screenId: 'Planning', svg: 'Plan' },
   { screenId: 'Chat', svg: 'Chat' },
   { screenId: 'Profile' }
 ];

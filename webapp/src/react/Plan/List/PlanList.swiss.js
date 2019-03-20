@@ -4,7 +4,7 @@ import EmptyState from 'src/react/_components/EmptyState/EmptyState';
 export default styleSheet('PlanList', {
   Wrapper: {
     _size: '100%',
-    padding: '0 30px',
+    padding: '0 18px',
 
     empty: {
       _flex: ['row', 'left', 'center']
