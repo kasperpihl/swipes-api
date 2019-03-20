@@ -58,11 +58,6 @@ export default class ModalCreate extends PureComponent {
 
     loader.set('creating', 'Creating');
 
-    if (type === 'plan') {
-      endpoint = 'plan.add';
-      delete options.title;
-      analyticsEvent = 'Plan created';
-    }
     if (type === 'project') {
       endpoint = 'project.add';
       analyticsEvent = 'Project created';
@@ -131,10 +126,6 @@ export default class ModalCreate extends PureComponent {
     const titlePlaceholder = 'Title';
     const titleLabel = '1. Set the title';
     let createLabel = 'Create chat';
-    if (type === 'plan') {
-      title = 'New Plan';
-      createLabel = 'Create plan';
-    }
     if (type === 'project') {
       title = 'New Project';
       createLabel = 'Create project';
@@ -144,23 +135,21 @@ export default class ModalCreate extends PureComponent {
       <FMSW.Wrapper>
         <FMSW.Title>{title}</FMSW.Title>
         <FMSW.InputContainer>
-          {type !== 'plan' && (
-            <FMSW.InputWrapper>
-              <FMSW.Label>{titleLabel}</FMSW.Label>
-              <InputText
-                value={titleVal}
-                onChange={this.handleTitleChange}
-                onKeyDown={this.handleKeyDown}
-                placeholder={titlePlaceholder}
-                type="text"
-                style={{ paddingLeft: '6px' }}
-                autoFocus
-              />
-            </FMSW.InputWrapper>
-          )}
+          <FMSW.InputWrapper>
+            <FMSW.Label>{titleLabel}</FMSW.Label>
+            <InputText
+              value={titleVal}
+              onChange={this.handleTitleChange}
+              onKeyDown={this.handleKeyDown}
+              placeholder={titlePlaceholder}
+              type="text"
+              style={{ paddingLeft: '6px' }}
+              autoFocus
+            />
+          </FMSW.InputWrapper>
           <FMSW.InputWrapper>
             <FMSW.Label>
-              {type === 'plan' ? '1' : '2'}. Choose belonging
+              2. Choose belonging
             </FMSW.Label>
             <OrgPicker
               value={ownedBy}
@@ -168,7 +157,7 @@ export default class ModalCreate extends PureComponent {
               disablePersonal={type === 'discussion'}
             />
           </FMSW.InputWrapper>
-          {ownedBy !== myId && type !== 'plan' && (
+          {ownedBy !== myId && (
             <>
               <FMSW.InputWrapper>
                 <FMSW.Label>3. Choose privacy</FMSW.Label>

@@ -1,10 +1,6 @@
 {
   "name": "webapp",
-<<<<<<< HEAD
-  "version": "0.32.63",
-=======
   "version": "0.32.65",
->>>>>>> development
   "description": "Swipes Webapp",
   "author": "Swipes Team",
   "license": "MIT",

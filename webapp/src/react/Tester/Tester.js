@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import InputField from '_shared/InputField/InputField';
+// import InputField from '_shared/InputField/InputField';
 
 export default function Tester() {
   return (

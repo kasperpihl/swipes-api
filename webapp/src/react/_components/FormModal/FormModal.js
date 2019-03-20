@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import withLoader from 'src/react/_hocs/withLoader';
-import InputField from '_shared/InputField/InputField';
+import InputText from '_shared/Input/Text/InputText';
 import SW from './FormModal.swiss';
 
 @withLoader
@@ -44,7 +44,7 @@ export default class FormModal extends PureComponent {
       return (
         <SW.InputWrapper key={i}>
           {!!label && <SW.Label>{label}</SW.Label>}
-          <InputField
+          <InputText
             {...rest}
             onChange={this.handleInputCached(i)}
             onKeyDown={this.handleKeyDownCached(i)}
