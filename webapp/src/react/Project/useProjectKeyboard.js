@@ -22,26 +22,22 @@ export default function useProjectKeyboard(stateManager) {
       } else if (e.keyCode === 13) {
         e.preventDefault();
         stateManager.editHandler.enter(selectedId, e.target.selectionStart);
-      } else if (e.keyCode === 37) {
-        // Left arrow
-        if (e.metaKey || e.ctrlKey) {
-          e.preventDefault();
-          stateManager.expandHandler.collapse(selectedId);
-        }
       } else if (e.keyCode === 38) {
         // Up arrow
         e.preventDefault();
-        stateManager.selectHandler.selectPrev(e.target.selectionStart);
-      } else if (e.keyCode === 39) {
-        // Right arrow
         if (e.metaKey || e.ctrlKey) {
-          e.preventDefault();
-          stateManager.expandHandler.expand(selectedId);
+          stateManager.expandHandler.collapse(selectedId);
+        } else {
+          stateManager.selectHandler.selectPrev(e.target.selectionStart);
         }
       } else if (e.keyCode === 40) {
         // Down arrow
         e.preventDefault();
-        stateManager.selectHandler.selectNext(e.target.selectionStart);
+        if (e.metaKey || e.ctrlKey) {
+          stateManager.expandHandler.expand(selectedId);
+        } else {
+          stateManager.selectHandler.selectNext(e.target.selectionStart);
+        }
       } else if (e.keyCode === 90 && (e.ctrlKey || e.metaKey)) {
         e.preventDefault();
         if (e.shiftKey) {
