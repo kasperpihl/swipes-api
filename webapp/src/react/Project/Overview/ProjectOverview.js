@@ -66,10 +66,27 @@ function ProjectOverview({ projectId }) {
     });
   };
 
+  const handleDeleteCompletedTasks = () => {
+    stateManager.editHandler.deleteCompleted();
+  };
+
+  const handleClickProjectOption = (i, e) => {
+    switch (e) {
+      case 'Delete Project':
+        handleDeleteProject();
+        break;
+      case 'Delete Completed Tasks':
+        handleDeleteCompletedTasks();
+        break;
+      default:
+        return;
+    }
+  };
+
   const openContextMenu = e => {
     contextMenu(ListMenu, e, {
-      onClick: handleDeleteProject,
-      buttons: ['Delete Project']
+      onClick: handleClickProjectOption,
+      buttons: ['Delete Project', 'Delete Completed Tasks']
     });
   };
 
