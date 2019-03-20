@@ -30,6 +30,7 @@ export default async function queueRunBatch(jobs) {
           QueueUrl: queueUrl
         },
         (err, data) => {
+          console.log('added job', err, data);
           if (err) console.log(err);
         }
       );
