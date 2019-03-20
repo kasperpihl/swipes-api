@@ -9,6 +9,10 @@ export default styleSheet('CardHeader', {
       borderBottom: '1px solid $sw4',
       paddingBottom: '6px'
     },
+    horizontalPadding: {
+      paddingLeft: get => `${get('horizontalPadding')}px`,
+      paddingRight: get => `${get('horizontalPadding')}px`
+    },
 
     subtitle: {
       _flex: ['row', 'left', 'bottom']
@@ -20,11 +24,7 @@ export default styleSheet('CardHeader', {
     _truncateString: '',
     _textStyle: 'H1',
     _size: ['100%', 'auto'],
-    color: 'black',
-
-    '&:hover': {
-      cursor: 'text'
-    }
+    color: 'black'
   },
 
   Subtitle: {

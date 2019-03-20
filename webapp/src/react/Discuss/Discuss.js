@@ -67,24 +67,22 @@ export default class Discuss extends PureComponent {
     }
 
     return (
-      <SW.ProvideContext>
-        <SW.ParentWrapper>
-          <SW.LeftSide>
-            <CardContent header={this.renderLeftHeader()} noframe>
-              <DiscussionList
-                key={type}
-                type={type}
-                onSelectItemId={this.onSelectItemId}
-              />
-            </CardContent>
-          </SW.LeftSide>
-          <SW.RightSide viewWidth={nav.width}>
-            {selectedId && (
-              <DiscussionOverview key={selectedId} discussionId={selectedId} />
-            )}
-          </SW.RightSide>
-        </SW.ParentWrapper>
-      </SW.ProvideContext>
+      <SW.ParentWrapper>
+        <SW.LeftSide>
+          <CardContent header={this.renderLeftHeader()} noframe>
+            <DiscussionList
+              key={type}
+              type={type}
+              onSelectItemId={this.onSelectItemId}
+            />
+          </CardContent>
+        </SW.LeftSide>
+        <SW.RightSide viewWidth={nav.width}>
+          {selectedId && (
+            <DiscussionOverview key={selectedId} discussionId={selectedId} />
+          )}
+        </SW.RightSide>
+      </SW.ParentWrapper>
     );
   }
 }
