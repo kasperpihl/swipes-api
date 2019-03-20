@@ -33,6 +33,7 @@ export default function Button({
       status={parsedStatus}
       selected={selected}
       small={small}
+      withTitle={!!parsedTitle}
     >
       <SW.Wrapper
         {...rest}

@@ -2,9 +2,7 @@ import { styleSheet } from 'swiss-react';
 import Icon from 'src/react/_components/Icon/Icon';
 
 export default styleSheet('PlanSidePicker', {
-  Wrapper: {
-    padding: '12px 0'
-  },
+  Wrapper: {},
   Title: {
     _textStyle: 'caption',
     color: '$sw2',
@@ -14,7 +12,6 @@ export default styleSheet('PlanSidePicker', {
     _textStyle: 'body',
     _flex: ['row', 'left', 'center'],
     _size: ['100%', '30px'],
-    margin: '8px 0 18px 0',
     border: '1px solid $sw3'
   },
 
@@ -59,7 +56,7 @@ export default styleSheet('PlanSidePicker', {
 
   WeekNumber: {
     _size: '30px',
-    _font: ['8px', '12px', '$regular'],
+    _textStyle: 'caption',
     _flex: ['row', 'center', 'center'],
     color: '$dark',
     margin: '6px 6px 6px 9px',
@@ -76,8 +73,7 @@ export default styleSheet('PlanSidePicker', {
 
   InputContainer: {
     _flex: ['row', 'left', 'center'],
-    _size: ['100%', '30px'],
-    margin: '8px 0 32px 0 '
+    _size: ['100%', '30px']
   },
 
   InputWrapper: {
@@ -112,6 +108,7 @@ export default styleSheet('PlanSidePicker', {
 
   InputText: {
     _textStyle: 'body',
+    fontWeight: '$medium',
 
     checked: {
       color: 'white'

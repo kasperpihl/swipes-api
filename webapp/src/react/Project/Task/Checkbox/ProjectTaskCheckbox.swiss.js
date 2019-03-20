@@ -6,7 +6,8 @@ export default styleSheet('ProjectTaskCheckbox', {
     _flex: 'center',
     flex: 'none',
     cursor: 'pointer',
-    marginBottom: 'auto'
+    marginBottom: 'auto',
+    userSelect: 'none'
   },
   Checkbox: {
     _size: '16px',

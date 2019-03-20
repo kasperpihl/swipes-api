@@ -53,11 +53,32 @@ export default function ProjectList() {
     return <RequestLoader req={req} />;
   }
 
+  if (!req.items.length) {
+    return (
+      <CardContent
+        noframe
+        header={
+          <CardHeader padding={18} title="Projects">
+            <Button icon="CircledPlus" onClick={handleNewProject} />
+          </CardHeader>
+        }
+      >
+        <SW.Wrapper>
+          <SW.EmptyState
+            showIcon
+            title="IT’S STILL AND QUIET"
+            description={`Whenever someone creates a project \n it will show up here.`}
+          />
+        </SW.Wrapper>
+      </CardContent>
+    );
+  }
+
   return (
     <CardContent
       noframe
       header={
-        <CardHeader padding={30} title="Projects">
+        <CardHeader padding={18} title="Projects">
           <Button icon="CircledPlus" onClick={handleNewProject} />
         </CardHeader>
       }

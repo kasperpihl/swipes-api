@@ -113,16 +113,16 @@ export default styleSheet('Sidebar', {
   },
   Icon: {
     _el: Icon,
-    _size: '36px',
-    _svgColor: '$sw2',
+    _size: '42px',
+    fill: '$sw2',
     transition: '.3s ease',
     pointerEvents: 'none',
 
     active: {
-      _svgColor: '$sw1'
+      fill: '$sw1'
     },
     '.Sidebar_Item:hover &': {
-      _svgColor: '$sw1',
+      fill: '$sw1',
       transition: '.3s ease'
     }
   },
@@ -164,7 +164,7 @@ export default styleSheet('Sidebar', {
       }
     },
     '!expanded': {
-      '.Sidebar_Wrapper:hover &': {
+      '.Sidebar_Item:hover &': {
         opacity: '1',
         transform: 'translateX(100%) translateY(-50%)',
         transition: '.3s ease',

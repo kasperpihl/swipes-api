@@ -12,6 +12,10 @@ export default styleSheet('ProjectTaskInput', {
     resize: 'none',
     border: 'none',
     outline: 'none',
-    boxShadow: 'none'
+    boxShadow: 'none',
+
+    isCompleted: {
+      opacity: '0.5'
+    }
   }
 });

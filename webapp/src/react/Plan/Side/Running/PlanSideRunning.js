@@ -72,13 +72,13 @@ export default function PlanSideRunning({ plan, hasPending, planState }) {
           workdaysLeft.text
         }`}
       />
-      <Spacing height={12} />
+      <Spacing height={15} />
       <DayTracker
         startDate={plan.start_date}
         endDate={plan.end_date}
         showCurrentDateMarker
       />
-      <Spacing height={30} />
+      <Spacing height={24} />
       <SideHeader
         smallTitle={`/ ${plan.tasks.length}`}
         title={totalCompleted}
@@ -86,9 +86,10 @@ export default function PlanSideRunning({ plan, hasPending, planState }) {
       />
       <Spacing height={18} />
       <ProgressBar progress={percentage} />
-
+      <Spacing height={24} />
       <SW.ButtonWrapper>
         <SW.Button title="End plan" icon="Complete" onClick={handleEnd} />
+        <Spacing height={8} />
       </SW.ButtonWrapper>
       <Spacing height={6} />
       {maxDepth > 0 && (

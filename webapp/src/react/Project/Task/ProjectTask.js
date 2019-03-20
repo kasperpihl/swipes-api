@@ -32,12 +32,15 @@ function ProjectTask({ taskId, selected, onInputClick }) {
       indention={indention - indentComp}
       selected={isSelected}
       isPlanSelected={selected}
-      isCompleted={completion}
     >
       <ProjectTaskExpand taskId={taskId} />
       <ProjectTaskCheckbox taskId={taskId} />
-      <ProjectTaskInput taskId={taskId} onClick={onInputClick} />
-      <ProjectTaskAssignees taskId={taskId} />
+      <ProjectTaskInput
+        taskId={taskId}
+        onClick={onInputClick}
+        isCompleted={completion}
+      />
+      <ProjectTaskAssignees taskId={taskId} isCompleted={completion} />
     </SW.Wrapper>
   );
 }

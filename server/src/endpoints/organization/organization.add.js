@@ -5,6 +5,7 @@ import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
 import update from 'src/utils/update';
 import redisPublish from 'src/utils/redis/redisPublish';
 import idGenerate from 'src/utils/idGenerate';
+import queueScheduleBatch from 'src/utils/queue/queueScheduleBatch';
 
 const expectedInput = {
   name: string.min(1).require()
@@ -50,6 +51,10 @@ export default endpointCreate(
       payload: { channel: organizationId }
     });
 
+    res.locals.backgroundInput = {
+      organization_id: organizationId
+    };
+
     res.locals.update = update.prepare(organizationId, [
       { type: 'organization', data: organizationRes.rows[0] },
       { type: 'organization_user', data: userRes.rows[0] }
@@ -57,4 +62,31 @@ export default endpointCreate(
   }
 ).background(async (req, res) => {
   update.send(res.locals.update);
+
+  const { organization_id } = res.locals.input;
+
+  // Trial email 1 week left
+  await queueScheduleBatch({
+    job_name: 'job.sendEmail.queue',
+    owned_by: organization_id,
+    identifier: 'trial-1week',
+    run_at: 60 * 24 * 7
+  });
+
+  // Trial 1 day left
+  await queueScheduleBatch({
+    job_name: 'job.sendEmail.queue',
+    owned_by: organization_id,
+    identifier: 'trial-1day',
+    run_at: 60 * 24 * 13
+  });
+
+  // Trial expired
+  await queueScheduleBatch({
+    job_name: 'job.sendEmail.queue',
+    owned_by: organization_id,
+    identifier: 'trial-expired',
+    run_at: 60 * 24 * 15,
+    recurring: 60 * 24 * 3 // Re-send every 3 days
+  });
 });

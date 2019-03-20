@@ -64,33 +64,23 @@ export default class DiscussionHeader extends PureComponent {
       }
     });
   };
-  onArchive() {
-    const { discussion, nav, loader } = this.props;
-    nav.openModal(FormModal, {
-      title: 'Delete discussion',
-      subtitle:
-        'This will delete the discussion permanently and cannot be undone.',
-      onConfirm: () => {
-        loader.set('dots');
-        request('discussion.archive', {
-          discussion_id: discussion.discussion_id
-        }).then(res => {
-          if (res.ok) {
-            window.analytics.sendEvent('Discussion archived', {});
-          }
-          if (!res || !res.ok) {
-            loader.error('dots', res.error, 3000);
-          }
-        });
-      }
-    });
-  }
   openDiscussionOptions = e => {
     const { discussion, myId } = this.props;
     contextMenu(ListMenu, e, {
-      onClick: this.onFollowClick,
-      buttons: [{ title: discussion.followers[myId] ? 'Unfollow' : 'Follow' }]
+      onClick: this.onOptionClick,
+      buttons: [
+        { title: discussion.followers[myId] ? 'Unfollow' : 'Follow' },
+        { title: 'Archive discussion' }
+      ]
     });
+  };
+
+  onOptionClick = (i, e) => {
+    if (e.title === 'Unfollow' || e.title === 'Follow') {
+      this.onFollowClick();
+    } else if (e.title === 'Archive discussion') {
+      this.onArchiveClick();
+    }
   };
   onFollowClick = () => {
     const { myId, discussion, loader } = this.props;
@@ -104,6 +94,27 @@ export default class DiscussionHeader extends PureComponent {
       discussion_id: discussion.discussion_id
     }).then(res => {
       loader.clear('following');
+    });
+  };
+  onArchiveClick = () => {
+    const { discussion, nav, loader } = this.props;
+    nav.openModal(FormModal, {
+      title: 'Delete discussion',
+      subtitle:
+        'This will delete the discussion permanently and cannot be undone.',
+      onConfirm: () => {
+        loader.set('dots');
+        // request('discussion.archive', {
+        //   discussion_id: discussion.discussion_id
+        // }).then(res => {
+        //   if (res.ok) {
+        //     window.analytics.sendEvent('Discussion archived', {});
+        //   }
+        //   if (!res || !res.ok) {
+        //     loader.error('dots', res.error, 3000);
+        //   }
+        // }); TODO: Wire up correct endpoint once it's fixed by Kasper
+      }
     });
   };
   render() {
