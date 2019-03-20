@@ -5,6 +5,7 @@ import DiscussionHeader from '../Header/DiscussionHeader';
 import CommentComposer from 'src/react/Comment/Composer/CommentComposer';
 import CommentList from 'src/react/Comment/List/CommentList';
 import CardContent from 'src/react/_components/Card/Content/CardContent';
+import useUpdate from 'core/react/_hooks/useUpdate';
 
 import SW from './DiscussionOverview.swiss';
 
@@ -37,6 +38,12 @@ function DiscussionOverview({ discussionId, myId }) {
       }
     }
   );
+
+  useUpdate('discussion', update => {
+    if (update.discussion_id === discussionId) {
+      req.merge('discussion', update);
+    }
+  });
 
   if (req.loading || req.error) {
     return <RequestLoader req={req} />;

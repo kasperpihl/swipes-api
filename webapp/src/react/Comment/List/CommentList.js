@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useContext, useMemo } from 'react';
 import moment from 'moment';
 import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
 import usePaginationRequest from 'core/react/_hooks/usePaginationRequest';
@@ -7,6 +7,7 @@ import CommentItem from 'src/react/Comment/Item/CommentItem';
 import SectionHeader from 'src/react/_components/SectionHeader/SectionHeader';
 import useUpdate from 'core/react/_hooks/useUpdate';
 import useScrollComments from 'src/react/Comment/useScrollComments';
+import { MyIdContext } from 'src/react/contexts';
 import SW from './CommentList.swiss';
 
 export default function CommentList({
@@ -14,6 +15,7 @@ export default function CommentList({
   discussion,
   scrollRef
 }) {
+  const myId = useContext(MyIdContext);
   const req = usePaginationRequest(
     'comment.list',
     {
@@ -37,6 +39,8 @@ export default function CommentList({
     }
   });
 
+  const myLastRead = useMemo(() => discussion.followers[myId], []);
+
   useScrollComments(scrollRef, req.items);
 
   if (req.error || req.loading) {
@@ -54,9 +58,10 @@ export default function CommentList({
   }
   let deltaDate = moment('1970-02-15');
   let deltaSentBy;
+  let indicatorDate;
 
   return (
-    <>
+    <SW.Wrapper>
       <PaginationScrollToMore
         req={req}
         errorLabel="Couldn't get discussions."
@@ -69,6 +74,15 @@ export default function CommentList({
           const showSectionHeader = currentDate.isAfter(deltaDate, 'days');
           const isSingleLine =
             !showSectionHeader && deltaSentBy === comment.sent_by;
+
+          let showNewIndicator = false;
+          if (
+            !indicatorDate &&
+            (myLastRead === 'n' || comment.sent_at > myLastRead)
+          ) {
+            indicatorDate = comment.sent_at;
+            showNewIndicator = true;
+          }
           deltaDate = currentDate;
           deltaSentBy = comment.sent_by;
 
@@ -76,6 +90,12 @@ export default function CommentList({
             <Fragment key={comment.comment_id}>
               {showSectionHeader && (
                 <SectionHeader>{currentDate.format('MMM D')}</SectionHeader>
+              )}
+              {showNewIndicator && (
+                <SW.NewMessageIndicator>
+                  <SW.New>NEW</SW.New>
+                  <SW.Line />
+                </SW.NewMessageIndicator>
               )}
               <CommentItem
                 comment={comment}
@@ -86,6 +106,6 @@ export default function CommentList({
             </Fragment>
           );
         })}
-    </>
+    </SW.Wrapper>
   );
 }

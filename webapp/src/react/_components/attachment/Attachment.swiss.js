@@ -23,7 +23,7 @@ export default styleSheet('Attachment', {
   },
   Icon: {
     _el: Icon,
-    _svgColor: '$sw1',
+    fill: '$sw1',
     _size: '24px',
     isContext: {
       _size: '18px',
@@ -33,13 +33,13 @@ export default styleSheet('Attachment', {
     },
     '!hasCloseIcon': {
       '.Attachment_ATag:hover &': {
-        _svgColor: '$blue'
+        fill: '$blue'
       }
     },
 
     hasCloseIcon: {
       '.Attachment_IconContainer:hover &': {
-        _svgColor: '$blue'
+        fill: '$blue'
       }
     }
   },

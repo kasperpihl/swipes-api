@@ -51,7 +51,7 @@ export default styleSheet('DiscussionHeader', {
   Icon: {
     _el: Icon,
     _size: '14px',
-    _svgColor: '$sw2',
+    fill: '$sw2',
     margin: '0 2px'
   },
 
