@@ -26,7 +26,7 @@ export default (middleware, jobName) => {
       await middleware(req, res, next);
 
       const logObject = logGetObject(req, res);
-      logger.log('info', logObject);
+      logger('info', logObject);
 
       res.sendStatus(200);
     });

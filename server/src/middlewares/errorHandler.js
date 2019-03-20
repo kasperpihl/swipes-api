@@ -14,7 +14,7 @@ export default (error, req, res, next) => {
     console.error(JSON.stringify(logObject, null, 2));
   }
 
-  logger.log('error', logObject);
+  logger('error', logObject);
 
   const result = {
     ok: false,

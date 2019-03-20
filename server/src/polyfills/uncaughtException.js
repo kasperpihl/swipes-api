@@ -5,7 +5,7 @@ const env = config.get('env');
 // Log out any uncaught exceptions, but making sure to kill the process after!
 process.on('uncaughtException', err => {
   if (env !== 'dev') {
-    logger.log('error', err);
+    logger('error', err);
   }
   console.error(err);
   process.exit(1);

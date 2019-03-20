@@ -25,7 +25,7 @@ export default schema => async (req, res, next) => {
   const logObject = logGetObject(req, res);
   logObject.output = output;
 
-  logger.log('info', logObject);
+  logger('info', logObject);
 
   return res
     .status(200)
