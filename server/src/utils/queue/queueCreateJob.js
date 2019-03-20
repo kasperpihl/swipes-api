@@ -12,7 +12,6 @@ export default (middleware, jobName) => {
   console.log(jobName);
   // FUNCTION MUST BE NAMED queueCreateJob. Dont change!
   return function queueCreateJob(router) {
-    console.log(jobName, req.body.job_name);
     router.use(async (req, res, next) => {
       if (!req.body.job_name || req.body.job_name !== jobName) {
         return next();
