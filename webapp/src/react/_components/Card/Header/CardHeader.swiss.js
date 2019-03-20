@@ -16,6 +16,7 @@ export default styleSheet('CardHeader', {
   },
 
   Title: {
+    _el: 'p',
     _truncateString: '',
     _textStyle: 'H1',
     _size: ['100%', 'auto'],

@@ -27,9 +27,7 @@ function ProjectTaskExpand({ taskId }) {
 
   return (
     <SW.Wrapper onClick={handleExpandClick}>
-      {hasChildren && (
-        <SW.ExpandIcon icon="ArrowRightFull" expanded={expanded} />
-      )}
+      {hasChildren && <SW.ExpandIcon icon="ArrowRight" expanded={expanded} />}
     </SW.Wrapper>
   );
 }
