@@ -29,4 +29,4 @@ app.use(errorHandler);
 const server = http.createServer(app);
 
 server.listen(port);
-console.log('queue started on port %s', port);
+console.log('queue started on port %s ' + new Date().toISOString(), port);

@@ -24,4 +24,4 @@ const server = http.createServer(app);
 socketSetup(server);
 
 server.listen(port);
-console.log('websocket started on port %s', port);
+console.log('websocket started on port %s ' + new Date().toISOString(), port);

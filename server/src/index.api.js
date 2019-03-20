@@ -96,4 +96,4 @@ const server = http.createServer(app);
 // start api rest server
 server.listen(port);
 
-console.log('server started on port %s', port);
+console.log('server started on port %s ' + new Date().toISOString(), port);
