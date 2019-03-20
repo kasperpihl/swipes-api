@@ -18,28 +18,32 @@ export default class Profile extends PureComponent {
   static sizes = [540];
   handleCreateOrganization = () => {
     const { nav, loader } = this.props;
-    nav.openModal(FormModal, {
-      title: 'Create Organization',
-      subtitle:
-        'This will start a trial for 30 days, after which it will be $7.5/user/month.',
-      inputs: [
-        { type: 'text', placeholder: 'Name of organization', autoFocus: true }
-      ],
-      confirmLabel: 'Create',
-      onConfirm: ([name]) => {
-        if (!name.length) {
-          return;
-        }
+    // nav.openModal(FormModal, {
+    //   title: 'Create Organization',
+    //   subtitle:
+    //     'This will start a trial for 30 days, after which it will be $7.5/user/month.',
+    //   inputs: [
+    //     { type: 'text', placeholder: 'Name of organization', autoFocus: true }
+    //   ],
+    //   confirmLabel: 'Create',
+    //   onConfirm: ([name]) => {
+    //     if (!name.length) {
+    //       return;
+    //     }
 
-        loader.set('createOrg');
-        request('organization.add', { name }).then(res => {
-          if (res && res.ok) {
-            loader.clear('createOrg');
-          } else {
-            loader.error('createOrg', res.error, 3000);
-          }
-        });
-      }
+    //     loader.set('createOrg');
+    //     request('organization.add', { name }).then(res => {
+    //       if (res && res.ok) {
+    //         loader.clear('createOrg');
+    //       } else {
+    //         loader.error('createOrg', res.error, 3000);
+    //       }
+    //     });
+    //   }`
+    // });
+    nav.push({
+      screenId: 'OrganizationCreate',
+      crumbTitle: 'Create an organization'
     });
   };
   renderHeader = () => <ProfileHeader />;
