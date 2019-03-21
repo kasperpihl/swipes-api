@@ -55,6 +55,10 @@ export default endpointCreate(
       organization_id: organizationId
     };
 
+    res.locals.output = {
+      organization_id: organizationId
+    };
+
     res.locals.update = update.prepare(organizationId, [
       { type: 'organization', data: organizationRes.rows[0] },
       { type: 'organization_user', data: userRes.rows[0] }
