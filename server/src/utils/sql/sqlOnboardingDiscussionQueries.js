@@ -12,7 +12,7 @@ export default function sqlOnboardingDiscussionQueries(organizationId, userId) {
     last_comment_by: userId,
     last_comment: 'just created this discussion.',
     last_comment_at: 'now()',
-    followers: `jsonb_build_object('${uId}', 'n')`
+    followers: `jsonb_build_object('${userId}', 'n')`
   }));
 
   return [
