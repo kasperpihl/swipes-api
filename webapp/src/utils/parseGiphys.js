@@ -14,7 +14,7 @@ export default function parseGiphys(string) {
         finalArr.push(
           <img
             src={match[1]}
-            style={{ width: '200px' }}
+            style={{ height: '150px' }}
             key={`prase-gif-${i}`}
           />
         );
