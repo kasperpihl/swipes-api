@@ -34,7 +34,7 @@ export default endpointCreate(
         admin: true,
         status: 'active'
       }),
-      ...sqlOnboardingDiscussionQueries(organizationId),
+      ...sqlOnboardingDiscussionQueries(organizationId, user_id),
       {
         text: `
           SELECT ou.status, ou.organization_id, ou.admin, u.first_name, u.last_name, u.email, u.user_id, u.username, u.photo
