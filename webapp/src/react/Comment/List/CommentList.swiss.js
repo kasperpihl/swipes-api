@@ -2,7 +2,11 @@ import { styleSheet } from 'swiss-react';
 import EmptyState from 'src/react/_components/EmptyState/EmptyState';
 
 export default styleSheet('CommentList', {
-  Wrapper: {},
+  Wrapper: {
+    _flex: ['column', 'left', 'bottom'],
+    minHeight: '100%',
+    marginTop: 'auto'
+  },
 
   EmptyState: {
     _el: EmptyState,

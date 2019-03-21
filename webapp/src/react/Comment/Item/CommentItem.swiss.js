@@ -58,6 +58,7 @@ export default styleSheet('CommentItem', {
     _textStyle: 'body',
     wordBreak: 'break-word',
     maxWidth: '100%',
+    paddingRight: '6px',
 
     isSingleLine: {
       padding: '6px 0'
