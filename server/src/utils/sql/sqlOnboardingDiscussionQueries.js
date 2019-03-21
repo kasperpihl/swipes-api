@@ -1,7 +1,9 @@
+import idGenerate from 'src/utils/idGenerate';
+import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
+import sqlPermissionInsertQuery from 'src/utils/sql/sqlPermissionInsertQuery';
+
 export default function sqlOnboardingDiscussionQueries(organizationId, userId) {
-  const generalTitle = 'General';
-  const randomTitle = 'Random';
-  const discussions = [generalTitle, randomTitle].map((title, i) => ({
+  const discussions = ['General', 'Random'].map((title, i) => ({
     discussion_id: idGenerate('C-', 15),
     is_default: true,
     owned_by: organizationId,
