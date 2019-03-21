@@ -7,8 +7,8 @@ export default function sqlOnboardingProjectQueries(userId, firstName) {
 
   const tasks = [
     '',
-    'Press Shift+Tab to 👈',
-    'Press Tab to make subtasks 👉'
+    'Press Tab to make subtasks 👉',
+    'Press Shift+Tab to 👈'
   ].map(title => ({
     project_id: projectId,
     task_id: idGenerate(6),
@@ -21,7 +21,7 @@ export default function sqlOnboardingProjectQueries(userId, firstName) {
 
   tasks.forEach(({ task_id }, i) => {
     ordering[task_id] = i;
-    indention[task_id] = i === 1 ? 1 : 0;
+    indention[task_id] = i === 2 ? 1 : 0;
     completion[task_id] = false;
   });
 

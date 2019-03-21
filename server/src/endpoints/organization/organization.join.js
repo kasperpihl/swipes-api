@@ -5,6 +5,7 @@ import redisPublish from 'src/utils/redis/redisPublish';
 import update from 'src/utils/update';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
 import tokenParse from 'src/utils/token/tokenParse';
+import sqlToIsoString from 'src/utils/sql/sqlToIsoString';
 import stripeUpdateQuantity from 'src/utils/stripe/stripeUpdateQuantity';
 
 const expectedInput = {
@@ -56,6 +57,17 @@ export default endpointCreate(
           upsert: 'organization_users_pkey'
         }
       ),
+      {
+        text: `
+          UPDATE discussions
+          SET followers = followers || jsonb_build_object('${user_id}', ${sqlToIsoString(
+          'now()'
+        )})
+          WHERE owned_by = $1
+          AND is_default = true
+        `,
+        values: [organization_id]
+      },
       {
         text: `
           UPDATE organizations
