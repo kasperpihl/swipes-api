@@ -7,14 +7,15 @@ export default styleSheet('InputText', {
     _textStyle: 'body',
     color: '$sw1',
     transition: '.2s ease',
-    borderBottom: '1px solid $sw3',
+    padding: '9px',
+    border: '1px solid $sw3',
     '&:focus': {
-      borderBottom: '1px solid $blue',
+      border: '1px solid $blue',
       transition: '.2s ease'
     },
 
     error: {
-      borderBottom: '1px solid $red'
+      border: '1px solid $red'
     }
   }
 });

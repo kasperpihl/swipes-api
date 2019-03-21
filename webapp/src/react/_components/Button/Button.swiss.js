@@ -25,8 +25,15 @@ export default styleSheet('Button', {
       }
     },
     withTitle: {
-      padding: '0 6px',
+      padding: '0 6px'
     },
+    border: {
+      border: '1px solid $sw3'
+    },
+    green: {
+      border: 'none',
+      backgroundColor: '$green1'
+    }
   },
 
   Title: {
@@ -40,9 +47,11 @@ export default styleSheet('Button', {
     'status=Success': {
       color: '$green1'
     },
-
     'status=Error': {
       color: '$red'
+    },
+    green: {
+      color: '$base'
     }
   }
 });

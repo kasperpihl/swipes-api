@@ -60,17 +60,21 @@ export default function OrganizationCreate() {
     );
   }
 
+  const handleCancel = () => {
+    console.log('cancelled');
+  };
+
   return (
-    <CardContent>
+    <CardContent header={<CardHeader title="Invite your team to join in!" />}>
       <SW.Wrapper>
-        <Spacing height={18} />
+        <Spacing height={69} />
         <InputText
           type="text"
           placeholder="Give your team a name"
           value={teamName}
           onChange={handleInputChange}
         />
-        <Spacing height={36} />
+        <Spacing height={56} />
         <SW.Text>Invite your colleagues!</SW.Text>
         <Spacing height={18} />
         {members.map((member, i) => {
@@ -100,13 +104,18 @@ export default function OrganizationCreate() {
           );
         })}
         <Button
-          title="Add more people"
+          icon="CircledPlus"
+          title="Invite more"
           onClick={() => dispatch({ type: 'add' })}
         />
-        <Button
-          title="Create organization"
-          onClick={handleCreateOrganization}
-        />
+        <SW.ActionsWrapper>
+          <Button title="Cancel" onClick={handleCancel} />
+          <Button
+            title="Start collaborating!"
+            onClick={handleCreateOrganization}
+            green
+          />
+        </SW.ActionsWrapper>
       </SW.Wrapper>
     </CardContent>
   );

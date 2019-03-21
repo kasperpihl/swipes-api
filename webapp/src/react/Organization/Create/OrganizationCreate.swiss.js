@@ -2,9 +2,9 @@ import { styleSheet } from 'swiss-react';
 
 export default styleSheet('OrganizationCreate', {
   Wrapper: {
-    _size: ['480px', 'auto'],
+    _size: ['100%', 'auto'],
     _flex: ['column', 'left', 'top'],
-    margin: '0 auto'
+    padding: '0 18px'
   },
 
   InputWrapper: {
@@ -22,6 +22,15 @@ export default styleSheet('OrganizationCreate', {
     _textStyle: 'body',
     color: '$red',
     position: 'absolute',
-    right: '0'
+    right: '9px'
+  },
+
+  ActionsWrapper: {
+    _flex: ['row', 'left', 'center'],
+    marginLeft: 'auto',
+
+    '& > a:first-child': {
+      marginRight: '12px'
+    }
   }
 });

@@ -12,7 +12,8 @@ Button.propTypes = {
     loading: PropTypes.string,
     success: PropTypes.string,
     error: PropTypes.string
-  })
+  }),
+  green: PropTypes.bool
 };
 
 export default function Button({
@@ -22,6 +23,7 @@ export default function Button({
   onClick,
   selected,
   small,
+  green,
   ...rest
 }) {
   const parsedStatus = buttonParseStatus(status);
@@ -34,6 +36,8 @@ export default function Button({
       selected={selected}
       small={small}
       withTitle={!!parsedTitle}
+      green={green}
+      border={!(icon || parsedStatus !== 'Standard') && !!parsedTitle}
     >
       <SW.Wrapper
         {...rest}
