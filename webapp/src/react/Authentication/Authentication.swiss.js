@@ -24,9 +24,13 @@ export default styleSheet('Authentication', {
     marginTop: '24px'
   },
   SubmitWrapper: {
-    _size: ['100%', 'auto'],
-    _flex: ['row', 'left', 'center'],
-    paddingTop: '24px'
+    _flex: ['row', 'right', 'center'],
+    paddingTop: '24px',
+    marginLeft: 'auto',
+
+    '& > a:first-child': {
+      marginRight: '6px'
+    }
   },
 
   ErrorLabel: {
@@ -38,12 +42,19 @@ export default styleSheet('Authentication', {
   },
 
   Switch: {
-    _font: ['12px', '18px', '$medium'],
+    _textStyle: 'body',
+    _flex: ['row', 'center', 'center'],
+    width: '100%',
     padding: '0 12px',
     color: '$sw2',
+    position: 'absolute',
+    bottom: '36px',
+    left: '50%',
+    transform: 'translateX(-50%)',
 
     '& a': {
-      _font: ['12px', '18px', '$medium'],
+      _textStyle: 'body',
+      color: '$green1',
       cursor: 'pointer',
       '&:hover': {
         textDecoration: 'underline'

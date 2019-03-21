@@ -32,7 +32,11 @@ export default styleSheet('Button', {
     },
     green: {
       border: 'none',
-      backgroundColor: '$green1'
+      backgroundColor: '$green1',
+
+      '&:hover': {
+        backgroundColor: '$green2'
+      }
     }
   },
 
@@ -51,7 +55,11 @@ export default styleSheet('Button', {
       color: '$red'
     },
     green: {
-      color: '$base'
+      color: '$base',
+
+      '.Button_Wrapper:hover &': {
+        color: '$dark'
+      }
     }
   }
 });

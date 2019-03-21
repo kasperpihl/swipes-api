@@ -166,18 +166,11 @@ export default class Authentication extends PureComponent {
   }
   renderSwitch() {
     if (this.isLogin()) {
-      return (
-        <SW.Switch>
-          Forgot your password?{' '}
-          <a href="" onClick={this.handleResetPassword}>
-            Reset it here
-          </a>
-        </SW.Switch>
-      );
+      return;
     }
     return (
       <SW.Switch>
-        By signing up you agree to the{' '}
+        By signing up you agree to the{'   '}
         <a target="_blank" href="http://swipesapp.com/workspacepolicies.pdf">
           Terms of service
         </a>
@@ -189,28 +182,37 @@ export default class Authentication extends PureComponent {
     const { loader } = this.props;
     return (
       <Card>
+        <Spacing height={36} />
+        <CardHeader title="Welcome to Swipes!" />
         <SW.Wrapper>
-          <CardHeader title="Swipes Workspace" />
           <SW.StyledTabBar
             onChange={this.handleTabChange}
             tabs={['Create account', 'Sign in']}
             value={this.isLogin() ? 1 : 0}
           />
+          <Spacing height={45} />
           <SW.Form>
             {this.renderInputs()}
             {loader.get('authButton').error && (
               <SW.ErrorLabel>{loader.get('authButton').error}</SW.ErrorLabel>
             )}
             <SW.SubmitWrapper>
+              {this.isLogin() ? (
+                <Button
+                  title="Reset password"
+                  onClick={this.handleResetPassword}
+                />
+              ) : null}
               <Button
                 title={this.isLogin() ? 'Sign in' : 'Create account'}
                 onClick={this.handleAuthentication}
                 status={loader.get('authButton')}
+                green
               />
-              {this.renderSwitch()}
             </SW.SubmitWrapper>
           </SW.Form>
         </SW.Wrapper>
+        {this.renderSwitch()}
       </Card>
     );
   }

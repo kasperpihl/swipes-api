@@ -22,7 +22,7 @@ export default styleSheet('Card2', {
     backgroundColor: '$sw5',
     boxShadow: '0 6px 12px 1px rgba(0,12,47,0.3)',
     margin: '0 auto',
-    padding: '0 60px',
+    padding: '0 18px',
     '@media $max600': {
       padding: '0 24px'
     },
