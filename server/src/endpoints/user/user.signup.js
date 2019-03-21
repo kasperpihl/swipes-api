@@ -6,6 +6,7 @@ import idGenerate from 'src/utils/idGenerate';
 import getClientIp from 'src/utils/getClientIp';
 import tokenCreate from 'src/utils/token/tokenCreate';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
+import sqlOnboardingProjectQueries from 'src/utils/sql/sqlOnboardingProjectQueries';
 
 const expectedInput = {
   email: string.format('email').require(),
@@ -61,7 +62,8 @@ export default endpointCreate(
           platform: req.header('sw-platform') || 'browser',
           ip: getClientIp(req)
         }
-      })
+      }),
+      ...sqlOnboardingProjectQueries(userId, first_name)
     ]);
 
     // Create response data.
