@@ -2,6 +2,7 @@ import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import { transaction } from 'src/utils/db/db';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
+import sqlOnboardingDiscussionQueries from 'src/utils/sql/sqlOnboardingDiscussionQueries';
 import update from 'src/utils/update';
 import redisPublish from 'src/utils/redis/redisPublish';
 import idGenerate from 'src/utils/idGenerate';
@@ -33,6 +34,7 @@ export default endpointCreate(
         admin: true,
         status: 'active'
       }),
+      ...sqlOnboardingDiscussionQueries(organizationId),
       {
         text: `
           SELECT ou.status, ou.organization_id, ou.admin, u.first_name, u.last_name, u.email, u.user_id, u.username, u.photo
