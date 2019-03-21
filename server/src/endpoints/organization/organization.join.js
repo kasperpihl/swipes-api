@@ -58,6 +58,15 @@ export default endpointCreate(
       ),
       {
         text: `
+          UPDATE discussions
+          SET followers = followers || jsonb_build_object('${user_id}', 'n')
+          WHERE owned_by = $1
+          AND is_default = true
+        `,
+        values: [organization_id]
+      },
+      {
+        text: `
           UPDATE organizations
           SET 
             pending_users = jsonb_strip_nulls(
