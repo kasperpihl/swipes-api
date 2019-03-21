@@ -6,7 +6,6 @@ export default styleSheet('ProjectTaskInput', {
     _el: TextareaAutosize,
     _textStyle: 'H3',
     width: '100%',
-    minHeight: '18px',
     borderRadius: '3px',
     paddingLeft: '6px',
     resize: 'none',

@@ -11,6 +11,10 @@ export default styleSheet('InputText', {
     '&:focus': {
       borderBottom: '1px solid $blue',
       transition: '.2s ease'
+    },
+
+    error: {
+      borderBottom: '1px solid $red'
     }
   }
 });

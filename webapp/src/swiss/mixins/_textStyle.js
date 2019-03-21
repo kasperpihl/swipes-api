@@ -14,7 +14,7 @@ addMixin('textStyle', (style = 'item') => {
       };
     case 'H3':
       return {
-        _font: ['14px', '18px', '$regular'],
+        _font: ['13px', '18px', '$regular'],
         color: '$dark'
       };
     case 'H2':
