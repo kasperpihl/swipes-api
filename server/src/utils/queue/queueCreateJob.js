@@ -9,7 +9,6 @@ export default (middleware, jobName) => {
   if (typeof jobName !== 'string') {
     jobName = endpointDetermineName();
   }
-  console.log(jobName);
   // FUNCTION MUST BE NAMED queueCreateJob. Dont change!
   return function queueCreateJob(router) {
     router.use(async (req, res, next) => {

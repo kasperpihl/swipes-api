@@ -24,16 +24,10 @@ export default async function queueRunBatch(jobs) {
 
     do {
       const chunk = jobs.splice(0, 10);
-      await sqs.sendMessageBatch(
-        {
-          Entries: chunk,
-          QueueUrl: queueUrl
-        },
-        (err, data) => {
-          console.log('added job', err, data);
-          if (err) console.log(err);
-        }
-      );
+      await sqs.sendMessageBatch({
+        Entries: chunk,
+        QueueUrl: queueUrl
+      });
     } while (jobs.length > 0);
   } else {
     jobs.forEach(({ job_name, payload }) => {
