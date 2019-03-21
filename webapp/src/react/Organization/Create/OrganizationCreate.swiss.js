@@ -3,8 +3,7 @@ import { styleSheet } from 'swiss-react';
 export default styleSheet('OrganizationCreate', {
   Wrapper: {
     _size: ['100%', 'auto'],
-    _flex: ['column', 'left', 'top'],
-    padding: '0 18px'
+    _flex: ['column', 'left', 'top']
   },
 
   InputWrapper: {
