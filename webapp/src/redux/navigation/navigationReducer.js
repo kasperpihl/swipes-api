@@ -3,12 +3,12 @@ import * as coreTypes from 'core/redux/constants';
 import * as types from '../constants';
 
 const initialState = fromJS({
-  sideMenuId: 'PlanList',
+  sideMenuId: 'ProjectList',
   onTopSide: 'left',
   left: [
     {
-      screenId: 'PlanList',
-      crumbTitle: 'Plans'
+      screenId: 'ProjectList',
+      crumbTitle: 'Projects'
     }
   ],
   right: [],

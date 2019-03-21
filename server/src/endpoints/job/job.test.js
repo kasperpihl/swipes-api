@@ -20,9 +20,9 @@ export default endpointCreate(
       run_at: 1,
       owned_by: res.locals.user_id
     });
-    console.log('scheduled job');
+
     await sleep(5000);
-    console.log('adding job');
+
     await queueRunBatch({
       job_name: 'job.checkAndRun.queue',
       payload: {
