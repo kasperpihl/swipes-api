@@ -64,10 +64,11 @@ export default class FormModal extends PureComponent {
         {!!subtitle && <SW.Subtitle>{subtitle}</SW.Subtitle>}
         <SW.InputContainer>{this.renderInputs()}</SW.InputContainer>
         <SW.ButtonWrapper>
-          <SW.Button title="Cancel" onClick={hideModal} />
+          <SW.Button title="Cancel" onClick={hideModal} border />
           <SW.Button
             title={confirmLabel || 'Confirm'}
             onClick={this.handleConfirm}
+            border
           />
         </SW.ButtonWrapper>
       </SW.Wrapper>

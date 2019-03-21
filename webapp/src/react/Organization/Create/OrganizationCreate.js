@@ -109,7 +109,7 @@ export default function OrganizationCreate() {
           onClick={() => dispatch({ type: 'add' })}
         />
         <SW.ActionsWrapper>
-          <Button title="Cancel" onClick={handleCancel} />
+          <Button title="Cancel" onClick={handleCancel} border />
           <Button
             title="Start collaborating!"
             onClick={handleCreateOrganization}

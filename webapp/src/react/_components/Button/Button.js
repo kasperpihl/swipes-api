@@ -24,6 +24,7 @@ export default function Button({
   selected,
   small,
   green,
+  border,
   ...rest
 }) {
   const parsedStatus = buttonParseStatus(status);
@@ -37,7 +38,7 @@ export default function Button({
       small={small}
       withTitle={!!parsedTitle}
       green={green}
-      border={!(icon || parsedStatus !== 'Standard') && !!parsedTitle}
+      border={border}
     >
       <SW.Wrapper
         {...rest}

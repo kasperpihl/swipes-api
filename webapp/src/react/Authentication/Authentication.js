@@ -201,6 +201,7 @@ export default class Authentication extends PureComponent {
                 <Button
                   title="Reset password"
                   onClick={this.handleResetPassword}
+                  border
                 />
               ) : null}
               <Button

@@ -148,9 +148,7 @@ export default class ModalCreate extends PureComponent {
             />
           </FMSW.InputWrapper>
           <FMSW.InputWrapper>
-            <FMSW.Label>
-              2. Choose belonging
-            </FMSW.Label>
+            <FMSW.Label>2. Choose belonging</FMSW.Label>
             <OrgPicker
               value={ownedBy}
               onChange={this.handleOrgChange}
@@ -173,7 +171,11 @@ export default class ModalCreate extends PureComponent {
                   maxImages={9}
                   onClick={this.handleAssignClick}
                 >
-                  <Button title="Tag people" onClick={this.handleAssignClick} />
+                  <Button
+                    title="Tag people"
+                    onClick={this.handleAssignClick}
+                    border
+                  />
                 </Assignees>
               </FMSW.InputWrapper>
             </>
@@ -184,6 +186,7 @@ export default class ModalCreate extends PureComponent {
             title={createLabel}
             onClick={this.handleCreate}
             status={loader.get('creating')}
+            border
           />
         </FMSW.ButtonWrapper>
       </FMSW.Wrapper>
