@@ -15,7 +15,7 @@ export default async function queueRunBatch(jobs) {
     jobs = jobs.map(({ job_name, payload }) => ({
       Id: randomstring.generate(12),
       MessageBody: JSON.stringify({
-        job_name: job_name,
+        job_name,
         payload
       }),
       MessageGroupId: randomstring.generate(12),
@@ -24,10 +24,17 @@ export default async function queueRunBatch(jobs) {
 
     do {
       const chunk = jobs.splice(0, 10);
-      await sqs.sendMessageBatch({
-        Entries: chunk,
-        QueueUrl: queueUrl
-      });
+      await sqs.sendMessageBatch(
+        {
+          Entries: chunk,
+          QueueUrl: queueUrl
+        },
+        (err, data) => {
+          if (err || data.Failed) {
+            console.log(err, data);
+          }
+        }
+      );
     } while (jobs.length > 0);
   } else {
     jobs.forEach(({ job_name, payload }) => {

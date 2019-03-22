@@ -71,6 +71,7 @@ export default class FormModal extends PureComponent {
                 title={confirmLabel || 'Confirm'}
                 onClick={this.handleConfirm}
                 border
+                green
               />
             </>
           ) : (
