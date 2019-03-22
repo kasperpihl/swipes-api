@@ -2,7 +2,7 @@ import config from 'config';
 import mandrillSendTemplate from 'src/utils/mandrill/mandrillSendTemplate';
 
 export default (email, firstName, token) => {
-  const host = config.get('host');
+  const host = config.get('emailHost');
   const template_name = 'reset-password';
   const template_content = [
     {

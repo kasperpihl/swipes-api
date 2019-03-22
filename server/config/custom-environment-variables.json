@@ -27,7 +27,7 @@
     "yearlyPlanId": "STRIPE_YEARLY_PLAN_ID",
     "monthlyPlanId": "STRIPE_MONTHLY_PLAN_ID"
   },
-  "host": "SW_HOST",
+  "emailHost": "EMAIL_HOST",
   "env": "SW_ENV",
   "jwtTokenSecret": "JWT_TOKEN_SECRET"
 }

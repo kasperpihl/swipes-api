@@ -2,7 +2,7 @@ import config from 'config';
 import mandrillSendTemplate from 'src/utils/mandrill/mandrillSendTemplate';
 
 export default (email, invitationToken, organizatioName, inviterFirstName) => {
-  const host = config.get('host');
+  const host = config.get('emailHost');
   const template_name = 'welcome-invitation';
   const template_content = [
     {

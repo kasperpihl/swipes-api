@@ -58,7 +58,8 @@ export default class Authentication extends PureComponent {
             }
             openModal('auth', FormModal, {
               title,
-              subtitle
+              subtitle,
+              alert: true
             });
           });
         }
