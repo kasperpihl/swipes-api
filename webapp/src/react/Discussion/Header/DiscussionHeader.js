@@ -50,7 +50,8 @@ export default class DiscussionHeader extends PureComponent {
       inputs: [
         {
           placeholder: 'Title of discussion',
-          initialValue: discussion.title
+          initialValue: discussion.title,
+          autoFocus: true
         }
       ],
       confirmLabel: 'Rename',
@@ -70,6 +71,7 @@ export default class DiscussionHeader extends PureComponent {
       onClick: this.onOptionClick,
       buttons: [
         { title: discussion.followers[myId] ? 'Unfollow' : 'Follow' },
+        { title: 'Rename discussion' },
         { title: 'Delete discussion' }
       ]
     });
@@ -80,6 +82,8 @@ export default class DiscussionHeader extends PureComponent {
       this.onFollowClick();
     } else if (e.title === 'Delete discussion') {
       this.onArchiveClick();
+    } else if (e.title === 'Rename discussion') {
+      this.onTitleClick();
     }
   };
   onFollowClick = () => {
