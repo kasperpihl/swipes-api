@@ -45,10 +45,11 @@ export default class FormModal extends PureComponent {
         <SW.InputWrapper key={i}>
           {!!label && <SW.Label>{label}</SW.Label>}
           <InputText
-            {...rest}
+            type="text"
             onChange={this.handleInputCached(i)}
             onKeyDown={this.handleKeyDownCached(i)}
             value={this.state[i]}
+            {...rest}
           />
         </SW.InputWrapper>
       );

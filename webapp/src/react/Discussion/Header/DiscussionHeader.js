@@ -133,7 +133,11 @@ export default class DiscussionHeader extends PureComponent {
 
     return (
       <SW.Wrapper>
-        <CardHeader title={discussion.title} subtitle={subtitle}>
+        <CardHeader
+          title={discussion.title}
+          subtitle={subtitle}
+          onTitleClick={this.onTitleClick}
+        >
           <SW.Button
             title={'See attachments'}
             icon="Eye"
