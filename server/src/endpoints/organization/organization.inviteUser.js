@@ -48,7 +48,7 @@ export default endpointCreate(
     const lastSent = org.pending_users[target_email];
     // Only send an invitation email every 24 hours at max.
     if (lastSent && lastSent + 24 * 60 * 60 > Math.floor(Date.now() / 1000)) {
-      throw Error('too_soon');
+      throw Error("Can't resend. Too soon.").toClient();
     }
 
     const inviteToken = tokenCreate('sw-i', {
