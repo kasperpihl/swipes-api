@@ -19,6 +19,7 @@ export default (options, middleware) => {
   if (typeof options !== 'object') {
     options = {};
   }
+
   if (typeof middleware !== 'function') {
     throw Error('endpointCreate second parameter must be a middleware');
   }
