@@ -60,8 +60,14 @@ export default class Invitation extends PureComponent {
         title="Join"
         onClick={this.handleJoin}
         status={loader.get('loader')}
+        green
       />,
-      <Button key="decline" title="Decline" onClick={this.handleDecline} />
+      <Button
+        key="decline"
+        title="Decline"
+        onClick={this.handleDecline}
+        border
+      />
     ];
 
     if (organizations.get(invitedToOrg.get('organization_id'))) {
