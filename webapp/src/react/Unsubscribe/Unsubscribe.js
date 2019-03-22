@@ -21,7 +21,7 @@ export default function Unsubscribe() {
           'You have been unsubscribed from these types of emails'
         );
       } else {
-        loader.error('unsubscribe', '!Something went wrong');
+        loader.error('unsubscribe', res.error);
       }
     });
   }, []);

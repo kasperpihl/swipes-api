@@ -1,5 +1,6 @@
 import 'babel-polyfill';
 import React, { PureComponent } from 'react';
+import { SwissProvider } from 'swiss-react';
 import { render } from 'react-dom';
 
 import 'src/scss/reset.scss';
@@ -13,7 +14,12 @@ if (!regeneratorRuntime.default) {
 }
 
 const loadPage = (Page, props) => {
-  render(<Page {...props} />, document.getElementById('content'));
+  render(
+    <SwissProvider>
+      <Page {...props} />
+    </SwissProvider>,
+    document.getElementById('content')
+  );
 };
 
 export default loadPage;

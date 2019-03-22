@@ -33,7 +33,7 @@ export default class extends PureComponent {
       this.addAttachment('file', res.file.file_id, res.file.file_name);
       this.setState({ fileVal: '' });
     } else {
-      loader.error('attach', 'Something went wrong');
+      loader.error('attach', res.error);
     }
   }
   addAttachment(type, id, title) {

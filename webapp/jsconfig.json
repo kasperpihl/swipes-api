@@ -4,6 +4,7 @@
     "checkJs": false,
     "experimentalDecorators": true,
     "paths": {
+      "_shared/*": ["src/react/_components/*"],
       "src/*": ["src/*"]
     }
   },

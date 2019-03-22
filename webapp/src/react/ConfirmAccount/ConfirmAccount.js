@@ -20,7 +20,7 @@ export default function ConfirmAccount() {
       if (res.ok) {
         loader.success('confirm', 'Successfully confirmed the email');
       } else {
-        loader.error('confirm', 'Something went wrong.');
+        loader.error('confirm', res.error);
       }
     });
   }, []);

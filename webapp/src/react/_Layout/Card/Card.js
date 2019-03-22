@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from 'src/react/_components/Button/Button';
 import { connect } from 'react-redux';
 import useNav from 'src/react/_hooks/useNav';
 import Breadcrumbs from 'src/react/_components/Breadcrumbs/Breadcrumbs';

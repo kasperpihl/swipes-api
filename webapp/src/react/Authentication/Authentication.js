@@ -6,10 +6,13 @@ import { Map } from 'immutable';
 import withLoader from 'src/react/_hocs/withLoader';
 import request from 'core/utils/request';
 import Card from '_shared/Card/Card';
+import * as mainActions from 'src/redux/main/mainActions';
 import Button from '_shared/Button/Button';
 import CardHeader from '_shared/Card/Header/CardHeader';
 import InputText from '_shared/Input/Text/InputText';
 import SW from './Authentication.swiss';
+import FormModal from 'src/react/_components/FormModal/FormModal';
+import Modal from 'src/react/_Layout/modal/Modal';
 import Spacing from '_shared/Spacing/Spacing';
 
 @withRouter
@@ -19,7 +22,8 @@ import Spacing from '_shared/Spacing/Spacing';
     invitedToOrg: state.invitation.get('invitedToOrg')
   }),
   {
-    redirectTo: navigationActions.redirectTo
+    redirectTo: navigationActions.redirectTo,
+    openModal: mainActions.modal
   }
 )
 export default class Authentication extends PureComponent {
@@ -27,34 +31,39 @@ export default class Authentication extends PureComponent {
     formData: Map()
   };
   handleResetPassword = e => {
-    e.preventDefault();
-    const { inputMenu, alert } = this.props;
+    const { openModal } = this.props;
     const { formData } = this.state;
 
-    const options = { boundingRect: e.target.getBoundingClientRect() };
-    inputMenu(
-      {
-        ...options,
-        placeholder: 'Enter your email',
-        text: formData.get('email') || '',
-        buttonLabel: 'Reset'
-      },
-      resetEmail => {
-        if (resetEmail && resetEmail.length) {
+    openModal('auth', FormModal, {
+      title: 'Reset password',
+      inputs: [
+        {
+          type: 'text',
+          placeholder: 'Enter your email',
+          autoFocus: true,
+          initialValue: formData.get('email') || ''
+        }
+      ],
+      confirmLabel: 'Reset',
+      onConfirm: ([email]) => {
+        if (email && email.length) {
           request('user.sendResetEmail', {
-            email: resetEmail
+            email
           }).then(res => {
-            alert({
-              ...options,
-              title: 'Reset password',
-              message: 'We will send you an email to change your password.'
+            let title = 'Password reset';
+            let subtitle = 'We will send you an email to change your password.';
+            if (res.error) {
+              title = 'Password reset error';
+              subtitle = res.error;
+            }
+            openModal('auth', FormModal, {
+              title,
+              subtitle
             });
           });
         }
       }
-    );
-
-    return false;
+    });
   };
   handleAuthentication = () => {
     const { formData } = this.state;
@@ -182,6 +191,7 @@ export default class Authentication extends PureComponent {
     const { loader } = this.props;
     return (
       <Card>
+        <Modal side="auth" />
         <Spacing height={36} />
         <CardHeader title="Welcome to Swipes!" />
         <SW.Wrapper>

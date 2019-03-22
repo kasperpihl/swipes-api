@@ -34,7 +34,7 @@ export default injectStripe(function BillingPaymentSubmit({
         if (res.ok) {
           loader.clear('submit');
         } else {
-          loader.error('submit', 'Something went wrong', 3000);
+          loader.error('submit', res.error, 3000);
         }
       });
   };

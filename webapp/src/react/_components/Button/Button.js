@@ -22,9 +22,7 @@ export default function Button({
   status,
   onClick,
   selected,
-  small,
   green,
-  border,
   ...rest
 }) {
   const parsedStatus = buttonParseStatus(status);
@@ -35,10 +33,8 @@ export default function Button({
       hasIcon={!!(icon || parsedStatus !== 'Standard')}
       status={parsedStatus}
       selected={selected}
-      small={small}
-      withTitle={!!parsedTitle}
       green={green}
-      border={border}
+      withTitle={!!parsedTitle}
     >
       <SW.Wrapper
         {...rest}

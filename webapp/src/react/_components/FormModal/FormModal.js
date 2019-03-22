@@ -56,7 +56,7 @@ export default class FormModal extends PureComponent {
   };
 
   render() {
-    const { hideModal, title, subtitle, confirmLabel } = this.props;
+    const { hideModal, title, subtitle, confirmLabel, inputs } = this.props;
 
     return (
       <SW.Wrapper>
@@ -64,12 +64,18 @@ export default class FormModal extends PureComponent {
         {!!subtitle && <SW.Subtitle>{subtitle}</SW.Subtitle>}
         <SW.InputContainer>{this.renderInputs()}</SW.InputContainer>
         <SW.ButtonWrapper>
-          <SW.Button title="Cancel" onClick={hideModal} border />
-          <SW.Button
-            title={confirmLabel || 'Confirm'}
-            onClick={this.handleConfirm}
-            border
-          />
+          {inputs && inputs.length ? (
+            <>
+              <SW.Button title="Cancel" onClick={hideModal} border />
+              <SW.Button
+                title={confirmLabel || 'Confirm'}
+                onClick={this.handleConfirm}
+                border
+              />
+            </>
+          ) : (
+            <SW.Button title="Okay" onClick={hideModal} border />
+          )}
         </SW.ButtonWrapper>
       </SW.Wrapper>
     );

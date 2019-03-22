@@ -30,6 +30,9 @@ export default styleSheet('Button', {
     border: {
       border: '1px solid $sw3'
     },
+    right: {
+      marginLeft: 'auto'
+    },
     green: {
       border: 'none',
       backgroundColor: '$green1',
