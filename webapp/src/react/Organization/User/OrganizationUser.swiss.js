@@ -37,7 +37,7 @@ export default styleSheet('OrganizationUser', {
     _size: ['40px', 'auto'],
     _flex: ['row', 'flex-end', 'center'],
     _textStyle: 'body',
-    marginLeft: '12px',
+    marginLeft: '18px',
     flexShrink: '0',
     color: '$sw2'
   },
