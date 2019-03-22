@@ -21,7 +21,7 @@ export default endpointCreate(
       `
         UPDATE discussions
         SET
-          updated_at = now()
+          updated_at = now(),
           title = $1
         WHERE discussion_id = $2
         RETURNING discussion_id, updated_at, title
