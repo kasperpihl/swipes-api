@@ -9,6 +9,7 @@ import Spacing from '_shared/Spacing/Spacing';
 import Button from '_shared/Button/Button';
 
 import SW from './OrganizationCreate.swiss';
+import useLoader from 'src/react/_hooks/useLoader';
 
 const initialState = [
   {
@@ -39,11 +40,14 @@ export default function OrganizationCreate() {
   const [teamName, handleTeamNameChange] = useState('');
   const [members, dispatch] = useReducer(inputReducer, initialState);
 
+  const loader = useLoader();
+
   const handleInputChange = e => {
     handleTeamNameChange(e.target.value);
   };
 
   async function handleCreateOrganization() {
+    loader.set('create');
     const orgRes = await request('organization.add', {
       name: teamName
     });
@@ -57,11 +61,13 @@ export default function OrganizationCreate() {
             target_email: value
           })
         )
-    );
+    ).then(() => {
+      loader.clear('create');
+    });
   }
 
   const handleCancel = () => {
-    console.log('cancelled');
+    nav.pop();
   };
 
   return (
@@ -113,6 +119,7 @@ export default function OrganizationCreate() {
           <Button
             title="Start collaborating!"
             onClick={handleCreateOrganization}
+            status={loader.get('create')}
             green
           />
         </SW.ActionsWrapper>
