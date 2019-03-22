@@ -34,7 +34,7 @@ export default endpointCreate(
     const sha1Password = sha1(password);
 
     if (!user || sha1Password !== user.password) {
-      throw Error('Wrong email or password');
+      throw Error('Wrong email or password').toClient();
     }
     const token = tokenCreate('sw', {
       iss: user.user_id,

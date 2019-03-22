@@ -1,5 +1,4 @@
 import { styleSheet } from 'swiss-react';
-import Button from 'src/react/_components/Button/Button';
 
 export default styleSheet('Invitation', {
   Popup: {
@@ -54,13 +53,8 @@ export default styleSheet('Invitation', {
 
     displayActions: {
       display: 'none'
-    }
-  },
-
-  Button: {
-    _el: Button,
-
-    '&:not(:last-child)': {
+    },
+    '& > *:not(:last-child)': {
       marginRight: '20px'
     }
   }

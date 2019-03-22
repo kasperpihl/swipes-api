@@ -1,6 +1,5 @@
 import { fromJS } from 'immutable';
 import * as types from '../constants';
-import { REHYDRATE } from 'redux-persist';
 
 const initialState = fromJS({
   invitationToken: null,

@@ -22,7 +22,7 @@ export default endpointCreate(
     const parsedToken = tokenParse('sw-i', invitation_token);
 
     if (!parsedToken || !parsedToken.tokenContent) {
-      throw Error('invalid_token');
+      throw Error('Invalid token').toClient();
     }
 
     const { sub: organization_id, aud: email, exp } = parsedToken.tokenContent;
@@ -42,7 +42,9 @@ export default endpointCreate(
 
     const now = Math.floor(Date.now() / 1000);
     if (!org.pending_users[email] || exp < now || org.status === 'active') {
-      throw Error('invalid_token').info(org);
+      throw Error('Invalid token')
+        .info(org)
+        .toClient();
     }
 
     const [orgUserRes, orgInsertRes] = await transaction([
@@ -59,17 +61,6 @@ export default endpointCreate(
       ),
       {
         text: `
-          UPDATE discussions
-          SET followers = followers || jsonb_build_object('${user_id}', ${sqlToIsoString(
-          'now()'
-        )})
-          WHERE owned_by = $1
-          AND is_default = true
-        `,
-        values: [organization_id]
-      },
-      {
-        text: `
           UPDATE organizations
           SET 
             pending_users = jsonb_strip_nulls(
@@ -77,6 +68,17 @@ export default endpointCreate(
             )
           WHERE organization_id = $1
           RETURNING organization_id, pending_users
+        `,
+        values: [organization_id]
+      },
+      {
+        text: `
+          UPDATE discussions
+          SET followers = followers || jsonb_build_object('${user_id}', ${sqlToIsoString(
+          'now()'
+        )})
+          WHERE owned_by = $1
+          AND is_default = true
         `,
         values: [organization_id]
       }

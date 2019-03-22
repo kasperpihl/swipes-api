@@ -19,7 +19,7 @@ export default endpointCreate(
     const parsedToken = tokenParse('sw-i', invitation_token);
 
     if (!parsedToken || !parsedToken.tokenContent) {
-      throw Error('invalid_token');
+      throw Error('Invalid token').toClient();
     }
 
     const {
@@ -41,7 +41,9 @@ export default endpointCreate(
 
     const now = Math.floor(Date.now() / 1000);
     if (!org.pending_users[email] || exp < now) {
-      throw Error('invalid_token').info(org);
+      throw Error('Invalid token')
+        .info(org)
+        .toClient();
     }
     delete org.pending_users;
     org.invitation_token = invitation_token;

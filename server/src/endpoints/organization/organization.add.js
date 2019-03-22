@@ -34,18 +34,18 @@ export default endpointCreate(
         admin: true,
         status: 'active'
       }),
-      ...sqlOnboardingDiscussionQueries(organizationId, user_id),
       {
         text: `
-          SELECT ou.status, ou.organization_id, ou.admin, u.first_name, u.last_name, u.email, u.user_id, u.username, u.photo
-          FROM users u
-          LEFT JOIN organization_users ou
-          ON u.user_id = ou.user_id 
-          AND ou.organization_id = $1
-          WHERE u.user_id = $2
+        SELECT ou.status, ou.organization_id, ou.admin, u.first_name, u.last_name, u.email, u.user_id, u.username, u.photo
+        FROM users u
+        LEFT JOIN organization_users ou
+        ON u.user_id = ou.user_id 
+        AND ou.organization_id = $1
+        WHERE u.user_id = $2
         `,
         values: [organizationId, user_id]
-      }
+      },
+      ...sqlOnboardingDiscussionQueries(organizationId, user_id)
     ]);
 
     await redisPublish(user_id, {
