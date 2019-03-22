@@ -40,7 +40,7 @@ function ProjectTask({ taskId, selected, onInputClick }) {
         onClick={onInputClick}
         isCompleted={completion}
       />
-      <ProjectTaskAssignees taskId={taskId} isCompleted={completion} />
+      <ProjectTaskAssignees taskId={taskId} />
     </SW.Wrapper>
   );
 }

@@ -12,10 +12,6 @@ export default styleSheet('ProjectTaskAssignees', {
         opacity: '1',
         visbility: 'visible'
       }
-    },
-
-    isCompleted: {
-      opacity: '0.5'
     }
   }
 });

@@ -10,7 +10,7 @@ import { ProjectContext } from 'src/react/contexts';
 import SW from './ProjectTaskAssignees.swiss';
 
 export default memo(ProjectTaskAssignees);
-function ProjectTaskAssignees({ taskId, isCompleted }) {
+function ProjectTaskAssignees({ taskId }) {
   const stateManager = useContext(ProjectContext);
 
   const [assignees, ownedBy, isSelected] = useProjectSlice(
@@ -47,7 +47,6 @@ function ProjectTaskAssignees({ taskId, isCompleted }) {
     <SW.Wrapper
       hide={!assigneesCount && !isSelected}
       onClick={handleAssignClick}
-      isCompleted={isCompleted}
     >
       <Assignees
         userIds={assigneesCount}
