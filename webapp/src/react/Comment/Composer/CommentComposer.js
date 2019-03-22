@@ -163,9 +163,9 @@ export default class CommentComposer extends PureComponent {
               onChange={e => this.setState({ commentVal: e.target.value })}
             />
             <SW.ButtonWrapper>
+              <AttachButton onAttach={this.handleAttach} ownedBy={ownedBy} />
               <Button icon="Gif" onClick={this.openGiphySelector} />
               <Button icon="Emoji" onClick={this.openEmojiPicker} />
-              <AttachButton onAttach={this.handleAttach} ownedBy={ownedBy} />
               <SW.SubmitButton
                 onClick={() => this.handleAddComment(commentVal)}
                 icon="Enter"

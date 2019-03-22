@@ -47,7 +47,7 @@ export default class OrganizationHeader extends PureComponent {
         {
           placeholder: 'Enter name of organization',
           type: 'text',
-          label: 'test',
+          label: '',
           autoFocus: true,
           initialValue: organization.get('name')
         }

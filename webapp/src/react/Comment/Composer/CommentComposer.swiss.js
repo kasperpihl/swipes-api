@@ -77,7 +77,6 @@ export default styleSheet('CommentComposer', {
   },
   TypingRow: {
     _flex: ['row', 'left', 'top'],
-    paddingRight: '3px',
     width: '100%',
     '& .gl-button': {
       marginTop: '12px'

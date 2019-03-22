@@ -38,15 +38,19 @@ function ProjectTaskAssignees({ taskId, isCompleted }) {
     },
     [assignees]
   );
+  let assigneesCount = [];
+  if (assignees) {
+    assigneesCount = assignees;
+  }
 
   return (
     <SW.Wrapper
-      hide={!assignees.size && !isSelected}
+      hide={!assigneesCount && !isSelected}
       onClick={handleAssignClick}
       isCompleted={isCompleted}
     >
       <Assignees
-        userIds={assignees}
+        userIds={assigneesCount}
         organizationId={ownedBy}
         size={18}
         maxImages={4}

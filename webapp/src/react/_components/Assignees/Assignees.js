@@ -8,7 +8,7 @@ export default function Assignees(props) {
   maxImages = maxImages || 3;
   size = size || 24;
 
-  const userCount = userIds.size || userIds.length || 0;
+  const userCount = userIds.size || 0;
   const imageCount = Math.min(userCount, maxImages);
   const extraNumber = Math.max(userCount - maxImages, 0);
 
