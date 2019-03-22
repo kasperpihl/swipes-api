@@ -34,7 +34,7 @@ if (fs.existsSync(path.join(__dirname, './public'))) {
     if (req.path.startsWith('/v1')) {
       return next();
     }
-    res.sendFile('public/index.html');
+    res.sendFile('./public/index.html');
   });
 }
 
