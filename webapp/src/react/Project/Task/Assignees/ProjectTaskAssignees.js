@@ -38,14 +38,14 @@ function ProjectTaskAssignees({ taskId }) {
     },
     [assignees]
   );
-  let assigneesCount = [];
+  let assigneesCount = fromJS([]);
   if (assignees) {
     assigneesCount = assignees;
   }
 
   return (
     <SW.Wrapper
-      hide={!assigneesCount && !isSelected}
+      hide={!assigneesCount.size && !isSelected}
       onClick={handleAssignClick}
     >
       <Assignees

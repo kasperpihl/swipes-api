@@ -10,26 +10,26 @@ export default styleSheet('Modal', {
     visibility: 'hidden',
     zIndex: 9,
     show: {
-      background: 'rgba(255, 255, 255, .8)',
+      background: 'rgba($dark, .1)',
       opacity: 1,
       transition: 'visibility 0s 0s, opacity .15s',
-      visibility: 'visible',
+      visibility: 'visible'
     },
-    _flex: ['column', 'center', 'center'],
+    _flex: ['column', 'center', 'center'],
     'position=bottom': {
-      _flex: ['column', 'center', 'bottom'],
+      _flex: ['column', 'center', 'bottom']
     },
     'position=top': {
-      _flex: ['column', 'center', 'top'],
-    },
+      _flex: ['column', 'center', 'top']
+    }
   },
   Content: {
     _size: ['100%', 'auto'],
     'position=bottom': {
-      borderTop: '1px solid $sw3',
+      borderTop: '1px solid $sw3'
     },
     'position=top': {
-      borderBottom: '1px solid $sw3',
-    },
-  },
+      borderBottom: '1px solid $sw3'
+    }
+  }
 });
