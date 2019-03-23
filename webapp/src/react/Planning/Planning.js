@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { connect } from 'react-redux';
-
+import moment from 'moment';
 import SW from './Planning.swiss';
-import useWeekSelect from './useWeekSelect';
+
 import useOrgTabs from './useOrgTabs';
 import CardHeader from '_shared/Card/Header/CardHeader';
 import CardContent from '_shared/Card/Content/CardContent';
@@ -16,13 +16,14 @@ export default connect(state => ({
 }))(Planning);
 
 function Planning({ organizations }) {
-  const [weeks, weekIndex, setWeekIndex] = useWeekSelect();
+  const defaultYearWeek = useMemo(() => {
+    const now = moment();
+    return `${now.year()}-${now.week()}`;
+  }, []);
+  const [yearWeek, setYearWeek] = useState(defaultYearWeek);
 
   const [tabs, tabIndex, setTabIndex] = useOrgTabs(organizations);
 
-  const [title, selectedWeek] = weeks[weekIndex];
-
-  const yearWeek = `${selectedWeek.year()}-${selectedWeek.week()}`;
   const ownedBy = tabs[tabIndex].id;
 
   return (
@@ -33,11 +34,7 @@ function Planning({ organizations }) {
           noframe
         >
           <Spacing height={12} />
-          <PlanningSide
-            weeks={weeks}
-            weekIndex={weekIndex}
-            setWeekIndex={setWeekIndex}
-          />
+          <PlanningSide yearWeek={yearWeek} setYearWeek={setYearWeek} />
         </CardContent>
       </SW.LeftSide>
       <SW.RightSide>
@@ -56,7 +53,6 @@ function Planning({ organizations }) {
         >
           <PlanningOverview
             key={`${ownedBy}-${yearWeek}`}
-            selectedWeek={selectedWeek}
             ownedBy={ownedBy}
             yearWeek={yearWeek}
           />
