@@ -1,16 +1,16 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import DiscussionListItems from 'src/react/Discussion/List/Items/DiscussionListItems';
 import PaginationScrollToMore from 'src/react/_components/pagination/PaginationScrollToMore';
 
 import usePaginationRequest from 'core/react/_hooks/usePaginationRequest';
 import useUpdate from 'core/react/_hooks/useUpdate';
 import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
-import { MyIdContext } from 'src/react/contexts';
+import useMyId from 'core/react/_hooks/useMyId';
 
 import SW from './DiscussionList.swiss';
 
 export default function DiscussionList({ type, onSelectItemId }) {
-  const myId = useContext(MyIdContext);
+  const myId = useMyId();
   const req = usePaginationRequest(
     'discussion.list',
     {

@@ -15,8 +15,9 @@ import configureStore from 'src/redux/configureStore';
 import Analytics from 'src/classes/analytics';
 import IpcListener from 'src/classes/ipc-listener';
 import urlGetParameter from 'src/utils/url/urlGetParameter';
-import { setStore } from 'core/utils/store/storeGet';
 import Socket from 'core/classes/Socket';
+import CoreProvider from 'core/react/_hocs/CoreProvider';
+
 import { StripeProvider } from 'react-stripe-elements';
 
 // Init core!
@@ -31,7 +32,6 @@ const { store, persistor } = configureStore({
   })
 });
 
-setStore(store); // Make store accessible from core
 window.socket = new Socket(store);
 // END Init core
 
@@ -66,7 +66,9 @@ render(
         <BrowserRouter>
           <OptimistProvider>
             <StripeProvider apiKey={token}>
-              <Root />
+              <CoreProvider>
+                <Root />
+              </CoreProvider>
             </StripeProvider>
           </OptimistProvider>
         </BrowserRouter>

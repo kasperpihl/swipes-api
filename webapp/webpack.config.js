@@ -24,8 +24,8 @@ module.exports = {
     alias: {
       // 'swiss-react': path.resolve(__dirname, '../../../swiss-react/dist/es'),
       core: '@swipesapp/core/dist',
-      _shared: path.resolve(__dirname, 'src/react/_components'),
       // core: path.resolve(__dirname, '../../packages/core/dist'),
+      _shared: path.resolve(__dirname, 'src/react/_components'),
       src: path.resolve(__dirname, 'src'),
       styles: path.resolve(__dirname, 'src/scss')
     },

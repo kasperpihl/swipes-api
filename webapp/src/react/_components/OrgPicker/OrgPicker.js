@@ -1,16 +1,16 @@
-import React, { useContext, useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
 import cachedCallback from 'src/utils/cachedCallback';
 import InputRadio from '_shared/Input/Radio/InputRadio';
 import SW from './OrgPicker.swiss';
-import { MyIdContext } from 'src/react/contexts';
+import useMyId from 'core/react/_hooks/useMyId';
 
 export default connect(state => ({
   organizations: state.organizations
 }))(OrgPicker);
 
 function OrgPicker({ organizations, value, onChange, disablePersonal }) {
-  const myId = useContext(MyIdContext);
+  const myId = useMyId();
   const foundCheckedRef = useRef(false);
   const handleClickCached = cachedCallback((v, e) => {
     e.stopPropagation();

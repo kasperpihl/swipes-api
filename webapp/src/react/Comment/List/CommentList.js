@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useMemo } from 'react';
+import React, { Fragment, useMemo } from 'react';
 import moment from 'moment';
 import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
 import usePaginationRequest from 'core/react/_hooks/usePaginationRequest';
@@ -7,7 +7,8 @@ import CommentItem from 'src/react/Comment/Item/CommentItem';
 import SectionHeader from 'src/react/_components/SectionHeader/SectionHeader';
 import useUpdate from 'core/react/_hooks/useUpdate';
 import useScrollComments from 'src/react/Comment/useScrollComments';
-import { MyIdContext } from 'src/react/contexts';
+import useMyId from 'core/react/_hooks/useMyId';
+
 import SW from './CommentList.swiss';
 
 export default function CommentList({
@@ -15,7 +16,7 @@ export default function CommentList({
   discussion,
   scrollRef
 }) {
-  const myId = useContext(MyIdContext);
+  const myId = useMyId();
   const req = usePaginationRequest(
     'comment.list',
     {

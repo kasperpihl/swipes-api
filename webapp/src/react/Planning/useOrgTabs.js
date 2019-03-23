@@ -1,8 +1,8 @@
-import { useState, useContext } from 'react';
-import { MyIdContext } from 'src/react/contexts';
+import { useState } from 'react';
+import useMyId from 'core/react/_hooks/useMyId';
 
 export default function useOrgTabs(organizations) {
-  const myId = useContext(MyIdContext);
+  const myId = useMyId();
 
   const [tabIndex, setTabIndex] = useState(0);
 

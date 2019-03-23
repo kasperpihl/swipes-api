@@ -20,14 +20,12 @@ import ContextMenu from 'src/react/_Layout/ContextMenu/ContextMenu';
 import Gradient from 'src/react/_Layout/gradient/Gradient';
 import * as invitationActions from 'src/redux/invitation/invitationActions';
 // import HOCDragAndDrop from 'src/react/_components/drag-and-drop/HOCDragAndDrop';
-import { MyIdContext } from 'src/react/contexts';
 import 'src/scss/reset.scss';
 import 'src/scss/app.scss';
 
 @withRouter
 @connect(
   state => ({
-    myId: state.me.get('user_id'),
     auth: state.auth,
     isHydrated: state.main.get('isHydrated'),
     isMaximized: state.main.get('isMaximized'),
@@ -88,26 +86,24 @@ export default class Root extends PureComponent {
     );
   }
   render() {
-    const { isMaximized, isFullscreen, platform, myId } = this.props;
+    const { isMaximized, isFullscreen, platform } = this.props;
     let className = `platform-${platform}`;
     if (isMaximized) className += ' window-is-maximized';
     if (isFullscreen) className += ' window-is-fullscreen';
 
     return (
-      <MyIdContext.Provider value={myId}>
-        <div id="app" className={className}>
-          <div id="draggable" />
-          <Redirect />
-          <Gradient />
-          <ContextMenu />
-          {/* <HOCAutoCompleting /> */}
-          <Tooltip />
-          {/* <HOCDragAndDrop> */}
-          <Topbar />
-          {this.renderRoutes()}
-          {/* </HOCDragAndDrop> */}
-        </div>
-      </MyIdContext.Provider>
+      <div id="app" className={className}>
+        <div id="draggable" />
+        <Redirect />
+        <Gradient />
+        <ContextMenu />
+        {/* <HOCAutoCompleting /> */}
+        <Tooltip />
+        {/* <HOCDragAndDrop> */}
+        <Topbar />
+        {this.renderRoutes()}
+        {/* </HOCDragAndDrop> */}
+      </div>
     );
   }
 }
