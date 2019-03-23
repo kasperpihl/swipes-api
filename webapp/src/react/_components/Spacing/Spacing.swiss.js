@@ -11,6 +11,7 @@ export default styleSheet('Spacing', {
         return get('height');
       },
       '!width': {
+        flex: 'none',
         width: '100%'
       }
     },
@@ -22,6 +23,7 @@ export default styleSheet('Spacing', {
         return get('width');
       },
       '!height': {
+        flex: 'none',
         height: '100%'
       }
     }
