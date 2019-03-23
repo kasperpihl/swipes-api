@@ -4,7 +4,7 @@ import { Map } from 'immutable';
 import traverseElement from 'src/utils/traverseElement';
 import { getVisibleSelectionRect } from 'draft-js';
 import ControlPanel from './ControlPanel';
-import prefixAll from 'inline-style-prefixer/static';
+import { prefix } from 'inline-style-prefixer';
 import SW from './MediumEditor.swiss';
 
 const SPACING = 10;
@@ -239,7 +239,7 @@ class MediumEditor extends PureComponent {
       <ControlPanel
         show={showPanel}
         editorState={editorState}
-        style={prefixAll(style)}
+        style={prefix(style)}
         delegate={delegate}
         setEditorState={delegate.setEditorState}
         ref="controlPanel"
