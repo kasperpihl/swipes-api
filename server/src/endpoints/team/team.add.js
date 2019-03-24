@@ -20,7 +20,7 @@ export default endpointCreate(
     const { user_id, input } = res.locals;
     const { name } = input;
 
-    const teamId = idGenerate('T-');
+    const teamId = idGenerate('T', 8, true);
     // creating a new user from scratch
     const [teamRes, userInsertQuery, userRes] = await transaction([
       sqlInsertQuery('teams', {

@@ -28,7 +28,7 @@ export default endpointCreate(
       owned_by,
       privacy = 'public'
     } = res.locals.input;
-    const discussionId = idGenerate('C-', 15);
+    const discussionId = idGenerate('C', 8, true);
 
     const uniqueFollowers = [...new Set(followers).add(user_id)];
 

@@ -18,7 +18,7 @@ export default async function convertMiscDiscussion({
 
   console.log('CONVERTING MISC DISCUSSION');
 
-  const discussionId = idGenerate('C-', 15);
+  const discussionId = idGenerate('C', 8, true);
   const discussion = {
     discussion_id: discussionId,
     title: 'Misc',

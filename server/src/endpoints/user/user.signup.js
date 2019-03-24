@@ -38,7 +38,7 @@ export default endpointCreate(
     if (user) {
       throw Error().toClient('User already exists');
     } else {
-      userId = idGenerate('U');
+      userId = idGenerate('U', 8, true);
     }
 
     // Creating the actual token

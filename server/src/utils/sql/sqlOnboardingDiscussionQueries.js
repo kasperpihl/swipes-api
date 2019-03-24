@@ -5,7 +5,7 @@ import sqlPermissionInsertQuery from 'src/utils/sql/sqlPermissionInsertQuery';
 
 export default function sqlOnboardingDiscussionQueries(teamId, userId) {
   const discussions = ['General', 'Random'].map((title, i) => ({
-    discussion_id: idGenerate('C-', 15),
+    discussion_id: idGenerate('C', 8, true),
     is_default: true,
     owned_by: teamId,
     created_by: teamId,

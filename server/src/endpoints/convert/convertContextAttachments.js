@@ -22,7 +22,7 @@ export default async function convertContextAttachments({
   for (let i = 0; i < milestones.length; i++) {
     const milestone = milestones[i];
     if (milestone.archived) continue;
-    const discussionId = idGenerate('C-', 8);
+    const discussionId = idGenerate('C', 8, true);
     const discussion = {
       discussion_id: discussionId,
       title: milestone.title.slice(0, 254),

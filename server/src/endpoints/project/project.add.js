@@ -27,7 +27,7 @@ export default endpointCreate(
       privacy = 'public'
     } = res.locals.input;
 
-    const projectId = idGenerate('PROJ-', 15);
+    const projectId = idGenerate('P', 8, true);
 
     const userIds = [...new Set(followers).add(user_id)];
 

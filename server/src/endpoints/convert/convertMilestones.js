@@ -18,7 +18,7 @@ export default async function convertMilestones({
   for (let i = 0; i < milestones.length; i++) {
     const milestone = milestones[i];
     if (milestone.archived) continue;
-    const projectId = idGenerate('PR-', 15);
+    const projectId = idGenerate('P', 8, true);
     const totalOrder = milestone.goal_order.later
       .concat(milestone.goal_order.now)
       .concat(milestone.goal_order.done);

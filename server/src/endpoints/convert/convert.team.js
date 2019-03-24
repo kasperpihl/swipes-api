@@ -21,7 +21,7 @@ export default endpointCreate(
   },
   async (req, res, next) => {
     // Get inputs
-    const { team_id } = res.locals.input;
+    let { team_id } = res.locals.input;
 
     ////////////////////////
     // FETCHING FROM RETHINKDB
@@ -47,6 +47,7 @@ export default endpointCreate(
     ////////////////////////
     const c = await getClient();
 
+    team_id = idGenerate('T', 8, true);
     try {
       await convertClean({ c, team_id });
       await c.query('BEGIN');

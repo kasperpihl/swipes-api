@@ -42,7 +42,7 @@ export default endpointCreate(
 
     const addQuery = [];
     if (!project_id) {
-      project_id = idGenerate('P');
+      project_id = idGenerate('P', 8, true);
       addQuery.push({
         text: 'INSERT INTO projects (id, created_by) VALUES ($1, $2)',
         values: [project_id, user_id]

@@ -25,8 +25,8 @@ export default class Profile extends PureComponent {
     return (
       <CardContent header={this.renderHeader()}>
         <SW.Wrapper>
-          <SW.Title>teams</SW.Title>
-          <SW.Button title="Create Team" onClick={this.openCreateTeam} />
+          <SW.Title>Teams you are part of</SW.Title>
+          <SW.Button title="Create Team" onClick={this.openCreateTeam} border />
           {teams
             .map(team => <ProfileTeam key={team.get('team_id')} team={team} />)
             .toList()}

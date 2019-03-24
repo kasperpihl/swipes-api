@@ -22,7 +22,7 @@ export default async function convertDiscussions({
     const followers = followersByDiscussionId[discussion.id];
     if (!comments || !comments.length || !followers || !followers.length)
       return;
-    const discussionId = idGenerate('C-', 15);
+    const discussionId = idGenerate('C', 8, true);
     await c.query(
       sqlInsertQuery(
         'discussions',
@@ -48,9 +48,7 @@ export default async function convertDiscussions({
         }
       )
     );
-    await c.query(
-      sqlPermissionInsertQuery(discussionId, 'public', team_id)
-    );
+    await c.query(sqlPermissionInsertQuery(discussionId, 'public', team_id));
     await c.query(
       sqlInsertQuery(
         'discussion_comments',

@@ -14,7 +14,7 @@ export default async function convertGoalsWithoutMilestone({
   // PROJECTS FROM MILESTONES
   ////////////////////////
   console.log('CONVERTING GOALS WITHOUT MILESTONE ' + goalsNoMilestone.length);
-  const projectId = idGenerate('PR-', 15);
+  const projectId = idGenerate('P', 8, true);
 
   const ordering = {};
   const indention = {};

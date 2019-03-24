@@ -3,7 +3,7 @@ import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
 import sqlPermissionInsertQuery from 'src/utils/sql/sqlPermissionInsertQuery';
 
 export default function sqlOnboardingProjectQueries(userId, firstName) {
-  const projectId = idGenerate('PR-', 15);
+  const projectId = idGenerate('P', 8, true);
 
   const tasks = [
     '',
