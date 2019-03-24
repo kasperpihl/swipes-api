@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import timeGetDayOrTime from 'core/utils/time/timeGetDayOrTime';
 import SW from './DiscussionListItem.swiss';
 import orgGetBelonging from 'core/utils/org/orgGetBelonging';
-import userGetFirstName from 'core/utils/user/userGetFirstName';
 
 @connect(state => ({
   myId: state.me.get('user_id')
@@ -15,37 +14,22 @@ export default class DiscussionListItem extends PureComponent {
     onSelectItemId(item.discussion_id);
   };
   render() {
-    const {
-      item,
-      myId,
-      selected,
-      siblingToSelectedItem,
-      compact,
-      first
-    } = this.props;
-
-    const firstName = userGetFirstName(item.last_comment_by, item.owned_by);
-    const subtitle = `${firstName}: ${item.last_comment}`;
+    const { item, myId, selected, showTeam } = this.props;
 
     const ts = item.followers[myId];
     const unread = ts === 'n' || ts < item.last_comment_at;
 
     return (
-      <SW.ProvideContext
-        selected={selected}
-        unread={unread}
-        siblingToSelectedItem={siblingToSelectedItem}
-        first={first}
-        compact={compact}
-      >
+      <SW.ProvideContext selected={selected} unread={unread}>
         <SW.Wrapper onClick={this.onClick}>
           <SW.UnreadCircle />
           <SW.MiddleWrapper>
             <SW.Topic>{item.title}</SW.Topic>
-            <SW.OrganizationName>
-              {orgGetBelonging(item.owned_by)}
-            </SW.OrganizationName>
-            <SW.Subtitle>{subtitle}</SW.Subtitle>
+            {showTeam && (
+              <SW.OrganizationName>
+                {orgGetBelonging(item.owned_by)}
+              </SW.OrganizationName>
+            )}
           </SW.MiddleWrapper>
           <SW.Time>{timeGetDayOrTime(item.last_comment_at)}</SW.Time>
         </SW.Wrapper>

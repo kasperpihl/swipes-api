@@ -4,14 +4,12 @@ import CardHeader from 'src/react/_components/Card/Header/CardHeader';
 import DiscussionList from 'src/react/Discussion/List/DiscussionList';
 import DiscussionOverview from 'src/react/Discussion/Overview/DiscussionOverview';
 import TabBar from 'src/react/_components/TabBar/TabBar';
-import { withOptimist } from 'react-optimist';
 import CardContent from 'src/react/_components/Card/Content/CardContent';
 import ModalCreate from 'src/react/Modal/Create/ModalCreate';
 import withNav from 'src/react/_hocs/Nav/withNav';
 import Button from 'src/react/_components/Button/Button';
 
 @withNav
-@withOptimist
 export default class Discuss extends PureComponent {
   static sizes = [800, 910];
   constructor(props) {
@@ -35,10 +33,8 @@ export default class Discuss extends PureComponent {
     });
   };
   selectDiscussionId(selectedId) {
-    const { nav, optimist } = this.props;
-    this.setState({ selectedId }, () => {
-      optimist.set('discussSelectedId', selectedId);
-    });
+    const { nav } = this.props;
+    this.setState({ selectedId });
     nav.setUniqueId(selectedId);
   }
   onSelectItemId = id => {
@@ -73,6 +69,7 @@ export default class Discuss extends PureComponent {
             <DiscussionList
               key={type}
               type={type}
+              selectedId={selectedId}
               onSelectItemId={this.onSelectItemId}
             />
           </CardContent>

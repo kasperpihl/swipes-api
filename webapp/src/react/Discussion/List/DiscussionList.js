@@ -9,7 +9,7 @@ import useMyId from 'core/react/_hooks/useMyId';
 
 import SW from './DiscussionList.swiss';
 
-export default function DiscussionList({ type, onSelectItemId }) {
+export default function DiscussionList({ type, onSelectItemId, selectedId }) {
   const myId = useMyId();
   const req = usePaginationRequest(
     'discussion.list',
@@ -32,7 +32,7 @@ export default function DiscussionList({ type, onSelectItemId }) {
   });
 
   useUpdate('discussion', update => {
-    if (!update.last_comment) {
+    if (!update.last_comment_at) {
       return req.mergeItem(update);
     }
     if (
@@ -53,7 +53,11 @@ export default function DiscussionList({ type, onSelectItemId }) {
 
   return (
     <SW.Wrapper>
-      <DiscussionListItems req={req} onSelectItemId={onSelectItemId} />
+      <DiscussionListItems
+        req={req}
+        onSelectItemId={onSelectItemId}
+        selectedId={selectedId}
+      />
       <PaginationScrollToMore
         req={req}
         errorLabel="Couldn't get discussions."

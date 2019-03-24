@@ -1,11 +1,18 @@
 import React, { useRef } from 'react';
-import { withOptimist } from 'react-optimist';
+import { connect } from 'react-redux';
 import DiscussionListItem from 'src/react/Discussion/List/Item/DiscussionListItem';
 import EmptyState from 'src/react/_components/EmptyState/EmptyState';
 
-export default withOptimist(DiscussionListItems);
+export default connect(state => ({
+  organizations: state.organizations
+}))(DiscussionListItems);
 
-function DiscussionListItems({ req, optimist, onSelectItemId }) {
+function DiscussionListItems({
+  req,
+  onSelectItemId,
+  selectedId,
+  organizations
+}) {
   const { items } = req;
   const selectedRef = useRef();
 
@@ -13,22 +20,13 @@ function DiscussionListItems({ req, optimist, onSelectItemId }) {
     return <EmptyState title="No discussions yet" />;
   }
 
-  // onSelectItemId(newSelectedId, results);
-
-  return items.map(item => {
-    const siblingToSelectedItem = selectedRef.current || false;
-    selectedRef.current =
-      optimist.get('discussSelectedId') === item.discussion_id;
-
-    return (
-      <DiscussionListItem
-        onSelectItemId={onSelectItemId}
-        selected={selectedRef.current}
-        first={items[0].discussion_id === item.discussion_id}
-        siblingToSelectedItem={siblingToSelectedItem}
-        item={item}
-        key={item.discussion_id}
-      />
-    );
-  });
+  return items.map(item => (
+    <DiscussionListItem
+      showTeam={organizations.size > 1}
+      onSelectItemId={onSelectItemId}
+      selected={item.discussion_id === selectedId}
+      item={item}
+      key={item.discussion_id}
+    />
+  ));
 }
