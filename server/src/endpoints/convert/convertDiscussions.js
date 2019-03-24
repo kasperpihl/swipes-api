@@ -4,7 +4,7 @@ import idGenerate from 'src/utils/idGenerate';
 import sqlPermissionInsertQuery from 'src/utils/sql/sqlPermissionInsertQuery';
 
 export default async function convertDiscussions({
-  organization_id,
+  team_id,
   c,
   discussions,
   followersByDiscussionId,
@@ -28,7 +28,7 @@ export default async function convertDiscussions({
         'discussions',
         {
           discussion_id: discussionId,
-          owned_by: organization_id,
+          owned_by: team_id,
           title: discussion.topic,
           last_comment: discussion.last_comment,
           last_comment_at: discussion.last_comment_at,
@@ -49,7 +49,7 @@ export default async function convertDiscussions({
       )
     );
     await c.query(
-      sqlPermissionInsertQuery(discussionId, 'public', organization_id)
+      sqlPermissionInsertQuery(discussionId, 'public', team_id)
     );
     await c.query(
       sqlInsertQuery(
@@ -70,7 +70,7 @@ export default async function convertDiscussions({
                   if (note.title) title = note.title;
                   notesToInsert.push({
                     note_id: id,
-                    owned_by: organization_id,
+                    owned_by: team_id,
                     rev: note.rev,
                     title,
                     created_at: note.created_at,
@@ -87,7 +87,7 @@ export default async function convertDiscussions({
                   }
                   filesToInsert.push({
                     file_id: id,
-                    owned_by: organization_id,
+                    owned_by: team_id,
                     file_name: file.file_name,
                     s3_url: file.s3_url,
                     content_type: file.content_type,

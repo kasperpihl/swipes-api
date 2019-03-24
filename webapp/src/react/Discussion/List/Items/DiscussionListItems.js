@@ -4,14 +4,14 @@ import DiscussionListItem from 'src/react/Discussion/List/Item/DiscussionListIte
 import EmptyState from 'src/react/_components/EmptyState/EmptyState';
 
 export default connect(state => ({
-  organizations: state.organizations
+  teams: state.teams
 }))(DiscussionListItems);
 
 function DiscussionListItems({
   req,
   onSelectItemId,
   selectedId,
-  organizations
+  teams
 }) {
   const { items } = req;
   const selectedRef = useRef();
@@ -22,7 +22,7 @@ function DiscussionListItems({
 
   return items.map(item => (
     <DiscussionListItem
-      showTeam={organizations.size > 1}
+      showTeam={teams.size > 1}
       onSelectItemId={onSelectItemId}
       selected={item.discussion_id === selectedId}
       item={item}

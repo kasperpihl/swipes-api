@@ -1,7 +1,7 @@
 import config from 'config';
 import mandrillSendTemplate from 'src/utils/mandrill/mandrillSendTemplate';
 
-export default (email, invitationToken, organizatioName, inviterFirstName) => {
+export default (email, invitationToken, teamName, inviterFirstName) => {
   const host = config.get('emailHost');
   const template_name = 'welcome-invitation';
   const template_content = [
@@ -24,7 +24,7 @@ export default (email, invitationToken, organizatioName, inviterFirstName) => {
         },
         {
           name: 'COMPANY_NAME',
-          content: organizatioName
+          content: teamName
         },
         {
           name: 'INVITATION_LINK',
@@ -39,7 +39,7 @@ export default (email, invitationToken, organizatioName, inviterFirstName) => {
       type: 'to'
     }
   ];
-  const subject = `${inviterFirstName} invited you to join ${organizatioName} on Swipes Workspace`;
+  const subject = `${inviterFirstName} invited you to join ${teamName} on Swipes Workspace`;
   const message = {
     to,
     subject,

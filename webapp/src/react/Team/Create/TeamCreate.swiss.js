@@ -1,6 +1,6 @@
 import { styleSheet } from 'swiss-react';
 
-export default styleSheet('OrganizationCreate', {
+export default styleSheet('TeamCreate', {
   Wrapper: {
     _size: ['calc(100% - 18px * 2)', 'auto'],
     _flex: ['column', 'left', 'top'],

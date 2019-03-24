@@ -1,12 +1,12 @@
 import { string } from 'valjs';
 import stripeClient from 'src/utils/stripe/stripeClient';
-import userOrganizationCheck from 'src/utils/userOrganizationCheck';
+import userTeamCheck from 'src/utils/userTeamCheck';
 import { query } from 'src/utils/db/db';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 
 const expectedInput = {
   stripe_token: string.require(),
-  organization_id: string.require()
+  team_id: string.require()
 };
 
 export default endpointCreate(
@@ -16,29 +16,29 @@ export default endpointCreate(
   async (req, res) => {
     // Get inputs
     const { user_id } = res.locals;
-    const { organization_id, stripe_token } = res.locals.input;
+    const { team_id, stripe_token } = res.locals.input;
 
     // Ensure I have the rights to update billing.
-    await userOrganizationCheck(user_id, organization_id, {
+    await userTeamCheck(user_id, team_id, {
       admin: true,
       status: 'active'
     });
 
-    const orgRes = await query(
+    const teamRes = await query(
       `
         SELECT stripe_customer_id
-        FROM organizations
-        WHERE organization_id = $1
+        FROM teams
+        WHERE team_id = $1
       `,
-      [organization_id]
+      [team_id]
     );
-    const org = orgRes.rows[0];
+    const team = teamRes.rows[0];
 
-    if (!org.stripe_customer_id) {
+    if (!team.stripe_customer_id) {
       throw Error('not_stripe_customer');
     }
 
-    await stripeClient.customers.update(org.stripe_customer_id, {
+    await stripeClient.customers.update(team.stripe_customer_id, {
       source: stripe_token
     });
   }

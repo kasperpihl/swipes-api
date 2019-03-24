@@ -47,17 +47,17 @@ export default endpointCreate(
 
     const userRes = await query(text, values);
 
-    const orgRes = await query(
+    const teamRes = await query(
       `
-        SELECT organization_id
-        FROM organization_users
+        SELECT team_id
+        FROM team_users
         WHERE user_id = $1
         AND status = 'active'
       `,
       [user_id]
     );
 
-    const channels = [user_id, ...orgRes.rows.map(r => r.organization_id)];
+    const channels = [user_id, ...teamRes.rows.map(r => r.team_id)];
 
     res.locals.update = update.prepare(channels, [
       { type: 'me', data: userRes.rows[0] }

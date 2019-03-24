@@ -2,11 +2,11 @@ import { string } from 'valjs';
 import { query } from 'src/utils/db/db';
 import update from 'src/utils/update';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
-import userOrganizationCheck from 'src/utils/userOrganizationCheck';
+import userTeamCheck from 'src/utils/userTeamCheck';
 import sqlJsonbBuild from 'src/utils/sql/sqlJsonbBuild';
 
 const expectedInput = {
-  organization_id: string.require(),
+  team_id: string.require(),
   target_email: string.format('email').require()
 };
 
@@ -17,28 +17,28 @@ export default endpointCreate(
   async (req, res, next) => {
     // Get inputs
     const { user_id, input } = res.locals;
-    const { organization_id, target_email } = input;
+    const { team_id, target_email } = input;
 
     // Ensure I have the rights to invite users.
-    await userOrganizationCheck(user_id, organization_id, {
+    await userTeamCheck(user_id, team_id, {
       status: 'active'
     });
 
     const jsonb = sqlJsonbBuild({ [target_email]: null });
-    const orgRes = await query(
+    const teamRes = await query(
       `
-        UPDATE organizations
+        UPDATE teams
         SET pending_users = jsonb_strip_nulls(pending_users || ${jsonb})
-        WHERE organization_id = $1
-        RETURNING pending_users, organization_id
+        WHERE team_id = $1
+        RETURNING pending_users, team_id
       `,
-      [organization_id]
+      [team_id]
     );
 
-    res.locals.update = update.prepare(organization_id, [
+    res.locals.update = update.prepare(team_id, [
       {
-        type: 'organization',
-        data: orgRes.rows[0]
+        type: 'team',
+        data: teamRes.rows[0]
       }
     ]);
   }

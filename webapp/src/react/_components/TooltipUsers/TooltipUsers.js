@@ -6,16 +6,16 @@ import SW from './TooltipUsers.swiss';
 
 export default class TooltipUsers extends PureComponent {
   render() {
-    const { userIds, organizationId } = this.props;
+    const { userIds, teamId } = this.props;
     if (!userIds) return null;
     return (
       <SW.Wrapper>
         {userIds.map(uId => (
           <SW.UserWrapper key={uId}>
             <SW.ImageWrapper>
-              <UserImage userId={uId} organizationId={organizationId} />
+              <UserImage userId={uId} teamId={teamId} />
             </SW.ImageWrapper>
-            <SW.Name>{userGetFullName(uId, organizationId)}</SW.Name>
+            <SW.Name>{userGetFullName(uId, teamId)}</SW.Name>
           </SW.UserWrapper>
         ))}
       </SW.Wrapper>

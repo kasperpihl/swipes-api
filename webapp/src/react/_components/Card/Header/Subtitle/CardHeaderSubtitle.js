@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
-import orgGetBelonging from 'core/utils/org/orgGetBelonging';
+import teamGetBelonging from 'core/utils/team/teamGetBelonging';
 import TooltipUsers from 'src/react/_components/TooltipUsers/TooltipUsers';
 import SW from './CardHeaderSubtitle.swiss';
 
@@ -17,7 +17,7 @@ function CardHeaderSubtitle({ ownedBy, members, privacy, children, tooltip }) {
     tooltip({
       component: TooltipUsers,
       props: {
-        organizationId: ownedBy,
+        teamId: ownedBy,
         userIds: members,
         size: 24
       },
@@ -34,7 +34,7 @@ function CardHeaderSubtitle({ ownedBy, members, privacy, children, tooltip }) {
 
   return (
     <SW.Wrapper>
-      <SW.OrganizationName>{orgGetBelonging(ownedBy)}</SW.OrganizationName>
+      <SW.TeamName>{teamGetBelonging(ownedBy)}</SW.TeamName>
       {members && privacy === 'private' && (
         <SW.FollowerLabel
           onMouseEnter={onMouseEnter}

@@ -1,5 +1,5 @@
-export default (organization, plan) => {
-  const numberOfUsers = organization
+export default (team, plan) => {
+  const numberOfUsers = team
     .get('users')
     .filter(u => u.get('status') === 'active').size;
 

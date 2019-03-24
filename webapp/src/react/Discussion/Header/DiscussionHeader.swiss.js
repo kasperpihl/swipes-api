@@ -55,7 +55,7 @@ export default styleSheet('DiscussionHeader', {
     margin: '0 2px'
   },
 
-  OrganizationName: {
+  TeamName: {
     _textStyle: 'item',
     lineHeight: '24px',
     color: '$sw2'

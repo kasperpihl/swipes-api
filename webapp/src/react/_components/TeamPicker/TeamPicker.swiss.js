@@ -1,6 +1,6 @@
 import { styleSheet } from 'swiss-react';
 
-export default styleSheet('OrgPicker', {
+export default styleSheet('TeamPicker', {
   Wrapper: {
     _flex: ['row', 'left', 'center'],
     flexWrap: 'wrap'

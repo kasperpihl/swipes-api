@@ -8,7 +8,7 @@ import FormModal from 'src/react/_components/FormModal/FormModal';
 import ListMenu from 'src/react/_components/ListMenu/ListMenu';
 import withNav from 'src/react/_hocs/Nav/withNav';
 import request from 'core/utils/request';
-import SW from './OrganizationUser.swiss';
+import SW from './TeamUser.swiss';
 
 const kPromote = 'Promote to admin';
 const kDemote = 'Demote to user';
@@ -20,13 +20,13 @@ const kInvite = 'Invite user';
 @withLoader
 @connect(
   (state, props) => ({
-    organization: state.organizations.get(props.organizationId)
+    team: state.teams.get(props.teamId)
   }),
   {
     contextMenu: mainActions.contextMenu
   }
 )
-export default class OrganizationUser extends PureComponent {
+export default class TeamUser extends PureComponent {
   constructor(props) {
     super(props);
   }
@@ -41,7 +41,7 @@ export default class OrganizationUser extends PureComponent {
   openTransferModal() {
     const { nav, user } = this.props;
     nav.openModal(FormModal, {
-      title: 'Transfer ownership of organization',
+      title: 'Transfer ownership of team',
       subtitle:
         'Warrning: Transferring the ownership is permanent and it cannot be reversed!',
       inputs: [
@@ -56,11 +56,11 @@ export default class OrganizationUser extends PureComponent {
     });
   }
   handleTransferOwnership = ([password]) => {
-    const { organization, user, loader } = this.props;
+    const { team, user, loader } = this.props;
 
     loader.set('buttonClicked');
-    request('organization.transferOwnership', {
-      organization_id: organization.get('organization_id'),
+    request('team.transferOwnership', {
+      team_id: team.get('team_id'),
       target_user_id: user.get('user_id'),
       password
     }).then(res => {
@@ -72,7 +72,7 @@ export default class OrganizationUser extends PureComponent {
     });
   };
   handleListClick = (i, title) => {
-    const { organization, user, loader } = this.props;
+    const { team, user, loader } = this.props;
 
     if (loader.check('buttonClicked')) {
       return;
@@ -85,22 +85,22 @@ export default class OrganizationUser extends PureComponent {
     let endpoint;
     let buttonMessage;
     const options = {
-      organization_id: organization.get('organization_id'),
+      team_id: team.get('team_id'),
       target_user_id: user.get('user_id')
     };
     if (title === kDemote) {
-      endpoint = 'organization.demoteAdmin';
+      endpoint = 'team.demoteAdmin';
       buttonMessage = 'Demoted';
     } else if (title === kPromote) {
-      endpoint = 'organization.promoteAdmin';
+      endpoint = 'team.promoteAdmin';
       buttonMessage = 'Promoted';
     } else if (title === kDisable) {
-      endpoint = 'organization.disableUser';
+      endpoint = 'team.disableUser';
       buttonMessage = 'Disabled';
     } else if (title === kInvite) {
       delete options.target_user_id;
       options.target_email = user.get('email');
-      endpoint = 'organization.inviteUser';
+      endpoint = 'team.inviteUser';
       buttonMessage = 'Invite sent';
     }
 
@@ -114,10 +114,10 @@ export default class OrganizationUser extends PureComponent {
     });
   };
   openListMenu = e => {
-    const { contextMenu, organization, user, meInOrg } = this.props;
+    const { contextMenu, team, user, meInTeam } = this.props;
     const options = this.getOptionsForE(e);
     const meTag = this.getUserTag(
-      organization.getIn(['users', meInOrg.get('user_id')])
+      team.getIn(['users', meInTeam.get('user_id')])
     );
     const targetTag = this.getUserTag(user);
 
@@ -146,26 +146,26 @@ export default class OrganizationUser extends PureComponent {
   };
 
   handlePromoteAdmin = () => {
-    const { organization, user } = this.props;
+    const { team, user } = this.props;
 
-    request('organization.promoteAdmin', {
-      organization_id: organization.get('organization_id'),
+    request('team.promoteAdmin', {
+      team_id: team.get('team_id'),
       target_user_id: user.get('user_id')
     });
   };
 
   handleDemoteAdmin = () => {
-    const { organization, user } = this.props;
+    const { team, user } = this.props;
 
-    request('organization.demoteAdmin', {
-      organization_id: organization.get('organization_id'),
+    request('team.demoteAdmin', {
+      team_id: team.get('team_id'),
       target_user_id: user.get('user_id')
     });
   };
 
   getUserTag = user => {
-    const { organization } = this.props;
-    if (user.get('user_id') === organization.get('owner_id')) {
+    const { team } = this.props;
+    if (user.get('user_id') === team.get('owner_id')) {
       return 'Owner';
     }
     if (user.get('admin')) {
@@ -178,17 +178,17 @@ export default class OrganizationUser extends PureComponent {
   };
 
   render() {
-    const { user, organization, meInOrg, loader } = this.props;
+    const { user, team, meInTeam, loader } = this.props;
     const isOwner = this.getUserTag(user) === 'Owner';
     const meUser =
-      this.getUserTag(meInOrg) !== 'Owner' &&
-      this.getUserTag(meInOrg) !== 'Admin';
+      this.getUserTag(meInTeam) !== 'Owner' &&
+      this.getUserTag(meInTeam) !== 'Admin';
 
     return (
       <SW.Wrapper>
         <UserImage
           userId={user.get('user_id')}
-          organizationId={organization.get('organization_id')}
+          teamId={team.get('team_id')}
           size={36}
         />
         <SW.UserDetails>

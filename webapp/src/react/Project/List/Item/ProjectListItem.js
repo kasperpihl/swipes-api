@@ -3,7 +3,7 @@ import moment from 'moment';
 import SW from './ProjectListItem.swiss';
 import ProgressCircle from 'src/react/_components/ProgressCircle/ProgressCircle';
 import useNav from 'src/react/_hooks/useNav';
-import orgGetBelonging from 'core/utils/org/orgGetBelonging';
+import teamGetBelonging from 'core/utils/team/teamGetBelonging';
 
 export default function ProjectListItem({ project }) {
   const nav = useNav();
@@ -43,7 +43,7 @@ export default function ProjectListItem({ project }) {
       </SW.LeftSideWrapper>
       <SW.TextWrapper>
         <SW.Title>{project.title}</SW.Title>
-        <SW.Subtitle>{orgGetBelonging(project.owned_by)}</SW.Subtitle>
+        <SW.Subtitle>{teamGetBelonging(project.owned_by)}</SW.Subtitle>
         <SW.DateOpened>
           {isNew && <span>New</span>}
           {!isNew && <span>{openedAt}</span>}

@@ -25,51 +25,51 @@ export default endpointCreate(
       throw Error('Invalid token').toClient();
     }
 
-    const { sub: organization_id, aud: email, exp } = parsedToken.tokenContent;
+    const { sub: team_id, aud: email, exp } = parsedToken.tokenContent;
 
-    const orgRes = await query(
+    const teamRes = await query(
       `
-        SELECT o.organization_id, o.pending_users, ou.status
-        FROM organizations o
-        LEFT JOIN organization_users ou
-        ON ou.user_id = $2
-        AND ou.organization_id = o.organization_id
-        WHERE o.organization_id = $1
+        SELECT t.team_id, t.pending_users, tu.status
+        FROM teams t
+        LEFT JOIN team_users tu
+        ON tu.user_id = $2
+        AND tu.team_id = t.team_id
+        WHERE t.team_id = $1
       `,
-      [organization_id, user_id]
+      [team_id, user_id]
     );
-    const org = orgRes.rows[0];
+    const team = teamRes.rows[0];
 
     const now = Math.floor(Date.now() / 1000);
-    if (!org.pending_users[email] || exp < now || org.status === 'active') {
+    if (!team.pending_users[email] || exp < now || team.status === 'active') {
       throw Error('Invalid token')
-        .info(org)
+        .info(team)
         .toClient();
     }
 
-    const [orgUserRes, orgInsertRes] = await transaction([
+    const [teamUserRes, teamInsertRes] = await transaction([
       sqlInsertQuery(
-        'organization_users',
+        'team_users',
         {
           user_id,
-          organization_id,
+          team_id,
           status: 'active'
         },
         {
-          upsert: 'organization_users_pkey'
+          upsert: 'team_users_pkey'
         }
       ),
       {
         text: `
-          UPDATE organizations
+          UPDATE teams
           SET 
             pending_users = jsonb_strip_nulls(
               pending_users || jsonb_build_object('${email}', null)
             )
-          WHERE organization_id = $1
-          RETURNING organization_id, pending_users
+          WHERE team_id = $1
+          RETURNING team_id, pending_users
         `,
-        values: [organization_id]
+        values: [team_id]
       },
       {
         text: `
@@ -80,23 +80,23 @@ export default endpointCreate(
           WHERE owned_by = $1
           AND is_default = true
         `,
-        values: [organization_id]
+        values: [team_id]
       }
     ]);
 
     await redisPublish(user_id, { type: 'forceDisconnect' });
 
     res.locals.backgroundInput = {
-      organization_id
+      team_id
     };
 
-    res.locals.update = update.prepare(organization_id, [
-      { type: 'organization', data: orgInsertRes.rows[0] },
-      { type: 'organization_user', data: orgUserRes.rows[0] }
+    res.locals.update = update.prepare(team_id, [
+      { type: 'team', data: teamInsertRes.rows[0] },
+      { type: 'team_user', data: teamUserRes.rows[0] }
     ]);
   }
 ).background(async (req, res) => {
   update.send(res.locals.update);
-  const { organization_id } = res.locals.input;
-  await stripeUpdateQuantity(organization_id);
+  const { team_id } = res.locals.input;
+  await stripeUpdateQuantity(team_id);
 });

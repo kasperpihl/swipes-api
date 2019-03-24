@@ -2,12 +2,12 @@ import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import { query } from 'src/utils/db/db';
 import update from 'src/utils/update';
-import userOrganizationCheck from 'src/utils/userOrganizationCheck';
+import userTeamCheck from 'src/utils/userTeamCheck';
 import tokenCreate from 'src/utils/token/tokenCreate';
 import emailInviteUser from 'src/utils/email/emailInviteUser';
 
 const expectedInput = {
-  organization_id: string.require(),
+  team_id: string.require(),
   target_email: string.format('email').require()
 };
 
@@ -17,35 +17,35 @@ export default endpointCreate(
   },
   async (req, res) => {
     const { user_id, input } = res.locals;
-    const { organization_id, target_email } = input;
+    const { team_id, target_email } = input;
 
     // Ensure I have the rights to invite users.
-    await userOrganizationCheck(user_id, organization_id, {
+    await userTeamCheck(user_id, team_id, {
       status: 'active'
     });
 
-    const orgRes = await query(
+    const teamRes = await query(
       `
-        SELECT ou.status, o.name, o.pending_users, u.user_id, iu.email as inviter_email, iu.first_name as inviter_first_name
-        FROM organizations o
+        SELECT tu.status, t.name, t.pending_users, u.user_id, iu.email as inviter_email, iu.first_name as inviter_first_name
+        FROM teams t
         LEFT JOIN users u
         ON email = $1
         LEFT JOIN users iu
         ON iu.user_id = $2
-        LEFT JOIN organization_users ou
-        ON ou.user_id = u.user_id
-        AND ou.organization_id = o.organization_id
-        WHERE o.organization_id = $3
+        LEFT JOIN team_users tu
+        ON tu.user_id = u.user_id
+        AND tu.team_id = t.team_id
+        WHERE t.team_id = $3
       `,
-      [target_email, user_id, organization_id]
+      [target_email, user_id, team_id]
     );
 
-    const org = orgRes.rows[0];
-    if (org.status === 'active') {
-      throw Error('already_part_of_org').toClient('Already in organization');
+    const team = teamRes.rows[0];
+    if (team.status === 'active') {
+      throw Error('Already in team').toClient();
     }
 
-    const lastSent = org.pending_users[target_email];
+    const lastSent = team.pending_users[target_email];
     // Only send an invitation email every 24 hours at max.
     if (lastSent && lastSent + 24 * 60 * 60 > Math.floor(Date.now() / 1000)) {
       throw Error("Can't resend. Too soon.").toClient();
@@ -54,33 +54,33 @@ export default endpointCreate(
     const inviteToken = tokenCreate('sw-i', {
       iss: user_id,
       aud: target_email,
-      sub: organization_id,
+      sub: team_id,
       exp: Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60
     });
 
     const now = Math.floor(Date.now() / 1000);
-    const orgUpdateRes = await query(
+    const teamUpdateRes = await query(
       `
-          UPDATE organizations
+          UPDATE teams
           SET pending_users = pending_users || jsonb_build_object('${target_email}', ${now})
-          WHERE organization_id = $1
-          RETURNING pending_users, organization_id
+          WHERE team_id = $1
+          RETURNING pending_users, team_id
         `,
-      [organization_id]
+      [team_id]
     );
 
     res.locals.backgroundInput = {
       email: target_email,
       inviteToken,
-      organizationName: org.name,
-      inviterFirstName: org.inviter_first_name,
-      inviterEmail: org.inviter_email
+      teamName: team.name,
+      inviterFirstName: team.inviter_first_name,
+      inviterEmail: team.inviter_email
     };
 
-    res.locals.update = update.prepare(organization_id, [
+    res.locals.update = update.prepare(team_id, [
       {
-        type: 'organization',
-        data: orgUpdateRes.rows[0]
+        type: 'team',
+        data: teamUpdateRes.rows[0]
       }
     ]);
   }
@@ -89,7 +89,7 @@ export default endpointCreate(
   const {
     email,
     inviteToken,
-    organizationName,
+    teamName,
     inviterFirstName,
     inviterEmail
   } = res.locals.input;
@@ -98,7 +98,7 @@ export default endpointCreate(
     await emailInviteUser(
       email,
       inviteToken,
-      organizationName,
+      teamName,
       inviterFirstName || inviterEmail
     );
   }

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import useLoader from 'src/react/_hooks/useLoader';
 import request from 'core/utils/request';
-import SW from './OrganizationInviteInput.swiss';
+import SW from './TeamInviteInput.swiss';
 
-export default function OrganizationInviteInput({ organizationId }) {
+export default function TeamInviteInput({ teamId }) {
   const loader = useLoader();
   const [emailValue, setEmailValue] = useState('');
 
@@ -11,8 +11,8 @@ export default function OrganizationInviteInput({ organizationId }) {
 
   const handleSendInvite = () => {
     loader.set('sendInvite');
-    request('organization.inviteUser', {
-      organization_id: organizationId,
+    request('team.inviteUser', {
+      team_id: teamId,
       target_email: emailValue
     }).then(res => {
       if (res && res.ok) {

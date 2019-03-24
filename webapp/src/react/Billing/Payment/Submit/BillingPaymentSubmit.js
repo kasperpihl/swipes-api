@@ -8,7 +8,7 @@ import billingGetPrice from 'src/utils/billing/billingGetPrice';
 
 export default injectStripe(function BillingPaymentSubmit({
   stripe,
-  organization,
+  team,
   plan
 }) {
   const loader = useLoader();
@@ -26,7 +26,7 @@ export default injectStripe(function BillingPaymentSubmit({
 
         return request('billing.add', {
           stripe_token: token.id,
-          organization_id: organization.get('organization_id'),
+          team_id: team.get('team_id'),
           plan
         });
       })
@@ -48,7 +48,7 @@ export default injectStripe(function BillingPaymentSubmit({
         onClick={handleSubmit}
       />
       <SW.Subtitle>
-        You will be billed ${billingGetPrice(organization, plan)}.
+        You will be billed ${billingGetPrice(team, plan)}.
       </SW.Subtitle>
 
       <SW.Terms>

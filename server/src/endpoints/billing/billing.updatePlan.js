@@ -2,12 +2,12 @@ import { string, any } from 'valjs';
 import { query } from 'src/utils/db/db';
 import update from 'src/utils/update';
 import stripeClient from 'src/utils/stripe/stripeClient';
-import userOrganizationCheck from 'src/utils/userOrganizationCheck';
+import userTeamCheck from 'src/utils/userTeamCheck';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import stripeGetPlanId from 'src/utils/stripe/stripeGetPlanId';
 
 const expectedInput = {
-  organization_id: string.require(),
+  team_id: string.require(),
   plan: any.of('monthly', 'yearly')
 };
 
@@ -18,41 +18,41 @@ export default endpointCreate(
   async (req, res, next) => {
     // Get inputs
     const { user_id } = res.locals;
-    const { organization_id, plan } = res.locals.input;
+    const { team_id, plan } = res.locals.input;
 
     // Ensure I have the rights to update billing plan.
-    await userOrganizationCheck(user_id, organization_id, {
+    await userTeamCheck(user_id, team_id, {
       admin: true,
       status: 'active'
     });
 
-    const orgRes = await query(
+    const teamRes = await query(
       `
-        SELECT o.stripe_subscription_id, u.email, o.stripe_plan_id
-        FROM organizations o
+        SELECT t.stripe_subscription_id, u.email, t.stripe_plan_id
+        FROM teams t
         INNER JOIN users u
-        ON u.user_id = o.owner_id
-        WHERE o.organization_id = $1
+        ON u.user_id = t.owner_id
+        WHERE t.team_id = $1
       `,
-      [organization_id]
+      [team_id]
     );
 
-    const org = orgRes.rows[0];
+    const team = teamRes.rows[0];
 
-    if (!org.stripe_subscription_id) {
+    if (!team.stripe_subscription_id) {
       throw Error('no_stripe_subscription');
     }
 
     const stripePlanId = stripeGetPlanId(plan);
-    if (stripePlanId === org.stripe_plan_id) {
+    if (stripePlanId === team.stripe_plan_id) {
       throw Error('already_on_plan');
     }
 
     const subscription = await stripeClient.subscriptions.retrieve(
-      org.stripe_subscription_id
+      team.stripe_subscription_id
     );
 
-    await stripeClient.subscriptions.update(org.stripe_subscription_id, {
+    await stripeClient.subscriptions.update(team.stripe_subscription_id, {
       items: [
         {
           id: subscription.items.data[0].id,
@@ -61,19 +61,19 @@ export default endpointCreate(
       ]
     });
 
-    const orgUpdateRes = await query(
+    const teamUpdateRes = await query(
       `
-        UPDATE organizations
+        UPDATE teams
         SET
           stripe_plan_id = $1,
           plan = $2
-        WHERE organization_id = $3
-        RETURNING organization_id, plan, stripe_plan_id
+        WHERE team_id = $3
+        RETURNING team_id, plan, stripe_plan_id
       `,
-      [stripePlanId, plan, organization_id]
+      [stripePlanId, plan, team_id]
     );
-    res.locals.update = update.prepare(organization_id, [
-      { type: 'organization', data: orgUpdateRes.rows[0] }
+    res.locals.update = update.prepare(team_id, [
+      { type: 'team', data: teamUpdateRes.rows[0] }
     ]);
   }
 ).background(async (req, res) => {

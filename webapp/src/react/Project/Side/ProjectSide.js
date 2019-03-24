@@ -56,7 +56,7 @@ function ProjectSide({ stateManager }) {
       excludeMe: true,
       hideRowOnSelect: true,
       selectedIds: followers,
-      organizationId: ownedBy,
+      teamId: ownedBy,
       onSelect: id => {
         console.log(id); // TODO: Add endpoint to add people to project
       }

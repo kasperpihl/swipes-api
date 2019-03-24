@@ -22,8 +22,7 @@ export default class Analytics {
     const defs = {
       _Client: isElectron ? 'Electron' : 'Web',
       '_Web version': version,
-      _Platform: platform,
-      Organization: this.orgId || 'No org'
+      _Platform: platform
     };
     if (electronVersion) {
       defs['_Electron version'] = electronVersion;

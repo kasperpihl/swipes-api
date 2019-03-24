@@ -12,10 +12,10 @@ export default server => {
     const { token } = parsedUrl.query;
     const userId = await tokenCheck(token);
 
-    const orgRes = await query(
+    const teamRes = await query(
       `
-        SELECT organization_id
-        FROM organization_users
+        SELECT team_id
+        FROM team_users
         WHERE user_id = $1
       `,
       [userId]
@@ -24,8 +24,8 @@ export default server => {
 
     redisClient.subscribe('global');
     redisClient.subscribe(userId);
-    orgRes.rows.forEach(org => {
-      redisClient.subscribe(org.organization_id);
+    teamRes.rows.forEach(team => {
+      redisClient.subscribe(team.team_id);
     });
 
     redisClient.on('message', (channel, actionString) => {

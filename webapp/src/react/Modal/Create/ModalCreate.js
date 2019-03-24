@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import request from 'core/utils/request';
 import withLoader from 'src/react/_hocs/withLoader';
-import OrgPicker from 'src/react/_components/OrgPicker/OrgPicker';
+import TeamPicker from 'src/react/_components/TeamPicker/TeamPicker';
 import cachedCallback from 'src/utils/cachedCallback';
 import Assignees from 'src/react/_components/Assignees/Assignees';
 import AssignMenu from 'src/react/_components/AssignMenu/AssignMenu';
@@ -34,7 +34,7 @@ export default class ModalCreate extends PureComponent {
     contextMenu(AssignMenu, e, {
       excludeMe: true,
       selectedIds: followers,
-      organizationId: ownedBy,
+      teamId: ownedBy,
       onClose: this.handleAssignSelect
     });
   };
@@ -80,7 +80,7 @@ export default class ModalCreate extends PureComponent {
     });
   };
   handlePrivacyCached = cachedCallback(privacy => this.setState({ privacy }));
-  handleOrgChange = ownedBy => {
+  handleTeamChange = ownedBy => {
     this.setState({
       ownedBy,
       followers: fromJS([])
@@ -101,7 +101,7 @@ export default class ModalCreate extends PureComponent {
 
   renderPrivacyCheckbox(iAmPrivacy) {
     const { privacy } = this.state;
-    let label = 'Public - anyone in organization can find this';
+    let label = 'Public - everyone from team have access';
     if (iAmPrivacy !== 'public') {
       label = 'Private - only chosen people have access';
     }
@@ -149,9 +149,9 @@ export default class ModalCreate extends PureComponent {
           </FMSW.InputWrapper>
           <FMSW.InputWrapper>
             <FMSW.Label>2. Choose belonging</FMSW.Label>
-            <OrgPicker
+            <TeamPicker
               value={ownedBy}
-              onChange={this.handleOrgChange}
+              onChange={this.handleTeamChange}
               disablePersonal={type === 'discussion'}
             />
           </FMSW.InputWrapper>
@@ -166,7 +166,7 @@ export default class ModalCreate extends PureComponent {
                 <FMSW.Label>4. Choose people</FMSW.Label>
                 <Assignees
                   userIds={followers}
-                  organizationId={ownedBy}
+                  teamId={ownedBy}
                   size={36}
                   maxImages={9}
                   onClick={this.handleAssignClick}

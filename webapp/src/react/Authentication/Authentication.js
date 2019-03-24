@@ -19,7 +19,7 @@ import Spacing from '_shared/Spacing/Spacing';
 @withLoader
 @connect(
   state => ({
-    invitedToOrg: state.invitation.get('invitedToOrg')
+    invitedToTeam: state.invitation.get('invitedToTeam')
   }),
   {
     redirectTo: navigationActions.redirectTo,
@@ -119,16 +119,16 @@ export default class Authentication extends PureComponent {
     }
   };
   getSubtitle() {
-    const { invitedToOrg } = this.props;
+    const { invitedToTeam } = this.props;
 
-    if (!invitedToOrg) {
+    if (!invitedToTeam) {
       if (this.isLogin()) {
         return 'Sign in to your account';
       }
       return 'The Workspace is free for personal use, and paid for companies.';
     }
 
-    return `Join ${invitedToOrg.get('name')}.`;
+    return `Join ${invitedToTeam.get('name')}.`;
   }
   renderInputs() {
     return (

@@ -23,33 +23,33 @@ export default endpointCreate(
     }
 
     const {
-      sub: organization_id,
+      sub: team_id,
       aud: email,
       exp,
       iss: invited_by_user_id
     } = parsedToken.tokenContent;
 
-    const orgRes = await query(
+    const teamRes = await query(
       `
-        SELECT o.organization_id, o.pending_users, o.name
-        FROM organizations o
-        WHERE o.organization_id = $1
+        SELECT t.team_id, t.pending_users, t.name
+        FROM teams t
+        WHERE t.team_id = $1
       `,
-      [organization_id]
+      [team_id]
     );
-    const org = orgRes.rows[0];
+    const team = teamRes.rows[0];
 
     const now = Math.floor(Date.now() / 1000);
-    if (!org.pending_users[email] || exp < now) {
+    if (!team.pending_users[email] || exp < now) {
       throw Error('Invalid token')
-        .info(org)
+        .info(team)
         .toClient();
     }
-    delete org.pending_users;
-    org.invitation_token = invitation_token;
-    org.invited_by_user_id = invited_by_user_id;
+    delete team.pending_users;
+    team.invitation_token = invitation_token;
+    team.invited_by_user_id = invited_by_user_id;
 
     // Create response data.
-    res.locals.output = { organization: org };
+    res.locals.output = { team: team };
   }
 );

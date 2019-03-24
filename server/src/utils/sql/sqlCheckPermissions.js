@@ -2,10 +2,10 @@ export default function sqlCheckPermissions(attribute, userId) {
   return `
     ${attribute}
     IN (
-      SELECT '${userId}' as organization_id /* Personal Support */
+      SELECT '${userId}' as team_id /* Personal Support */
       UNION ALL
-      SELECT organization_id 
-      FROM organization_users 
+      SELECT team_id 
+      FROM team_users 
       WHERE user_id = '${userId}'
       AND status = 'active'
     )

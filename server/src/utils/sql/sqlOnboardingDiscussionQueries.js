@@ -3,12 +3,12 @@ import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
 import sqlToIsoString from 'src/utils/sql/sqlToIsoString';
 import sqlPermissionInsertQuery from 'src/utils/sql/sqlPermissionInsertQuery';
 
-export default function sqlOnboardingDiscussionQueries(organizationId, userId) {
+export default function sqlOnboardingDiscussionQueries(teamId, userId) {
   const discussions = ['General', 'Random'].map((title, i) => ({
     discussion_id: idGenerate('C-', 15),
     is_default: true,
-    owned_by: organizationId,
-    created_by: organizationId,
+    owned_by: teamId,
+    created_by: teamId,
     title,
     last_comment_by: userId,
     last_comment: 'just created this discussion.',
@@ -21,7 +21,7 @@ export default function sqlOnboardingDiscussionQueries(organizationId, userId) {
       dontPrepare: { followers: true }
     }),
     ...discussions.map(d =>
-      sqlPermissionInsertQuery(d.discussion_id, 'public', organizationId)
+      sqlPermissionInsertQuery(d.discussion_id, 'public', teamId)
     )
   ];
 }

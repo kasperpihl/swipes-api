@@ -5,9 +5,9 @@ import idGenerate from 'src/utils/idGenerate';
 import sqlPermissionInsertQuery from 'src/utils/sql/sqlPermissionInsertQuery';
 
 export default async function convertMilestones({
-  organization_id,
+  team_id,
   c,
-  org,
+  team,
   milestones,
   goalsById
 }) {
@@ -77,7 +77,7 @@ export default async function convertMilestones({
           ordering: JSON.stringify(ordering),
           completion: JSON.stringify(completion),
           indention: JSON.stringify(indention),
-          owned_by: organization_id
+          owned_by: team_id
         })
       );
 
@@ -85,7 +85,7 @@ export default async function convertMilestones({
       await c.query(
         sqlInsertQuery(
           'project_opens',
-          org.active_users.map(user_id => ({
+          team.active_users.map(user_id => ({
             user_id,
             project_id: projectId,
             opened_at: milestone.updated_at
@@ -94,7 +94,7 @@ export default async function convertMilestones({
       );
 
       const projectPerRes = await c.query(
-        sqlPermissionInsertQuery(projectId, 'public', organization_id)
+        sqlPermissionInsertQuery(projectId, 'public', team_id)
       );
       console.log('INSERTED PROJECT ' + projectId);
       // console.log(projectRes.rows, taskRes.rows);

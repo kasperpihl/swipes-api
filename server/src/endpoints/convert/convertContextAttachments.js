@@ -5,8 +5,8 @@ import sqlPermissionInsertQuery from 'src/utils/sql/sqlPermissionInsertQuery';
 
 export default async function convertContextAttachments({
   c,
-  org,
-  organization_id,
+  team,
+  team_id,
   milestones,
   goalsById,
   discussionsByContext,
@@ -26,10 +26,10 @@ export default async function convertContextAttachments({
     const discussion = {
       discussion_id: discussionId,
       title: milestone.title.slice(0, 254),
-      owned_by: organization_id,
+      owned_by: team_id,
       created_by: milestone.created_by,
       followers: `jsonb_build_object(
-        ${org.active_users
+        ${team.active_users
           .map(user_id => `'${user_id}', '${new Date().toISOString()}'`)
           .join(', ')}
           )`
@@ -54,7 +54,7 @@ export default async function convertContextAttachments({
                     if (note.title) title = note.title;
                     notesToInsert.push({
                       note_id: id,
-                      owned_by: organization_id,
+                      owned_by: team_id,
                       rev: note.rev,
                       title,
                       created_at: note.created_at,
@@ -71,7 +71,7 @@ export default async function convertContextAttachments({
                     }
                     filesToInsert.push({
                       file_id: id,
-                      owned_by: organization_id,
+                      owned_by: team_id,
                       file_name: file.file_name,
                       s3_url: file.s3_url,
                       content_type: file.content_type,
@@ -158,9 +158,7 @@ export default async function convertContextAttachments({
         dontPrepare: { followers: true }
       })
     );
-    await c.query(
-      sqlPermissionInsertQuery(discussionId, 'public', organization_id)
-    );
+    await c.query(sqlPermissionInsertQuery(discussionId, 'public', team_id));
     await c.query(sqlInsertQuery('discussion_comments', comments));
     console.log('INSERTED DISCUSSION ' + discussionId);
   }

@@ -2,11 +2,11 @@ import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import { transaction } from 'src/utils/db/db';
 import update from 'src/utils/update';
-import userOrganizationCheck from 'src/utils/userOrganizationCheck';
+import userTeamCheck from 'src/utils/userTeamCheck';
 import stripeUpdateQuantity from 'src/utils/stripe/stripeUpdateQuantity';
 
 const expectedInput = {
-  organization_id: string.require(),
+  team_id: string.require(),
   target_user_id: string.require()
 };
 
@@ -16,35 +16,35 @@ export default endpointCreate(
   },
   async (req, res) => {
     const { user_id, input } = res.locals;
-    const { organization_id, target_user_id } = input;
+    const { team_id, target_user_id } = input;
 
-    // Allow to disable your self (leave org)
+    // Allow to disable your self (leave team)
     if (target_user_id !== user_id) {
       // Ensure I have the rights to disable users.
-      await userOrganizationCheck(user_id, organization_id, {
+      await userTeamCheck(user_id, team_id, {
         admin: true,
         status: 'active'
       });
     }
 
     // Check that target user exists and is not owner.
-    await userOrganizationCheck(target_user_id, organization_id, {
+    await userTeamCheck(target_user_id, team_id, {
       owner: false
     });
 
     // creating a new user from scratch
-    const [orgUserRes] = await transaction([
+    const [teamUserRes] = await transaction([
       {
         text: `
-          UPDATE organization_users
+          UPDATE team_users
           SET
             status = 'disabled',
             admin = false
-          WHERE organization_id = $1
+          WHERE team_id = $1
           AND user_id = $2
-          RETURNING user_id, organization_id, admin, status
+          RETURNING user_id, team_id, admin, status
         `,
-        values: [organization_id, target_user_id]
+        values: [team_id, target_user_id]
       },
       {
         text: `
@@ -52,20 +52,20 @@ export default endpointCreate(
           WHERE owned_by = $1
           AND granted_to = $2
         `,
-        values: [organization_id, target_user_id]
+        values: [team_id, target_user_id]
       }
     ]);
 
     res.locals.backgroundInput = {
-      organization_id
+      team_id
     };
 
-    res.locals.update = update.prepare(organization_id, [
-      { type: 'organization_user', data: orgUserRes.rows[0] }
+    res.locals.update = update.prepare(team_id, [
+      { type: 'team_user', data: teamUserRes.rows[0] }
     ]);
   }
 ).background(async (req, res) => {
   update.send(res.locals.update);
-  const { organization_id } = res.locals.input;
-  await stripeUpdateQuantity(organization_id);
+  const { team_id } = res.locals.input;
+  await stripeUpdateQuantity(team_id);
 });

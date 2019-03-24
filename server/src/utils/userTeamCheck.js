@@ -1,19 +1,19 @@
 import { query } from 'src/utils/db/db';
 
-export default async (user_id, organization_id, options) => {
+export default async (user_id, team_id, options) => {
   if (typeof options !== 'object') {
     options = {};
   }
 
   const userRes = await query(
     `
-      SELECT (o.owner_id = ou.user_id) as owner, ou.admin, ou.status FROM organization_users ou
-      INNER JOIN organizations o
-      ON o.organization_id = ou.organization_id
-      WHERE ou.user_id = $1
-      AND ou.organization_id = $2 
+      SELECT (t.owner_id = tu.user_id) as owner, tu.admin, tu.status FROM team_users tu
+      INNER JOIN teams t
+      ON t.team_id = tu.team_id
+      WHERE tu.user_id = $1
+      AND tu.team_id = $2 
     `,
-    [user_id, organization_id]
+    [user_id, team_id]
   );
 
   if (!userRes || !userRes.rows.length) {

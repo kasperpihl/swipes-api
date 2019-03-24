@@ -3,11 +3,11 @@ import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import { transaction, query } from 'src/utils/db/db';
 import update from 'src/utils/update';
-import userOrganizationCheck from 'src/utils/userOrganizationCheck';
+import userTeamCheck from 'src/utils/userTeamCheck';
 import stripeCancelSubscription from 'src/utils/stripe/stripeCancelSubscription';
 
 const expectedInput = {
-  organization_id: string.require(),
+  team_id: string.require(),
   password: string.require()
 };
 
@@ -17,10 +17,10 @@ export default endpointCreate(
   },
   async (req, res) => {
     const { user_id, input } = res.locals;
-    const { organization_id, password } = input;
+    const { team_id, password } = input;
 
-    // Ensure I have the rights to delete organization.
-    await userOrganizationCheck(user_id, organization_id, {
+    // Ensure I have the rights to delete team.
+    await userTeamCheck(user_id, team_id, {
       owner: true
     });
 
@@ -37,49 +37,49 @@ export default endpointCreate(
       throw Error('Wrong password').toClient();
     }
 
-    await stripeCancelSubscription(organization_id);
+    await stripeCancelSubscription(team_id);
 
     // creating a new user from scratch
     await transaction([
       {
         text: `
-          DELETE FROM organizations
-          WHERE organization_id = $1
+          DELETE FROM teams
+          WHERE team_id = $1
         `,
-        values: [organization_id]
+        values: [team_id]
       },
       {
         text: `
           DELETE FROM projects
           WHERE owned_by = $1
         `,
-        values: [organization_id]
+        values: [team_id]
       },
       {
         text: `
           DELETE FROM discussions
           WHERE owned_by = $1
         `,
-        values: [organization_id]
+        values: [team_id]
       },
       {
         text: `
           DELETE FROM permissions
           WHERE owned_by = $1
         `,
-        values: [organization_id]
+        values: [team_id]
       },
       {
         text: `
           DELETE FROM jobs
           WHERE owned_by = $1
         `,
-        values: [organization_id]
+        values: [team_id]
       }
     ]);
 
-    res.locals.update = update.prepare(organization_id, [
-      { type: 'organization', data: { organization_id, deleted: true } }
+    res.locals.update = update.prepare(team_id, [
+      { type: 'team', data: { team_id, deleted: true } }
     ]);
   }
 ).background(async (req, res) => {

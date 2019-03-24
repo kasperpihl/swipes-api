@@ -6,10 +6,8 @@ export {
 } from './Discussion/Overview/DiscussionOverview';
 export { default as File } from './File/File';
 export { default as NotFound } from './NotFound/NotFound';
-export { default as Organization } from './Organization/Organization';
-export {
-  default as OrganizationCreate
-} from './Organization/Create/OrganizationCreate';
+export { default as Team } from './Team/Team';
+export { default as TeamCreate } from './Team/Create/TeamCreate';
 export { default as PlanList } from './Plan/List/PlanList';
 export { default as Planning } from './Planning/Planning';
 

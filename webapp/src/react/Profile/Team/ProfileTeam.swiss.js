@@ -1,6 +1,6 @@
 import { styleSheet } from 'swiss-react';
 
-export default styleSheet('ProfileOrg', {
+export default styleSheet('ProfileTeam', {
   Wrapper: {
     _size: ['100%', 'auto'],
     _flex: ['row', 'flex-start', 'center'],
@@ -19,7 +19,7 @@ export default styleSheet('ProfileOrg', {
     }
   },
 
-  OrgName: {
+  TeamName: {
     _el: 'h1',
     _size: ['100%', 'auto'],
     _flex: ['column', 'flex-start', 'center'],
@@ -32,7 +32,7 @@ export default styleSheet('ProfileOrg', {
     flexShrink: '0'
   },
 
-  OrganizationInfo: {
+  TeamInfo: {
     _el: 'p',
     _textStyle: 'body',
     color: '$sw2',

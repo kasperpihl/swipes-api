@@ -8,7 +8,7 @@ const expectedInput = {};
 const expectedOutput = {
   me: object.require(),
   users: array.require(),
-  organizations: array.require(),
+  teams: array.require(),
   unread: object.require(),
   sofi: object.require()
 };
@@ -31,14 +31,14 @@ export default endpointCreate(
       [user_id]
     );
 
-    const orgRes = await query(
+    const teamRes = await query(
       `
-        SELECT organization_id, name, trial_ending, owner_id, pending_users, stripe_subscription_id, plan
-        FROM organizations
-        WHERE organization_id
+        SELECT team_id, name, trial_ending, owner_id, pending_users, stripe_subscription_id, plan
+        FROM teams
+        WHERE team_id
         IN (
-          SELECT organization_id
-          FROM organization_users
+          SELECT team_id
+          FROM team_users
           WHERE user_id = $1
           AND status = 'active'
         )
@@ -48,14 +48,14 @@ export default endpointCreate(
 
     const usersRes = await query(
       `
-        SELECT ou.status, ou.organization_id, ou.admin, u.first_name, u.last_name, u.email, u.user_id, u.username, u.photo
-        FROM organization_users ou
+        SELECT ou.status, ou.team_id, ou.admin, u.first_name, u.last_name, u.email, u.user_id, u.username, u.photo
+        FROM team_users ou
         LEFT JOIN users u
         ON u.user_id = ou.user_id
-        WHERE ou.organization_id
+        WHERE ou.team_id
         IN (
-          SELECT organization_id
-          FROM organization_users
+          SELECT team_id
+          FROM team_users
           WHERE user_id = $1
           AND status = 'active'
         )
@@ -83,7 +83,7 @@ export default endpointCreate(
     // Create response data.
     res.locals.output = {
       me: meRes.rows[0],
-      organizations: orgRes.rows,
+      teams: teamRes.rows,
       unread,
       timestamp: now,
       users: usersRes.rows,

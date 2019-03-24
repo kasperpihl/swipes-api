@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import timeGetDayOrTime from 'core/utils/time/timeGetDayOrTime';
 import SW from './DiscussionListItem.swiss';
-import orgGetBelonging from 'core/utils/org/orgGetBelonging';
+import teamGetBelonging from 'core/utils/team/teamGetBelonging';
 
 @connect(state => ({
   myId: state.me.get('user_id')
@@ -26,9 +26,7 @@ export default class DiscussionListItem extends PureComponent {
           <SW.MiddleWrapper>
             <SW.Topic>{item.title}</SW.Topic>
             {showTeam && (
-              <SW.OrganizationName>
-                {orgGetBelonging(item.owned_by)}
-              </SW.OrganizationName>
+              <SW.TeamName>{teamGetBelonging(item.owned_by)}</SW.TeamName>
             )}
           </SW.MiddleWrapper>
           <SW.Time>{timeGetDayOrTime(item.last_comment_at)}</SW.Time>

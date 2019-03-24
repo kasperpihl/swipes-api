@@ -2,14 +2,14 @@ import React, { useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
 import cachedCallback from 'src/utils/cachedCallback';
 import InputRadio from '_shared/Input/Radio/InputRadio';
-import SW from './OrgPicker.swiss';
+import SW from './TeamPicker.swiss';
 import useMyId from 'core/react/_hooks/useMyId';
 
 export default connect(state => ({
-  organizations: state.organizations
-}))(OrgPicker);
+  teams: state.teams
+}))(TeamPicker);
 
-function OrgPicker({ organizations, value, onChange, disablePersonal }) {
+function TeamPicker({ teams, value, onChange, disablePersonal }) {
   const myId = useMyId();
   const foundCheckedRef = useRef(false);
   const handleClickCached = cachedCallback((v, e) => {
@@ -20,8 +20,8 @@ function OrgPicker({ organizations, value, onChange, disablePersonal }) {
   useEffect(() => {
     if (!foundCheckedRef.current) {
       let selectId = disablePersonal ? undefined : myId;
-      if (organizations.size) {
-        selectId = organizations.first().get('organization_id');
+      if (teams.size) {
+        selectId = teams.first().get('team_id');
       }
 
       selectId && onChange(selectId);
@@ -41,7 +41,7 @@ function OrgPicker({ organizations, value, onChange, disablePersonal }) {
           label={title}
           value={myValue}
           checked={myValue === value}
-          name="org"
+          name="team"
           onChange={handleClickCached(myValue)}
         />
       </SW.InputWrapper>
@@ -51,9 +51,9 @@ function OrgPicker({ organizations, value, onChange, disablePersonal }) {
   return (
     <SW.Wrapper>
       {!disablePersonal && renderInput(myId, 'Personal')}
-      {organizations
+      {teams
         .toList()
-        .map(org => renderInput(org.get('organization_id'), org.get('name')))}
+        .map(team => renderInput(team.get('team_id'), team.get('name')))}
     </SW.Wrapper>
   );
 }

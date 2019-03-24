@@ -20,61 +20,61 @@ export default endpointCreate(
     const { user_id, input } = res.locals;
     const { name } = input;
 
-    const organizationId = idGenerate('ORG-');
+    const teamId = idGenerate('T-');
     // creating a new user from scratch
-    const [organizationRes, userInsertQuery, userRes] = await transaction([
-      sqlInsertQuery('organizations', {
-        organization_id: organizationId,
+    const [teamRes, userInsertQuery, userRes] = await transaction([
+      sqlInsertQuery('teams', {
+        team_id: teamId,
         name,
         owner_id: user_id
       }),
-      sqlInsertQuery('organization_users', {
-        organization_id: organizationId,
+      sqlInsertQuery('team_users', {
+        team_id: teamId,
         user_id: user_id,
         admin: true,
         status: 'active'
       }),
       {
         text: `
-        SELECT ou.status, ou.organization_id, ou.admin, u.first_name, u.last_name, u.email, u.user_id, u.username, u.photo
+        SELECT tu.status, tu.team_id, tu.admin, u.first_name, u.last_name, u.email, u.user_id, u.username, u.photo
         FROM users u
-        LEFT JOIN organization_users ou
-        ON u.user_id = ou.user_id 
-        AND ou.organization_id = $1
+        LEFT JOIN team_users tu
+        ON u.user_id = tu.user_id 
+        AND tu.team_id = $1
         WHERE u.user_id = $2
         `,
-        values: [organizationId, user_id]
+        values: [teamId, user_id]
       },
-      ...sqlOnboardingDiscussionQueries(organizationId, user_id)
+      ...sqlOnboardingDiscussionQueries(teamId, user_id)
     ]);
 
     await redisPublish(user_id, {
       type: 'subscribeChannel',
-      payload: { channel: organizationId }
+      payload: { channel: teamId }
     });
 
     res.locals.backgroundInput = {
-      organization_id: organizationId
+      team_id: teamId
     };
 
     res.locals.output = {
-      organization_id: organizationId
+      team_id: teamId
     };
 
-    res.locals.update = update.prepare(organizationId, [
-      { type: 'organization', data: organizationRes.rows[0] },
-      { type: 'organization_user', data: userRes.rows[0] }
+    res.locals.update = update.prepare(teamId, [
+      { type: 'team', data: teamRes.rows[0] },
+      { type: 'team_user', data: userRes.rows[0] }
     ]);
   }
 ).background(async (req, res) => {
   update.send(res.locals.update);
 
-  const { organization_id } = res.locals.input;
+  const { team_id } = res.locals.input;
 
   // Trial email 1 week left
   await queueScheduleBatch({
     job_name: 'job.sendEmail.queue',
-    owned_by: organization_id,
+    owned_by: team_id,
     identifier: 'trial-1week',
     run_at: 60 * 24 * 7
   });
@@ -82,7 +82,7 @@ export default endpointCreate(
   // Trial 1 day left
   await queueScheduleBatch({
     job_name: 'job.sendEmail.queue',
-    owned_by: organization_id,
+    owned_by: team_id,
     identifier: 'trial-1day',
     run_at: 60 * 24 * 13
   });
@@ -90,7 +90,7 @@ export default endpointCreate(
   // Trial expired
   await queueScheduleBatch({
     job_name: 'job.sendEmail.queue',
-    owned_by: organization_id,
+    owned_by: team_id,
     identifier: 'trial-expired',
     run_at: 60 * 24 * 15,
     recurring: 60 * 24 * 3 // Re-send every 3 days

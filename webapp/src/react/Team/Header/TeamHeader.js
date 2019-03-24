@@ -5,15 +5,15 @@ import withLoader from 'src/react/_hocs/withLoader';
 import FormModal from 'src/react/_components/FormModal/FormModal';
 import ListMenu from 'src/react/_components/ListMenu/ListMenu';
 import CardHeader from 'src/react/_components/Card/Header/CardHeader';
-import SW from './OrganizationHeader.swiss';
+import SW from './TeamHeader.swiss';
 import withNav from 'src/react/_hocs/Nav/withNav';
 import request from 'core/utils/request';
 
 const kDelete = {
-  title: 'Delete organization'
+  title: 'Delete team'
 };
 const kLeave = {
-  title: 'Leave organization',
+  title: 'Leave team',
   subtitle: 'Transfer ownership before leaving'
 };
 
@@ -25,50 +25,49 @@ const kLeave = {
     contextMenu: mainActions.contextMenu
   }
 )
-export default class OrganizationHeader extends PureComponent {
+export default class TeamHeader extends PureComponent {
   openBillingView = () => {
-    const { nav, organization } = this.props;
+    const { nav, team } = this.props;
 
     nav.push({
       screenId: 'Billing',
       crumbTitle: 'Billing',
       props: {
-        organizationId: organization.get('organization_id')
+        teamId: team.get('team_id')
       }
     });
   };
 
   openRenameModal = () => {
-    const { nav, organization } = this.props;
+    const { nav, team } = this.props;
 
     nav.openModal(FormModal, {
-      title: 'Rename organization',
+      title: 'Rename team',
       inputs: [
         {
-          placeholder: 'Enter name of organization',
+          placeholder: 'Enter name of team',
           type: 'text',
           label: '',
           autoFocus: true,
-          initialValue: organization.get('name')
+          initialValue: team.get('name')
         }
       ],
       confirmLabel: 'Rename',
-      onConfirm: this.handleRenameOrganization
+      onConfirm: this.handleRenameTeam
     });
   };
 
   openContextMenu = e => {
-    const { contextMenu, organization, meInOrg } = this.props;
-    const activeUsersAmount = organization
+    const { contextMenu, team, meInTeam } = this.props;
+    const activeUsersAmount = team
       .get('users')
       .filter(u => u.get('status') === 'active').size;
 
     kLeave.disabled =
-      organization.get('owner_id') === meInOrg.get('user_id') &&
-      activeUsersAmount > 1;
+      team.get('owner_id') === meInTeam.get('user_id') && activeUsersAmount > 1;
 
     let buttons = [kLeave];
-    if (organization.get('owner_id') === meInOrg.get('user_id')) {
+    if (team.get('owner_id') === meInTeam.get('user_id')) {
       if (activeUsersAmount > 1) {
         buttons = [kLeave, kDelete];
       } else {
@@ -104,30 +103,30 @@ export default class OrganizationHeader extends PureComponent {
     });
   };
 
-  handleDeleteOrganization = ([password]) => {
-    const { organization } = this.props;
+  handleDeleteTeam = ([password]) => {
+    const { team } = this.props;
 
-    this.runRequest('organization.delete', {
-      organization_id: organization.get('organization_id'),
+    this.runRequest('team.delete', {
+      team_id: team.get('team_id'),
       password
     });
   };
 
-  handleLeaveOrganization = ([password]) => {
-    const { organization, meInOrg } = this.props;
+  handleLeaveTeam = ([password]) => {
+    const { team, meInTeam } = this.props;
 
-    this.runRequest('organization.disableUser', {
-      organization_id: organization.get('organization_id'),
-      target_user_id: meInOrg.get('user_id'),
+    this.runRequest('team.disableUser', {
+      team_id: team.get('team_id'),
+      target_user_id: meInTeam.get('user_id'),
       password
     });
   };
 
-  handleRenameOrganization = ([name]) => {
-    const { organization } = this.props;
+  handleRenameTeam = ([name]) => {
+    const { team } = this.props;
 
-    this.runRequest('organization.rename', {
-      organization_id: organization.get('organization_id'),
+    this.runRequest('team.rename', {
+      team_id: team.get('team_id'),
       name
     });
   };
@@ -139,45 +138,45 @@ export default class OrganizationHeader extends PureComponent {
   };
 
   handleListClick = (i, button) => {
-    const { organization } = this.props;
+    const { team } = this.props;
     if (button.title === kDelete.title) {
       const modalOptions = {
-        title: 'Delete organization',
+        title: 'Delete team',
         subtitle:
-          'Are you sure you want to delete this organization? Deleting it is permanent and cannot be reversed.',
+          'Are you sure you want to delete this team? Deleting it is permanent and cannot be reversed.',
         inputs: [
           {
             type: 'password',
             placeholder: 'Password',
             autoFocus: true,
-            label: `Confirm deleting "${organization.get('name')}"`
+            label: `Confirm deleting "${team.get('name')}"`
           }
         ],
-        onConfirm: this.handleDeleteOrganization
+        onConfirm: this.handleDeleteTeam
       };
       return this.openFormModal(modalOptions);
     }
     if (button.title === kLeave.title) {
       const modalOptions = {
-        title: 'Leave organization',
-        subtitle: 'Are you sure that you want to leave this organization?',
+        title: 'Leave team',
+        subtitle: 'Are you sure that you want to leave this team?',
         inputs: [
           {
             type: 'password',
             placeholder: 'Password',
             autoFocus: true,
-            label: `Confirm leaving "${organization.get('name')}"`
+            label: `Confirm leaving "${team.get('name')}"`
           }
         ],
-        onConfirm: this.handleLeaveOrganization
+        onConfirm: this.handleLeaveTeam
       };
 
       return this.openFormModal(modalOptions);
     }
   };
   render() {
-    const { name, loader, meInOrg } = this.props;
-    const isAdmin = meInOrg.get('admin');
+    const { name, loader, meInTeam } = this.props;
+    const isAdmin = meInTeam.get('admin');
     return (
       <CardHeader title={name} onTitleClick={this.openRenameModal}>
         {isAdmin && (

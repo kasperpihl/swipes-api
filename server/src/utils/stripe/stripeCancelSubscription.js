@@ -1,29 +1,29 @@
 import stripeClient from 'src/utils/stripe/stripeClient';
 import { query } from 'src/utils/db/db';
 
-export default async organizationId => {
-  const orgRes = await query(
+export default async teamId => {
+  const teamRes = await query(
     `
       SELECT stripe_subscription_id
-      FROM organizations
-      WHERE organization_id = $1
+      FROM teams
+      WHERE team_id = $1
     `,
-    [organizationId]
+    [teamId]
   );
 
-  const org = orgRes.rows[0];
-  if (!org.stripe_subscription_id) {
+  const team = teamRes.rows[0];
+  if (!team.stripe_subscription_id) {
     return;
   }
 
-  await stripeClient.subscriptions.del(org.stripe_subscription_id);
+  await stripeClient.subscriptions.del(team.stripe_subscription_id);
 
   await query(
     `
-      UPDATE organizations
+      UPDATE teams
       SET stripe_subscription_id = null
-      WHERE organization_id = $1
+      WHERE team_id = $1
     `,
-    [organizationId]
+    [teamId]
   );
 };

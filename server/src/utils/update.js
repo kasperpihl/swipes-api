@@ -12,7 +12,7 @@ export default {
     let receivers = update.permission_id;
     if (
       typeof receivers === 'string' &&
-      !(receivers.startsWith('USER') || receivers.startsWith('ORG'))
+      !(receivers.startsWith('U') || receivers.startsWith('T'))
     ) {
       const receiverRes = await query(
         `

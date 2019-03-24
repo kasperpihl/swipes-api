@@ -28,7 +28,7 @@ const { store, persistor } = configureStore({
   global: getGlobals(),
   invitation: fromJS({
     invitationToken: localStorage.getItem('invitation_token') || null,
-    invitedToOrg: null
+    invitedToTeam: null
   })
 });
 

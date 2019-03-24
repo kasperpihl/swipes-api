@@ -3,10 +3,10 @@ import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import update from 'src/utils/update';
 import { query, transaction } from 'src/utils/db/db';
-import userOrganizationCheck from 'src/utils/userOrganizationCheck';
+import userTeamCheck from 'src/utils/userTeamCheck';
 
 const expectedInput = {
-  organization_id: string.require(),
+  team_id: string.require(),
   target_user_id: string.require(),
   password: string.require()
 };
@@ -17,7 +17,7 @@ export default endpointCreate(
   },
   async (req, res) => {
     const { user_id, input } = res.locals;
-    const { organization_id, target_user_id, password } = input;
+    const { team_id, target_user_id, password } = input;
 
     // check if this user is available
     const userRes = await query('SELECT password FROM users WHERE user_id=$1', [
@@ -33,41 +33,41 @@ export default endpointCreate(
     }
 
     // Ensure I have the rights to transfer ownership.
-    await userOrganizationCheck(user_id, organization_id, {
+    await userTeamCheck(user_id, team_id, {
       owner: true
     });
 
     // Check that target user exists and is not owner.
-    await userOrganizationCheck(target_user_id, organization_id, {
+    await userTeamCheck(target_user_id, team_id, {
       owner: false
     });
 
     // creating a new user from scratch
-    const [orgRes, orgUserRes] = await transaction([
+    const [teamRes, teamUserRes] = await transaction([
       {
         text: `
-          UPDATE organizations
+          UPDATE teams
           SET owner_id = $1
-          WHERE organization_id = $2
-          RETURNING organization_id, owner_id
+          WHERE team_id = $2
+          RETURNING team_id, owner_id
         `,
-        values: [target_user_id, organization_id]
+        values: [target_user_id, team_id]
       },
       {
         text: `
-          UPDATE organization_users
+          UPDATE team_users
           SET admin = true
           WHERE user_id = $1
-          AND organization_id = $2
-          RETURNING organization_id, user_id, admin
+          AND team_id = $2
+          RETURNING team_id, user_id, admin
         `,
-        values: [target_user_id, organization_id]
+        values: [target_user_id, team_id]
       }
     ]);
 
-    res.locals.update = update.prepare(organization_id, [
-      { type: 'organization', data: orgRes.rows[0] },
-      { type: 'organization_user', data: orgUserRes.rows[0] }
+    res.locals.update = update.prepare(team_id, [
+      { type: 'team', data: teamRes.rows[0] },
+      { type: 'team_user', data: teamUserRes.rows[0] }
     ]);
   }
 ).background(async (req, res) => {

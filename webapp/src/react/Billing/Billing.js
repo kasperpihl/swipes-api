@@ -20,29 +20,29 @@ import SW from './Billing.swiss';
 @withNav
 @withLoader
 @connect((state, props) => ({
-  organization: state.organizations.get(props.organizationId)
+  team: state.teams.get(props.teamId)
 }))
-@propsOrPop('organization')
+@propsOrPop('team')
 export default class Billing extends PureComponent {
   state = {
     plan: 'monthly'
   };
   updatePlanRequest = plan => {
-    const { organization } = this.props;
+    const { team } = this.props;
 
     request('billing.updatePlan', {
       plan,
-      organization_id: organization.get('organization_id')
+      team_id: team.get('team_id')
     });
   };
   handlePlanChange = plan => {
-    const { nav, organization } = this.props;
-    if (!organization.get('stripe_subscription_id')) {
+    const { nav, team } = this.props;
+    if (!team.get('stripe_subscription_id')) {
       this.setState({ plan });
     } else {
       nav.openModal(FormModal, {
         title: 'Change billing plan',
-        subtitle: `You are about to change your billing plan from ${organization.get(
+        subtitle: `You are about to change your billing plan from ${team.get(
           'plan'
         )} to ${plan}. Any unused time from the current subscription will be converted in credits that will be used for future payments.
     
@@ -52,25 +52,22 @@ export default class Billing extends PureComponent {
     }
   };
   render() {
-    const { organization, nav } = this.props;
+    const { team, nav } = this.props;
     const { plan } = this.state;
 
     return (
       <Elements>
-        <CardContent header={<BillingHeader organization={organization} />}>
+        <CardContent header={<BillingHeader team={team} />}>
           <SW.Wrapper>
             <BillingPlan
-              value={organization.get('plan') || plan}
+              value={team.get('plan') || plan}
               onChange={this.handlePlanChange}
             />
             <SW.PaymentSection>
-              {organization.get('stripe_subscription_id') ? (
-                <BillingPaymentActive
-                  openModal={nav.openModal}
-                  organization={organization}
-                />
+              {team.get('stripe_subscription_id') ? (
+                <BillingPaymentActive openModal={nav.openModal} team={team} />
               ) : (
-                <BillingPaymentSubmit organization={organization} plan={plan} />
+                <BillingPaymentSubmit team={team} plan={plan} />
               )}
             </SW.PaymentSection>
           </SW.Wrapper>

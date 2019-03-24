@@ -1,42 +1,34 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import ProfileHeader from 'src/react/Profile/Header/ProfileHeader';
-import ProfileOrg from 'src/react/Profile/Org/ProfileOrg.js';
-import withLoader from 'src/react/_hocs/withLoader';
+import ProfileTeam from 'src/react/Profile/Team/ProfileTeam.js';
 import withNav from 'src/react/_hocs/Nav/withNav';
 import SW from './Profile.swiss';
 import CardContent from 'src/react/_components/Card/Content/CardContent';
 
 @withNav
-@withLoader
 @connect(state => ({
-  organizations: state.organizations
+  teams: state.teams
 }))
 export default class Profile extends PureComponent {
   static sizes = [540];
-  openCreateOrganization = () => {
+  openCreateTeam = () => {
     const { nav } = this.props;
     nav.push({
-      screenId: 'OrganizationCreate',
-      crumbTitle: 'Create an organization'
+      screenId: 'TeamCreate',
+      crumbTitle: 'Create a team'
     });
   };
   renderHeader = () => <ProfileHeader />;
   render() {
-    const { organizations, loader } = this.props;
+    const { teams } = this.props;
     return (
       <CardContent header={this.renderHeader()}>
         <SW.Wrapper>
-          <SW.Title>Organizations</SW.Title>
-          <SW.Button
-            title="Create Organization"
-            onClick={this.openCreateOrganization}
-            status={loader.get('createOrg')}
-          />
-          {organizations
-            .map((org, i) => (
-              <ProfileOrg key={org.get('organization_id')} organization={org} />
-            ))
+          <SW.Title>teams</SW.Title>
+          <SW.Button title="Create Team" onClick={this.openCreateTeam} />
+          {teams
+            .map(team => <ProfileTeam key={team.get('team_id')} team={team} />)
             .toList()}
         </SW.Wrapper>
       </CardContent>

@@ -1,19 +1,19 @@
 import dbRethinkQuery from 'src/utils/db/dbRethinkQuery';
 import r from 'rethinkdb';
 
-export default async function convertFetchRethink({ organization_id }) {
+export default async function convertFetchRethink({ team_id }) {
   ////////////////////////
   // FETCHING FROM RETHINKDB
   ////////////////////////
 
-  const org = await dbRethinkQuery(
-    r.table('organizations').get(organization_id)
-  );
+  const team = await dbRethinkQuery(r.table('organizations').get(team_id));
 
   let users = await dbRethinkQuery(
-    r.table('users').getAll(r.args(org.active_users.concat(org.disabled_users)))
+    r
+      .table('users')
+      .getAll(r.args(team.active_users.concat(team.disabled_users)))
   );
-  org.active_users = org.active_users.filter(
+  team.active_users = team.active_users.filter(
     userId => !!users.find(u => u.id === userId)
   );
 
@@ -23,31 +23,25 @@ export default async function convertFetchRethink({ organization_id }) {
   }));
 
   const milestones = await dbRethinkQuery(
-    r.table('milestones').filter({ organization_id })
+    r.table('milestones').filter({ team_id })
   );
   const goalsNoMilestone = await dbRethinkQuery(
-    r.table('goals').filter({ organization_id, milestone_id: null })
+    r.table('goals').filter({ team_id, milestone_id: null })
   );
 
-  const _rGoals = await dbRethinkQuery(
-    r.table('goals').filter({ organization_id })
-  );
+  const _rGoals = await dbRethinkQuery(r.table('goals').filter({ team_id }));
 
-  const _rNotes = await dbRethinkQuery(
-    r.table('notes').filter({ organization_id })
-  );
-  const _rFiles = await dbRethinkQuery(
-    r.table('files').filter({ organization_id })
-  );
+  const _rNotes = await dbRethinkQuery(r.table('notes').filter({ team_id }));
+  const _rFiles = await dbRethinkQuery(r.table('files').filter({ team_id }));
 
   const _rDiscussions = await dbRethinkQuery(
-    r.table('discussions').filter({ organization_id })
+    r.table('discussions').filter({ team_id })
   );
   const _rComments = await dbRethinkQuery(
-    r.table('comments').filter({ organization_id })
+    r.table('comments').filter({ team_id })
   );
   const _rFollowers = await dbRethinkQuery(
-    r.table('discussion_followers').filter({ organization_id })
+    r.table('discussion_followers').filter({ team_id })
   );
 
   const goalsById = {};
@@ -106,7 +100,7 @@ export default async function convertFetchRethink({ organization_id }) {
     goalsById,
     milestones,
     goalsNoMilestone,
-    org,
+    team,
     users
   };
 }

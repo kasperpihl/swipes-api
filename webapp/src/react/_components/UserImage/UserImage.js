@@ -8,24 +8,24 @@ import SW from './UserImage.swiss';
 
 @connect(state => ({
   me: state.me,
-  organizations: state.organizations
+  teams: state.teams
 }))
 export default class UserImage extends PureComponent {
   static propTypes = {
     userId: PropTypes.string.isRequired,
-    organizationId: PropTypes.string,
+    teamId: PropTypes.string,
     grayscale: PropTypes.bool,
     size: PropTypes.number
   };
   getUser = () => {
-    const { userId, organizationId, organizations, me } = this.props;
+    const { userId, teamId, teams, me } = this.props;
 
     if (userId === 'me' || userId === me.get('user_id')) {
       return me;
     }
-    const user = organizations.getIn([organizationId, 'users', userId]);
+    const user = teams.getIn([teamId, 'users', userId]);
     if (!user) {
-      console.warn('UserImage expects userId and organizationId');
+      console.warn('UserImage expects userId and teamId');
       return me;
     }
     return user;

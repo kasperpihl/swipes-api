@@ -72,7 +72,7 @@ export default class CommentReaction extends PureComponent {
         component: TooltipUsers,
         props: {
           userIds,
-          organizationId: ownedBy
+          teamId: ownedBy
         },
         options: {
           boundingRect: target,

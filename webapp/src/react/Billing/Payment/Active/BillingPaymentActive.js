@@ -2,10 +2,10 @@ import React from 'react';
 import BillingPaymentModal from 'src/react/Billing/Payment/Modal/BillingPaymentModal';
 import SW from './BillingPaymentActive.swiss';
 
-export default function BillingPaymentActive({ openModal, organization }) {
+export default function BillingPaymentActive({ openModal, team }) {
   const handleCardDetails = () => {
     openModal(BillingPaymentModal, {
-      organizationId: organization.get('organization_id')
+      teamId: team.get('team_id')
     });
   };
   return (

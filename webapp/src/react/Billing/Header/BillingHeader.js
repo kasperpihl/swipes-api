@@ -2,10 +2,10 @@ import React from 'react';
 import CardHeader from 'src/react/_components/Card/Header/CardHeader';
 import SW from './BillingHeader.swiss';
 
-const BillingHeader = ({ organization }) => {
-  const hasStripe = !!organization.get('stripe_subscription_id');
+const BillingHeader = ({ team }) => {
+  const hasStripe = !!team.get('stripe_subscription_id');
   const status = hasStripe ? 'Active' : 'Inactive';
-  const title = `Billing: ${organization.get('name')}`;
+  const title = `Billing: ${team.get('name')}`;
 
   return (
     <CardHeader title={title}>

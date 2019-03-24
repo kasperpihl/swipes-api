@@ -1,7 +1,7 @@
 import { styleSheet } from 'swiss-react';
 import Button from 'src/react/_components/Button/Button';
 
-export default styleSheet('OrganizationUser', {
+export default styleSheet('TeamUser', {
   Wrapper: {
     _size: ['100%', 'auto'],
     _flex: ['row', 'flex-start', 'center'],

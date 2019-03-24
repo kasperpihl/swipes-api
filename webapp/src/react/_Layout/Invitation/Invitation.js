@@ -8,8 +8,8 @@ import SW from './Invitation.swiss';
 
 @connect(
   state => ({
-    invitedToOrg: state.invitation.get('invitedToOrg'),
-    organizations: state.organizations
+    invitedToTeam: state.invitation.get('invitedToTeam'),
+    teams: state.teams
   }),
   {
     invitationClear: invitationActions.clear
@@ -22,10 +22,10 @@ export default class Invitation extends PureComponent {
     invitationClear();
   };
   handleJoin = () => {
-    const { invitedToOrg, invitationClear, loader } = this.props;
+    const { invitedToTeam, invitationClear, loader } = this.props;
     loader.set('loader');
-    request('organization.join', {
-      invitation_token: invitedToOrg.get('invitation_token')
+    request('team.join', {
+      invitation_token: invitedToTeam.get('invitation_token')
     }).then(res => {
       if (res.ok) {
         loader.clear('loader');
@@ -45,13 +45,13 @@ export default class Invitation extends PureComponent {
     });
   };
   render() {
-    const { invitedToOrg, loader, organizations } = this.props;
-    if (!invitedToOrg) {
+    const { invitedToTeam, loader, teams } = this.props;
+    if (!invitedToTeam) {
       return null;
     }
 
-    let title = `Join ${invitedToOrg.get('name')}`;
-    let paragraph = `Do you want to join the team "${invitedToOrg.get(
+    let title = `Join ${invitedToTeam.get('name')}`;
+    let paragraph = `Do you want to join the team "${invitedToTeam.get(
       'name'
     )}"?`;
     let actions = [
@@ -70,10 +70,10 @@ export default class Invitation extends PureComponent {
       />
     ];
 
-    if (organizations.get(invitedToOrg.get('organization_id'))) {
-      // User is already in this org (most likely clicked)
+    if (teams.get(invitedToTeam.get('team_id'))) {
+      // User is already in this team (most likely clicked)
       title = 'Already part of team';
-      paragraph = `Looks like you are already part of the team "${invitedToOrg.get(
+      paragraph = `Looks like you are already part of the team "${invitedToTeam.get(
         'name'
       )}".`;
       actions = [

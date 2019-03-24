@@ -32,7 +32,7 @@ function ProjectTaskAssignees({ taskId }) {
       contextMenu(AssignMenu, e, {
         excludeMe: false,
         selectedIds: assignees,
-        organizationId: stateManager.getClientState().get('owned_by'),
+        teamId: stateManager.getClientState().get('owned_by'),
         onClose: handleAssigneeSelect
       });
     },
@@ -50,7 +50,7 @@ function ProjectTaskAssignees({ taskId }) {
     >
       <Assignees
         userIds={assigneesCount}
-        organizationId={ownedBy}
+        teamId={ownedBy}
         size={18}
         maxImages={4}
         onClick={handleAssignClick}

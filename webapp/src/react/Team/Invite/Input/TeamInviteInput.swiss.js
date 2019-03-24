@@ -1,7 +1,7 @@
 import { styleSheet } from 'swiss-react';
 import Button from 'src/react/_components/Button/Button';
 
-export default styleSheet('OrganizationInviteInput', {
+export default styleSheet('TeamInviteInput', {
   Wrapper: {
     _size: ['100%', 'auto'],
     _flex: ['column', 'flex-start', 'flex-start'],

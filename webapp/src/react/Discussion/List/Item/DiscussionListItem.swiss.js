@@ -40,7 +40,7 @@ export default styleSheet('DiscussionListItem', {
     right: '12px',
     color: '$sw2'
   },
-  OrganizationName: {
+  TeamName: {
     _textStyle: 'caption',
     flex: 'none'
   },

@@ -87,7 +87,7 @@ export default class CommentItem extends PureComponent {
       <SW.Picture>
         <UserImage
           userId={comment.sent_by}
-          organizationId={ownedBy}
+          teamId={ownedBy}
           size={30}
         />
       </SW.Picture>

@@ -10,7 +10,7 @@ import SW from './BillingPaymentModal.swiss';
 @withLoader
 export default class BillingPaymentModal extends PureComponent {
   handleSubmit = e => {
-    const { organizationId, hideModal, loader } = this.props;
+    const { teamId, hideModal, loader } = this.props;
     loader.set('changeCardNumber');
     this.stripe
       .createToken()
@@ -23,7 +23,7 @@ export default class BillingPaymentModal extends PureComponent {
         console.log('Received Stripe token:', token);
         return request('billing.update', {
           stripe_token: token.id,
-          organization_id: organizationId
+          team_id: teamId
         });
       })
       .then(res => {

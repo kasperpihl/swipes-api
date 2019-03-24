@@ -20,7 +20,7 @@ export default styleSheet('CardHeaderSubtitle', {
     fill: '$sw2',
     margin: '0 2px'
   },
-  OrganizationName: {
+  TeamName: {
     _textStyle: 'body',
     lineHeight: '24px',
     color: '$sw2'

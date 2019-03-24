@@ -2,7 +2,7 @@ import { styleSheet } from 'swiss-react';
 import Button from 'src/react/_components/Button/Button';
 import Icon from 'src/react/_components/Icon/Icon';
 
-export default styleSheet('OrganizationPendingInvites', {
+export default styleSheet('TeamPendingInvites', {
   Wrapper: {
     _size: ['100%', 'auto'],
     _flex: ['column', 'flex-start', 'flex-start'],

@@ -8,7 +8,7 @@ import CardHeader from '_shared/Card/Header/CardHeader';
 import Spacing from '_shared/Spacing/Spacing';
 import Button from '_shared/Button/Button';
 
-import SW from './OrganizationCreate.swiss';
+import SW from './TeamCreate.swiss';
 import useLoader from 'src/react/_hooks/useLoader';
 
 const initialState = [
@@ -36,7 +36,7 @@ function inputReducer(state, action) {
   }
 }
 
-export default function OrganizationCreate() {
+export default function TeamCreate() {
   const [teamName, handleTeamNameChange] = useState('');
   const [members, dispatch] = useReducer(inputReducer, initialState);
 
@@ -46,18 +46,18 @@ export default function OrganizationCreate() {
     handleTeamNameChange(e.target.value);
   };
 
-  async function handleCreateOrganization() {
+  async function handleCreateTeam() {
     loader.set('create');
-    const orgRes = await request('organization.add', {
+    const teamRes = await request('team.add', {
       name: teamName
     });
-    const orgId = orgRes.organization_id;
+    const teamId = teamRes.team_id;
     await Promise.all(
       members
         .filter(({ value }) => !!value)
         .map(({ value }) =>
-          request('organization.inviteUser', {
-            organization_id: orgId,
+          request('team.inviteUser', {
+            team_id: teamId,
             target_email: value
           })
         )
@@ -118,7 +118,7 @@ export default function OrganizationCreate() {
           <Button title="Cancel" onClick={handleCancel} border />
           <Button
             title="Start collaborating!"
-            onClick={handleCreateOrganization}
+            onClick={handleCreateTeam}
             status={loader.get('create')}
             green
           />

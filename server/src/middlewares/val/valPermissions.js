@@ -14,10 +14,10 @@ export default function valPermissions({ permissionKey, permissionCreateKey }) {
       if (res.locals.input[permissionCreateKey] !== user_id) {
         const permissionRes = await query(
           `
-            SELECT organization_id
-            FROM organization_users 
+            SELECT team_id
+            FROM team_users 
             WHERE user_id = $1
-            AND organization_id = $2
+            AND team_id = $2
             AND status = 'active'
           `,
           [user_id, res.locals.input[permissionCreateKey]]

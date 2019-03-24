@@ -1,24 +1,20 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import OrganizationHeader from 'src/react/Organization/Header/OrganizationHeader';
-import OrganizationUser from 'src/react/Organization/User/OrganizationUser';
-import OrganizationInviteInput from 'src/react/Organization/Invite/Input/OrganizationInviteInput';
-import OrganizationPendingInvites from 'src/react/Organization/Invite/PendingInvites/OrganizationPendingInvites';
-import SW from './Organization.swiss';
+import TeamHeader from 'src/react/Team/Header/TeamHeader';
+import TeamUser from 'src/react/Team/User/TeamUser';
+import TeamInviteInput from 'src/react/Team/Invite/Input/TeamInviteInput';
+import TeamPendingInvites from 'src/react/Team/Invite/PendingInvites/TeamPendingInvites';
+import SW from './Team.swiss';
 
 import propsOrPop from 'src/react/_hocs/propsOrPop';
 import CardContent from 'src/react/_components/Card/Content/CardContent';
 
 @connect((state, props) => ({
-  meInOrg: state.organizations.getIn([
-    props.organizationId,
-    'users',
-    state.me.get('user_id')
-  ]),
-  organization: state.organizations.get(props.organizationId)
+  meInTeam: state.teams.getIn([props.teamId, 'users', state.me.get('user_id')]),
+  team: state.teams.get(props.teamId)
 }))
-@propsOrPop('organization')
-export default class Organization extends PureComponent {
+@propsOrPop('team')
+export default class Team extends PureComponent {
   static sizes = [540];
   constructor(props) {
     super(props);
@@ -36,18 +32,18 @@ export default class Organization extends PureComponent {
 
   renderHeader = () => {
     const {
-      organization,
+      team,
       activeSubscription,
       trialExpired,
       daysLeft,
-      meInOrg
+      meInTeam
     } = this.props;
     return (
-      <OrganizationHeader
-        name={organization.get('name')}
-        organization={organization}
-        meInOrg={meInOrg}
-        admin={organization.getIn(['users', meInOrg.get('user_id'), 'admin'])}
+      <TeamHeader
+        name={team.get('name')}
+        team={team}
+        meInTeam={meInTeam}
+        admin={team.getIn(['users', meInTeam.get('user_id'), 'admin'])}
         activeSubscription={activeSubscription}
         trialExpired={trialExpired}
         daysLeft={daysLeft}
@@ -56,8 +52,8 @@ export default class Organization extends PureComponent {
   };
 
   renderTabBar = () => {
-    const { organization } = this.props;
-    const disabledUsersAmount = organization
+    const { team } = this.props;
+    const disabledUsersAmount = team
       .get('users')
       .filter(u => u.get('status') === 'disabled').size;
 
@@ -76,27 +72,25 @@ export default class Organization extends PureComponent {
 
   render() {
     const { tabIndex } = this.state;
-    const { organization, meInOrg } = this.props;
+    const { team, meInTeam } = this.props;
     const userStatus = tabIndex === 0 ? 'active' : 'disabled';
 
     return (
       <CardContent header={this.renderHeader()}>
         <SW.Wrapper>
-          <OrganizationInviteInput
-            organizationId={organization.get('organization_id')}
-          />
-          <OrganizationPendingInvites organization={organization} />
+          <TeamInviteInput teamId={team.get('team_id')} />
+          <TeamPendingInvites team={team} />
           {this.renderTabBar()}
           <SW.UsersWrapper>
-            {organization
+            {team
               .get('users')
               .filter(u => u.get('status') === userStatus)
               .map(u => (
-                <OrganizationUser
+                <TeamUser
                   key={u.get('user_id')}
                   user={u}
-                  organizationId={organization.get('organization_id')}
-                  meInOrg={meInOrg}
+                  teamId={team.get('team_id')}
+                  meInTeam={meInTeam}
                 />
               ))
               .toList()}

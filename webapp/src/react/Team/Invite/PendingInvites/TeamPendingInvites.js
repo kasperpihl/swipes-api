@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import withLoader from 'src/react/_hocs/withLoader';
 import request from 'core/utils/request';
-import SW from './OrganizationPendingInvites.swiss';
+import SW from './TeamPendingInvites.swiss';
 
 @withLoader
-export default class OrganizationPendingInvites extends PureComponent {
+export default class TeamPendingInvites extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -14,11 +14,11 @@ export default class OrganizationPendingInvites extends PureComponent {
   }
 
   handleSendInviteCached = email => {
-    const { organization, loader } = this.props;
+    const { team, loader } = this.props;
     const loadingKey = `${email}sendInvite`;
     loader.set(loadingKey);
-    request('organization.inviteUser', {
-      organization_id: organization.get('organization_id'),
+    request('team.inviteUser', {
+      team_id: team.get('team_id'),
       target_email: email
     }).then(res => {
       if (res && res.ok) {
@@ -30,12 +30,12 @@ export default class OrganizationPendingInvites extends PureComponent {
   };
 
   handleRevokeInviteCached = email => {
-    const { organization, loader } = this.props;
+    const { team, loader } = this.props;
     const loadingKey = `${email}revokeInvite`;
 
     loader.set(loadingKey);
-    request('organization.inviteRevoke', {
-      organization_id: organization.get('organization_id'),
+    request('team.inviteRevoke', {
+      team_id: team.get('team_id'),
       target_email: email
     }).then(res => {
       if (res && res.ok) {
@@ -53,12 +53,12 @@ export default class OrganizationPendingInvites extends PureComponent {
 
   renderPendingInvites = () => {
     const { showPendingInvites } = this.state;
-    const { organization, loader } = this.props;
+    const { team, loader } = this.props;
 
     if (showPendingInvites) {
       return (
         <SW.PendingInvites>
-          {organization
+          {team
             .get('pending_users')
             .map((ts, email) => (
               <SW.InviteItem key={email}>
@@ -84,8 +84,8 @@ export default class OrganizationPendingInvites extends PureComponent {
 
   render() {
     const { showPendingInvites } = this.state;
-    const { organization } = this.props;
-    const pendingUsersArr = organization.get('pending_users').keySeq();
+    const { team } = this.props;
+    const pendingUsersArr = team.get('pending_users').keySeq();
 
     if (!pendingUsersArr.size) {
       return null;

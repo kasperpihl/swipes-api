@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import SW from './Planning.swiss';
 
-import useOrgTabs from './useOrgTabs';
+import useTeamTabs from './useTeamTabs';
 import CardHeader from '_shared/Card/Header/CardHeader';
 import CardContent from '_shared/Card/Content/CardContent';
 import Spacing from '_shared/Spacing/Spacing';
@@ -12,17 +12,17 @@ import PlanningOverview from './Overview/PlanningOverview';
 import TabBar from '_shared/TabBar/TabBar';
 
 export default connect(state => ({
-  organizations: state.organizations
+  teams: state.teams
 }))(Planning);
 
-function Planning({ organizations }) {
+function Planning({ teams }) {
   const defaultYearWeek = useMemo(() => {
     const now = moment();
     return `${now.year()}-${now.week()}`;
   }, []);
   const [yearWeek, setYearWeek] = useState(defaultYearWeek);
 
-  const [tabs, tabIndex, setTabIndex] = useOrgTabs(organizations);
+  const [tabs, tabIndex, setTabIndex] = useTeamTabs(teams);
 
   const ownedBy = tabs[tabIndex].id;
 

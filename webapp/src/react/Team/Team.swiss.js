@@ -2,7 +2,7 @@ import { styleSheet } from 'swiss-react';
 import Button from 'src/react/_components/Button/Button';
 import TabBar from 'src/react/_components/TabBar/TabBar';
 
-export default styleSheet('Organization', {
+export default styleSheet('Team', {
   Wrapper: {
     _size: ['100%', 'auto'],
     _flex: ['row'],

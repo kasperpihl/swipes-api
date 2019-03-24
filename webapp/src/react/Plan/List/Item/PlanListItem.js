@@ -2,7 +2,7 @@ import React from 'react';
 import useNav from 'src/react/_hooks/useNav';
 import DayTracker from 'src/react/_components/DayTracker/DayTracker';
 import planGetTitle from 'core/utils/plan/planGetTitle';
-import orgGetBelonging from 'core/utils/org/orgGetBelonging';
+import teamGetBelonging from 'core/utils/team/teamGetBelonging';
 import SW from './PlanListItem.swiss';
 
 export default function PlanListItem({ plan }) {
@@ -31,7 +31,7 @@ export default function PlanListItem({ plan }) {
       />
       <SW.TextWrapper>
         <SW.Title>{title}</SW.Title>
-        <SW.Subtitle>{orgGetBelonging(plan.owned_by)}</SW.Subtitle>
+        <SW.Subtitle>{teamGetBelonging(plan.owned_by)}</SW.Subtitle>
       </SW.TextWrapper>
     </SW.Wrapper>
   );

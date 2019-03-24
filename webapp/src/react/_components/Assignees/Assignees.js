@@ -3,7 +3,7 @@ import UserImage from 'src/react/_components/UserImage/UserImage';
 import SW from './Assignees.swiss';
 
 export default function Assignees(props) {
-  let { organizationId, userIds, maxImages, size, onClick, children } = props;
+  let { teamId, userIds, maxImages, size, onClick, children } = props;
 
   maxImages = maxImages || 3;
   size = size || 24;
@@ -27,7 +27,7 @@ export default function Assignees(props) {
                 <SW.ImageWrapper index={i}>
                   <UserImage
                     userId={userId}
-                    organizationId={organizationId}
+                    teamId={teamId}
                     size={size}
                   />
                 </SW.ImageWrapper>

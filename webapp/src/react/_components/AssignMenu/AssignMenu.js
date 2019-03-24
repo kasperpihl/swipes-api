@@ -8,7 +8,7 @@ import userGetFullName from 'core/utils/user/userGetFullName';
 import Button from 'src/react/_components/Button/Button';
 
 @connect((state, props) => ({
-  organization: state.organizations.get(props.organizationId),
+  team: state.teams.get(props.teamId),
   me: state.me
 }))
 export default class AssignMenu extends PureComponent {
@@ -55,17 +55,10 @@ export default class AssignMenu extends PureComponent {
 
   render() {
     const { selectedIds } = this.state;
-    const {
-      excludeMe,
-      organization,
-      me,
-      organizationId,
-      hide,
-      hideRowOnSelect
-    } = this.props;
-    const teamName = organization ? organization.get('name') : 'Personal';
-    let users = organization
-      ? organization
+    const { excludeMe, team, me, teamId, hide, hideRowOnSelect } = this.props;
+    const teamName = team ? team.get('name') : 'Personal';
+    let users = team
+      ? team
           .get('users')
           .toList()
           .filter(u => u.get('status') === 'active')
@@ -99,9 +92,9 @@ export default class AssignMenu extends PureComponent {
                 <UserImage
                   userId={u.get('user_id')}
                   size={36}
-                  organizationId={organizationId}
+                  teamId={teamId}
                 />
-                <SW.UserName>{userGetFullName(u, organizationId)}</SW.UserName>
+                <SW.UserName>{userGetFullName(u, teamId)}</SW.UserName>
               </SW.Row>
             );
           })}

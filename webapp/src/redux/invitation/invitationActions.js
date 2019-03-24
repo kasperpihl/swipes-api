@@ -2,14 +2,14 @@ import * as types from '../constants';
 import request from 'core/utils/request';
 
 export const fetch = invitationToken => dispatch => {
-  request('organization.inviteReadToken', {
+  request('team.inviteReadToken', {
     invitation_token: invitationToken
   }).then(res => {
     if (res.ok) {
       dispatch({
-        type: types.INVITATION_SET_ORGANIZATION,
+        type: types.INVITATION_SET_TEAM,
         payload: {
-          org: res.organization
+          team: res.team
         }
       });
     } else {

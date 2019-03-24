@@ -11,7 +11,7 @@ import convertUsers from './convertUsers';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 
 const expectedInput = {
-  organization_id: string.require()
+  team_id: string.require()
 };
 
 export default endpointCreate(
@@ -21,12 +21,12 @@ export default endpointCreate(
   },
   async (req, res, next) => {
     // Get inputs
-    const { organization_id } = res.locals.input;
+    const { team_id } = res.locals.input;
 
     ////////////////////////
     // FETCHING FROM RETHINKDB
     ////////////////////////
-    console.log('STARTING ' + organization_id);
+    console.log('STARTING ' + team_id);
 
     const {
       followersByDiscussionId,
@@ -38,9 +38,9 @@ export default endpointCreate(
       goalsById,
       milestones,
       goalsNoMilestone,
-      org,
+      team,
       users
-    } = await convertFetchRethink({ organization_id });
+    } = await convertFetchRethink({ team_id });
 
     ////////////////////////
     // BEGINNING SQL QUERIES
@@ -48,15 +48,15 @@ export default endpointCreate(
     const c = await getClient();
 
     try {
-      await convertClean({ c, organization_id });
+      await convertClean({ c, team_id });
       await c.query('BEGIN');
 
-      await convertUsers({ org, users, c });
+      await convertUsers({ team, users, c });
 
       await convertMilestones({
-        organization_id,
+        team_id,
         c,
-        org,
+        team,
         milestones,
         goalsById,
         filesById,
@@ -68,9 +68,9 @@ export default endpointCreate(
 
       await convertGoalsWithoutMilestone({
         goalsNoMilestone,
-        organization_id,
+        team_id,
         c,
-        org,
+        team,
         filesById,
         notesById,
         commentsByDiscussionId,
@@ -79,7 +79,7 @@ export default endpointCreate(
       });
 
       await convertDiscussions({
-        organization_id,
+        team_id,
         c,
         followersByDiscussionId,
         commentsByDiscussionId,
@@ -90,8 +90,8 @@ export default endpointCreate(
 
       await convertContextAttachments({
         c,
-        org,
-        organization_id,
+        team,
+        team_id,
         milestones,
         goalsById,
         discussionsByContext,
@@ -102,8 +102,8 @@ export default endpointCreate(
 
       await convertMiscDiscussion({
         c,
-        org,
-        organization_id,
+        team,
+        team_id,
         goalsNoMilestone,
         discussionsByContext,
         commentsByDiscussionId,

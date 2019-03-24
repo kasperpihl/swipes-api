@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import useMyId from 'core/react/_hooks/useMyId';
 
-export default function useOrgTabs(organizations) {
+export default function useTeamTabs(teams) {
   const myId = useMyId();
 
   const [tabIndex, setTabIndex] = useState(0);
 
-  const tabs = organizations
+  const tabs = teams
     .toArray()
-    .map(org => ({ title: org.get('name'), id: org.get('organization_id') }))
+    .map(team => ({ title: team.get('name'), id: team.get('team_id') }))
     .concat([{ title: 'Personal', id: myId }]);
 
   return [tabs, tabIndex, setTabIndex];
