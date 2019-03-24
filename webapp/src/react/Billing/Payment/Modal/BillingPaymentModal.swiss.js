@@ -2,11 +2,7 @@ import { styleSheet } from 'swiss-react';
 
 export default styleSheet('BillingPaymentModal', {
   Wrapper: {
-    boxShadow: '0 1px 20px 3px rgba($sw1  ,0.1)',
-    background: '$sw5',
-    width: '479px',
-    borderRadius: '5px',
-    margin: 'auto'
+    width: '479px'
   },
   ComposerWrapper: {
     _flex: ['row', 'left', 'top'],

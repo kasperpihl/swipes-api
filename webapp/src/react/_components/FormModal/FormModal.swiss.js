@@ -4,11 +4,8 @@ import Button from 'src/react/_components/Button/Button';
 export default styleSheet('FormModal', {
   Wrapper: {
     _flex: ['column', 'flex-start', 'flex-start'],
-    maxWidth: '450px',
-    margin: '0 auto',
-    boxShadow: '0 1px 20px 3px rgba(0, 37, 82, .3)',
-    padding: '24px',
-    backgroundColor: '$sw5'
+    width: '450px',
+    padding: '24px'
   },
 
   Title: {

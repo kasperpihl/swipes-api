@@ -17,10 +17,7 @@ export default class Modal extends PureComponent {
     clear(side);
   };
   clickedBackground = e => {
-    const isBackground =
-      e.target.classList.contains('Modal_Container') ||
-      e.target.classList.contains('Modal_Content');
-    if (isBackground) {
+    if (e.target.classList.contains('Modal_Container')) {
       this.hideModal();
     }
   };
@@ -33,11 +30,9 @@ export default class Modal extends PureComponent {
         show={!!modal}
         onClick={this.clickedBackground}
       >
-        <SW.Content>
-          {modal && modal.component && (
-            <modal.component hideModal={this.hideModal} {...modal.props} />
-          )}
-        </SW.Content>
+        {modal && modal.component && (
+          <modal.component hideModal={this.hideModal} {...modal.props} />
+        )}
       </SW.Container>
     );
   }

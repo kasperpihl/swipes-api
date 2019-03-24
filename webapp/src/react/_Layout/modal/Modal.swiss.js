@@ -16,20 +16,11 @@ export default styleSheet('Modal', {
       visibility: 'visible'
     },
     _flex: ['column', 'center', 'center'],
-    'position=bottom': {
-      _flex: ['column', 'center', 'bottom']
-    },
-    'position=top': {
-      _flex: ['column', 'center', 'top']
-    }
-  },
-  Content: {
-    _size: ['100%', 'auto'],
-    'position=bottom': {
-      borderTop: '1px solid $sw3'
-    },
-    'position=top': {
-      borderBottom: '1px solid $sw3'
+    '& > *': {
+      margin: 'auto',
+      boxShadow: '0 1px 20px 3px rgba($sw1  ,0.1)',
+      background: '$base',
+      borderRadius: '6px'
     }
   }
 });
