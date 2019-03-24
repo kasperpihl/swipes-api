@@ -4,7 +4,7 @@ export default styleSheet('DiscussionListItem', {
   Wrapper: {
     _flex: ['row', 'left', 'top'],
     width: 'auto',
-    padding: '10px 30px',
+    padding: '6px 30px',
     selected: {
       background: '$green3'
     }
@@ -36,7 +36,7 @@ export default styleSheet('DiscussionListItem', {
     _flex: ['row', 'center', 'center'],
     flex: 'none',
     position: 'absolute',
-    top: '13px',
+    top: '9px',
     right: '12px',
     color: '$sw2'
   },
@@ -49,7 +49,7 @@ export default styleSheet('DiscussionListItem', {
     opacity: '0',
     visibility: 'hidden',
     position: 'absolute',
-    top: '14px',
+    top: '10px',
     left: '9px',
     borderRadius: '50%',
     backgroundColor: '$blue',

@@ -34,7 +34,7 @@ export default endpointCreate(
     const sha1Password = sha1(password);
 
     if (!user || sha1Password !== user.password) {
-      throw Error('unauthorized');
+      throw Error('Wrong password').toClient();
     }
 
     await stripeCancelSubscription(organization_id);

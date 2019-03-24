@@ -13,14 +13,8 @@ export default function ButtonIcon(props) {
     }
     case 'Loading':
       return <SW.LoaderCircle />;
-    case 'Error':
-      icon = 'Close';
-      break;
-    case 'Success':
-      icon = 'ChecklistCheckmark';
-      break;
     default:
-      break;
+      return null;
   }
   return (
     <SW.IconWrapper>
