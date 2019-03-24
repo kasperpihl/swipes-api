@@ -19,14 +19,10 @@ export default endpointCreate(
     const limit = input.limit || 20;
 
     const values = [user_id, limit + 1, skip];
-    let orderBy = `
-      po.opened_at DESC NULLS FIRST,
-      p.created_at DESC
-    `;
+
     let ownedByFilter = '';
     if (owned_by) {
       ownedByFilter = 'AND p.owned_by = $4';
-      orderBy = 'p.title ASC';
       values.push(owned_by);
     }
 
@@ -41,7 +37,9 @@ export default endpointCreate(
         WHERE ${sqlCheckPermissions('per.granted_to', user_id)}
         ${ownedByFilter}
         AND p.deleted=FALSE
-        ORDER BY ${orderBy}
+        ORDER BY
+          po.opened_at DESC NULLS FIRST,
+          p.created_at DESC
         LIMIT $2
         OFFSET $3
       `,

@@ -5,9 +5,12 @@ import ProgressCircle from 'src/react/_components/ProgressCircle/ProgressCircle'
 import useNav from 'src/react/_hooks/useNav';
 import teamGetBelonging from 'core/utils/team/teamGetBelonging';
 
-export default function ProjectListItem({ project }) {
+export default function ProjectListItem({ project, hideTeam, onClick }) {
   const nav = useNav();
   const handleClick = () => {
+    if (onClick) {
+      return onClick();
+    }
     nav.push({
       screenId: 'ProjectOverview',
       crumbTitle: 'Project',
@@ -43,7 +46,9 @@ export default function ProjectListItem({ project }) {
       </SW.LeftSideWrapper>
       <SW.TextWrapper>
         <SW.Title>{project.title}</SW.Title>
-        <SW.Subtitle>{teamGetBelonging(project.owned_by)}</SW.Subtitle>
+        {!hideTeam && (
+          <SW.Subtitle>{teamGetBelonging(project.owned_by)}</SW.Subtitle>
+        )}
         <SW.DateOpened>
           {isNew && <span>New</span>}
           {!isNew && <span>{openedAt}</span>}
