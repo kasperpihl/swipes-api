@@ -9,6 +9,7 @@ import Spacing from '_shared/Spacing/Spacing';
 import Button from '_shared/Button/Button';
 import ActionBar from '_shared/ActionBar/ActionBar';
 import StepSlider from '_shared/StepSlider/StepSlider';
+import parseWeekLabel from '_shared/WeekPicker/parseWeekLabel';
 
 import SW from './PlanningOverview.swiss';
 
@@ -55,6 +56,9 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
     changeSliderValue(parseInt(e.target.value));
   };
 
+  const weekLabel = parseWeekLabel(yearWeek);
+  console.log(weekLabel);
+
   const actions = [
     <StepSlider
       sliderValue={sliderValue}
@@ -76,7 +80,7 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
           <EmptyState
             showIcon
             fill
-            title="Nothing planned for this week"
+            title={`Nothing planned for ${weekLabel}`}
             description="Add tasks from a project"
             icon="Typewriter"
           />

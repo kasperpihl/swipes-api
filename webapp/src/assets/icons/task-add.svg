@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="atom/icon/task_plan" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="task" stroke="#5C5B5B" fill="#FCFCFA" x="4.5" y="4.5" width="14" height="14" rx="7"></rect>
+        <path d="M12,11 L15,11 L15,12 L12,12 L12,15 L11,15 L11,12 L8,12 L8,11 L11,11 L11,8 L12,8 L12,11 Z" id="Combined-Shape" fill="#5C5B5B"></path>
+    </g>
+</svg>

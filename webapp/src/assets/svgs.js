@@ -53,6 +53,8 @@ export { default as PlanStart } from './icons/plan-start.svg';
 export { default as Plus } from './icons/plus.svg';
 export { default as Project } from './icons/projects.svg';
 export { default as Reload } from './icons/reload.svg';
+export { default as TaskAdd } from './icons/task-add.svg'; // new;
+export { default as TaskRemove } from './icons/task-remove.svg'; // new;
 export { default as ThreeDots } from './icons/three-dots.svg';
 export { default as Typewriter } from './icons/typewriter.svg';
 export { default as Underline } from './icons/underline.svg';
