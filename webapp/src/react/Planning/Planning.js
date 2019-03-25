@@ -11,8 +11,6 @@ import PlanningSide from './Side/PlanningSide';
 import PlanningOverview from './Overview/PlanningOverview';
 import Button from '_shared/Button/Button';
 import TabBar from '_shared/TabBar/TabBar';
-import SideHeader from '_shared/SideHeader/SideHeader';
-import ProgressBar from '_shared/ProgressBar/ProgressBar';
 import PlanningContext from './PlanningContext';
 
 export default connect(state => ({
@@ -33,7 +31,29 @@ function Planning({ teams }) {
 
   const [tabs, tabIndex, setTabIndex] = useTeamTabs(teams);
 
+  const [planningState, updatePlanningState] = useReducer(
+    (state, action) => {
+      if (action === 'reset') {
+        return {
+          editingId: null
+        };
+      }
+      return {
+        ...state,
+        ...action
+      };
+    },
+    {
+      editingId: null
+    }
+  );
+
   const ownedBy = tabs[tabIndex].id;
+
+  const updateYearWeek = yW => {
+    updatePlanningState('reset');
+    setYearWeek(yW);
+  };
 
   const handleNextWeek = () => {
     const now = moment();
@@ -44,18 +64,9 @@ function Planning({ teams }) {
       year = year + 1;
     }
 
-    setYearWeek(`${year}-${now.week()}`);
+    updateYearWeek(`${year}-${now.week()}`);
   };
 
-  const [planningState, updatePlanningState] = useReducer(
-    (state, action) => ({
-      ...state,
-      ...action
-    }),
-    {
-      editingId: null
-    }
-  );
   const planningValue = useMemo(() => [planningState, updatePlanningState], [
     planningState,
     updatePlanningState
@@ -84,7 +95,7 @@ function Planning({ teams }) {
         noframe
       >
         <SW.ParentWrapper>
-          <PlanningSide yearWeek={yearWeek} setYearWeek={setYearWeek} />
+          <PlanningSide yearWeek={yearWeek} setYearWeek={updateYearWeek} />
           <Spacing width={48} />
           <SW.RightSide>
             <PlanningOverview

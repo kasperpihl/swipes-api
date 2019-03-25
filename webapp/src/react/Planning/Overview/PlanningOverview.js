@@ -57,6 +57,7 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
     { editingId, maxDepth, stateManagers },
     updatePlanningState
   ] = usePlanningState();
+
   let actions = [];
   if (maxDepth) {
     const handleChange = e => {

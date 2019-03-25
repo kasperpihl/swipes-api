@@ -32,7 +32,7 @@ export default function PlanningList({ tasks, ownedBy, yearWeek }) {
   ).length;
 
   const [
-    { numberOfCompleted, maxDepth },
+    { numberOfCompleted, maxDepth, totalNumberOfTasks },
     updatePlanningState
   ] = usePlanningState();
   useEffect(() => {
@@ -49,15 +49,19 @@ export default function PlanningList({ tasks, ownedBy, yearWeek }) {
       dDepth = Math.max(dDepth, p.maxIndention);
     });
 
-    if (dCompleted !== numberOfCompleted || dDepth !== maxDepth) {
-      console.log(dCompleted, dDepth);
+    if (
+      dCompleted !== numberOfCompleted ||
+      dDepth !== maxDepth ||
+      tasks.length !== totalNumberOfTasks
+    ) {
       updatePlanningState({
         numberOfCompleted: dCompleted,
         maxDepth: dDepth,
-        stateManagers
+        stateManagers,
+        totalNumberOfTasks: tasks.length
       });
     }
-  }, [hasPending, projects]);
+  }, [hasPending, projects, tasks]);
 
   const sortedProjectIds = useMemo(() => {
     if (hasPending) return Object.keys(projects);
