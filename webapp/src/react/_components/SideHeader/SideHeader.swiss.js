@@ -1,10 +1,15 @@
 import { styleSheet } from 'swiss-react';
 
 export default styleSheet('SideHeader', {
-  Wrapper: {},
+  Wrapper: {
+    _flex: ['row', 'left', 'center'],
+    height: '35px'
+  },
 
   TitleWrapper: {
-    _flex: ['row', 'flex-start', 'flex-start'],
+    _flex: ['column', 'left', 'top'],
+    height: '100%',
+    marginTop: '3px'
   },
 
   BigNumber: {
@@ -15,8 +20,7 @@ export default styleSheet('SideHeader', {
 
   SmallNumber: {
     _textStyle: 'body',
-    color: '$dark',
-    marginTop: '12px'
+    color: '$dark'
   },
 
   Subtitle: {

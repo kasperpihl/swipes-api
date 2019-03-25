@@ -1,5 +1,6 @@
 import React, { memo, useEffect, useState } from 'react';
 import Loader from 'src/react/_components/loaders/Loader';
+import Spacing from '_shared/Spacing/Spacing';
 import PlanTaskList from 'src/react/Plan/TaskList/PlanTaskList';
 import useSyncedProject from 'core/react/_hooks/useSyncedProject';
 import useProjectKeyboard from 'src/react/Project/useProjectKeyboard';
@@ -41,6 +42,7 @@ export default function PlanningModalProject({
 
   return (
     <SW.Wrapper>
+      <Spacing height={6} />
       <PlanTaskList
         stateManager={stateManager}
         selectable

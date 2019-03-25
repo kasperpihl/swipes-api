@@ -9,7 +9,10 @@ import CardContent from '_shared/Card/Content/CardContent';
 import Spacing from '_shared/Spacing/Spacing';
 import PlanningSide from './Side/PlanningSide';
 import PlanningOverview from './Overview/PlanningOverview';
+import Button from '_shared/Button/Button';
 import TabBar from '_shared/TabBar/TabBar';
+import SideHeader from '_shared/SideHeader/SideHeader';
+import ProgressBar from '_shared/ProgressBar/ProgressBar';
 
 export default connect(state => ({
   teams: state.teams
@@ -27,37 +30,44 @@ function Planning({ teams }) {
   const ownedBy = tabs[tabIndex].id;
 
   return (
-    <SW.ParentWrapper>
-      <SW.LeftSide>
-        <CardContent
-          header={<CardHeader title="Planning" horizontalPadding={12} />}
-          noframe
-        >
+    <CardContent
+      header={
+        <SW.HeaderWrapper>
+          <CardHeader title="Planning">
+            <Button title="Plan next week" icon="Calendar" />
+          </CardHeader>
           <Spacing height={12} />
+          <TabBar
+            tabs={tabs.map(t => t.title)}
+            value={tabIndex}
+            onChange={i => setTabIndex(i)}
+          />
+        </SW.HeaderWrapper>
+      }
+      noframe
+    >
+      <Spacing height={42} />
+      <SW.ParentWrapper>
+        <SW.LeftSide>
           <PlanningSide yearWeek={yearWeek} setYearWeek={setYearWeek} />
-        </CardContent>
-      </SW.LeftSide>
-      <SW.RightSide>
-        <CardContent
-          header={
-            <>
-              {/* <CardHeader title={title} />
-              <Spacing height={12} /> */}
-              <TabBar
-                tabs={tabs.map(t => t.title)}
-                value={tabIndex}
-                onChange={i => setTabIndex(i)}
-              />
-            </>
-          }
-        >
+          <Spacing height={24} />
+          <SideHeader
+            largeNumber={20}
+            smallNumber={`/ ${25}`}
+            subtitle="Tasks Completed"
+          />
+          <Spacing height={9} />
+          <ProgressBar progress={50} />
+        </SW.LeftSide>
+        <Spacing width={48} height="100%" />
+        <SW.RightSide>
           <PlanningOverview
             key={`${ownedBy}-${yearWeek}`}
             ownedBy={ownedBy}
             yearWeek={yearWeek}
           />
-        </CardContent>
-      </SW.RightSide>
-    </SW.ParentWrapper>
+        </SW.RightSide>
+      </SW.ParentWrapper>
+    </CardContent>
   );
 }

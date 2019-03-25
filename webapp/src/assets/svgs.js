@@ -12,6 +12,7 @@ export { default as ArrowUp } from './icons/arrow-up.svg';
 export { default as Attach } from './icons/attach.svg';
 export { default as Bold } from './icons/bold.svg';
 export { default as Breadcrumb } from './icons/breadcrumb.svg';
+export { default as Calendar } from './icons/calendar.svg';
 export { default as Chat } from './icons/chat.svg';
 export { default as Checklist } from './icons/checklist.svg';
 export { default as ChecklistCheckmark } from './icons/checklist-checkmark.svg';
