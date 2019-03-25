@@ -73,6 +73,7 @@ function PlanningListProject({
   useEffect(() => {
     if (completion) {
       const projectState = {
+        title,
         stateManager,
         maxIndention,
         numberOfTasks: filteredTaskIds.length,
