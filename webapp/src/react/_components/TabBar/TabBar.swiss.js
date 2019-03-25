@@ -8,6 +8,8 @@ export default styleSheet('TabBar', {
   Item: {
     _flex: 'center',
     _textStyle: 'caption',
+    userSelect: 'none',
+    cursor: 'pointer',
     color: '$sw2',
     height: 'calc(100% + 1px)',
     padding: '6px 0',

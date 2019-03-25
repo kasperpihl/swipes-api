@@ -54,6 +54,11 @@ export default function ProjectListItem({
         <SW.Title>{project.title}</SW.Title>
         {!hideTeam && (
           <SW.Subtitle
+            title={
+              isFiltered
+                ? 'Remove filter'
+                : `Filter: ${teamGetBelonging(project.owned_by)}`
+            }
             onClick={e => {
               e.preventDefault();
               e.stopPropagation();
