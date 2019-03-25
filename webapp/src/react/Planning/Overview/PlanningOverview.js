@@ -38,7 +38,8 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
   const handleAddTasks = () => {
     nav.openModal(PlanningModal, {
       yearWeek,
-      ownedBy
+      ownedBy,
+      initialTasks: req.result.tasks
     });
   };
 

@@ -26,11 +26,19 @@ export default function WeekPicker({ value, onChange }) {
 
   const handlePrev = () => {
     date.subtract(1, 'week');
-    onChange(`${date.year()}-${date.week()}`);
+    let newYearWeek = `${year}-${date.week()}`;
+    if (week < date.week()) {
+      newYearWeek = `${parseInt(year, 10) - 1}-${date.week()}`;
+    }
+    onChange(newYearWeek);
   };
   const handleNext = () => {
     date.add(1, 'week');
-    onChange(`${date.year()}-${date.week()}`);
+    let newYearWeek = `${year}-${date.week()}`;
+    if (week > date.week()) {
+      newYearWeek = `${parseInt(year, 10) + 1}-${date.week()}`;
+    }
+    onChange(newYearWeek);
   };
 
   return (

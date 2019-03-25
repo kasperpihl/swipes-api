@@ -33,7 +33,7 @@ export default function PlanningModalProjectList({
   if (!req.items) {
     return (
       <SW.ScrollWrapper>
-        <RequestLoader req={req} />
+        <RequestLoader req={req} loaderProps={{ mini: true, size: 36 }} />
       </SW.ScrollWrapper>
     );
   }
