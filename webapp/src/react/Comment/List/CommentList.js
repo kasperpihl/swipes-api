@@ -79,7 +79,8 @@ export default function CommentList({
           let showNewIndicator = false;
           if (
             !indicatorDate &&
-            (myLastRead === 'n' || comment.sent_at > myLastRead)
+            (myLastRead === 'n' ||
+              (comment.sent_at > myLastRead && comment.sent_by !== myId))
           ) {
             indicatorDate = comment.sent_at;
             showNewIndicator = true;
