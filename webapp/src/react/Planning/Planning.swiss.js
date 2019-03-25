@@ -4,7 +4,7 @@ export default styleSheet('Planning', {
   ParentWrapper: {
     _flex: ['row', 'left', 'top'],
     _size: '100%',
-    padding: '42px 18px 0 36px'
+    padding: '42px 0 0 36px'
   },
 
   HeaderWrapper: {

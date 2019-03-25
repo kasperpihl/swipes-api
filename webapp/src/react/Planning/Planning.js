@@ -79,7 +79,7 @@ function Planning({ teams }) {
           <Spacing height={9} />
           <ProgressBar progress={50} />
         </SW.LeftSide>
-        <Spacing width={48} height="100%" />
+        <Spacing width={48} />
         <SW.RightSide>
           <PlanningOverview
             key={`${ownedBy}-${yearWeek}`}

@@ -98,11 +98,14 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
 
   return (
     <SW.Wrapper>
-      <PlanningList
-        tasks={req.result.tasks}
-        ownedBy={ownedBy}
-        yearWeek={yearWeek}
-      />
+      <SW.ScrollableWrapper>
+        <PlanningList
+          tasks={req.result.tasks}
+          ownedBy={ownedBy}
+          yearWeek={yearWeek}
+        />
+      </SW.ScrollableWrapper>
+
       <ActionBar actions={actions} />
     </SW.Wrapper>
   );

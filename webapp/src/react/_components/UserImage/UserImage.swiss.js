@@ -3,7 +3,7 @@ import { styleSheet } from 'swiss-react';
 export default styleSheet('UserImage', {
   Wrapper: {
     _size: '100%',
-    position: 'relative',
+    _flex: ['column', 'center', 'center'],
     overflow: 'hidden',
     borderRadius: '50%',
     flexShrink: '0',

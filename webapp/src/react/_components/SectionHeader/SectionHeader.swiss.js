@@ -2,7 +2,7 @@ import { styleSheet } from 'swiss-react';
 
 export default styleSheet('SectionHeader', {
   Wrapper: {
-    _size: ['100%', 'auto'],
+    _size: ['100%', '31px'],
     _textStyle: 'caption',
     _flex: ['row', 'left', 'center'],
     color: '$sw2',
