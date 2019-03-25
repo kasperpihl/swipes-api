@@ -9,13 +9,14 @@ class PDFRender extends PureComponent {
     const { file, scale, page, onDocumentComplete } = this.props;
 
     return (
-      <Document
-        file={file}
-        onLoadSuccess={onDocumentComplete}
-        loading={<span />}
-      >
-        <Page pageIndex={page} scale={scale} />
-      </Document>
+      // <Document
+      //   file={file}
+      //   onLoadSuccess={onDocumentComplete}
+      //   loading={<span />}
+      // >
+      //   <Page pageIndex={page} scale={scale} />
+      // </Document>
+      <div>Cannot view PDFs at this time...</div>
     );
   }
 }
