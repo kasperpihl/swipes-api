@@ -6,8 +6,7 @@ import useProjectKeyboard from 'src/react/Project/useProjectKeyboard';
 import useBeforeUnload from 'src/react/_hooks/useBeforeUnload';
 import useTaskSelect from 'src/react/Planning/useTaskSelect';
 import SectionHeader from '_shared/SectionHeader/SectionHeader';
-import Button from '_shared/Button/Button';
-import Spacing from '_shared/Spacing/Spacing';
+import usePlanningState from 'src/react/Planning/usePlanningState';
 import { ProjectContext } from 'src/react/contexts';
 
 import ProjectTaskList from 'src/react/Project/Task/List/ProjectTaskList';
@@ -32,17 +31,19 @@ function PlanningListProject({
     [tasks]
   );
 
+  const taskIdsRef = useRef();
+  const selectingRef = useRef();
   const stateManager = useSyncedProject(projectId, {
     filteredTaskIds
   });
 
-  useMemo(() => {
-    if (stateManager) {
+  useEffect(() => {
+    taskIdsRef.current = filteredTaskIds;
+    if (stateManager && !selectingRef.current) {
       stateManager.filterHandler.setFilteredTaskIds(filteredTaskIds);
     }
   }, [filteredTaskIds, stateManager]);
 
-  const [selectable, setSelectable] = useState(false);
   const [selectedTasks, handleToggleTask] = useTaskSelect(
     ownedBy,
     projectId,
@@ -92,22 +93,23 @@ function PlanningListProject({
     }
   }, [completion, filteredTaskIds, maxIndention]);
 
-  const hasSelectedRef = useRef(!!selectedId);
+  const [{ editingId }, updatePlanningState] = usePlanningState();
   useEffect(() => {
-    if (selectedId && stateManager) {
-      hasSelectedRef.current = true;
-      stateManager.filterHandler.setFilteredTaskIds(null, filteredTaskIds);
-      setSelectable(true);
-    } else if (stateManager) {
-      hasSelectedRef.current = false;
-      setTimeout(() => {
-        if (!hasSelectedRef.current) {
-          stateManager.filterHandler.setFilteredTaskIds(filteredTaskIds);
-          setSelectable(false);
-        }
-      }, 100);
+    if (selectedId && editingId !== projectId) {
+      updatePlanningState({ editingId: projectId });
     }
-  }, [!!selectedId, stateManager]);
+  }, [selectedId, editingId, projectId]);
+
+  useEffect(() => {
+    if (editingId === projectId && stateManager) {
+      selectingRef.current = true;
+      stateManager.filterHandler.setFilteredTaskIds(null, taskIdsRef.current);
+      return () => {
+        selectingRef.current = false;
+        stateManager.filterHandler.setFilteredTaskIds(taskIdsRef.current);
+      };
+    }
+  }, [editingId, stateManager]);
 
   if (!visibleOrder || !stateManager || hasPending) {
     return null;
@@ -118,7 +120,7 @@ function PlanningListProject({
       <SW.Wrapper>
         <SectionHeader>{title}</SectionHeader>
         <ProjectTaskList
-          selectable={selectable}
+          selectable={editingId === projectId}
           onToggleTask={handleToggleTask}
           selectedTasks={selectedTasks}
         />

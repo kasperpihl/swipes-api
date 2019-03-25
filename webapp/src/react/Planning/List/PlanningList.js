@@ -1,7 +1,8 @@
-import React, { useMemo, useReducer } from 'react';
+import React, { useMemo, useReducer, useEffect } from 'react';
 import Loader from 'src/react/_components/loaders/Loader';
 
 import PlanningListProject from './Project/PlanningListProject';
+import usePlanningState from 'src/react/Planning/usePlanningState';
 
 import SW from './PlanningList.swiss';
 
@@ -14,7 +15,7 @@ export default function PlanningList({ tasks, ownedBy, yearWeek }) {
     return initialState;
   }, []);
 
-  const [planState, dispatch] = useReducer((state, action) => {
+  const [projects, dispatch] = useReducer((state, action) => {
     switch (action.type) {
       case 'update':
         return {
@@ -26,16 +27,44 @@ export default function PlanningList({ tasks, ownedBy, yearWeek }) {
     }
   }, initialState);
 
-  const hasPending = !!Object.entries(planState).filter(
+  const hasPending = !!Object.entries(projects).filter(
     ([key, value]) => value === 'pending'
   ).length;
 
+  const [
+    { numberOfCompleted, maxDepth },
+    updatePlanningState
+  ] = usePlanningState();
+  useEffect(() => {
+    if (hasPending) return;
+    let dCompleted = 0;
+    let dDepth = 0;
+    const stateManagers = [];
+
+    Object.values(projects).forEach(p => {
+      if (p === 'pending') return;
+      console.log(p);
+      stateManagers.push(p.stateManager);
+      dCompleted += p.numberOfCompleted;
+      dDepth = Math.max(dDepth, p.maxIndention);
+    });
+
+    if (dCompleted !== numberOfCompleted || dDepth !== maxDepth) {
+      console.log(dCompleted, dDepth);
+      updatePlanningState({
+        numberOfCompleted: dCompleted,
+        maxDepth: dDepth,
+        stateManagers
+      });
+    }
+  }, [hasPending, projects]);
+
   const sortedProjectIds = useMemo(() => {
-    if (hasPending) return Object.keys(planState);
-    return Object.keys(planState).sort((a, b) =>
-      planState[a].title.localeCompare(planState[b].title)
+    if (hasPending) return Object.keys(projects);
+    return Object.keys(projects).sort((a, b) =>
+      projects[a].title.localeCompare(projects[b].title)
     );
-  }, [planState, hasPending]);
+  }, [projects, hasPending]);
 
   return (
     <SW.Content>

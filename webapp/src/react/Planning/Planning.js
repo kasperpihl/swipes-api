@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useReducer } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import SW from './Planning.swiss';
@@ -13,6 +13,7 @@ import Button from '_shared/Button/Button';
 import TabBar from '_shared/TabBar/TabBar';
 import SideHeader from '_shared/SideHeader/SideHeader';
 import ProgressBar from '_shared/ProgressBar/ProgressBar';
+import PlanningContext from './PlanningContext';
 
 export default connect(state => ({
   teams: state.teams
@@ -46,48 +47,54 @@ function Planning({ teams }) {
     setYearWeek(`${year}-${now.week()}`);
   };
 
+  const [planningState, updatePlanningState] = useReducer(
+    (state, action) => ({
+      ...state,
+      ...action
+    }),
+    {
+      editingId: null
+    }
+  );
+  const planningValue = useMemo(() => [planningState, updatePlanningState], [
+    planningState,
+    updatePlanningState
+  ]);
+
   return (
-    <CardContent
-      header={
-        <SW.HeaderWrapper>
-          <CardHeader title="Planning">
-            <Button
-              title="Plan next week"
-              icon="Calendar"
-              onClick={handleNextWeek}
+    <PlanningContext.Provider value={planningValue}>
+      <CardContent
+        header={
+          <SW.HeaderWrapper>
+            <CardHeader title="Planning">
+              <Button
+                title="Plan next week"
+                icon="Calendar"
+                onClick={handleNextWeek}
+              />
+            </CardHeader>
+            <Spacing height={12} />
+            <TabBar
+              tabs={tabs.map(t => t.title)}
+              value={tabIndex}
+              onChange={i => setTabIndex(i)}
             />
-          </CardHeader>
-          <Spacing height={12} />
-          <TabBar
-            tabs={tabs.map(t => t.title)}
-            value={tabIndex}
-            onChange={i => setTabIndex(i)}
-          />
-        </SW.HeaderWrapper>
-      }
-      noframe
-    >
-      <SW.ParentWrapper>
-        <SW.LeftSide>
+          </SW.HeaderWrapper>
+        }
+        noframe
+      >
+        <SW.ParentWrapper>
           <PlanningSide yearWeek={yearWeek} setYearWeek={setYearWeek} />
-          <Spacing height={24} />
-          <SideHeader
-            largeNumber={20}
-            smallNumber={`/ ${25}`}
-            subtitle="Tasks Completed"
-          />
-          <Spacing height={9} />
-          <ProgressBar progress={50} />
-        </SW.LeftSide>
-        <Spacing width={48} />
-        <SW.RightSide>
-          <PlanningOverview
-            key={`${ownedBy}-${yearWeek}`}
-            ownedBy={ownedBy}
-            yearWeek={yearWeek}
-          />
-        </SW.RightSide>
-      </SW.ParentWrapper>
-    </CardContent>
+          <Spacing width={48} />
+          <SW.RightSide>
+            <PlanningOverview
+              key={`${ownedBy}-${yearWeek}`}
+              ownedBy={ownedBy}
+              yearWeek={yearWeek}
+            />
+          </SW.RightSide>
+        </SW.ParentWrapper>
+      </CardContent>
+    </PlanningContext.Provider>
   );
 }

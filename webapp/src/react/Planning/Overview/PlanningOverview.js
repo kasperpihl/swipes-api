@@ -11,6 +11,7 @@ import ActionBar from '_shared/ActionBar/ActionBar';
 import StepSlider from '_shared/StepSlider/StepSlider';
 import parseWeekLabel from '_shared/WeekPicker/parseWeekLabel';
 import PlanningList from 'src/react/Planning/List/PlanningList';
+import usePlanningState from 'src/react/Planning/usePlanningState';
 
 import SW from './PlanningOverview.swiss';
 
@@ -45,7 +46,6 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
   const [sliderValue, changeSliderValue] = useState(0);
 
   const handleAddTasks = () => {
-    console.log('handle');
     nav.openModal(PlanningModal, {
       yearWeek,
       ownedBy,
@@ -53,27 +53,50 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
     });
   };
 
-  const handleChange = e => {
-    changeSliderValue(parseInt(e.target.value));
-  };
+  const [
+    { editingId, maxDepth, stateManagers },
+    updatePlanningState
+  ] = usePlanningState();
+  let actions = [];
+  if (maxDepth) {
+    const handleChange = e => {
+      stateManagers.forEach(stateManager => {
+        stateManager.expandHandler.setDepth(parseInt(e.target.value));
+      });
+      changeSliderValue(parseInt(e.target.value));
+    };
+    actions.push(
+      <StepSlider
+        sliderValue={sliderValue}
+        onSliderChange={handleChange}
+        min={0}
+        max={maxDepth}
+      />
+    );
+  }
 
-  const weekLabel = parseWeekLabel(yearWeek);
-
-  const actions = [
-    <StepSlider
-      sliderValue={sliderValue}
-      onSliderChange={handleChange}
-      min={0}
-      max={5}
-    />,
+  actions.push(
     <Button title="Add Tasks" icon="CircledPlus" onClick={handleAddTasks} />
-  ];
+  );
+
+  if (editingId) {
+    actions = [
+      <Button
+        title="Done editing"
+        icon="Checkmark"
+        onClick={() => {
+          updatePlanningState({ editingId: null });
+        }}
+      />
+    ];
+  }
 
   if (req.error || req.loading) {
     return <RequestLoader req={req} />;
   }
 
   if (!req.result.tasks.length) {
+    const weekLabel = parseWeekLabel(yearWeek);
     return (
       <SW.Wrapper>
         <SW.EmptyStateWrapper>
