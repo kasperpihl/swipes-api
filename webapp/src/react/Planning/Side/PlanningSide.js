@@ -9,7 +9,7 @@ export default function PlanningSide({ yearWeek, setYearWeek }) {
   return (
     <SW.Wrapper>
       <WeekPicker value={yearWeek} onChange={setYearWeek} />
-      <Spacing height={12} />
+      <Spacing height={30} />
       <WeekIndicator yearWeek={yearWeek} />
     </SW.Wrapper>
   );

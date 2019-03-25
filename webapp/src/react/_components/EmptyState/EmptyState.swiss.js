@@ -12,12 +12,13 @@ export default styleSheet('EmptyState', {
   },
 
   ImageWrapper: {
-    paddingBottom: '30px'
+
   },
 
   Image: {
     _el: Icon,
     _size: ['150px', 'auto'],
+    fill: "$green2",
 
     large: {
       _size: ['300px', 'auto']
@@ -26,7 +27,7 @@ export default styleSheet('EmptyState', {
 
   Title: {
     _font: ['13px', '18px', 'bold'],
-    color: '$sw2',
+    _textStyle: 'H2',
     userSelect: 'none',
 
     large: {

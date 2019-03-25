@@ -19,6 +19,7 @@ export { default as ChecklistCheckmark } from './icons/checklist-checkmark.svg';
 export { default as Checkmark } from './icons/checkmark.svg';
 export { default as Close } from './icons/close.svg';
 export { default as CloseThick } from './icons/close-thick.svg';
+export { default as CircledPlus } from './icons/circled-plus.svg'; // new
 export { default as Comment } from './icons/comment.svg';
 export { default as Complete } from './icons/complete.svg'; // new
 export { default as Cross } from './icons/cross.svg'; // new
@@ -50,10 +51,10 @@ export { default as Pin } from './icons/pin.svg';
 export { default as Plan } from './icons/plan.svg';
 export { default as PlanStart } from './icons/plan-start.svg';
 export { default as Plus } from './icons/plus.svg';
-export { default as CircledPlus } from './icons/circled-plus.svg';
 export { default as Project } from './icons/projects.svg';
 export { default as Reload } from './icons/reload.svg';
 export { default as ThreeDots } from './icons/three-dots.svg';
+export { default as Typewriter } from './icons/typewriter.svg';
 export { default as Underline } from './icons/underline.svg';
 export { default as UnorderedList } from './icons/unordered-list.svg';
 export { default as WindowLock } from './icons/window-lock.svg';

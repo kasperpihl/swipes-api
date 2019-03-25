@@ -9,13 +9,14 @@ const EmptyState = props => {
       <SW.Wrapper className={props.className}>
         {props.showIcon && (
           <SW.ImageWrapper>
-            <SW.Image icon="EmptyState" />
+            <SW.Image icon={props.icon} />
           </SW.ImageWrapper>
         )}
         <SW.Title>{props.title}</SW.Title>
         <SW.Description>
           {parseLinks(parseNewLines(props.description))}
         </SW.Description>
+        {props.children}
       </SW.Wrapper>
     </SW.ProvideContext>
   );
