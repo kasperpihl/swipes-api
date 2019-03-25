@@ -57,7 +57,6 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
   };
 
   const weekLabel = parseWeekLabel(yearWeek);
-  console.log(weekLabel);
 
   const actions = [
     <StepSlider
