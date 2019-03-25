@@ -46,7 +46,6 @@ function Planning({ teams }) {
       }
       noframe
     >
-      <Spacing height={42} />
       <SW.ParentWrapper>
         <SW.LeftSide>
           <PlanningSide yearWeek={yearWeek} setYearWeek={setYearWeek} />

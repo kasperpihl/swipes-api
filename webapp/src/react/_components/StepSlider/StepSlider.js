@@ -14,7 +14,7 @@ export default class stepSlider extends Component {
           min={min}
           max={max}
           value={sliderValue}
-          colorValue={sliderBackground} //TODO: once onChange handler is wired up, remove hard coded value and set it to sliderValue
+          colorValue={sliderBackground}
         />
       </SW.InputPackage>
     );

@@ -3,8 +3,8 @@ import { styleSheet } from 'swiss-react';
 export default styleSheet('Planning', {
   ParentWrapper: {
     _flex: ['row', 'left', 'top'],
-    width: '100%',
-    padding: '0 18px 0 36px'
+    _size: '100%',
+    padding: '42px 18px 0 36px'
   },
 
   HeaderWrapper: {

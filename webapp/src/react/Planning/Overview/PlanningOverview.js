@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import RequestLoader from '_shared/RequestLoader/RequestLoader';
 import PlanningModal from 'src/react/Planning/Modal/PlanningModal';
 import useRequest from 'core/react/_hooks/useRequest';
@@ -7,6 +7,8 @@ import EmptyState from '_shared/EmptyState/EmptyState';
 import useNav from 'src/react/_hooks/useNav';
 import Spacing from '_shared/Spacing/Spacing';
 import Button from '_shared/Button/Button';
+import ActionBar from '_shared/ActionBar/ActionBar';
+import StepSlider from '_shared/StepSlider/StepSlider';
 
 import SW from './PlanningOverview.swiss';
 
@@ -38,6 +40,8 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
     }
   });
 
+  const [sliderValue, changeSliderValue] = useState(0);
+
   const handleAddTasks = () => {
     console.log('handle');
     nav.openModal(PlanningModal, {
@@ -47,6 +51,20 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
     });
   };
 
+  const handleChange = e => {
+    changeSliderValue(parseInt(e.target.value));
+  };
+
+  const actions = [
+    <StepSlider
+      sliderValue={sliderValue}
+      onSliderChange={handleChange}
+      min={0}
+      max={5}
+    />,
+    <Button title="Add Tasks" icon="CircledPlus" onClick={handleAddTasks} />
+  ];
+
   if (req.error || req.loading) {
     return <RequestLoader req={req} />;
   }
@@ -54,15 +72,22 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
   if (!req.result.tasks.length) {
     return (
       <SW.Wrapper>
-        <EmptyState
-          showIcon
-          fill
-          title="Nothing planned for this week"
-          description="Add tasks from a project"
-          icon="Typewriter"
-        />
-        <Spacing height={21} />
-        <Button title="Add tasks" icon="CircledPlus" onClick={handleAddTasks} />
+        <SW.EmptyStateWrapper>
+          <EmptyState
+            showIcon
+            fill
+            title="Nothing planned for this week"
+            description="Add tasks from a project"
+            icon="Typewriter"
+          />
+          <Spacing height={21} />
+          <Button
+            title="Add tasks"
+            icon="CircledPlus"
+            onClick={handleAddTasks}
+          />
+        </SW.EmptyStateWrapper>
+        <ActionBar actions={actions} />
       </SW.Wrapper>
     );
   }
@@ -72,6 +97,7 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
       {req.result.tasks.map(task => {
         return <div key={task.task_id}>{task.task_id}</div>;
       })}
+      <ActionBar actions={actions} />
     </SW.Wrapper>
   );
 }
