@@ -1,10 +1,11 @@
 import React, { useMemo, useReducer } from 'react';
+import Loader from 'src/react/_components/loaders/Loader';
 
 import PlanningListProject from './Project/PlanningListProject';
 
 import SW from './PlanningList.swiss';
 
-export default function PlanningList({ tasks }) {
+export default function PlanningList({ tasks, ownedBy, yearWeek }) {
   const initialState = useMemo(() => {
     const initialState = {};
     tasks.forEach(({ project_id }) => {
@@ -30,22 +31,24 @@ export default function PlanningList({ tasks }) {
   ).length;
 
   const sortedProjectIds = useMemo(() => {
-    if (hasPending) return Object.keys(projects);
-    return Object.keys(projects).sort((a, b) =>
+    if (hasPending) return Object.keys(planState);
+    return Object.keys(planState).sort((a, b) =>
       planState[a].title.localeCompare(planState[b].title)
     );
-  }, [hasPending]);
-
-  console.log(planState, hasPending);
+  }, [planState, hasPending]);
 
   return (
     <SW.Content>
+      {hasPending && <Loader center mini size={24} />}
       {sortedProjectIds.map(project_id => (
         <PlanningListProject
           key={project_id}
+          tasks={tasks}
           projectId={project_id}
           hasPending={hasPending}
           dispatch={dispatch}
+          ownedBy={ownedBy}
+          yearWeek={yearWeek}
         />
       ))}
     </SW.Content>

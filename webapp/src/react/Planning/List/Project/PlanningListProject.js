@@ -1,50 +1,70 @@
-import React, { memo, useEffect, useState, useMemo } from 'react';
+import React, { memo, useEffect, useState, useMemo, useRef } from 'react';
 
 import useSyncedProject from 'core/react/_hooks/useSyncedProject';
 import useProjectSlice from 'core/react/_hooks/useProjectSlice';
 import useProjectKeyboard from 'src/react/Project/useProjectKeyboard';
 import useBeforeUnload from 'src/react/_hooks/useBeforeUnload';
-import usePlanProjectSelect from 'src/react/Plan/usePlanProjectSelect';
+import useTaskSelect from 'src/react/Planning/useTaskSelect';
 import SectionHeader from '_shared/SectionHeader/SectionHeader';
 import Button from '_shared/Button/Button';
 import Spacing from '_shared/Spacing/Spacing';
+import { ProjectContext } from 'src/react/contexts';
 
-import PlanTaskList from 'src/react/Plan/TaskList/PlanTaskList';
+import ProjectTaskList from 'src/react/Project/Task/List/ProjectTaskList';
 
 import SW from './PlanningListProject.swiss';
 
 export default memo(PlanningListProject);
 
-function PlanningListProject({ projectId, dispatch, tasks, hasPending }) {
-  const filteredTasksIds = useMemo(
+function PlanningListProject({
+  projectId,
+  dispatch,
+  tasks,
+  hasPending,
+  ownedBy,
+  yearWeek
+}) {
+  const filteredTaskIds = useMemo(
     () =>
       tasks
         .filter(({ project_id }) => project_id === projectId)
         .map(({ task_id }) => task_id),
     [tasks]
   );
+
   const stateManager = useSyncedProject(projectId, {
     filteredTaskIds
   });
 
   useMemo(() => {
     if (stateManager) {
-      stateManager.filterHandler.setFilteredTaskIds(filteredTasksIds);
+      stateManager.filterHandler.setFilteredTaskIds(filteredTaskIds);
     }
   }, [filteredTaskIds, stateManager]);
 
   const [selectable, setSelectable] = useState(false);
-  const [selectedTasks, handleToggleTask] = usePlanProjectSelect(plan);
+  const [selectedTasks, handleToggleTask] = useTaskSelect(
+    ownedBy,
+    projectId,
+    yearWeek,
+    tasks
+  );
 
   useProjectKeyboard(stateManager);
-  const [visibleOrder, completion, maxIndention] = useProjectSlice(
-    stateManager,
-    (clientState, localState) => [
-      localState.get('visibleOrder'),
-      clientState.get('completion'),
-      localState.get('maxIndention')
-    ]
-  );
+
+  const [
+    visibleOrder,
+    completion,
+    maxIndention,
+    title,
+    selectedId
+  ] = useProjectSlice(stateManager, (clientState, localState) => [
+    localState.get('visibleOrder'),
+    clientState.get('completion'),
+    localState.get('maxIndention'),
+    clientState.get('title'),
+    localState.get('selectedId')
+  ]);
 
   useBeforeUnload(() => {
     stateManager && stateManager.syncHandler.syncIfNeeded();
@@ -55,10 +75,10 @@ function PlanningListProject({ projectId, dispatch, tasks, hasPending }) {
       const projectState = {
         stateManager,
         maxIndention,
-        numberOfTasks: project.taskIds.length,
+        numberOfTasks: filteredTaskIds.length,
         numberOfCompleted: 0
       };
-      project.taskIds.forEach(taskId => {
+      filteredTaskIds.forEach(taskId => {
         if (completion.get(taskId)) {
           projectState.numberOfCompleted++;
         }
@@ -69,45 +89,39 @@ function PlanningListProject({ projectId, dispatch, tasks, hasPending }) {
         payload: projectState
       });
     }
-  }, [completion, project, maxIndention]);
+  }, [completion, filteredTaskIds, maxIndention]);
+
+  const hasSelectedRef = useRef(!!selectedId);
+  useEffect(() => {
+    if (selectedId && stateManager) {
+      hasSelectedRef.current = true;
+      stateManager.filterHandler.setFilteredTaskIds(null, filteredTaskIds);
+      setSelectable(true);
+    } else if (stateManager) {
+      hasSelectedRef.current = false;
+      setTimeout(() => {
+        if (!hasSelectedRef.current) {
+          stateManager.filterHandler.setFilteredTaskIds(filteredTaskIds);
+          setSelectable(false);
+        }
+      }, 100);
+    }
+  }, [!!selectedId, stateManager]);
 
   if (!visibleOrder || !stateManager || hasPending) {
-    return (
-      <SW.Wrapper>
-        <SectionHeader>{project.title}</SectionHeader>
-      </SW.Wrapper>
-    );
+    return null;
   }
 
-  const handleSelect = e => {
-    e.preventDefault();
-
-    stateManager.filterHandler.setFilteredTaskIds(null, project.taskIds);
-    setSelectable(true);
-  };
-
   return (
-    <SW.Wrapper>
-      <SectionHeader>
-        {project.title}
-        <Spacing width={'100%'} />
-        {selectable && (
-          <Button
-            title="Done"
-            onClick={() => {
-              stateManager.filterHandler.setFilteredTaskIds(project.taskIds);
-              setSelectable(false);
-            }}
-          />
-        )}
-      </SectionHeader>
-      <PlanTaskList
-        stateManager={stateManager}
-        selectable={selectable}
-        onToggleTask={handleToggleTask}
-        onInputClick={selectable ? undefined : handleSelect}
-        selectedTasks={selectedTasks}
-      />
-    </SW.Wrapper>
+    <ProjectContext.Provider value={stateManager}>
+      <SW.Wrapper>
+        <SectionHeader>{title}</SectionHeader>
+        <ProjectTaskList
+          selectable={selectable}
+          onToggleTask={handleToggleTask}
+          selectedTasks={selectedTasks}
+        />
+      </SW.Wrapper>
+    </ProjectContext.Provider>
   );
 }

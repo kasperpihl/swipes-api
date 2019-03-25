@@ -21,7 +21,12 @@ export default connect(state => ({
 function Planning({ teams }) {
   const defaultYearWeek = useMemo(() => {
     const now = moment();
-    return `${now.year()}-${now.week()}`;
+    let year = now.year();
+    // Ensure working when week 1 starts in december.
+    if (now.month() === 12 && now.week() < 4) {
+      year = year + 1;
+    }
+    return `${year}-${now.week()}`;
   }, []);
   const [yearWeek, setYearWeek] = useState(defaultYearWeek);
 
@@ -29,12 +34,28 @@ function Planning({ teams }) {
 
   const ownedBy = tabs[tabIndex].id;
 
+  const handleNextWeek = () => {
+    const now = moment();
+    let year = now.year();
+    let week = now.week();
+    now.add(1, 'week');
+    if (now.week() < week) {
+      year = year + 1;
+    }
+
+    setYearWeek(`${year}-${now.week()}`);
+  };
+
   return (
     <CardContent
       header={
         <SW.HeaderWrapper>
           <CardHeader title="Planning">
-            <Button title="Plan next week" icon="Calendar" />
+            <Button
+              title="Plan next week"
+              icon="Calendar"
+              onClick={handleNextWeek}
+            />
           </CardHeader>
           <Spacing height={12} />
           <TabBar

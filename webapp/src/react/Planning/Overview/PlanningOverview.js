@@ -10,6 +10,7 @@ import Button from '_shared/Button/Button';
 import ActionBar from '_shared/ActionBar/ActionBar';
 import StepSlider from '_shared/StepSlider/StepSlider';
 import parseWeekLabel from '_shared/WeekPicker/parseWeekLabel';
+import PlanningList from 'src/react/Planning/List/PlanningList';
 
 import SW from './PlanningOverview.swiss';
 
@@ -97,9 +98,11 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
 
   return (
     <SW.Wrapper>
-      {req.result.tasks.map(task => {
-        return <div key={task.task_id}>{task.task_id}</div>;
-      })}
+      <PlanningList
+        tasks={req.result.tasks}
+        ownedBy={ownedBy}
+        yearWeek={yearWeek}
+      />
       <ActionBar actions={actions} />
     </SW.Wrapper>
   );
