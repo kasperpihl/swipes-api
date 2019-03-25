@@ -28,6 +28,11 @@ export default styleSheet('PlanningModal', {
     flex: 'none',
     borderTop: '1px solid $sw3'
   },
+  ButtonWrapper: {
+    '& > *:not(:last-child)': {
+      marginRight: '12px'
+    }
+  },
   TaskCounter: {
     _el: 'span',
     _textStyle: 'body'

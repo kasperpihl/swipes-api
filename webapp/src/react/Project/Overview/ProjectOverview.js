@@ -15,6 +15,8 @@ import useNav from 'src/react/_hooks/useNav';
 import request from 'core/utils/request';
 import contextMenu from 'src/utils/contextMenu';
 import useRequest from 'core/react/_hooks/useRequest';
+import useProjectKeyboard from 'src/react/Project/useProjectKeyboard';
+
 import useSyncedProject from 'core/react/_hooks/useSyncedProject';
 import useProjectSlice from 'core/react/_hooks/useProjectSlice';
 import useBeforeUnload from 'src/react/_hooks/useBeforeUnload';
@@ -28,6 +30,9 @@ export default memo(ProjectOverview);
 function ProjectOverview({ projectId }) {
   const nav = useNav();
   const stateManager = useSyncedProject(projectId);
+
+  useProjectKeyboard(stateManager);
+
   useBeforeUnload(() => {
     stateManager && stateManager.syncHandler.syncIfNeeded();
   });
@@ -107,7 +112,9 @@ function ProjectOverview({ projectId }) {
       <ProjectContext.Provider value={stateManager}>
         <SW.Wrapper>
           <ProjectSide stateManager={stateManager} />
-          <ProjectTaskList />
+          <SW.TaskWrapper>
+            <ProjectTaskList />
+          </SW.TaskWrapper>
         </SW.Wrapper>
       </ProjectContext.Provider>
     </CardContent>

@@ -14,6 +14,7 @@ export default function PlanningModal({
   const [[projectId, projectTitle], setProjectId] = useState([]);
 
   const [selectedTasks, handleToggleTask] = useTaskSelect(
+    ownedBy,
     projectId,
     yearWeek,
     initialTasks
@@ -30,9 +31,6 @@ export default function PlanningModal({
   return (
     <SW.Wrapper>
       <SW.TopBar>
-        {projectId && (
-          <Button icon="ArrowLeft" onClick={() => setProjectId([])} />
-        )}
         <SW.Title>{projectId ? projectTitle : 'Choose a project'}</SW.Title>
       </SW.TopBar>
       <PlanningModalProjectList
@@ -54,7 +52,16 @@ export default function PlanningModal({
         <SW.TaskCounter>
           {count && `${count} task${count > 1 ? 's' : ''} selected`}
         </SW.TaskCounter>
-        <Button title="Done" border onClick={hideModal} />
+        <SW.ButtonWrapper>
+          {projectId && (
+            <Button
+              title="Add more tasks"
+              border
+              onClick={() => setProjectId([])}
+            />
+          )}
+          <Button title="Done" border onClick={hideModal} />
+        </SW.ButtonWrapper>
       </SW.BottomBar>
     </SW.Wrapper>
   );
