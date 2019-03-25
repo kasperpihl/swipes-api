@@ -4,7 +4,6 @@ import Spacing from '_shared/Spacing/Spacing';
 import useSyncedProject from 'core/react/_hooks/useSyncedProject';
 import ProjectTaskList from 'src/react/Project/Task/List/ProjectTaskList';
 import useProjectKeyboard from 'src/react/Project/useProjectKeyboard';
-import useSyncedProject from 'core/react/_hooks/useSyncedProject';
 import useBeforeUnload from 'src/react/_hooks/useBeforeUnload';
 import { ProjectContext } from 'src/react/contexts';
 
