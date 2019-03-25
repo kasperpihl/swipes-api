@@ -2,7 +2,12 @@ import { useReducer } from 'react';
 import request from 'core/utils/request';
 import useUpdate from 'core/react/_hooks/useUpdate';
 
-export default function useTaskSelect(projectId, yearWeek, initialTasks) {
+export default function useTaskSelect(
+  ownedBy,
+  projectId,
+  yearWeek,
+  initialTasks
+) {
   const [selectedTasks, toggleSelectedTask] = useReducer((state, action) => {
     const newState = [].concat(state);
     const index = state.indexOf(action.payload);
@@ -32,6 +37,7 @@ export default function useTaskSelect(projectId, yearWeek, initialTasks) {
     let endpoint = 'planning.addTask';
     let type = 'add';
     const params = {
+      owned_by: ownedBy,
       year_week: yearWeek,
       project_id: projectId,
       task_id: taskId

@@ -53,7 +53,7 @@ export default endpointCreate(
       )
     );
 
-    res.locals.update = update.prepare(plan_id, [
+    res.locals.update = update.prepare(owned_by, [
       { type: 'planning_task', data: planProjectTaskRes.rows[0] }
     ]);
   }

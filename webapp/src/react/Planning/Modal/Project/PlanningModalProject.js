@@ -1,10 +1,12 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Loader from 'src/react/_components/loaders/Loader';
 import Spacing from '_shared/Spacing/Spacing';
-import PlanTaskList from 'src/react/Plan/TaskList/PlanTaskList';
 import useSyncedProject from 'core/react/_hooks/useSyncedProject';
+import ProjectTaskList from 'src/react/Project/Task/List/ProjectTaskList';
 import useProjectKeyboard from 'src/react/Project/useProjectKeyboard';
+import useSyncedProject from 'core/react/_hooks/useSyncedProject';
 import useBeforeUnload from 'src/react/_hooks/useBeforeUnload';
+import { ProjectContext } from 'src/react/contexts';
 
 import SW from './PlanningModalProject.swiss';
 
@@ -41,14 +43,15 @@ export default function PlanningModalProject({
   }
 
   return (
-    <SW.Wrapper>
-      <Spacing height={6} />
-      <PlanTaskList
-        stateManager={stateManager}
-        selectable
-        onToggleTask={onToggleTask}
-        selectedTasks={selectedTasks}
-      />
-    </SW.Wrapper>
+    <ProjectContext.Provider value={stateManager}>
+      <SW.Wrapper>
+        <Spacing height={6} />
+        <ProjectTaskList
+          selectable
+          onToggleTask={onToggleTask}
+          selectedTasks={selectedTasks}
+        />
+      </SW.Wrapper>
+    </ProjectContext.Provider>
   );
 }

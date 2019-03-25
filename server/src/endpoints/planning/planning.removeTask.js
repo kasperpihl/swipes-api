@@ -31,7 +31,7 @@ export default endpointCreate(
       [owned_by, year_week, project_id, task_id]
     );
 
-    res.locals.update = update.prepare(plan_id, [
+    res.locals.update = update.prepare(owned_by, [
       {
         type: 'planning_task',
         data: {

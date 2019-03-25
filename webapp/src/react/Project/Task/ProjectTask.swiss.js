@@ -7,11 +7,11 @@ export default styleSheet('ProjectTask', {
     padding: '1px 0',
     paddingLeft: get => `${get('indention') * 24}px`,
     paddingRight: '6px',
-    isPlanSelected: {
+    isSelected: {
       backgroundColor: '$green3',
       opacity: 1
     },
-    selected: {
+    isFocused: {
       backgroundColor: '$green2',
       opacity: 1
     },
