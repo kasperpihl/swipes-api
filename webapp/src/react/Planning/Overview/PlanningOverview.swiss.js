@@ -7,6 +7,7 @@ export default styleSheet('PlanningOverview', {
   },
 
   EmptyStateWrapper: {
-    _flex: ['column', 'center', 'center']
+    _flex: ['column', 'center', 'center'],
+    transform: 'translateY(-50%)'
   }
 });
