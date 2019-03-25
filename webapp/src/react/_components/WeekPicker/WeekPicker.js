@@ -6,9 +6,11 @@ import Spacing from '_shared/Spacing/Spacing';
 import SW from './WeekPicker.swiss';
 
 export default function WeekPicker({ value, onChange }) {
-  const weekLabel = parseWeekLabel(value);
   const [year, week] = value.split('-');
   const date = moment();
+  date.year(year);
+  date.week(week);
+  const weekLabel = parseWeekLabel(value);
 
   const handlePrev = () => {
     date.subtract(1, 'week');

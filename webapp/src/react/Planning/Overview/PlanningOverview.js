@@ -56,7 +56,7 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
     changeSliderValue(parseInt(e.target.value));
   };
 
-  const weekLabel = parseWeekLabel(yearWeek);
+  const weekLabel = parseWeekLabel(yearWeek).toLowerCase();
 
   const actions = [
     <StepSlider
