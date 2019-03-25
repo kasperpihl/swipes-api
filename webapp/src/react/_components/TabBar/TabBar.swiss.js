@@ -13,16 +13,16 @@ export default styleSheet('TabBar', {
     padding: '6px 0',
     textTransform: 'uppercase',
     '&:hover': {
-      _textStyle: 'caption',
-      color: '$dark'
+      color: '$dark',
+      borderBottom: '1px solid $dark'
     },
     active: {
       _textStyle: 'caption',
       color: '$dark',
       borderBottom: '1px solid $dark'
     },
-    '&:not(:last-child)': {
-      marginRight: '24px'
+    '&:not(:first-child)': {
+      marginLeft: '24px'
     }
   }
 });

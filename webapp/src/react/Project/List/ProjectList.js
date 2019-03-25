@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import SW from './ProjectList.swiss';
 import useNav from 'src/react/_hooks/useNav';
 import useUpdate from 'core/react/_hooks/useUpdate';
@@ -17,21 +17,28 @@ ProjectList.sizes = [750];
 
 export default function ProjectList() {
   const nav = useNav();
-  const req = usePaginationRequest(
-    'project.list',
-    {},
-    {
-      cursorKey: 'skip',
-      idAttribute: 'project_id',
-      resultPath: 'projects'
-    }
-  );
+  const [ownedBy, setOwnedBy] = useState();
+  const params = {};
+  if (ownedBy) {
+    params.owned_by = ownedBy;
+  }
+
+  const req = usePaginationRequest('project.list', params, {
+    cursorKey: 'skip',
+    idAttribute: 'project_id',
+    resultPath: 'projects'
+  });
 
   useUpdate('project', update => {
     if (update.created_at) {
       req.prependItem(update);
     }
   });
+
+  const handleFilter = ownedBy => {
+    setOwnedBy(ownedBy);
+    req.retry(true);
+  };
 
   const handleNewProject = () => {
     nav.openModal(ModalCreate, {
@@ -90,7 +97,12 @@ export default function ProjectList() {
           <SW.LastOpened>Last Opened</SW.LastOpened>
         </SectionHeader>
         {req.items.map(project => (
-          <ProjectListItem key={project.project_id} project={project} />
+          <ProjectListItem
+            key={project.project_id}
+            project={project}
+            onFilter={handleFilter}
+            isFiltered={!!ownedBy}
+          />
         ))}
         <PaginationScrollToMore req={req} errorLabel="Couldn't get projects." />
       </SW.Wrapper>

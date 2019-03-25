@@ -18,7 +18,16 @@ export default styleSheet('ProjectListItem', {
   Subtitle: {
     _textStyle: 'body',
     width: '160px',
-    color: '$sw2'
+    color: '$sw2',
+    '&:hover': {
+      textDecoration: 'underline'
+    },
+    isFiltered: {
+      textDecoration: 'underline',
+      '&:hover': {
+        textDecoration: 'line-through'
+      }
+    }
   },
   LeftSideWrapper: {
     _size: ['60px', '54px'],
