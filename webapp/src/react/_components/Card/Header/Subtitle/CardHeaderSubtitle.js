@@ -11,7 +11,17 @@ export default connect(
     tooltip: mainActions.tooltip
   }
 )(CardHeaderSubtitle);
-function CardHeaderSubtitle({ ownedBy, members, privacy, children, tooltip }) {
+function CardHeaderSubtitle({ subtitle, children, tooltip }) {
+  if (typeof subtitle === 'string') {
+    return (
+      <SW.Wrapper>
+        <SW.TeamName>{subtitle}</SW.TeamName>
+        <SW.Actions>{children}</SW.Actions>
+      </SW.Wrapper>
+    );
+  }
+
+  const { ownedBy, members, privacy } = subtitle;
   const onMouseEnter = e => {
     if (!members || !members.length) return;
     tooltip({

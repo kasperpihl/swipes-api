@@ -5,11 +5,14 @@ import CardHeaderSubtitle from './Subtitle/CardHeaderSubtitle';
 
 CardHeader.propTypes = {
   title: PropTypes.string.isRequired,
-  subtitle: PropTypes.shape({
-    ownedBy: PropTypes.string.isRequired,
-    members: PropTypes.arrayOf(PropTypes.string),
-    privacy: PropTypes.oneOf(['public', 'private'])
-  }),
+  subtitle: PropTypes.oneOfType([
+    PropTypes.shape({
+      ownedBy: PropTypes.string.isRequired,
+      members: PropTypes.arrayOf(PropTypes.string),
+      privacy: PropTypes.oneOf(['public', 'private'])
+    }),
+    PropTypes.string
+  ]),
   separator: PropTypes.bool
 };
 
@@ -27,7 +30,9 @@ export default function CardHeader({
         {title}
       </SW.Title>
       {!subtitle && <SW.Actions>{children}</SW.Actions>}
-      {subtitle && <CardHeaderSubtitle {...subtitle} children={children} />}
+      {subtitle && (
+        <CardHeaderSubtitle subtitle={subtitle} children={children} />
+      )}
     </SW.Wrapper>
   );
 }

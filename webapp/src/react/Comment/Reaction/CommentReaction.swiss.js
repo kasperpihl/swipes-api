@@ -4,7 +4,8 @@ import Icon from 'src/react/_components/Icon/Icon';
 export default styleSheet('CommentReaction', {
   Container: {
     _flex: ['row', 'left', 'center'],
-    flex: 'none'
+    flex: 'none',
+    userSelect: 'none'
   },
   HeartButton: {
     _size: ['30px', '30px'],

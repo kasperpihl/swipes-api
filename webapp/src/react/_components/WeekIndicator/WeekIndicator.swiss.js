@@ -6,7 +6,8 @@ export default styleSheet('WeekIndicator', {
     _textStyle: 'caption',
     marginBottom: '9px',
     color: '$sw2',
-    textTransform: 'uppercase'
+    textTransform: 'uppercase',
+    userSelect: 'none'
   },
   Week: {
     height: '30px',
@@ -20,6 +21,7 @@ export default styleSheet('WeekIndicator', {
     borderRadius: '2px',
     border: '1px solid $green2',
     color: '$dark',
+    userSelect: 'none',
     '&:not(:last-child)': {
       marginRight: '3px'
     },

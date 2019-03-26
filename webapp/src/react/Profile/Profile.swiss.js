@@ -19,6 +19,7 @@ export default styleSheet('Profile', {
     _el: 'h1',
     _textStyle: 'body',
     fontWeight: '800',
-    _flex: 'center'
+    _flex: 'center',
+    userSelect: 'none'
   }
 });

@@ -3,7 +3,8 @@ import { styleSheet } from 'swiss-react';
 export default styleSheet('SideHeader', {
   Wrapper: {
     _flex: ['row', 'left', 'center'],
-    height: '35px'
+    height: '35px',
+    userSelect: 'none'
   },
 
   TitleWrapper: {

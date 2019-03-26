@@ -24,7 +24,8 @@ export default styleSheet('CardHeader', {
     _truncateString: '',
     _textStyle: 'H1',
     _size: ['100%', 'auto'],
-    color: 'black'
+    color: 'black',
+    userSelect: 'none'
   },
 
   Subtitle: {
@@ -34,7 +35,8 @@ export default styleSheet('CardHeader', {
     _flex: ['row', 'left', 'center'],
     color: '$sw1',
     letterSpacing: '.1px',
-    marginTop: '6px'
+    marginTop: '6px',
+    userSelect: 'none'
   },
 
   Input: {

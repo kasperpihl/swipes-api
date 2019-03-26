@@ -5,6 +5,7 @@ export default styleSheet('DiscussionListItem', {
     _flex: ['row', 'left', 'top'],
     width: 'auto',
     padding: '6px 30px',
+    userSelect: 'none',
     selected: {
       background: '$green3'
     }

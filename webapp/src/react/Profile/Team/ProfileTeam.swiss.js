@@ -9,6 +9,7 @@ export default styleSheet('ProfileTeam', {
     color: '$sw1',
     borderBottom: '1px solid $sw3',
     padding: '12px 0',
+    userSelect: 'none',
 
     '&:first-child': {
       padding: '0px 0px 12px 0px'

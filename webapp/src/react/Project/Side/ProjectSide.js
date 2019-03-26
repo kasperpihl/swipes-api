@@ -75,8 +75,8 @@ function ProjectSide({ stateManager }) {
   return (
     <SW.Wrapper>
       <SideHeader
-        title={completedTasksAmount}
-        smallTitle={`/${totalAmountOfTasks}`}
+        largeNumber={completedTasksAmount}
+        smallNumber={`/ ${totalAmountOfTasks}`}
         subtitle="Tasks Completed"
       />
       <Spacing height={18} />

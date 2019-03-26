@@ -7,6 +7,7 @@ export default styleSheet('UserImage', {
     overflow: 'hidden',
     borderRadius: '50%',
     flexShrink: '0',
+    userSelect: 'none',
 
     size: {
       width: get => `${get('size')}px`,

@@ -21,6 +21,7 @@ export default styleSheet('Planning', {
     _flex: ['column', 'center', 'center'],
     height: '100%',
     fontSize: '24px',
-    width: '100%'
+    width: '100%',
+    paddingRight: '18px'
   }
 });

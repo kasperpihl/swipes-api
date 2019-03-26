@@ -46,6 +46,7 @@ export default styleSheet('Breadcrumbs', {
     _font: ['10px', '24px', '$medium'],
     letterSpacing: '0.6px',
     textTransform: 'uppercase',
+    userSelect: 'none',
     '.crumb:hover &': {
       color: '$blue'
     },

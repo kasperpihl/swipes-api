@@ -10,6 +10,7 @@ export default styleSheet('SectionHeader', {
     paddingTop: '12px',
     paddingBottom: '6px',
     marginBottom: '12px',
-    textTransform: 'uppercase'
+    textTransform: 'uppercase',
+    userSelect: 'none'
   }
 });

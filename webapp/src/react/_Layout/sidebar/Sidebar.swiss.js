@@ -57,6 +57,7 @@ export default styleSheet('Sidebar', {
     // overflow: 'hidden',
     backgroundColor: 'rgba(255, 255, 255, .3)',
     transition: '.3s ease',
+    userSelect: 'none',
 
     '!round': {
       expanded: {

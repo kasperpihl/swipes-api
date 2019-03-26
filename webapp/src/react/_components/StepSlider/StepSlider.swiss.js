@@ -4,8 +4,7 @@ export default styleSheet('StepSlider', {
   InputPackage: {
     _size: ['100%', '24px'],
     _flex: ['row', 'center', 'center'],
-    position: 'relative',
-    maxWidth: '130px'
+    position: 'relative'
   },
 
   StepCounter: {
@@ -14,7 +13,8 @@ export default styleSheet('StepSlider', {
     border: '1px solid $sw3',
     borderRadius: '2px',
     color: '$sw2',
-    padding: '1px 6px'
+    padding: '1px 6px',
+    userSelect: 'none'
   },
 
   Input: {

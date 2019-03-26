@@ -188,13 +188,13 @@ export default class Authentication extends PureComponent {
     );
   }
   render() {
-    //subtitle={this.getSubtitle()}}
+    //subtitle={this.getSubtitle()}
     const { loader } = this.props;
     return (
       <Card>
         <Modal side="auth" />
         <Spacing height={36} />
-        <CardHeader title="Welcome to Swipes!" />
+        <CardHeader title="Welcome to Swipes!" subtitle={this.getSubtitle()} />
         <SW.Wrapper>
           <SW.StyledTabBar
             onChange={this.handleTabChange}

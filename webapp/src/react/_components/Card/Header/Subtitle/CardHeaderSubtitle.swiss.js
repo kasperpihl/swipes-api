@@ -4,7 +4,8 @@ import Icon from 'src/react/_components/Icon/Icon';
 export default styleSheet('CardHeaderSubtitle', {
   Wrapper: {
     _size: ['100%', '30px'],
-    _flex: ['row', 'left', 'center']
+    _flex: ['row', 'left', 'center'],
+    userSelect: 'none'
   },
 
   FollowerLabel: {
