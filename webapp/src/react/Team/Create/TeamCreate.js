@@ -1,6 +1,8 @@
 import React, { useState, useReducer, Fragment } from 'react';
 
 import request from 'core/utils/request';
+import useLoader from 'src/react/_hooks/useLoader';
+import useNav from 'src/react/_hooks/useNav';
 
 import CardContent from '_shared/Card/Content/CardContent';
 import InputText from '_shared/Input/Text/InputText';
@@ -9,7 +11,6 @@ import Spacing from '_shared/Spacing/Spacing';
 import Button from '_shared/Button/Button';
 
 import SW from './TeamCreate.swiss';
-import useLoader from 'src/react/_hooks/useLoader';
 
 const initialState = [
   {
@@ -41,6 +42,7 @@ export default function TeamCreate() {
   const [members, dispatch] = useReducer(inputReducer, initialState);
 
   const loader = useLoader();
+  const nav = useNav();
 
   const handleInputChange = e => {
     handleTeamNameChange(e.target.value);
