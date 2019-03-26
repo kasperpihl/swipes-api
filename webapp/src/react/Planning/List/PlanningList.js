@@ -17,6 +17,11 @@ export default function PlanningList({ tasks, ownedBy, yearWeek }) {
 
   const [projects, dispatch] = useReducer((state, action) => {
     switch (action.type) {
+      case 'unauthorized': {
+        const newState = { ...state };
+        delete newState[action.projectId];
+        return newState;
+      }
       case 'update':
         return {
           ...state,
@@ -35,6 +40,7 @@ export default function PlanningList({ tasks, ownedBy, yearWeek }) {
     { numberOfCompleted, maxDepth, totalNumberOfTasks },
     updatePlanningState
   ] = usePlanningState();
+
   useEffect(() => {
     if (hasPending) return;
     let dCompleted = 0;
@@ -43,7 +49,6 @@ export default function PlanningList({ tasks, ownedBy, yearWeek }) {
 
     Object.values(projects).forEach(p => {
       if (p === 'pending') return;
-      console.log(p);
       stateManagers.push(p.stateManager);
       dCompleted += p.numberOfCompleted;
       dDepth = Math.max(dDepth, p.maxIndention);

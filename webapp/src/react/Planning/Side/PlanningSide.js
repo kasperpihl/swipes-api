@@ -14,13 +14,13 @@ export default function PlanningSide({ yearWeek, setYearWeek }) {
     if (typeof numberOfCompleted !== 'number') return null;
     return (
       <>
-        <Spacing height={24} />
+        <Spacing height={30} />
         <SideHeader
           largeNumber={numberOfCompleted}
           smallNumber={`/ ${totalNumberOfTasks}`}
           subtitle="Tasks Completed"
         />
-        <Spacing height={9} />
+        <Spacing height={12} />
         <ProgressBar
           progress={Math.ceil((numberOfCompleted / totalNumberOfTasks) * 100)}
         />
@@ -30,7 +30,7 @@ export default function PlanningSide({ yearWeek, setYearWeek }) {
   return (
     <SW.Wrapper>
       <WeekPicker value={yearWeek} onChange={setYearWeek} />
-      <Spacing height={30} />
+      <Spacing height={24} />
       <WeekIndicator yearWeek={yearWeek} />
       {renderProgress()}
     </SW.Wrapper>

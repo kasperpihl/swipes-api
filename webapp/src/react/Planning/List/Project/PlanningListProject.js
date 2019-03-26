@@ -33,9 +33,20 @@ function PlanningListProject({
 
   const taskIdsRef = useRef();
   const selectingRef = useRef();
-  const stateManager = useSyncedProject(projectId, {
-    filteredTaskIds
-  });
+  const stateManager = useSyncedProject(
+    projectId,
+    {
+      filteredTaskIds
+    },
+    (err, res) => {
+      if (err && err === 'Not found') {
+        dispatch({
+          type: 'unauthorized',
+          projectId
+        });
+      }
+    }
+  );
 
   useEffect(() => {
     taskIdsRef.current = filteredTaskIds;
