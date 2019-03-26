@@ -41,7 +41,7 @@ function PlanningListProject({
     (err, res) => {
       if (err && err === 'Not found') {
         dispatch({
-          type: 'unauthorized',
+          type: 'remove',
           projectId
         });
       }

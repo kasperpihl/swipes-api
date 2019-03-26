@@ -7,6 +7,8 @@ import UserImage from 'src/react/_components/UserImage/UserImage';
 import SW from './ProfileHeader.swiss';
 import ListMenu from 'src/react/_components/ListMenu/ListMenu';
 import request from 'core/utils/request';
+import Loader from 'src/react/_components/loaders/Loader';
+
 import withNav from 'src/react/_hocs/Nav/withNav';
 
 @withNav
@@ -115,21 +117,31 @@ export default class ProfileHeader extends PureComponent {
     this.imageUpload.click();
   };
 
-  renderProfileImage = () => (
-    <SW.ProfileImage>
-      <UserImage userId="me" />
-      <SW.HeaderFileInput
-        className="fileInput"
-        onChange={this.handleImageChange}
-        type="file"
-        accept="image/x-png,image/jpeg"
-        innerRef={c => (this.imageUpload = c)}
-      />
-      <SW.ButtonWrapper onClick={this.handleUpload}>
-        <SW.OverlaySVG icon="Plus" />
-      </SW.ButtonWrapper>
-    </SW.ProfileImage>
-  );
+  renderProfileImage = () => {
+    const { loader } = this.props;
+    if (loader.check('uploadImage')) {
+      return (
+        <SW.ProfileImage>
+          <Loader mini size={24} />
+        </SW.ProfileImage>
+      );
+    }
+    return (
+      <SW.ProfileImage>
+        <UserImage userId="me" />
+        <SW.HeaderFileInput
+          className="fileInput"
+          onChange={this.handleImageChange}
+          type="file"
+          accept="image/x-png,image/jpeg,image/png"
+          innerRef={c => (this.imageUpload = c)}
+        />
+        <SW.ButtonWrapper onClick={this.handleUpload}>
+          <SW.OverlaySVG icon="Plus" />
+        </SW.ButtonWrapper>
+      </SW.ProfileImage>
+    );
+  };
   render() {
     const { me, loader } = this.props;
     const fullName = `${me.get('first_name')} ${me.get('last_name')}`;

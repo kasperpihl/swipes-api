@@ -17,7 +17,7 @@ export default function PlanningList({ tasks, ownedBy, yearWeek }) {
 
   const [projects, dispatch] = useReducer((state, action) => {
     switch (action.type) {
-      case 'unauthorized': {
+      case 'remove': {
         const newState = { ...state };
         delete newState[action.projectId];
         return newState;
