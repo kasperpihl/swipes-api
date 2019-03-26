@@ -10,5 +10,9 @@ export default styleSheet('PlanningModalProjectList', {
       visibility: 'hidden',
       position: 'absolute'
     }
+  },
+  EmptyWrapper: {
+    _size: '100%',
+    _flex: ['column', 'center', 'center']
   }
 });

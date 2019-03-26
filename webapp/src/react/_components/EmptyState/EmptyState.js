@@ -7,7 +7,7 @@ const EmptyState = props => {
   return (
     <SW.ProvideContext large={!!props.large} fill={!!props.fill}>
       <SW.Wrapper className={props.className}>
-        {props.showIcon && (
+        {props.icon && (
           <SW.ImageWrapper>
             <SW.Image icon={props.icon} />
           </SW.ImageWrapper>

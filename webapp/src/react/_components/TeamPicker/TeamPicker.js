@@ -50,10 +50,10 @@ function TeamPicker({ teams, value, onChange, disablePersonal }) {
 
   return (
     <SW.Wrapper>
-      {!disablePersonal && renderInput(myId, 'Personal')}
       {teams
         .toList()
         .map(team => renderInput(team.get('team_id'), team.get('name')))}
+      {!disablePersonal && renderInput(myId, 'Personal')}
     </SW.Wrapper>
   );
 }

@@ -55,12 +55,12 @@ export default function PlanningModal({
         <SW.ButtonWrapper>
           {projectId && (
             <Button
-              title="Add more tasks"
+              title="Change project"
               border
               onClick={() => setProjectId([])}
             />
           )}
-          <Button title="Done" border onClick={hideModal} />
+          <Button title="Done" green onClick={hideModal} />
         </SW.ButtonWrapper>
       </SW.BottomBar>
     </SW.Wrapper>

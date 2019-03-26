@@ -18,10 +18,10 @@ export const tooltip = payload => ({ type: types.TOOLTIP, payload });
 // ======================================================
 // Modal
 // ======================================================
-export function modal(target, component, props) {
+export function modal(side, component, props) {
   return {
     type: types.NAV_MODAL,
-    payload: { target, component, props }
+    payload: { side, component, props }
   };
 }
 

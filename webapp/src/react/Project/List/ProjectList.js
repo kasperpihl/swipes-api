@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SW from './ProjectList.swiss';
 import useNav from 'src/react/_hooks/useNav';
 import useUpdate from 'core/react/_hooks/useUpdate';
@@ -15,7 +15,7 @@ import ProjectListItem from './Item/ProjectListItem';
 
 ProjectList.sizes = [750];
 
-export default function ProjectList() {
+export default function ProjectList({ openAdd }) {
   const nav = useNav();
   const [ownedBy, setOwnedBy] = useState();
   const params = {};
@@ -55,6 +55,11 @@ export default function ProjectList() {
       }
     });
   };
+  useEffect(() => {
+    if (openAdd) {
+      handleNewProject();
+    }
+  }, []);
 
   if (!req.items) {
     return <RequestLoader req={req} />;

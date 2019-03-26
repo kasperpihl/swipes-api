@@ -4,7 +4,7 @@ export default styleSheet('ActionBar', {
   Wrapper: {
     _flex: ['row', 'left', 'center'],
     height: '42px',
-    backgroundColor: '$sw3',
+    backgroundColor: '$sw4',
     borderRadius: '3px',
     padding: '9px 12px',
     position: 'absolute',

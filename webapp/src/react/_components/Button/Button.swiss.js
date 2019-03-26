@@ -11,12 +11,18 @@ export default styleSheet('Button', {
     borderRadius: '2px',
     height: '30px',
     minWidth: '30px',
+    boxSizing: 'border-box',
+    cursor: 'pointer',
+    '& > *': {
+      pointerEvents: 'none'
+    },
     small: {
       minWidth: '24px',
       height: '24px'
     },
     '&:hover': {
-      backgroundColor: '$sw4'
+      backgroundColor: '$sw4',
+      opacity: 0.8
     },
     selected: {
       backgroundColor: '$dark',
