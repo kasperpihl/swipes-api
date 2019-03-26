@@ -44,43 +44,42 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
   });
 
   const [sliderValue, changeSliderValue] = useState(0);
-
-  const handleAddTasks = () => {
-    nav.openModal(PlanningModal, {
-      yearWeek,
-      ownedBy,
-      initialTasks: req.result.tasks
-    });
-  };
-
   const [
     { editingId, maxDepth, stateManagers },
     updatePlanningState
   ] = usePlanningState();
 
   let actions = [];
-  if (maxDepth) {
-    const handleChange = e => {
-      stateManagers.forEach(stateManager => {
-        stateManager.expandHandler.setDepth(parseInt(e.target.value));
+  if (!editingId) {
+    // Not editing!
+    if (maxDepth) {
+      const handleChange = e => {
+        stateManagers.forEach(stateManager => {
+          stateManager.expandHandler.setDepth(parseInt(e.target.value));
+        });
+        changeSliderValue(parseInt(e.target.value));
+      };
+      actions.push(
+        <StepSlider
+          sliderValue={sliderValue}
+          onSliderChange={handleChange}
+          min={0}
+          max={maxDepth}
+        />
+      );
+    }
+    const handleAddTasks = () => {
+      nav.openModal(PlanningModal, {
+        yearWeek,
+        ownedBy,
+        initialTasks: req.result.tasks
       });
-      changeSliderValue(parseInt(e.target.value));
     };
     actions.push(
-      <StepSlider
-        sliderValue={sliderValue}
-        onSliderChange={handleChange}
-        min={0}
-        max={maxDepth}
-      />
+      <Button title="Add Tasks" icon="CircledPlus" onClick={handleAddTasks} />
     );
-  }
-
-  actions.push(
-    <Button title="Add Tasks" icon="CircledPlus" onClick={handleAddTasks} />
-  );
-
-  if (editingId) {
+  } else {
+    // Editing!
     actions = [
       <Button
         title="Done editing"

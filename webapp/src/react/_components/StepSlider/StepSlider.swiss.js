@@ -11,7 +11,7 @@ export default styleSheet('StepSlider', {
   StepCounter: {
     _textStyle: 'caption',
     _flex: ['row', 'center', 'center'],
-    border: '1px solid $sw3',
+    border: '1px solid $sw2',
     borderRadius: '2px',
     color: '$sw2',
     padding: '1px 6px'
@@ -47,7 +47,7 @@ export default styleSheet('StepSlider', {
       background: get =>
         `linear-gradient(to right, $dark 0%, $dark ${get(
           'colorValue'
-        )}%, $sw4 ${get('colorValue')}%, $sw4 100%)`,
+        )}%, $sw3 ${get('colorValue')}%, $sw3 100%)`,
       '-webkit-appearance': 'none'
     },
 
@@ -55,7 +55,7 @@ export default styleSheet('StepSlider', {
       _size: '13px',
       backgroundColor: '$base',
       borderRadius: '50%',
-      border: '1px solid $sw3',
+      border: '1px solid $sw2',
       '-webkit-appearance': 'none'
     },
 

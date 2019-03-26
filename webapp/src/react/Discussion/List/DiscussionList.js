@@ -32,7 +32,7 @@ export default function DiscussionList({ type, onSelectItemId, selectedId }) {
   });
 
   useUpdate('discussion', update => {
-    if (!update.last_comment_at) {
+    if (!update.last_comment_by) {
       return req.mergeItem(update);
     }
     if (
