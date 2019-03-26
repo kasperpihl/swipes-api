@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
-// import InputField from '_shared/InputField/InputField';
+import InputToggle from '_shared/Input/Toggle/InputToggle';
+import UserImage from '_shared/UserImage/UserImage';
 
 export default function Tester() {
   return (
     <div style={{ width: '100%' }}>
-      <InputField
-        type="text"
-        onChange={handleChangeCallback}
-        value={inputVal}
-      />
+      <InputToggle component={<UserImage size={24} />} />
     </div>
   );
 }

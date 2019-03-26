@@ -2,18 +2,17 @@ import { styleSheet } from 'swiss-react';
 
 export default styleSheet('CardHeader', {
   Wrapper: {
-    _size: ['100%', 'auto'],
+    _size: ['calc(100% - 54px)', 'auto'],
     _flex: ['column', 'left', 'top'],
-    padding: get => `0 ${get('padding')}px`,
+    margin: '0 18px 0 36px',
     separator: {
       borderBottom: '1px solid $sw4',
       paddingBottom: '6px'
     },
-    horizontalPadding: {
-      paddingLeft: get => `${get('horizontalPadding')}px`,
-      paddingRight: get => `${get('horizontalPadding')}px`
+    noSpacing: {
+      margin: '0',
+      width: '100%'
     },
-
     subtitle: {
       _flex: ['row', 'left', 'bottom']
     }

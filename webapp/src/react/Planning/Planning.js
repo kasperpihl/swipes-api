@@ -95,7 +95,9 @@ function Planning({ teams }) {
         noframe
       >
         <SW.ParentWrapper>
-          <PlanningSide yearWeek={yearWeek} setYearWeek={updateYearWeek} />
+          <SW.LeftSide>
+            <PlanningSide yearWeek={yearWeek} setYearWeek={updateYearWeek} />
+          </SW.LeftSide>
           <Spacing width={48} />
           <SW.RightSide>
             <PlanningOverview

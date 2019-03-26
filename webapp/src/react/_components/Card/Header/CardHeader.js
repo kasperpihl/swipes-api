@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SW from './CardHeader.swiss';
 import CardHeaderSubtitle from './Subtitle/CardHeaderSubtitle';
+import Spacing from '_shared/Spacing/Spacing';
 
 CardHeader.propTypes = {
   title: PropTypes.string.isRequired,
@@ -29,6 +30,7 @@ export default function CardHeader({
       <SW.Title key="header-title" onClick={onTitleClick}>
         {title}
       </SW.Title>
+      {separator && <Spacing height={6} />}
       {!subtitle && <SW.Actions>{children}</SW.Actions>}
       {subtitle && (
         <CardHeaderSubtitle subtitle={subtitle} children={children} />

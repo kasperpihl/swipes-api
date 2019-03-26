@@ -4,8 +4,7 @@ import EmptyState from 'src/react/_components/EmptyState/EmptyState';
 export default styleSheet('ProjectList', {
   Wrapper: {
     _size: '100%',
-    padding: '0 18px',
-    paddingTop: '24px'
+    paddingLeft: '36px'
   },
 
   Name: {

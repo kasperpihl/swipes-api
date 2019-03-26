@@ -12,6 +12,7 @@ import CardContent from 'src/react/_components/Card/Content/CardContent';
 import Button from 'src/react/_components/Button/Button';
 import ModalCreate from 'src/react/Modal/Create/ModalCreate';
 import ProjectListItem from './Item/ProjectListItem';
+import Spacing from '_shared/Spacing/Spacing';
 
 ProjectList.sizes = [750];
 
@@ -90,17 +91,20 @@ export default function ProjectList({ openAdd }) {
     <CardContent
       noframe
       header={
-        <CardHeader padding={18} title="Projects">
-          <Button icon="CircledPlus" onClick={handleNewProject} />
-        </CardHeader>
+        <>
+          <CardHeader padding={18} title="Projects">
+            <Button icon="CircledPlus" onClick={handleNewProject} />
+          </CardHeader>{' '}
+          <Spacing height={24} />
+          <SectionHeader discussion>
+            <SW.Name>Name</SW.Name>
+            <SW.Team>Team</SW.Team>
+            <SW.LastOpened>Last Opened</SW.LastOpened>
+          </SectionHeader>
+        </>
       }
     >
       <SW.Wrapper>
-        <SectionHeader>
-          <SW.Name>Name</SW.Name>
-          <SW.Team>Team</SW.Team>
-          <SW.LastOpened>Last Opened</SW.LastOpened>
-        </SectionHeader>
         {req.items.map(project => (
           <ProjectListItem
             key={project.project_id}

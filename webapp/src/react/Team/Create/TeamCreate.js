@@ -1,4 +1,4 @@
-import React, { useState, useReducer, Fragment } from 'react';
+import React, { useState, useReducer, useRef, Fragment } from 'react';
 
 import request from 'core/utils/request';
 import useLoader from 'src/react/_hooks/useLoader';
@@ -12,37 +12,54 @@ import Button from '_shared/Button/Button';
 
 import SW from './TeamCreate.swiss';
 
-const initialState = [
-  {
-    key: 'member-0',
-    value: ''
-  },
-  {
-    key: 'member-1',
-    value: ''
-  }
-];
-
 const regEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-function inputReducer(state, action) {
-  switch (action.type) {
-    case 'change':
-      state[action.key].value = action.payload;
-      return [...state];
-    case 'add':
-      return [...state, { key: `member-${state.length}`, value: '' }];
-    default:
-      return state;
+function useTeamCreateFields() {
+  const initialState = [
+    {
+      key: 'member-0',
+      value: '',
+      error: false
+    },
+    {
+      key: 'member-1',
+      value: '',
+      error: false
+    }
+  ];
+  function inputReducer(state, action) {
+    switch (action.type) {
+      case 'change':
+        state[action.key] = {
+          ...state[action.key],
+          value: action.payload
+        };
+        return [...state];
+      case 'add':
+        return [
+          ...state,
+          { key: `member-${state.length}`, value: '', error: false }
+        ];
+      case 'error':
+        state[action.key].error = action.payload;
+        return [...state];
+      case 'reset':
+        state = initialState;
+        return state;
+      default:
+        return state;
+    }
   }
+  return useReducer(inputReducer, initialState);
 }
 
 export default function TeamCreate() {
   const [teamName, handleTeamNameChange] = useState('');
-  const [members, dispatch] = useReducer(inputReducer, initialState);
+  const [members, dispatch] = useTeamCreateFields();
 
   const loader = useLoader();
   const nav = useNav();
+  const emailRef = useRef();
 
   const handleInputChange = e => {
     handleTeamNameChange(e.target.value);
@@ -86,7 +103,15 @@ export default function TeamCreate() {
         <SW.Text>Invite your colleagues!</SW.Text>
         <Spacing height={18} />
         {members.map((member, i) => {
-          const error = !regEx.exec(member.value);
+          const checkForError = () => {
+            if (!regEx.test(member.value)) {
+              dispatch({
+                type: 'error',
+                key: i,
+                payload: true
+              });
+            }
+          };
           return (
             <Fragment key={member.key}>
               <SW.InputWrapper>
@@ -94,7 +119,9 @@ export default function TeamCreate() {
                   type="email"
                   placeholder="Email"
                   value={member.value}
-                  error={member.value !== '' && error}
+                  error={member.value !== '' && member.error}
+                  innerRef={c => (emailRef.current = c)}
+                  onBlur={checkForError}
                   onChange={e =>
                     dispatch({
                       type: 'change',
@@ -103,7 +130,7 @@ export default function TeamCreate() {
                     })
                   }
                 />
-                {member.value !== '' && error && (
+                {member.value !== '' && member.error && (
                   <SW.ErrorLabel>Please enter a valid email</SW.ErrorLabel>
                 )}
               </SW.InputWrapper>

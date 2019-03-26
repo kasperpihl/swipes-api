@@ -11,7 +11,6 @@ export default styleSheet('DiscussionHeader', {
   TitleWrapper: {
     paddingTop: '3px',
     width: '100%',
-    paddingLeft: '12px',
     _flex: ['column']
   },
   Subtitle: {

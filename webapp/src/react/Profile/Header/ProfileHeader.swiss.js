@@ -60,6 +60,7 @@ export default styleSheet('ProfileHeader', {
     top: '0',
     left: '0',
     backgroundColor: 'transparent',
+    borderRadius: '50%',
 
     '&:hover': {
       backgroundColor: '$dark',

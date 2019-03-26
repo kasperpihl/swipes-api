@@ -7,6 +7,7 @@ import CardHeader from 'src/react/_components/Card/Header/CardHeader';
 import Button from 'src/react/_components/Button/Button';
 import ListMenu from 'src/react/_components/ListMenu/ListMenu';
 import FormModal from 'src/react/_components/FormModal/FormModal';
+import Spacing from '_shared/Spacing/Spacing';
 
 import ProjectSide from 'src/react/Project/Side/ProjectSide';
 import ProjectTaskList from 'src/react/Project/Task/List/ProjectTaskList';
@@ -72,6 +73,16 @@ function ProjectOverview({ projectId }) {
   };
 
   const handleDeleteCompletedTasks = () => {
+    nav.openModal(FormModal, {
+      title: 'Delete completed tasks',
+      subtitle:
+        'Are you sure you want to delete the completed tasks from this project? This cannot be undone.',
+      onConfirm: callbackDeleteCompletedTasks,
+      confirmLabel: 'Delete'
+    });
+  };
+
+  const callbackDeleteCompletedTasks = () => {
     stateManager.editHandler.deleteCompleted();
   };
 
@@ -99,22 +110,24 @@ function ProjectOverview({ projectId }) {
     <CardContent
       noframe
       header={
-        <CardHeader
-          padding={18}
-          title={projectTitle}
-          subtitle={subtitle}
-          separator
-        >
-          <Button icon="ThreeDots" onClick={openContextMenu} />
-        </CardHeader>
+        <SW.HeaderWrapper>
+          <CardHeader title={projectTitle} subtitle={subtitle} separator>
+            <Button icon="ThreeDots" onClick={openContextMenu} />
+          </CardHeader>
+        </SW.HeaderWrapper>
       }
     >
       <ProjectContext.Provider value={stateManager}>
         <SW.Wrapper>
-          <ProjectSide stateManager={stateManager} />
-          <SW.TaskWrapper>
-            <ProjectTaskList />
-          </SW.TaskWrapper>
+          <SW.LeftSide>
+            <ProjectSide stateManager={stateManager} />
+          </SW.LeftSide>
+          <Spacing width={48} />
+          <SW.RightSide>
+            <SW.TaskWrapper>
+              <ProjectTaskList />
+            </SW.TaskWrapper>
+          </SW.RightSide>
         </SW.Wrapper>
       </ProjectContext.Provider>
     </CardContent>

@@ -2,8 +2,10 @@ import { styleSheet } from 'swiss-react';
 
 export default styleSheet('TabBar', {
   Wrapper: {
-    _size: ['100%', '30px'],
-    _flex: ['row', 'left', 'top']
+    _size: ['calc(100% - 54px)', '30px'],
+    _flex: ['row', 'left', 'top'],
+    margin: '0 18px 0 36px',
+    borderBottom: '1px solid $sw4'
   },
   Item: {
     _flex: 'center',

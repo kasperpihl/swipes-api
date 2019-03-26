@@ -21,8 +21,7 @@ export default styleSheet('Button', {
       height: '24px'
     },
     '&:hover': {
-      backgroundColor: '$sw4',
-      opacity: 0.8
+      backgroundColor: '$green3'
     },
     selected: {
       backgroundColor: '$dark',

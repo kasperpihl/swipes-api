@@ -4,24 +4,21 @@ export default styleSheet('Planning', {
   ParentWrapper: {
     _flex: ['row', 'left', 'top'],
     _size: '100%',
-    padding: '42px 0 0 36px'
+    paddingLeft: '36px'
   },
 
   HeaderWrapper: {
-    _flex: ['column', 'left', 'top'],
-    margin: '0 18px 0px 36px',
-    borderBottom: '1px solid $sw4'
+    _flex: ['column', 'left', 'top']
   },
 
   LeftSide: {
-    height: '100%',
-    flex: 'none'
+    paddingTop: '42px'
   },
+
   RightSide: {
     _flex: ['column', 'center', 'center'],
     height: '100%',
     fontSize: '24px',
-    width: '100%',
-    paddingRight: '18px'
+    width: '100%'
   }
 });

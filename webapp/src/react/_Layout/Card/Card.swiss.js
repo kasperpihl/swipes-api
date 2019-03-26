@@ -31,8 +31,8 @@ export default styleSheet('Card', {
     }
   },
   Header: {
-    _size: ['calc(100% - 36px)', 'auto'],
-    margin: '0 18px',
+    _size: ['calc(100% - 54px)', 'auto'],
+    margin: '0 18px 0 36px',
     flex: 'none'
   },
   Actions: {
@@ -57,7 +57,6 @@ export default styleSheet('Card', {
     }
   },
   PinButton: {
-    _el: Button,
-    borderRadius: '50% !important'
+    _el: Button
   }
 });

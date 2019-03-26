@@ -5,7 +5,6 @@ export default styleSheet('UserImage', {
     _size: '100%',
     _flex: ['column', 'center', 'center'],
     overflow: 'hidden',
-    borderRadius: '50%',
     flexShrink: '0',
     userSelect: 'none',
 
@@ -17,6 +16,7 @@ export default styleSheet('UserImage', {
   Image: {
     _el: 'img',
     _size: '100%',
+    borderRadius: '50%',
 
     grayscale: {
       filter: 'grayscale(100%)'

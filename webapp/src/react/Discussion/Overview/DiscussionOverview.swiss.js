@@ -5,5 +5,9 @@ export default styleSheet('DiscussionOverview', {
     marginLeft: '18px',
     marginRight: '33px',
     borderTop: '1px solid $sw3'
+  },
+
+  HeaderWrapper: {
+    margin: '0 18px 0 24px'
   }
 });

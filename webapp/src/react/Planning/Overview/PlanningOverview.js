@@ -12,10 +12,14 @@ import StepSlider from '_shared/StepSlider/StepSlider';
 import parseWeekLabel from '_shared/WeekPicker/parseWeekLabel';
 import PlanningList from 'src/react/Planning/List/PlanningList';
 import usePlanningState from 'src/react/Planning/usePlanningState';
+import useMyId from 'core/react/_hooks/useMyId';
 
 import SW from './PlanningOverview.swiss';
+import InputToggle from '_shared/Input/Toggle/InputToggle';
+import UserImage from '_shared/UserImage/UserImage';
 
 export default function PlanningOverview({ ownedBy, yearWeek }) {
+  const myId = useMyId();
   const nav = useNav();
   const req = useRequest('planning.listTasks', {
     owned_by: ownedBy,
@@ -60,17 +64,22 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
   let actions = [];
   if (!editingId) {
     // Not editing!
+    actions.push(
+      <InputToggle component={<UserImage userId={myId} size={24} />} />
+    );
     if (maxDepth) {
-      const handleChange = e => {
+      const handleChange = number => {
+        e.preventDefault();
+        console.log(number);
         stateManagers.forEach(stateManager => {
-          stateManager.expandHandler.setDepth(parseInt(e.target.value));
+          stateManager.expandHandler.setDepth(number);
         });
-        changeSliderValue(parseInt(e.target.value));
+        changeSliderValue(number);
       };
       actions.push(
         <StepSlider
-          sliderValue={sliderValue}
-          onSliderChange={handleChange}
+          sliderValue={sliderValue + 1}
+          handleChange={handleChange}
           min={0}
           max={maxDepth}
         />

@@ -6,10 +6,8 @@ export default styleSheet('Discuss', {
     _size: '100%'
   },
   LeftHeaderWrapper: {
-    _size: ['100%', '74px'],
     _flex: ['column', 'left', 'between'],
-    padding: '0 18px',
-    borderBottom: '1px solid $sw4'
+    height: '79px'
   },
   LeftSide: {
     height: '100%',

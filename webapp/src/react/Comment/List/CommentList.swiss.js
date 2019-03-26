@@ -5,7 +5,8 @@ export default styleSheet('CommentList', {
   Wrapper: {
     _flex: ['column', 'left', 'bottom'],
     minHeight: '100%',
-    marginTop: 'auto'
+    marginTop: 'auto',
+    paddingLeft: '24px'
   },
 
   EmptyState: {

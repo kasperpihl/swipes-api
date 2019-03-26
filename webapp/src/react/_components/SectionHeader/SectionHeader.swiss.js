@@ -11,6 +11,11 @@ export default styleSheet('SectionHeader', {
     paddingBottom: '6px',
     marginBottom: '12px',
     textTransform: 'uppercase',
-    userSelect: 'none'
+    userSelect: 'none',
+
+    discussion: {
+      margin: '0 18px 0 36px',
+      width: 'calc(100% - 54px)'
+    }
   }
 });

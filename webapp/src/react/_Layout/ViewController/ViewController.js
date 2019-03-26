@@ -77,7 +77,7 @@ export default class ViewController extends PureComponent {
     if (!this._unmounted) {
       this.setState({ appWidth: this.wrapperRef.clientWidth });
     }
-  }, 50);
+  }, 350);
   getScreen(side) {
     const { navigation } = this.props;
     const screen = navigation.get(side).last();

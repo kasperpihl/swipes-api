@@ -11,7 +11,8 @@ export default styleSheet('PlanningOverview', {
     _flex: ['column', 'center', 'top'],
     overflowY: 'auto',
     paddingRight: '18px',
-    paddingBottom: '60px'
+    paddingBottom: '60px',
+    paddingTop: '42px'
   },
 
   EmptyStateWrapper: {
