@@ -10,6 +10,7 @@ export default styleSheet('PlanningOverview', {
     _size: '100%',
     _flex: ['column', 'center', 'top'],
     overflowY: 'auto',
+    paddingRight: '18px',
     paddingBottom: '60px'
   },
 

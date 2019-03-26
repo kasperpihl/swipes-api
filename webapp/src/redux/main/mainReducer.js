@@ -47,7 +47,7 @@ export default function main(state = initialState, action) {
     case types.NAV_PUSH:
     case types.NAV_SET:
     case types.NAV_POP: {
-      return state.setIn(['modals', payload.target], null);
+      return state.setIn(['modals', payload.side], null);
     }
     case types.NAV_MODAL: {
       const modal = payload.component
@@ -56,7 +56,7 @@ export default function main(state = initialState, action) {
             props: payload.props || {}
           }
         : null;
-      return state.setIn(['modals', payload.target], modal);
+      return state.setIn(['modals', payload.side], modal);
     }
 
     // ======================================================

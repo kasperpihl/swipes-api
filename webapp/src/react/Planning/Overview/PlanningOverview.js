@@ -43,6 +43,14 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
     }
   });
 
+  const handleAddTasks = () => {
+    nav.openModal(PlanningModal, {
+      yearWeek,
+      ownedBy,
+      initialTasks: req.result.tasks
+    });
+  };
+
   const [sliderValue, changeSliderValue] = useState(0);
   const [
     { editingId, maxDepth, stateManagers },
@@ -68,13 +76,6 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
         />
       );
     }
-    const handleAddTasks = () => {
-      nav.openModal(PlanningModal, {
-        yearWeek,
-        ownedBy,
-        initialTasks: req.result.tasks
-      });
-    };
     actions.push(
       <Button title="Add Tasks" icon="CircledPlus" onClick={handleAddTasks} />
     );
@@ -101,13 +102,11 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
       <SW.Wrapper>
         <SW.EmptyStateWrapper>
           <EmptyState
-            showIcon
-            fill
             title={`Nothing planned for ${weekLabel}`}
-            description="Add tasks from a project"
+            description="Add tasks from your projects"
             icon="Typewriter"
           />
-          <Spacing height={21} />
+          <Spacing height={18} />
           <Button
             title="Add tasks"
             icon="CircledPlus"
