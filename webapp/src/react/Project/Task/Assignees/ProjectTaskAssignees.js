@@ -6,11 +6,13 @@ import Button from 'src/react/_components/Button/Button';
 import contextMenu from 'src/utils/contextMenu';
 import useProjectSlice from 'core/react/_hooks/useProjectSlice';
 import { ProjectContext } from 'src/react/contexts';
+import useMyId from 'core/react/_hooks/useMyId';
 
 import SW from './ProjectTaskAssignees.swiss';
 
 export default memo(ProjectTaskAssignees);
 function ProjectTaskAssignees({ taskId }) {
+  const myId = useMyId();
   const stateManager = useContext(ProjectContext);
 
   const [assignees, ownedBy, isSelected] = useProjectSlice(
@@ -46,16 +48,20 @@ function ProjectTaskAssignees({ taskId }) {
   return (
     <SW.Wrapper
       hide={!assigneesCount.size && !isSelected}
-      onClick={handleAssignClick}
+      onClick={assigneesCount.size ? handleAssignClick : undefined}
     >
       <Assignees
         userIds={assigneesCount}
         teamId={ownedBy}
-        size={18}
+        size={22}
         maxImages={4}
         onClick={handleAssignClick}
       >
-        <Button icon="Person" onClick={handleAssignClick} small />
+        <Button
+          icon="Person"
+          onClick={() => handleAssigneeSelect([myId])}
+          small
+        />
       </Assignees>
     </SW.Wrapper>
   );

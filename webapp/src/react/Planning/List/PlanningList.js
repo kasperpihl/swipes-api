@@ -1,4 +1,4 @@
-import React, { useMemo, useReducer, useEffect } from 'react';
+import React, { useMemo, useReducer, useEffect, useRef } from 'react';
 import Loader from 'src/react/_components/loaders/Loader';
 
 import PlanningListProject from './Project/PlanningListProject';
@@ -7,34 +7,37 @@ import usePlanningState from 'src/react/Planning/usePlanningState';
 import SW from './PlanningList.swiss';
 
 export default function PlanningList({ tasks, ownedBy, yearWeek }) {
-  const initialState = useMemo(() => {
-    const initialState = {};
-    tasks.forEach(({ project_id }) => {
-      initialState[project_id] = 'pending';
-    });
-    return initialState;
-  }, []);
+  const uniqueProjectIds = useMemo(
+    () => [...new Set(tasks.map(({ project_id }) => project_id))],
+    [tasks]
+  );
+
+  const didLoadInitial = useRef();
 
   const [projects, dispatch] = useReducer((state, action) => {
     switch (action.type) {
       case 'remove': {
-        const newState = { ...state };
-        delete newState[action.projectId];
-        return newState;
+        return { ...state, [action.projectId]: 'removed' };
       }
       case 'update':
-        return {
-          ...state,
-          [action.projectId]: action.payload
-        };
+        return { ...state, [action.projectId]: action.payload };
       default:
         return state;
     }
-  }, initialState);
+  }, {});
 
-  const hasPending = !!Object.entries(projects).filter(
-    ([key, value]) => value === 'pending'
-  ).length;
+  const sortedProjectIds = useMemo(() => {
+    return uniqueProjectIds
+      .filter(id => projects[id] !== 'removed')
+      .sort((a, b) => {
+        const aP = projects[a];
+        const bP = projects[b];
+        if (!aP && !bP) return 0;
+        if (aP && !bP) return -1;
+        if (!aP && bP) return 1;
+        return aP.title.localeCompare(bP.title);
+      });
+  }, [uniqueProjectIds, projects]);
 
   const [
     { numberOfCompleted, maxDepth, totalNumberOfTasks },
@@ -42,13 +45,20 @@ export default function PlanningList({ tasks, ownedBy, yearWeek }) {
   ] = usePlanningState();
 
   useEffect(() => {
-    if (hasPending) return;
+    if (!didLoadInitial.current) {
+      console.log(Object.keys(projects).length, uniqueProjectIds.length);
+      if (Object.keys(projects).length !== uniqueProjectIds.length) {
+        return;
+      }
+      didLoadInitial.current = true;
+    }
     let dCompleted = 0;
     let dDepth = 0;
     const stateManagers = [];
 
     Object.values(projects).forEach(p => {
       if (p === 'pending') return;
+      if (p === 'removed') return;
       stateManagers.push(p.stateManager);
       dCompleted += p.numberOfCompleted;
       dDepth = Math.max(dDepth, p.maxIndention);
@@ -66,24 +76,15 @@ export default function PlanningList({ tasks, ownedBy, yearWeek }) {
         totalNumberOfTasks: tasks.length
       });
     }
-  }, [hasPending, projects, tasks]);
-
-  const sortedProjectIds = useMemo(() => {
-    if (hasPending) return Object.keys(projects);
-    return Object.keys(projects).sort((a, b) =>
-      projects[a].title.localeCompare(projects[b].title)
-    );
-  }, [projects, hasPending]);
+  }, [projects, tasks]);
 
   return (
-    <SW.Content>
-      {hasPending && <Loader center mini size={24} />}
+    <SW.Content didLoad={didLoadInitial.current}>
       {sortedProjectIds.map(project_id => (
         <PlanningListProject
           key={project_id}
           tasks={tasks}
           projectId={project_id}
-          hasPending={hasPending}
           dispatch={dispatch}
           ownedBy={ownedBy}
           yearWeek={yearWeek}

@@ -93,6 +93,7 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
     actions = [
       <Button
         title="Done editing"
+        green
         icon="Checkmark"
         onClick={() => {
           updatePlanningState({ editingId: null });
@@ -137,7 +138,7 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
         />
       </SW.ScrollableWrapper>
 
-      <ActionBar actions={actions} />
+      <ActionBar actions={actions} green={!!editingId} />
     </SW.Wrapper>
   );
 }

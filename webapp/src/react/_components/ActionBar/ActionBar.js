@@ -2,9 +2,9 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import SW from './ActionBar.swiss';
 
-export default function ActionBar({ actions }) {
+export default function ActionBar({ actions, green }) {
   return (
-    <SW.Wrapper>
+    <SW.Wrapper green={green}>
       {actions.map((action, i) => {
         const lastItem = i === actions.length - 1;
         return (

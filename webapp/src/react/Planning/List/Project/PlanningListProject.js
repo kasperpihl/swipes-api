@@ -19,7 +19,6 @@ function PlanningListProject({
   projectId,
   dispatch,
   tasks,
-  hasPending,
   ownedBy,
   yearWeek
 }) {
@@ -122,7 +121,7 @@ function PlanningListProject({
     }
   }, [editingId, stateManager]);
 
-  if (!visibleOrder || !stateManager || hasPending) {
+  if (!visibleOrder || !stateManager) {
     return null;
   }
 
