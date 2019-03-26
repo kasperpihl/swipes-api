@@ -20,15 +20,6 @@ export default styleSheet('Button', {
       minWidth: '24px',
       height: '24px'
     },
-    '&:hover': {
-      backgroundColor: '$green3'
-    },
-    selected: {
-      backgroundColor: '$dark',
-      '&:hover': {
-        backgroundColor: '$sw1'
-      }
-    },
     withTitle: {
       padding: '0 6px'
     },
@@ -38,13 +29,16 @@ export default styleSheet('Button', {
     right: {
       marginLeft: 'auto'
     },
+    selected: {
+      backgroundColor: '$green1'
+    },
     green: {
       border: 'none',
-      backgroundColor: '$green1',
-
-      '&:hover': {
-        backgroundColor: '$green2'
-      }
+      backgroundColor: '$green1'
+    },
+    '&:hover': {
+      borderColor: '$green3',
+      backgroundColor: '$green3'
     }
   },
 
@@ -53,9 +47,6 @@ export default styleSheet('Button', {
     _textStyle: 'body',
     padding: '0 6px',
     color: '$dark',
-    selected: {
-      color: '$base'
-    },
     'status=Success': {
       color: '$green1'
     },

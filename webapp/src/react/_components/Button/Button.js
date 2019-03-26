@@ -40,7 +40,7 @@ export default function Button({
         {...rest}
         onClick={(parsedStatus === 'Standard' && onClick) || undefined}
       >
-        <ButtonIcon icon={icon} status={parsedStatus} />
+        <ButtonIcon icon={icon} status={parsedStatus} selected={selected} />
         {!!parsedTitle && <SW.Title>{parsedTitle}</SW.Title>}
       </SW.Wrapper>
     </SW.ProvideContext>

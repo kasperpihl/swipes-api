@@ -2,7 +2,7 @@ import React from 'react';
 import SW from './ButtonIcon.swiss';
 
 export default function ButtonIcon(props) {
-  let { icon, status } = props;
+  let { icon, status, selected } = props;
 
   switch (status) {
     case 'Standard': {
@@ -18,7 +18,7 @@ export default function ButtonIcon(props) {
   }
   return (
     <SW.IconWrapper>
-      <SW.Icon icon={icon} />
+      <SW.Icon icon={icon} selected={selected} />
     </SW.IconWrapper>
   );
 }
