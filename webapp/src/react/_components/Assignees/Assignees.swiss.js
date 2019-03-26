@@ -4,7 +4,11 @@ export default styleSheet('Assignees', {
   Wrapper: {
     _flex: ['row', 'right', 'center'],
     flexDirection: 'row-reverse',
-    flex: 'none'
+    flex: 'none',
+    cursor: 'pointer',
+    '& > *': {
+      pointerEvents: 'none'
+    }
   },
   AbsoluteWrapper: {
     width: get => `${(get('size') - 6) * get('imageCount') + 6}px`,

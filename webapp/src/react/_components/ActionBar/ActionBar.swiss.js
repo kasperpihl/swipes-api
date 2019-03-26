@@ -10,7 +10,10 @@ export default styleSheet('ActionBar', {
     position: 'absolute',
     bottom: '24px',
     left: '50%',
-    transform: 'translateX(-50%)'
+    transform: 'translateX(-50%)',
+    green: {
+      backgroundColor: '$green1'
+    }
   },
 
   Separator: {
