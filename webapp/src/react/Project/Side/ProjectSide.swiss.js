@@ -1,17 +1,11 @@
 import { styleSheet } from 'swiss-react';
 import Button from 'src/react/_components/Button/Button';
-import StepSlider from 'src/react/_components/StepSlider/StepSlider';
 
 export default styleSheet('ProjectSide', {
   Wrapper: {
     _size: ['180px', 'auto'],
     _flex: ['column', 'flex-start', 'flex-start'],
     flex: 'none'
-  },
-
-  StepSlider: {
-    _el: StepSlider,
-    width: '100%'
   },
 
   ButtonWrapper: {
