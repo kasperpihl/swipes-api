@@ -7,12 +7,12 @@ export default styleSheet('ProjectTaskInput', {
     _textStyle: 'H3',
     width: '100%',
     borderRadius: '3px',
-    padding: '3px 6px',
+    padding: '0 6px',
     resize: 'none',
     border: 'none',
     outline: 'none',
     boxShadow: 'none',
-    boxSizing: 'content-box',
+    overflowY: 'hidden',
 
     isCompleted: {
       opacity: '0.5'
