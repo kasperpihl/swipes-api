@@ -43,7 +43,7 @@ export default class Redirect extends PureComponent {
     const path = location.pathname;
 
     if (isHydrated && !token) {
-      if (['/'].indexOf(path) > -1) {
+      if (['/', '/create'].indexOf(path) > -1) {
         redirectTo('/login');
       }
     }

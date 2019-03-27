@@ -1,8 +1,11 @@
 import React, { useState, useReducer, useRef, Fragment } from 'react';
+import { connect } from 'react-redux';
 
 import request from 'core/utils/request';
 import useLoader from 'src/react/_hooks/useLoader';
 import useNav from 'src/react/_hooks/useNav';
+
+import * as navigationActions from 'src/redux/navigation/navigationActions';
 
 import CardContent from '_shared/Card/Content/CardContent';
 import InputText from '_shared/Input/Text/InputText';
@@ -53,12 +56,19 @@ function useTeamCreateFields() {
   return useReducer(inputReducer, initialState);
 }
 
-export default function TeamCreate() {
+export default connect(
+  null,
+  {
+    redirectTo: navigationActions.redirectTo
+  }
+)(TeamCreate);
+
+function TeamCreate({ fromRouter, redirectTo }) {
   const [teamName, handleTeamNameChange] = useState('');
   const [members, dispatch] = useTeamCreateFields();
 
-  const loader = useLoader();
   const nav = useNav();
+  const loader = useLoader();
   const emailRef = useRef();
 
   const handleInputChange = e => {
@@ -81,16 +91,24 @@ export default function TeamCreate() {
           })
         )
     ).then(() => {
+      if (fromRouter) {
+        redirectTo('/');
+      } else {
+        nav.pop();
+      }
       loader.clear('create');
     });
   }
 
-  const handleCancel = () => {
-    nav.pop();
+  const handleSkip = () => {
+    redirectTo('/');
   };
 
+  // Spacing when you are accessing through /create
+  const style = fromRouter && { paddingTop: '24px' };
+
   return (
-    <CardContent header={<CardHeader title="Invite your team to join in!" />}>
+    <CardContent header={<CardHeader title="Create a team" style={style} />}>
       <SW.Wrapper>
         <Spacing height={69} />
         <InputText
@@ -144,9 +162,9 @@ export default function TeamCreate() {
           onClick={() => dispatch({ type: 'add' })}
         />
         <SW.ActionsWrapper>
-          <Button title="Cancel" onClick={handleCancel} border />
+          {fromRouter && <Button title="Skip" onClick={handleSkip} border />}
           <Button
-            title="Start collaborating!"
+            title="Create team"
             onClick={handleCreateTeam}
             status={loader.get('create')}
             green

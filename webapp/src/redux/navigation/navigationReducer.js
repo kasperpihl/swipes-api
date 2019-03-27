@@ -3,12 +3,12 @@ import * as coreTypes from 'core/redux/constants';
 import * as types from '../constants';
 
 const initialState = fromJS({
-  sideMenuId: 'ProjectList',
+  sideMenuId: 'Planning',
   onTopSide: 'left',
   left: [
     {
-      screenId: 'ProjectList',
-      crumbTitle: 'Projects'
+      screenId: 'Planning',
+      crumbTitle: 'Planning'
     }
   ],
   right: [],
@@ -53,6 +53,9 @@ export default function navigationReducer(state = initialState, action) {
         payload.side,
         fromJS(payload.screen ? [payload.screen] : [])
       );
+    }
+    case types.NAV_RESET: {
+      return initialState;
     }
 
     case types.NAV_SET_UNIQUE_ID: {

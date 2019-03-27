@@ -10,6 +10,8 @@ import {
 import Unsubscribe from 'src/react/Unsubscribe/Unsubscribe';
 import Authentication from 'src/react/Authentication/Authentication';
 
+import Card from '_shared/Card/Card';
+import TeamCreate from 'src/react/Team/Create/TeamCreate';
 import ConfirmAccount from 'src/react/ConfirmAccount/ConfirmAccount';
 import SwipesLoader from 'src/react/_components/loaders/SwipesLoader';
 import Redirect from 'src/react/_Layout/redirect/Redirect';
@@ -62,13 +64,24 @@ export default class Root extends PureComponent {
 
     if (
       !isHydrated ||
-      (auth.get('token') && !lastConnect && status !== 'online') ||
+      (location.pathname === '/' &&
+        auth.get('token') &&
+        !lastConnect &&
+        status !== 'online') ||
       invitationToken
     ) {
       return <SwipesLoader center text="Loading" size={90} />;
     }
     return (
       <Switch>
+        <Route
+          path="/create"
+          render={() => (
+            <Card>
+              <TeamCreate fromRouter />
+            </Card>
+          )}
+        />
         <Route
           path="/"
           exact
@@ -77,10 +90,10 @@ export default class Root extends PureComponent {
             return <Comp />;
           }}
         />
-        ,
-        <Route path="/unsubscribe" component={Unsubscribe} />,
-        <Route path="/login" component={Authentication} />,
-        <Route path="/register" component={Authentication} />,
+
+        <Route path="/unsubscribe" component={Unsubscribe} />
+        <Route path="/login" component={Authentication} />
+        <Route path="/register" component={Authentication} />
         <Route path="/confirm" component={ConfirmAccount} />
       </Switch>
     );

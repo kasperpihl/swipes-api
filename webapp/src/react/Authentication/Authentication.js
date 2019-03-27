@@ -23,7 +23,9 @@ import Spacing from '_shared/Spacing/Spacing';
   }),
   {
     redirectTo: navigationActions.redirectTo,
-    openModal: mainActions.modal
+    openModal: mainActions.modal,
+    navSet: navigationActions.set,
+    navReset: navigationActions.reset
   }
 )
 export default class Authentication extends PureComponent {
@@ -68,7 +70,7 @@ export default class Authentication extends PureComponent {
   };
   handleAuthentication = () => {
     const { formData } = this.state;
-    const { redirectTo, loader } = this.props;
+    const { redirectTo, loader, invitedToTeam, navSet, navReset } = this.props;
 
     if (loader.check('authButton')) {
       return;
@@ -85,7 +87,18 @@ export default class Authentication extends PureComponent {
       if (res.ok) {
         loader.clear('authButton');
         window.analytics.sendEvent(analyticsEvent, {});
-        redirectTo('/');
+        if (!this.isLogin) {
+          navSet('left', {
+            screenId: 'ProjectList',
+            crumbTitle: 'Projects'
+          });
+        }
+
+        if (!this.isLogin() && !invitedToTeam) {
+          redirectTo('/create');
+        } else {
+          redirectTo('/');
+        }
       } else {
         loader.error('authButton', res.error, 3000);
       }

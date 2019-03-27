@@ -1,10 +1,6 @@
 import { styleSheet } from 'swiss-react';
 
 export default styleSheet('InputToggle', {
-  Wrapper: {
-    _flex: ['row', 'left', 'center']
-  },
-
   PackageWrapper: {
     _flex: ['column', 'center', 'center'],
     cursor: 'pointer'
@@ -14,13 +10,6 @@ export default styleSheet('InputToggle', {
     _el: 'label',
     _size: ['28px', '15px'],
     cursor: 'pointer'
-  },
-
-  Input: {
-    _el: 'input',
-    _size: '0',
-    pointerEvents: 'none',
-    opacity: '0'
   },
 
   Slider: {
