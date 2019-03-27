@@ -13,13 +13,5 @@ export default styleSheet('ActionBar', {
     green: {
       backgroundColor: '$green1'
     }
-  },
-
-  Separator: {
-    width: '1px',
-    height: '18px',
-    backgroundColor: '$sw3',
-    margin: '0 6px',
-    flex: 'none'
   }
 });

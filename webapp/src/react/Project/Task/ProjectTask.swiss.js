@@ -2,7 +2,7 @@ import { styleSheet } from 'swiss-react';
 
 export default styleSheet('ProjectTask', {
   Wrapper: {
-    _flex: ['row', 'left', 'center'],
+    _flex: ['row', 'left', 'top'],
     width: '100%',
     paddingLeft: get => `${get('indention') * 24}px`,
     paddingRight: '6px',

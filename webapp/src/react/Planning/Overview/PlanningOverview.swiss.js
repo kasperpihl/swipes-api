@@ -15,9 +15,14 @@ export default styleSheet('PlanningOverview', {
     paddingTop: '42px'
   },
   ToggleWrapper: {
+    _flex: ['row', 'left', 'center'],
     _size: 'auto',
     flex: 'none',
-    paddingRight: '12px'
+    paddingRight: '6px',
+    paddingLeft: '6px',
+    '& > *:not(:last-child)': {
+      marginRight: '2px'
+    }
   },
 
   EmptyStateWrapper: {

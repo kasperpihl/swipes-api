@@ -6,19 +6,19 @@ export default function Stepper({
   value,
   onChange,
   maxValue = 100,
-  minValue = 0
+  minValue = 1
 }) {
   return (
     <SW.InputPackage>
       <Button
-        disabled={value === minValue}
+        disabled={value <= minValue}
         title="-"
         onClick={() => onChange(value - 1)}
       />
       <SW.StepCounter>{value}</SW.StepCounter>
       <Button
         title="+"
-        disabled={value === maxValue}
+        disabled={value >= maxValue}
         onClick={() => onChange(value + 1)}
       />
     </SW.InputPackage>

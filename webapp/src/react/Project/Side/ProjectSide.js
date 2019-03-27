@@ -102,7 +102,6 @@ function ProjectSide({ stateManager }) {
         <Stepper
           maxValue={maxIndention + 1}
           value={sliderValue}
-          minValue={1}
           onChange={handleSliderChange}
         />
       )}

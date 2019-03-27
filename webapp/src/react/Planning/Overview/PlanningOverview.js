@@ -7,6 +7,7 @@ import EmptyState from '_shared/EmptyState/EmptyState';
 import useNav from 'src/react/_hooks/useNav';
 import Spacing from '_shared/Spacing/Spacing';
 import Button from '_shared/Button/Button';
+import Icon from '_shared/Icon/Icon';
 import ActionBar from '_shared/ActionBar/ActionBar';
 import Stepper from '_shared/Stepper/Stepper';
 import parseWeekLabel from '_shared/WeekPicker/parseWeekLabel';
@@ -57,6 +58,7 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
 
   const [sliderValue, changeSliderValue] = useState(1);
   const [showOnlyMe, setShowOnlyMe] = useState(false);
+  const [hideCompleted, setHideCompleted] = useState(false);
 
   const [
     { editingId, maxDepth, stateManagers },
@@ -66,22 +68,37 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
   let actions = [];
   if (!editingId) {
     // Not editing!
-    const handleOnlyMe = newMe => {
-      stateManagers.forEach(stateManager => {
-        stateManager.filterHandler.setFilteredAssignee(newMe ? myId : null);
-      });
-      setShowOnlyMe(newMe);
-    };
-    actions.push(
-      <SW.ToggleWrapper>
-        <InputToggle
-          value={showOnlyMe}
-          onChange={handleOnlyMe}
-          component={<UserImage userId={myId} size={24} />}
-        />
-      </SW.ToggleWrapper>
-    );
-    if (maxDepth) {
+    if (typeof stateManagers !== 'undefined') {
+      const handleHideCompleted = () => {
+        stateManagers.forEach(stateManager => {
+          stateManager.filterHandler.setFilteredCompleted(!hideCompleted);
+        });
+        setHideCompleted(!hideCompleted);
+      };
+      actions.push(
+        <SW.ToggleWrapper key="hidecompleted">
+          <InputToggle value={hideCompleted} onChange={handleHideCompleted} />
+          <Button icon="Checkmark" onClick={handleHideCompleted} />
+        </SW.ToggleWrapper>
+      );
+
+      const handleOnlyMe = () => {
+        stateManagers.forEach(stateManager => {
+          stateManager.filterHandler.setFilteredAssignee(
+            showOnlyMe ? null : myId
+          );
+        });
+        setShowOnlyMe(!showOnlyMe);
+      };
+      actions.push(
+        <SW.ToggleWrapper key="showMe">
+          <InputToggle value={showOnlyMe} onChange={handleOnlyMe} />
+          <Button onClick={handleOnlyMe}>
+            <UserImage userId={myId} size={24} />
+          </Button>
+        </SW.ToggleWrapper>
+      );
+
       const handleChange = number => {
         stateManagers.forEach(stateManager => {
           stateManager.expandHandler.setDepth(number - 1);
@@ -90,7 +107,7 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
       };
       actions.push(
         <Stepper
-          minValue={1}
+          key="stepper"
           value={sliderValue}
           onChange={handleChange}
           maxValue={maxDepth + 1}
@@ -98,12 +115,18 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
       );
     }
     actions.push(
-      <Button title="Add Tasks" icon="CircledPlus" onClick={handleAddTasks} />
+      <Button
+        key="add"
+        title="Add Tasks"
+        icon="CircledPlus"
+        onClick={handleAddTasks}
+      />
     );
   } else {
     // Editing!
     actions = [
       <Button
+        key="done"
         title="Done editing"
         green
         icon="Checkmark"

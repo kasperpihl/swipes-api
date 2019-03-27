@@ -7,12 +7,13 @@ export default styleSheet('InputToggle', {
 
   PackageWrapper: {
     _flex: ['column', 'center', 'center'],
-    marginRight: '6px'
+    cursor: 'pointer'
   },
 
   Switch: {
     _el: 'label',
-    _size: ['28px', '15px']
+    _size: ['28px', '15px'],
+    cursor: 'pointer'
   },
 
   Input: {
@@ -24,6 +25,7 @@ export default styleSheet('InputToggle', {
 
   Slider: {
     _el: 'span',
+    cursor: 'pointer',
     borderRadius: '9px',
     position: 'absolute',
     top: '0',
