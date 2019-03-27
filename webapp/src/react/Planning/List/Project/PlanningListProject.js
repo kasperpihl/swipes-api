@@ -7,6 +7,7 @@ import useBeforeUnload from 'src/react/_hooks/useBeforeUnload';
 import useTaskSelect from 'src/react/Planning/useTaskSelect';
 import SectionHeader from '_shared/SectionHeader/SectionHeader';
 import usePlanningState from 'src/react/Planning/usePlanningState';
+import useNav from 'src/react/_hooks/useNav';
 import { ProjectContext } from 'src/react/contexts';
 
 import ProjectTaskList from 'src/react/Project/Task/List/ProjectTaskList';
@@ -22,6 +23,7 @@ function PlanningListProject({
   ownedBy,
   yearWeek
 }) {
+  const nav = useNav();
   const filteredTaskIds = useMemo(
     () =>
       tasks
@@ -125,10 +127,22 @@ function PlanningListProject({
     return null;
   }
 
+  const handleOpenProject = () => {
+    nav.openRight({
+      screenId: 'ProjectOverview',
+      crumbTitle: 'Project',
+      props: {
+        projectId
+      }
+    });
+  };
+
   return (
     <ProjectContext.Provider value={stateManager}>
       <SW.Wrapper>
-        <SectionHeader>{title}</SectionHeader>
+        <SectionHeader>
+          <SW.Title onClick={handleOpenProject}>{title}</SW.Title>
+        </SectionHeader>
         <ProjectTaskList
           selectable={editingId === projectId}
           onToggleTask={handleToggleTask}

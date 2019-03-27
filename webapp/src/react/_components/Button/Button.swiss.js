@@ -32,6 +32,10 @@ export default styleSheet('Button', {
     selected: {
       backgroundColor: '$green1'
     },
+    disabled: {
+      pointerEvents: 'none',
+      opacity: 0.5
+    },
     green: {
       border: 'none',
       backgroundColor: '$green1'

@@ -14,6 +14,11 @@ export default styleSheet('PlanningOverview', {
     paddingBottom: '60px',
     paddingTop: '42px'
   },
+  ToggleWrapper: {
+    _size: 'auto',
+    flex: 'none',
+    paddingRight: '12px'
+  },
 
   EmptyStateWrapper: {
     _flex: ['column', 'center', 'center']

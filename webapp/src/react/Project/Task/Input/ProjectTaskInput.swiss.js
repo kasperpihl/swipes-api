@@ -7,7 +7,7 @@ export default styleSheet('ProjectTaskInput', {
     _textStyle: 'H3',
     width: '100%',
     borderRadius: '3px',
-    paddingLeft: '6px',
+    padding: '3px 6px',
     resize: 'none',
     border: 'none',
     outline: 'none',

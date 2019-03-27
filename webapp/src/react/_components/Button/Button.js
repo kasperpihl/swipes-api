@@ -13,7 +13,8 @@ Button.propTypes = {
     success: PropTypes.string,
     error: PropTypes.string
   }),
-  green: PropTypes.bool
+  green: PropTypes.bool,
+  disabled: PropTypes.bool
 };
 
 export default function Button({

@@ -20,7 +20,7 @@ export default styleSheet('ActionBar', {
     width: '1px',
     height: '18px',
     backgroundColor: '$sw2',
-    margin: '0 12px',
+    margin: '0 6px',
     flex: 'none'
   }
 });

@@ -7,13 +7,14 @@ import AssignMenu from '_shared/AssignMenu/AssignMenu';
 import SideHeader from '_shared/SideHeader/SideHeader';
 import ProgressBar from '_shared/ProgressBar/ProgressBar';
 import Spacing from '_shared/Spacing/Spacing';
+import Stepper from '_shared/Stepper/Stepper';
 
 import SW from './ProjectSide.swiss';
 
 export default memo(ProjectSide);
 
 function ProjectSide({ stateManager }) {
-  const [sliderValue, setSliderValue] = useState(0);
+  const [sliderValue, setSliderValue] = useState(1);
 
   const [followers, handleAssignSelect] = useState([]);
 
@@ -29,21 +30,20 @@ function ProjectSide({ stateManager }) {
 
   useEffect(() => {
     if (stateManager && maxIndention > 0) {
-      setSliderValue(1);
+      setSliderValue(2);
       stateManager.expandHandler.setDepth(1);
     }
   }, [stateManager]);
 
   useEffect(() => {
-    if (sliderValue > maxIndention) {
+    if (sliderValue > maxIndention + 1) {
       setSliderValue(maxIndention);
     }
   });
 
-  const handleSliderChange = e => {
-    const depth = parseInt(e.target.value, 10);
-    stateManager.expandHandler.setDepth(depth);
-    setSliderValue(depth);
+  const handleSliderChange = value => {
+    stateManager.expandHandler.setDepth(value - 1);
+    setSliderValue(value);
   };
 
   const completedTasksAmount = Math.round(
@@ -99,10 +99,11 @@ function ProjectSide({ stateManager }) {
       </SW.ButtonWrapper>
       <Spacing height={6} />
       {maxIndention > 0 && (
-        <SW.StepSlider
-          max={maxIndention}
-          sliderValue={sliderValue}
-          onSliderChange={handleSliderChange}
+        <Stepper
+          maxValue={maxIndention + 1}
+          value={sliderValue}
+          minValue={1}
+          onChange={handleSliderChange}
         />
       )}
     </SW.Wrapper>

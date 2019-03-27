@@ -46,7 +46,6 @@ export default function PlanningList({ tasks, ownedBy, yearWeek }) {
 
   useEffect(() => {
     if (!didLoadInitial.current) {
-      console.log(Object.keys(projects).length, uniqueProjectIds.length);
       if (Object.keys(projects).length !== uniqueProjectIds.length) {
         return;
       }

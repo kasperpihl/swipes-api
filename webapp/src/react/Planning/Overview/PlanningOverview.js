@@ -8,7 +8,7 @@ import useNav from 'src/react/_hooks/useNav';
 import Spacing from '_shared/Spacing/Spacing';
 import Button from '_shared/Button/Button';
 import ActionBar from '_shared/ActionBar/ActionBar';
-import StepSlider from '_shared/StepSlider/StepSlider';
+import Stepper from '_shared/Stepper/Stepper';
 import parseWeekLabel from '_shared/WeekPicker/parseWeekLabel';
 import PlanningList from 'src/react/Planning/List/PlanningList';
 import usePlanningState from 'src/react/Planning/usePlanningState';
@@ -55,7 +55,7 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
     });
   };
 
-  const [sliderValue, changeSliderValue] = useState(0);
+  const [sliderValue, changeSliderValue] = useState(1);
   const [
     { editingId, maxDepth, stateManagers },
     updatePlanningState
@@ -65,23 +65,23 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
   if (!editingId) {
     // Not editing!
     actions.push(
-      <InputToggle component={<UserImage userId={myId} size={24} />} />
+      <SW.ToggleWrapper>
+        <InputToggle component={<UserImage userId={myId} size={24} />} />
+      </SW.ToggleWrapper>
     );
     if (maxDepth) {
       const handleChange = number => {
-        e.preventDefault();
-        console.log(number);
         stateManagers.forEach(stateManager => {
-          stateManager.expandHandler.setDepth(number);
+          stateManager.expandHandler.setDepth(number - 1);
         });
         changeSliderValue(number);
       };
       actions.push(
-        <StepSlider
-          sliderValue={sliderValue + 1}
-          handleChange={handleChange}
-          min={0}
-          max={maxDepth}
+        <Stepper
+          minValue={1}
+          value={sliderValue}
+          onChange={handleChange}
+          maxValue={maxDepth + 1}
         />
       );
     }
