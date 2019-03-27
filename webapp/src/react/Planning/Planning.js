@@ -55,18 +55,6 @@ function Planning({ teams }) {
     setYearWeek(yW);
   };
 
-  const handleNextWeek = () => {
-    const now = moment();
-    let year = now.year();
-    let week = now.week();
-    now.add(1, 'week');
-    if (now.week() < week) {
-      year = year + 1;
-    }
-
-    updateYearWeek(`${year}-${now.week()}`);
-  };
-
   const planningValue = useMemo(() => [planningState, updatePlanningState], [
     planningState,
     updatePlanningState
@@ -77,13 +65,7 @@ function Planning({ teams }) {
       <CardContent
         header={
           <SW.HeaderWrapper>
-            <CardHeader title="Planning">
-              <Button
-                title="Plan next week"
-                icon="Calendar"
-                onClick={handleNextWeek}
-              />
-            </CardHeader>
+            <CardHeader title="Planning" />
             <Spacing height={12} />
             <TabBar
               tabs={tabs.map(t => t.title)}

@@ -15,6 +15,7 @@ export default styleSheet('Stepper', {
     flex: 'none',
     border: '1px solid $sw2',
     borderRadius: '2px',
+    margin: '0 3px',
     color: '$sw2',
     userSelect: 'none'
   }
