@@ -4,13 +4,25 @@ import Button from 'src/react/_components/Button/Button';
 export default styleSheet('FormModal', {
   Wrapper: {
     _flex: ['column', 'flex-start', 'flex-start'],
-    width: '450px',
-    padding: '24px'
+    _size: ['450px', '480px'],
+    padding: '18px'
+  },
+
+  Header: {
+    _flex: ['row', 'left', 'center'],
+    width: '100%',
+    borderBottom: '1px solid $sw3'
   },
 
   Title: {
-    _el: 'h1',
-    _textStyle: 'H1'
+    _el: 'h2',
+    _textStyle: 'H2',
+    fontWeight: '$bold',
+    paddingBottom: '14px'
+  },
+
+  Label: {
+    _textStyle: 'H3'
   },
 
   Subtitle: {
@@ -27,8 +39,7 @@ export default styleSheet('FormModal', {
 
   InputWrapper: {
     _size: ['100%', 'auto'],
-    _flex: ['column', 'flex-start', 'flex-start'],
-    marginTop: '12px'
+    _flex: ['column', 'flex-start', 'flex-start']
   },
 
   Input: {
@@ -40,21 +51,15 @@ export default styleSheet('FormModal', {
     marginBottom: '12px'
   },
 
-  Label: {
-    _el: 'h3',
-    _textStyle: 'body',
-    margin: '0 0 6px 0',
-    color: '$sw2'
-  },
-
   ButtonWrapper: {
     _size: ['100%', 'auto'],
     _flex: ['row', 'flex-end', 'center'],
-    marginTop: '6px'
+    borderTop: '1px solid $sw3',
+    marginTop: 'auto'
   },
 
   Button: {
     _el: Button,
-    marginLeft: '12px'
+    marginTop: '6px'
   }
 });

@@ -1,9 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import useNav from 'src/react/_hooks/useNav';
-import Breadcrumbs from 'src/react/_components/Breadcrumbs/Breadcrumbs';
-import Modal from 'src/react/_Layout/modal/Modal';
+
 import * as navigationActions from 'src/redux/navigation/navigationActions';
+import useNav from 'src/react/_hooks/useNav';
+import Modal from 'src/react/_Layout/modal/Modal';
+
+import Breadcrumbs from 'src/react/_components/Breadcrumbs/Breadcrumbs';
+import Button from 'src/react/_components/Button/Button';
+
 import SW from './Card.swiss';
 
 export default connect()(Card);
@@ -27,7 +31,7 @@ function Card({ children, left, isOverlay, isUnderlay, dispatch }) {
         <Breadcrumbs side={nav.side} />
         <SW.Actions>
           {nav.side !== 'left' && (
-            <SW.PinButton
+            <Button
               onClick={nav.toggleLock}
               icon={nav.isLocked ? 'Pin' : 'Pin'}
               selected={nav.isLocked}

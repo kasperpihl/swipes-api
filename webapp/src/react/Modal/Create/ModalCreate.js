@@ -12,6 +12,7 @@ import SW from './ModalCreate.swiss';
 import FMSW from 'src/react/_components/FormModal/FormModal.swiss';
 import contextMenu from 'src/utils/contextMenu';
 import InputText from '_shared/Input/Text/InputText';
+import Spacing from '_shared/Spacing/Spacing';
 
 @withLoader
 @connect(state => ({
@@ -101,14 +102,17 @@ export default class ModalCreate extends PureComponent {
 
   renderPrivacyCheckbox(iAmPrivacy) {
     const { privacy } = this.state;
-    let label = 'Public - everyone from team have access';
+    let label = 'Public - everyone from the team have access';
     if (iAmPrivacy !== 'public') {
       label = 'Private - only chosen people have access';
     }
 
     return (
-      <SW.CheckboxWrapper onClick={this.handlePrivacyCached(iAmPrivacy)}>
-        <input
+      <SW.CheckboxWrapper
+        onClick={this.handlePrivacyCached(iAmPrivacy)}
+        checked={privacy === iAmPrivacy}
+      >
+        <SW.Input
           onChange={this.handlePrivacyCached(iAmPrivacy)}
           type="radio"
           name="privacy"
@@ -119,12 +123,11 @@ export default class ModalCreate extends PureComponent {
     );
   }
   render() {
-    const { titleVal, ownedBy, followers } = this.state;
+    const { titleVal, ownedBy, followers, privacy } = this.state;
     const { myId, loader, type } = this.props;
 
     let title = 'New Chat';
     const titlePlaceholder = 'Title';
-    const titleLabel = '1. Set the title';
     let createLabel = 'Create chat';
     if (type === 'project') {
       title = 'New Project';
@@ -133,10 +136,12 @@ export default class ModalCreate extends PureComponent {
 
     return (
       <FMSW.Wrapper>
-        <FMSW.Title>{title}</FMSW.Title>
+        <FMSW.Header>
+          <FMSW.Title>{title}</FMSW.Title>
+        </FMSW.Header>
+        <Spacing height={30} />
         <FMSW.InputContainer>
           <FMSW.InputWrapper>
-            <FMSW.Label>{titleLabel}</FMSW.Label>
             <InputText
               value={titleVal}
               onChange={this.handleTitleChange}
@@ -147,23 +152,29 @@ export default class ModalCreate extends PureComponent {
               autoFocus
             />
           </FMSW.InputWrapper>
+          <Spacing height={27} />
           <FMSW.InputWrapper>
-            <FMSW.Label>2. Choose belonging</FMSW.Label>
+            <FMSW.Label>Team</FMSW.Label>
+            <Spacing height={9} />
             <TeamPicker
               value={ownedBy}
               onChange={this.handleTeamChange}
               disablePersonal={type === 'discussion'}
             />
           </FMSW.InputWrapper>
+          {ownedBy !== myId && <Spacing height={24} />}
           {ownedBy !== myId && (
             <>
               <FMSW.InputWrapper>
-                <FMSW.Label>3. Choose privacy</FMSW.Label>
+                <FMSW.Label>Access</FMSW.Label>
+                <Spacing height={9} />
                 {this.renderPrivacyCheckbox('public')}
                 {this.renderPrivacyCheckbox('private')}
               </FMSW.InputWrapper>
+              <Spacing height={20} />
               <FMSW.InputWrapper>
-                <FMSW.Label>4. Choose people</FMSW.Label>
+                <FMSW.Label>Members</FMSW.Label>
+                <Spacing height={9} />
                 <Assignees
                   userIds={followers}
                   teamId={ownedBy}
@@ -174,6 +185,7 @@ export default class ModalCreate extends PureComponent {
                   <Button
                     title="Tag people"
                     onClick={this.handleAssignClick}
+                    disabled={privacy === 'private'}
                     border
                   />
                 </Assignees>
@@ -182,7 +194,7 @@ export default class ModalCreate extends PureComponent {
           )}
         </FMSW.InputContainer>
         <FMSW.ButtonWrapper>
-          <Button
+          <FMSW.Button
             title={createLabel}
             onClick={this.handleCreate}
             status={loader.get('creating')}

@@ -39,6 +39,7 @@ export { default as Hashtag } from './icons/hashtag.svg';
 export { default as HeaderOne } from './icons/header-one.svg';
 export { default as HeaderTwo } from './icons/header-two.svg';
 export { default as Heart } from './icons/heart.svg';
+export { default as HideCompleted } from './icons/hide-completed.svg'; // new
 export { default as Hyperlink } from './icons/hyperlink.svg';
 export { default as Itallic } from './icons/itallic.svg';
 export { default as Messages } from './icons/messages.svg';

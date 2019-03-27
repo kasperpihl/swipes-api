@@ -8,6 +8,7 @@ import SW from './Team.swiss';
 
 import propsOrPop from 'src/react/_hocs/propsOrPop';
 import CardContent from 'src/react/_components/Card/Content/CardContent';
+import Spacing from '_shared/Spacing/Spacing';
 
 @connect((state, props) => ({
   meInTeam: state.teams.getIn([props.teamId, 'users', state.me.get('user_id')]),
@@ -76,9 +77,10 @@ export default class Team extends PureComponent {
     const userStatus = tabIndex === 0 ? 'active' : 'disabled';
 
     return (
-      <CardContent header={this.renderHeader()}>
+      <CardContent noframe header={this.renderHeader()}>
         <SW.Wrapper>
           <TeamInviteInput teamId={team.get('team_id')} />
+          <Spacing height={18} />
           <TeamPendingInvites team={team} />
           {this.renderTabBar()}
           <SW.UsersWrapper>

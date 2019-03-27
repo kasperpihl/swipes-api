@@ -4,12 +4,13 @@ import TabBar from 'src/react/_components/TabBar/TabBar';
 
 export default styleSheet('Authentication', {
   Wrapper: {
-    paddingTop: '30px'
+    paddingTop: '30px',
   },
 
   Form: {
     _el: 'form',
     color: '$sw2',
+    margin: '0 18px 0 36px',
 
     '@media $max600': {
       marginTop: '30px'

@@ -7,6 +7,9 @@ export default function InputRadio({
   onKeyDown,
   value,
   label,
+  hideRadio,
+  selected,
+  checked,
   ...rest
 }) {
   return (
@@ -15,10 +18,13 @@ export default function InputRadio({
         type="radio"
         onKeyDown={onKeyDown}
         value={value}
+        hideRadio={hideRadio}
         onChange={onChange}
         {...rest}
       />
-      <SW.Label>{label}</SW.Label>
+      <SW.Label checked={checked} hideRadio={hideRadio}>
+        {label}
+      </SW.Label>
     </SW.Wrapper>
   );
 }

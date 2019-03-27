@@ -9,11 +9,7 @@ export default styleSheet('TeamUser', {
     fontWeight: '$medium',
     color: '$sw1',
     borderBottom: '1px solid $sw3',
-    padding: '12px 0',
-
-    '&:first-child': {
-      padding: '0px 0px 12px 0px'
-    }
+    padding: '12px 0'
   },
 
   UserDetails: {

@@ -38,7 +38,7 @@ export default styleSheet('DiscussionListItem', {
     flex: 'none',
     position: 'absolute',
     top: '9px',
-    right: '12px',
+    right: '25px',
     color: '$sw2'
   },
   TeamName: {

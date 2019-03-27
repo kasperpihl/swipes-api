@@ -30,7 +30,7 @@ export default styleSheet('Button', {
       marginLeft: 'auto'
     },
     selected: {
-      backgroundColor: '$green1'
+      backgroundColor: '$green1',
     },
     disabled: {
       pointerEvents: 'none',
@@ -42,7 +42,11 @@ export default styleSheet('Button', {
     },
     '&:hover': {
       borderColor: '$green3',
-      backgroundColor: '$green3'
+      backgroundColor: '$green3',
+
+      '& > p': {
+        color: '$dark'
+      }
     }
   },
 
@@ -63,6 +67,9 @@ export default styleSheet('Button', {
       '.Button_Wrapper:hover &': {
         color: '$dark'
       }
+    },
+    selected: {
+      color: '$base',
     }
   }
 });

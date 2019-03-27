@@ -38,10 +38,11 @@ function TeamPicker({ teams, value, onChange, disablePersonal }) {
       <SW.InputWrapper key={myValue} onClick={handleClickCached(myValue)}>
         <InputRadio
           type="radio"
-          label={title}
           value={myValue}
+          label={title}
           checked={myValue === value}
           name="team"
+          hideRadio
           onChange={handleClickCached(myValue)}
         />
       </SW.InputWrapper>

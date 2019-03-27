@@ -43,11 +43,11 @@ export default class FormModal extends PureComponent {
       const { label, initialValue, ...rest } = comp;
       return (
         <SW.InputWrapper key={i}>
-          {!!label && <SW.Label>{label}</SW.Label>}
           <InputText
             type="text"
             onChange={this.handleInputCached(i)}
             onKeyDown={this.handleKeyDownCached(i)}
+            placeholder={label}
             value={this.state[i]}
             {...rest}
           />
@@ -61,8 +61,9 @@ export default class FormModal extends PureComponent {
 
     return (
       <SW.Wrapper>
-        <SW.Title>{title}</SW.Title>
-        {!!subtitle && <SW.Subtitle>{subtitle}</SW.Subtitle>}
+        <SW.Header>
+          <SW.Title>{title}</SW.Title>
+        </SW.Header>
         <SW.InputContainer>{this.renderInputs()}</SW.InputContainer>
         <SW.ButtonWrapper>
           {!alert ? (

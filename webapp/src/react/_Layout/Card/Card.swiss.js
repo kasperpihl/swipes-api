@@ -55,8 +55,5 @@ export default styleSheet('Card', {
       opacity: '0',
       visibility: 'hidden'
     }
-  },
-  PinButton: {
-    _el: Button
   }
 });

@@ -5,7 +5,7 @@ export default styleSheet('TeamInviteInput', {
   Wrapper: {
     _size: ['100%', 'auto'],
     _flex: ['column', 'flex-start', 'flex-start'],
-    marginTop: '12px'
+    margin: '12px 18px 0 36px'
   },
 
   InviteText: {

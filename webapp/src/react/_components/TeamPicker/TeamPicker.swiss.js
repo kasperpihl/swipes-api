@@ -7,7 +7,6 @@ export default styleSheet('TeamPicker', {
   },
   InputWrapper: {
     _flex: ['row', 'left', 'center'],
-    padding: '6px 0',
     marginRight: '12px'
   },
   Label: {

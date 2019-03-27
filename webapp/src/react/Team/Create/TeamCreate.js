@@ -90,7 +90,10 @@ export default function TeamCreate() {
   };
 
   return (
-    <CardContent header={<CardHeader title="Invite your team to join in!" />}>
+    <CardContent
+      noframe
+      header={<CardHeader title="Invite your team to join in!" subtitle="This will start a trial for 30 days, after which it will be $7.5/user/month."/>}
+    >
       <SW.Wrapper>
         <Spacing height={69} />
         <InputText
@@ -146,7 +149,7 @@ export default function TeamCreate() {
         <SW.ActionsWrapper>
           <Button title="Cancel" onClick={handleCancel} border />
           <Button
-            title="Start collaborating!"
+            title="Start trial!"
             onClick={handleCreateTeam}
             status={loader.get('create')}
             green

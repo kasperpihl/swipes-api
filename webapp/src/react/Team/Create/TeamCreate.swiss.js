@@ -2,9 +2,9 @@ import { styleSheet } from 'swiss-react';
 
 export default styleSheet('TeamCreate', {
   Wrapper: {
-    _size: ['calc(100% - 18px * 2)', 'auto'],
+    _size: ['calc(100% - 54px)', 'auto'],
     _flex: ['column', 'left', 'top'],
-    margin: '0 auto'
+    margin: '0 18px 0 36px'
   },
 
   InputWrapper: {

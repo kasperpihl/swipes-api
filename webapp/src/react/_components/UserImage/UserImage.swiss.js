@@ -27,6 +27,7 @@ export default styleSheet('UserImage', {
     _size: ['100%'],
     _flex: 'center',
     textTransform: 'uppercase',
+    borderRadius: '50%',
     color: '$sw5',
     backgroundColor: '$sw1',
     flexShrink: '0',

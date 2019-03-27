@@ -19,7 +19,7 @@ export default styleSheet('WeekIndicator', {
     _flex: ['row', 'center', 'center'],
     _textStyle: 'caption',
     borderRadius: '2px',
-    border: '1px solid $green2',
+    border: '1px solid $sw3',
     color: '$dark',
     userSelect: 'none',
     '&:not(:last-child)': {
@@ -29,7 +29,7 @@ export default styleSheet('WeekIndicator', {
       border: '1px solid $sw4'
     },
     current: {
-      border: '1px solid $green1'
+      border: '1px solid $dark'
     }
   }
 });

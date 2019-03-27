@@ -11,7 +11,8 @@ export default styleSheet('Team', {
 
   UsersWrapper: {
     _size: ['100%', 'auto'],
-    _flex: ['column', 'flex-start', 'flex-start']
+    _flex: ['column', 'flex-start', 'flex-start'],
+    margin: '0px 18px 0 36px'
   },
 
   TabBar: {

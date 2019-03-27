@@ -78,7 +78,7 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
       actions.push(
         <SW.ToggleWrapper key="hidecompleted">
           <InputToggle value={hideCompleted} onChange={handleHideCompleted} />
-          <Button icon="Checkmark" onClick={handleHideCompleted} />
+          <Button icon="HideCompleted" onClick={handleHideCompleted} />
         </SW.ToggleWrapper>
       );
 
