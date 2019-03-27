@@ -16,6 +16,10 @@ export function set(side, screen) {
   return { type: types.NAV_SET, payload };
 }
 
+export function reset() {
+  return { type: types.NAV_RESET };
+}
+
 export function setUniqueId(side, uniqueId) {
   return { type: types.NAV_SET_UNIQUE_ID, payload: { side, uniqueId } };
 }
