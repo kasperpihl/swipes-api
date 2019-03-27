@@ -12,10 +12,11 @@ export default endpointCreate(
   },
   async (req, res, next) => {
     await queueScheduleBatch({
-      job_name: 'job.sendEmail.queue.',
+      job_name: 'job.sendEmail.queue',
       identifier: res.locals.user_id,
       payload: {
-        hi: true
+        email: 'friday-reminder',
+        user_id: res.locals.user_id
       },
       run_at: 1,
       owned_by: res.locals.user_id

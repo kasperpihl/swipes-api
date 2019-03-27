@@ -39,6 +39,7 @@ export default function queueRunBatch(jobs) {
     } else {
       resolve();
       jobs.forEach(({ job_name, payload }) => {
+        console.log(job_name, payload);
         request.post({
           url: `http://localhost:6000/process`,
           method: 'POST',
