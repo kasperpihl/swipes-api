@@ -19,7 +19,6 @@ const regEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\
 
 function useTeamCreateFields() {
   const initialState = [
-
     {
       key: 'member-0',
       value: '',
@@ -111,7 +110,13 @@ function TeamCreate({ fromRouter, redirectTo }) {
   return (
     <CardContent
       noframe
-      header={<CardHeader title="Invite your team to join in!" subtitle="This will start a trial for 30 days, after which it will be $7.5/user/month." style={style}/>}
+      header={
+        <CardHeader
+          title="Create a team"
+          subtitle="This will start a trial for 30 days, after which it will be $7.5/user/month."
+          style={style}
+        />
+      }
     >
       <SW.Wrapper>
         <Spacing height={69} />
@@ -168,8 +173,7 @@ function TeamCreate({ fromRouter, redirectTo }) {
         <SW.ActionsWrapper>
           {fromRouter && <Button title="Skip" onClick={handleSkip} border />}
           <Button
-            title="Start trial!"
-            title="Create team"
+            title="Start trial"
             onClick={handleCreateTeam}
             status={loader.get('create')}
             green

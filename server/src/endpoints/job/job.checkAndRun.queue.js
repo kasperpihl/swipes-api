@@ -16,9 +16,10 @@ export default queueCreateJob(async (req, res, next) => {
     `
   );
 
-  if (!jobsRes.rows.length) {
+  if (!jobsRes.rows) {
     return;
   }
+
   await queueRunBatch(
     jobsRes.rows.map(({ job_name, payload, identifier }) => ({
       job_name,
