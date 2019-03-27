@@ -10,6 +10,7 @@ import CardContent from 'src/react/_components/Card/Content/CardContent';
 import useUpdate from 'core/react/_hooks/useUpdate';
 import useNav from 'src/react/_hooks/useNav';
 import useLoader from 'src/react/_hooks/useLoader';
+import ListMenu from '_shared/ListMenu/ListMenu.js'
 import contextMenu from 'src/utils/contextMenu';
 
 import SW from './DiscussionOverview.swiss';
