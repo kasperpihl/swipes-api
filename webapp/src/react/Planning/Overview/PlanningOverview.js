@@ -56,6 +56,8 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
   };
 
   const [sliderValue, changeSliderValue] = useState(1);
+  const [showOnlyMe, setShowOnlyMe] = useState(false);
+
   const [
     { editingId, maxDepth, stateManagers },
     updatePlanningState
@@ -64,9 +66,19 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
   let actions = [];
   if (!editingId) {
     // Not editing!
+    const handleOnlyMe = newMe => {
+      stateManagers.forEach(stateManager => {
+        stateManager.filterHandler.setFilteredAssignee(newMe ? myId : null);
+      });
+      setShowOnlyMe(newMe);
+    };
     actions.push(
       <SW.ToggleWrapper>
-        <InputToggle component={<UserImage userId={myId} size={24} />} />
+        <InputToggle
+          value={showOnlyMe}
+          onChange={handleOnlyMe}
+          component={<UserImage userId={myId} size={24} />}
+        />
       </SW.ToggleWrapper>
     );
     if (maxDepth) {

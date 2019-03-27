@@ -1,20 +1,18 @@
 import React, { useState } from 'react';
 import SW from './InputToggle.swiss';
 
-export default function InputToggle({ component }) {
-  const [checked, changeInput] = useState(false);
-
+export default function InputToggle({ component, value, onChange }) {
   const handleClick = e => {
     e.preventDefault();
-    changeInput(v => !v);
+    onChange(!value);
   };
 
   return (
     <SW.Wrapper>
       <SW.PackageWrapper>
-        <SW.Switch onClick={handleClick} checked={checked}>
-          <SW.Input type="checkbox" checked={checked} onChange={handleClick} />
-          <SW.Slider checked={checked} />
+        <SW.Switch onClick={handleClick} checked={value}>
+          <SW.Input type="checkbox" checked={value} onChange={handleClick} />
+          <SW.Slider checked={value} />
         </SW.Switch>
       </SW.PackageWrapper>
       {component}

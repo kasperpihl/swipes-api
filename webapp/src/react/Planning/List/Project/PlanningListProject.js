@@ -123,7 +123,7 @@ function PlanningListProject({
     }
   }, [editingId, stateManager]);
 
-  if (!visibleOrder || !stateManager) {
+  if (!visibleOrder || !stateManager || !visibleOrder.size) {
     return null;
   }
 
