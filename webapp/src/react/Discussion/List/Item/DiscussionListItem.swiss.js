@@ -4,10 +4,10 @@ export default styleSheet('DiscussionListItem', {
   Wrapper: {
     _flex: ['row', 'left', 'top'],
     width: 'auto',
-    padding: '6px 30px',
+    padding: '6px 36px',
     userSelect: 'none',
     selected: {
-      background: '$green3'
+      background: '$green4'
     }
   },
   MiddleWrapper: {
@@ -51,7 +51,7 @@ export default styleSheet('DiscussionListItem', {
     visibility: 'hidden',
     position: 'absolute',
     top: '10px',
-    left: '9px',
+    left: '14px',
     borderRadius: '50%',
     backgroundColor: '$blue',
     unread: {

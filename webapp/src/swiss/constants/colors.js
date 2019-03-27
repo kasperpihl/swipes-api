@@ -13,7 +13,8 @@ addConstants({
   red: '#F54D45',
   green1: '#05A851',
   green2: '#D5EDD1',
-  green3: '#E6F2EB',
+  green3: '#BFE0CA',
+  green4: '#E1F0E6',
   blue: '#3491ED',
   yellow: '#F59D45',
 

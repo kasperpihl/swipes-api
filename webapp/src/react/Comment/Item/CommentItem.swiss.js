@@ -9,7 +9,7 @@ export default styleSheet('CommentItem', {
     padding: '6px 0',
 
     '&:hover': {
-      background: '$green3',
+      background: '$green4',
       borderRadius: '2px'
     },
 

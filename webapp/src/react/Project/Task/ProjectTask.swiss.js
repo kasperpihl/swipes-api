@@ -7,11 +7,11 @@ export default styleSheet('ProjectTask', {
     paddingLeft: get => `${get('indention') * 24}px`,
     paddingRight: '6px',
     isSelected: {
-      backgroundColor: '$green3',
+      backgroundColor: '$green4',
       opacity: 1
     },
     isFocused: {
-      backgroundColor: '$green2',
+      backgroundColor: '$green4',
       opacity: 1
     },
     '&:hover': {

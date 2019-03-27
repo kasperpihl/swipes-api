@@ -4,13 +4,12 @@ export default styleSheet('ActionBar', {
   Wrapper: {
     _flex: ['row', 'left', 'center'],
     height: '42px',
-    backgroundColor: '$sw4',
+    width: 'auto',
+    backgroundColor: '$green4',
     borderRadius: '3px',
     padding: '9px 12px',
     position: 'absolute',
     bottom: '24px',
-    left: '50%',
-    transform: 'translateX(-50%)',
     green: {
       backgroundColor: '$green1'
     }
@@ -19,7 +18,7 @@ export default styleSheet('ActionBar', {
   Separator: {
     width: '1px',
     height: '18px',
-    backgroundColor: '$sw2',
+    backgroundColor: '$sw3',
     margin: '0 6px',
     flex: 'none'
   }
