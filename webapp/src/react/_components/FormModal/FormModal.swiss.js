@@ -4,8 +4,12 @@ import Button from 'src/react/_components/Button/Button';
 export default styleSheet('FormModal', {
   Wrapper: {
     _flex: ['column', 'flex-start', 'flex-start'],
-    _size: ['450px', '480px'],
-    padding: '18px'
+    width: '450px',
+    padding: '18px',
+
+    create: {
+      _size: '100%'
+    }
   },
 
   Header: {
@@ -28,7 +32,7 @@ export default styleSheet('FormModal', {
   Subtitle: {
     _el: 'p',
     _textStyle: 'body',
-    margin: '6px 0 18px 0'
+    margin: '12px 0'
   },
 
   InputContainer: {
@@ -60,6 +64,10 @@ export default styleSheet('FormModal', {
 
   Button: {
     _el: Button,
-    marginTop: '6px'
+    marginTop: '6px',
+
+    '&:last-child': {
+      marginLeft: '6px'
+    }
   }
 });

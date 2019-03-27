@@ -1,6 +1,11 @@
 import { styleSheet } from 'swiss-react';
 
 export default styleSheet('ModalCreate', {
+  Wrapper: {
+    _size: ['450px', '480px'],
+    _flex: ['column', 'flex-start', 'flex-start'],
+  },
+
   CheckboxWrapper: {
     _flex: ['row', 'left', 'center'],
     padding: '6px 9px',

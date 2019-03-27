@@ -135,73 +135,75 @@ export default class ModalCreate extends PureComponent {
     }
 
     return (
-      <FMSW.Wrapper>
-        <FMSW.Header>
-          <FMSW.Title>{title}</FMSW.Title>
-        </FMSW.Header>
-        <Spacing height={30} />
-        <FMSW.InputContainer>
-          <FMSW.InputWrapper>
-            <InputText
-              value={titleVal}
-              onChange={this.handleTitleChange}
-              onKeyDown={this.handleKeyDown}
-              placeholder={titlePlaceholder}
-              type="text"
-              style={{ paddingLeft: '6px' }}
-              autoFocus
-            />
-          </FMSW.InputWrapper>
-          <Spacing height={27} />
-          <FMSW.InputWrapper>
-            <FMSW.Label>Team</FMSW.Label>
-            <Spacing height={9} />
-            <TeamPicker
-              value={ownedBy}
-              onChange={this.handleTeamChange}
-              disablePersonal={type === 'discussion'}
-            />
-          </FMSW.InputWrapper>
-          {ownedBy !== myId && <Spacing height={24} />}
-          {ownedBy !== myId && (
-            <>
-              <FMSW.InputWrapper>
-                <FMSW.Label>Access</FMSW.Label>
-                <Spacing height={9} />
-                {this.renderPrivacyCheckbox('public')}
-                {this.renderPrivacyCheckbox('private')}
-              </FMSW.InputWrapper>
-              <Spacing height={20} />
-              <FMSW.InputWrapper>
-                <FMSW.Label>Members</FMSW.Label>
-                <Spacing height={9} />
-                <Assignees
-                  userIds={followers}
-                  teamId={ownedBy}
-                  size={36}
-                  maxImages={9}
-                  onClick={this.handleAssignClick}
-                >
-                  <Button
-                    title="Tag people"
+      <SW.Wrapper>
+        <FMSW.Wrapper create>
+          <FMSW.Header>
+            <FMSW.Title>{title}</FMSW.Title>
+          </FMSW.Header>
+          <Spacing height={30} />
+          <FMSW.InputContainer>
+            <FMSW.InputWrapper>
+              <InputText
+                value={titleVal}
+                onChange={this.handleTitleChange}
+                onKeyDown={this.handleKeyDown}
+                placeholder={titlePlaceholder}
+                type="text"
+                style={{ paddingLeft: '6px' }}
+                autoFocus
+              />
+            </FMSW.InputWrapper>
+            <Spacing height={27} />
+            <FMSW.InputWrapper>
+              <FMSW.Label>Team</FMSW.Label>
+              <Spacing height={9} />
+              <TeamPicker
+                value={ownedBy}
+                onChange={this.handleTeamChange}
+                disablePersonal={type === 'discussion'}
+              />
+            </FMSW.InputWrapper>
+            {ownedBy !== myId && <Spacing height={24} />}
+            {ownedBy !== myId && (
+              <>
+                <FMSW.InputWrapper>
+                  <FMSW.Label>Access</FMSW.Label>
+                  <Spacing height={9} />
+                  {this.renderPrivacyCheckbox('public')}
+                  {this.renderPrivacyCheckbox('private')}
+                </FMSW.InputWrapper>
+                <Spacing height={20} />
+                <FMSW.InputWrapper>
+                  <FMSW.Label>Members</FMSW.Label>
+                  <Spacing height={9} />
+                  <Assignees
+                    userIds={followers}
+                    teamId={ownedBy}
+                    size={36}
+                    maxImages={9}
                     onClick={this.handleAssignClick}
-                    disabled={privacy === 'private'}
-                    border
-                  />
-                </Assignees>
-              </FMSW.InputWrapper>
-            </>
-          )}
-        </FMSW.InputContainer>
-        <FMSW.ButtonWrapper>
-          <FMSW.Button
-            title={createLabel}
-            onClick={this.handleCreate}
-            status={loader.get('creating')}
-            border
-          />
-        </FMSW.ButtonWrapper>
-      </FMSW.Wrapper>
+                  >
+                    <Button
+                      title="Tag people"
+                      onClick={this.handleAssignClick}
+                      disabled={privacy === 'private'}
+                      border
+                    />
+                  </Assignees>
+                </FMSW.InputWrapper>
+              </>
+            )}
+          </FMSW.InputContainer>
+          <FMSW.ButtonWrapper>
+            <FMSW.Button
+              title={createLabel}
+              onClick={this.handleCreate}
+              status={loader.get('creating')}
+              border
+            />
+          </FMSW.ButtonWrapper>
+        </FMSW.Wrapper>
+      </SW.Wrapper>
     );
   }
 }

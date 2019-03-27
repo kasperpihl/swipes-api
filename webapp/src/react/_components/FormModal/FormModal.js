@@ -65,6 +65,7 @@ export default class FormModal extends PureComponent {
           <SW.Title>{title}</SW.Title>
         </SW.Header>
         <SW.InputContainer>{this.renderInputs()}</SW.InputContainer>
+        {!!subtitle && <SW.Subtitle>{subtitle}</SW.Subtitle>}
         <SW.ButtonWrapper>
           {!alert ? (
             <>

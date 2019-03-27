@@ -8,6 +8,7 @@ export default styleSheet('ProjectOverview', {
   },
   TaskWrapper: {
     _size: ['100%', '100%'],
+    _flex: ['column', 'center', 'top'],
     overflowY: 'auto',
     paddingTop: '48px',
     paddingRight: '18px'
@@ -25,5 +26,16 @@ export default styleSheet('ProjectOverview', {
 
   HeaderWrapper: {
     _flex: ['column', 'left', 'top']
+  },
+
+  ToggleWrapper: {
+    _flex: ['row', 'left', 'center'],
+    _size: 'auto',
+    flex: 'none',
+    paddingRight: '6px',
+    paddingLeft: '6px',
+    '& > *:not(:last-child)': {
+      marginRight: '2px'
+    }
   }
 });

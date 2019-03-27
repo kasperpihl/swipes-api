@@ -1,5 +1,5 @@
-import React, { memo } from 'react';
-import SW from './ProjectOverview.swiss';
+import React, { memo, useState, useEffect } from 'react';
+import { ProjectContext } from 'src/react/contexts';
 
 import Loader from 'src/react/_components/loaders/Loader';
 import CardContent from 'src/react/_components/Card/Content/CardContent';
@@ -8,6 +8,10 @@ import Button from 'src/react/_components/Button/Button';
 import ListMenu from 'src/react/_components/ListMenu/ListMenu';
 import FormModal from 'src/react/_components/FormModal/FormModal';
 import Spacing from '_shared/Spacing/Spacing';
+import InputToggle from '_shared/Input/Toggle/InputToggle';
+import UserImage from '_shared/UserImage/UserImage';
+import Stepper from '_shared/Stepper/Stepper';
+import ActionBar from '_shared/ActionBar/ActionBar';
 
 import ProjectSide from 'src/react/Project/Side/ProjectSide';
 import ProjectTaskList from 'src/react/Project/Task/List/ProjectTaskList';
@@ -21,8 +25,10 @@ import useProjectKeyboard from 'src/react/Project/useProjectKeyboard';
 import useSyncedProject from 'core/react/_hooks/useSyncedProject';
 import useProjectSlice from 'core/react/_hooks/useProjectSlice';
 import useBeforeUnload from 'src/react/_hooks/useBeforeUnload';
+import useMyId from 'core/react/_hooks/useMyId';
 
-import { ProjectContext } from 'src/react/contexts';
+import SW from './ProjectOverview.swiss';
+import { max } from 'moment';
 
 ProjectOverview.sizes = [750];
 
@@ -30,18 +36,41 @@ export default memo(ProjectOverview);
 
 function ProjectOverview({ projectId }) {
   const nav = useNav();
+  const myId = useMyId();
   const stateManager = useSyncedProject(projectId);
 
-  useProjectKeyboard(stateManager);
+  const [sliderValue, setSliderValue] = useState(1);
+  const [showOnlyMe, setShowOnlyMe] = useState(false);
+  const [hideCompleted, setHideCompleted] = useState(false);
+
+  const [projectTitle, maxIndention] = useProjectSlice(
+    stateManager,
+    (clientState, localState) => [
+      clientState.get('title'),
+      localState.get('maxIndention')
+    ]
+  );
+
+  useRequest('project.mark', { project_id: projectId });
 
   useBeforeUnload(() => {
     stateManager && stateManager.syncHandler.syncIfNeeded();
   });
 
-  const [projectTitle] = useProjectSlice(stateManager, clientState => [
-    clientState.get('title')
-  ]);
-  useRequest('project.mark', { project_id: projectId });
+  useProjectKeyboard(stateManager);
+
+  useEffect(() => {
+    if (typeof maxIndention === 'number' && stateManager && maxIndention > 0) {
+      setSliderValue(2);
+      stateManager.expandHandler.setDepth(1);
+    }
+  }, [stateManager, maxIndention]);
+
+  useEffect(() => {
+    if (sliderValue > maxIndention + 1) {
+      setSliderValue(maxIndention + 1);
+    }
+  });
 
   if (!projectTitle) {
     return <Loader center />;
@@ -106,6 +135,46 @@ function ProjectOverview({ projectId }) {
     });
   };
 
+  let actions = [];
+  if (typeof stateManager !== 'undefined') {
+    const handleHideCompleted = () => {
+      stateManager.filterHandler.setFilteredCompleted(!hideCompleted);
+      setHideCompleted(!hideCompleted);
+    };
+    actions.push(
+      <SW.ToggleWrapper key="hidecompleted">
+        <InputToggle value={hideCompleted} onChange={handleHideCompleted} />
+        <Button icon="HideCompleted" onClick={handleHideCompleted} />
+      </SW.ToggleWrapper>
+    );
+
+    const handleOnlyMe = () => {
+      stateManager.filterHandler.setFilteredAssignee(showOnlyMe ? null : myId);
+      setShowOnlyMe(!showOnlyMe);
+    };
+    actions.push(
+      <SW.ToggleWrapper key="showMe">
+        <InputToggle value={showOnlyMe} onChange={handleOnlyMe} />
+        <Button onClick={handleOnlyMe}>
+          <UserImage userId={myId} size={24} />
+        </Button>
+      </SW.ToggleWrapper>
+    );
+
+    const handleChange = number => {
+      stateManager.expandHandler.setDepth(number - 1);
+      setSliderValue(number);
+    };
+    actions.push(
+      <Stepper
+        key="stepper"
+        value={sliderValue}
+        onChange={handleChange}
+        maxValue={maxIndention + 1}
+      />
+    );
+  }
+
   return (
     <CardContent
       noframe
@@ -126,6 +195,7 @@ function ProjectOverview({ projectId }) {
           <SW.RightSide>
             <SW.TaskWrapper>
               <ProjectTaskList />
+              <ActionBar actions={actions} />
             </SW.TaskWrapper>
           </SW.RightSide>
         </SW.Wrapper>
