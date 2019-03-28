@@ -3,17 +3,12 @@ import moment from 'moment';
 import mandrillSendTemplate from 'src/utils/mandrill/mandrillSendTemplate';
 
 export default async function emailFridayReminder(email, firstName) {
-  const giphyCounter = await query(`SELECT count(giphy_id) from giphys`);
-  const randomGiphy = giphyCounter.rows[0];
-  const giphyId = Math.max(1, Math.floor(Math.random() * count));
   const giphyRes = await query(
-    `
-      SELECT *
-      FROM giphys
-      WHERE giphy_id = $1
-    `,
-    [giphyId]
+    'SELECT * FROM giphys ORDER BY random() LIMIT 1'
   );
+
+  const giphy = giphyRes.rows[0];
+
   const host = config.get('emailHost');
   const template_name = 'friday-email-unfinished-tasks';
   const template_content = [

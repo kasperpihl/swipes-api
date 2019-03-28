@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState, useMemo, useRef } from 'react';
+import React, { memo, useEffect, useMemo, useRef } from 'react';
 
 import useSyncedProject from 'core/react/_hooks/useSyncedProject';
 import useProjectSlice from 'core/react/_hooks/useProjectSlice';
@@ -89,13 +89,16 @@ function PlanningListProject({
         title,
         stateManager,
         maxIndention,
-        numberOfTasks: filteredTaskIds.length,
-        numberOfCompleted: 0
+        numberOfCompleted: 0,
+        numberOfTasks: 0
       };
       filteredTaskIds.forEach(taskId => {
-        if (completion.get(taskId)) {
-          projectState.numberOfCompleted++;
-        }
+        const [
+          completed,
+          total
+        ] = stateManager.queryHandler.getCompletedAndTotal(taskId);
+        projectState.numberOfCompleted += completed;
+        projectState.numberOfTasks += total;
       });
       dispatch({
         type: 'update',

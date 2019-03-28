@@ -53,6 +53,7 @@ export default function PlanningList({ tasks, ownedBy, yearWeek }) {
     }
     let dCompleted = 0;
     let dDepth = 0;
+    let dTotal = 0;
     const stateManagers = [];
 
     Object.values(projects).forEach(p => {
@@ -60,19 +61,21 @@ export default function PlanningList({ tasks, ownedBy, yearWeek }) {
       if (p === 'removed') return;
       stateManagers.push(p.stateManager);
       dCompleted += p.numberOfCompleted;
+      console.log(p.numberOfTasks);
+      dTotal += p.numberOfTasks;
       dDepth = Math.max(dDepth, p.maxIndention);
     });
 
     if (
       dCompleted !== numberOfCompleted ||
       dDepth !== maxDepth ||
-      tasks.length !== totalNumberOfTasks
+      dTotal !== totalNumberOfTasks
     ) {
       updatePlanningState({
         numberOfCompleted: dCompleted,
         maxDepth: dDepth,
         stateManagers,
-        totalNumberOfTasks: tasks.length
+        totalNumberOfTasks: dTotal
       });
     }
   }, [projects, tasks]);

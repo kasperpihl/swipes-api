@@ -31,8 +31,10 @@ export default class ViewController extends PureComponent {
 
   componentDidMount() {
     const { navSet } = this.props;
-    const screen = screenFromGoTo();
+    const goTo = localStorage.getItem('go_to');
+    const screen = screenFromGoTo(goTo);
     if (screen) {
+      localStorage.removeItem('go_to');
       navSet('left', screen);
     }
     this.updateAppWidth();

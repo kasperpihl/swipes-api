@@ -1,5 +1,6 @@
-export default function screenFromGoTo() {
-  const goTo = localStorage.getItem('go_to');
+import moment from 'moment';
+
+export default function screenFromGoTo(goTo) {
   if (!goTo) return null;
 
   if (goTo.startsWith('billing-')) {
