@@ -59,7 +59,7 @@ export default function PlanningSide({
       <ProgressBar
         progress={Math.ceil((numberOfCompleted / totalNumberOfTasks) * 100)}
       />
-      <Spacing height={12} />
+      <Spacing height={24} />
       <Dropdown items={teams} onChange={onChangeTeam} />
     </SW.Wrapper>
   );

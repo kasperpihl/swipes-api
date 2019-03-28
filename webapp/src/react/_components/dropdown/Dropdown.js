@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import SW from './Dropdown.swiss';
 
 export default function Dropdown({ rounded, items, onChange }) {

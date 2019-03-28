@@ -95,19 +95,18 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
 
       actions.push(
         <>
-        <SW.ToggleWrapper key="hidecompleted">
-          <Button icon="CircledCheckmark" onClick={handleHideCompleted} />
-          <InputToggle value={hideCompleted} onChange={handleHideCompleted} />
-        </SW.ToggleWrapper>
-        <SW.ToggleWrapper key="showMe">
-          <Button onClick={handleOnlyMe}>
-            <UserImage userId={myId} size={24} />
-          </Button>
-          <InputToggle value={showOnlyMe} onChange={handleOnlyMe} />
-        </SW.ToggleWrapper>
+          <SW.ToggleWrapper key="hidecompleted">
+            <Button icon="CircledCheckmark" onClick={handleHideCompleted} />
+            <InputToggle value={hideCompleted} onChange={handleHideCompleted} />
+          </SW.ToggleWrapper>
+          <SW.ToggleWrapper key="showMe">
+            <Button onClick={handleOnlyMe}>
+              <UserImage userId={myId} size={24} />
+            </Button>
+            <InputToggle value={showOnlyMe} onChange={handleOnlyMe} />
+          </SW.ToggleWrapper>
         </>
       );
-
 
       const handleChange = number => {
         stateManagers.forEach(stateManager => {

@@ -79,19 +79,21 @@ export default function PlanningList({ tasks, ownedBy, yearWeek }) {
       });
     }
   }, [projects, tasks]);
-
   return (
-    <SW.Content didLoad={didLoadInitial.current}>
-      {sortedProjectIds.map(project_id => (
-        <PlanningListProject
-          key={project_id}
-          tasks={tasks}
-          projectId={project_id}
-          dispatch={dispatch}
-          ownedBy={ownedBy}
-          yearWeek={yearWeek}
-        />
-      ))}
-    </SW.Content>
+    <>
+      {!didLoadInitial.current && <Loader center />}
+      <SW.Content didLoad={didLoadInitial.current}>
+        {sortedProjectIds.map(project_id => (
+          <PlanningListProject
+            key={project_id}
+            tasks={tasks}
+            projectId={project_id}
+            dispatch={dispatch}
+            ownedBy={ownedBy}
+            yearWeek={yearWeek}
+          />
+        ))}
+      </SW.Content>
+    </>
   );
 }
