@@ -150,14 +150,14 @@ function ProjectOverview({ projectId }) {
     actions.push(
       <>
         <SW.ToggleWrapper key="hidecompleted">
-          <InputToggle value={hideCompleted} onChange={handleHideCompleted} />
           <Button icon="CircledCheckmark" onClick={handleHideCompleted} />
+          <InputToggle value={hideCompleted} onChange={handleHideCompleted} />
         </SW.ToggleWrapper>
         <SW.ToggleWrapper key="showMe">
-          <InputToggle value={showOnlyMe} onChange={handleOnlyMe} />
           <Button onClick={handleOnlyMe}>
             <UserImage userId={myId} size={24} />
           </Button>
+          <InputToggle value={showOnlyMe} onChange={handleOnlyMe} />
         </SW.ToggleWrapper>
       </>
     );
