@@ -3,7 +3,7 @@ import moment from 'moment';
 import mandrillSendTemplate from 'src/utils/mandrill/mandrillSendTemplate';
 
 export default (email, firstName) => {
-  // const host = config.get('emailHost');
+  const host = config.get('emailHost');
   const template_name = 'friday-email-unfinished-tasks';
   const template_content = [
     {
@@ -21,7 +21,8 @@ export default (email, firstName) => {
         },
         {
           name: 'GIPHY',
-          content: 'https://media.giphy.com/media/5sWOVtEv2c1sh2Mchc/giphy.gif'
+          content:
+            '<img src="https://media.giphy.com/media/5sWOVtEv2c1sh2Mchc/giphy.gif" />'
         },
         {
           name: 'PLANBUTTON',

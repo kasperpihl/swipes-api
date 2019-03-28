@@ -11,7 +11,7 @@ export default async function queueCancelBatch(jobs) {
       const schema = object.as({
         owned_by: string.require(),
         job_name: string,
-        identifier: string
+        unique_identifier: string
       });
       const error = schema.test(j);
       if (error) {
@@ -21,7 +21,7 @@ export default async function queueCancelBatch(jobs) {
         });
       }
 
-      const { job_name, identifier, owned_by } = j;
+      const { job_name, unique_identifier, owned_by } = j;
       const values = [owned_by];
       let text = `
         DELETE FROM jobs
@@ -32,9 +32,9 @@ export default async function queueCancelBatch(jobs) {
           AND job_name = $${values.push(job_name)}
         `;
       }
-      if (identifier) {
+      if (unique_identifier) {
         text += `
-          AND identifier = ${values.push(identifier)}
+          AND unique_identifier = ${values.push(unique_identifier)}
         `;
       }
 

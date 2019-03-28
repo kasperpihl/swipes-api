@@ -75,7 +75,7 @@ export default endpointCreate(
   await queueScheduleBatch({
     job_name: 'job.sendEmail.queue',
     owned_by: team_id,
-    identifier: 'trial-1week',
+    unique_identifier: 'trial-1week',
     run_at: 60 * 24 * 7
   });
 
@@ -83,7 +83,7 @@ export default endpointCreate(
   await queueScheduleBatch({
     job_name: 'job.sendEmail.queue',
     owned_by: team_id,
-    identifier: 'trial-1day',
+    unique_identifier: 'trial-1day',
     run_at: 60 * 24 * 13
   });
 
@@ -91,7 +91,7 @@ export default endpointCreate(
   await queueScheduleBatch({
     job_name: 'job.sendEmail.queue',
     owned_by: team_id,
-    identifier: 'trial-expired',
+    unique_identifier: 'trial-expired',
     run_at: 60 * 24 * 15,
     recurring: 60 * 24 * 3 // Re-send every 3 days
   });

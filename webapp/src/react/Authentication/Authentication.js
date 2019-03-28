@@ -82,7 +82,8 @@ export default class Authentication extends PureComponent {
     const analyticsEvent = this.isLogin() ? 'Logged in' : 'Signed up';
 
     request(endpoint, {
-      ...formData.toJS()
+      ...formData.toJS(),
+      timezone_offset: new Date().getTimezoneOffset()
     }).then(res => {
       if (res.ok) {
         loader.clear('authButton');

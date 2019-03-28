@@ -69,10 +69,10 @@ export default endpointCreate(
 ).background(async (req, res) => {
   update.send(res.locals.update);
   await queueCancelBatch(
-    ['trial-1week', 'trial-1day', 'trial-expired'].map(identifier => ({
+    ['trial-1week', 'trial-1day', 'trial-expired'].map(email => ({
       owned_by: team_id,
       job_name: 'job.sendEmail.queue',
-      identifier
+      unique_identifier: email
     }))
   );
 });

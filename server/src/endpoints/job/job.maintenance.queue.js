@@ -10,4 +10,11 @@ export default queueCreateJob(async () => {
       WHERE expires_at < now()
     `
   );
+  // Wipe out jobs that has already run
+  await query(
+    `
+      DELETE FROM jobs
+      WHERE next_run_at IS NULL
+    `
+  );
 });
