@@ -66,12 +66,6 @@ function Planning({ teams }) {
         header={
           <SW.HeaderWrapper>
             <CardHeader title="Planning" />
-            <Spacing height={12} />
-            <TabBar
-              tabs={tabs.map(t => t.title)}
-              value={tabIndex}
-              onChange={i => setTabIndex(i)}
-            />
           </SW.HeaderWrapper>
         }
         noframe
@@ -81,6 +75,7 @@ function Planning({ teams }) {
             <PlanningSide yearWeek={yearWeek} setYearWeek={updateYearWeek} />
           </SW.LeftSide>
           <Spacing width={48} />
+
           <SW.RightSide>
             <PlanningOverview
               key={`${ownedBy}-${yearWeek}`}

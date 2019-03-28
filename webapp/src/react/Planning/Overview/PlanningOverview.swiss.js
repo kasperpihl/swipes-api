@@ -12,8 +12,13 @@ export default styleSheet('PlanningOverview', {
     overflowY: 'auto',
     paddingRight: '18px',
     paddingBottom: '60px',
-    paddingTop: '42px'
+    paddingTop: '42px',
+
+    borderVisible: {
+      borderTop: '1px solid $sw4'
+    }
   },
+
   ToggleWrapper: {
     _flex: ['row', 'left', 'center'],
     _size: 'auto',

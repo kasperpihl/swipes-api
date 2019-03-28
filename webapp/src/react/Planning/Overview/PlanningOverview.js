@@ -59,11 +59,20 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
   const [sliderValue, changeSliderValue] = useState(1);
   const [showOnlyMe, setShowOnlyMe] = useState(false);
   const [hideCompleted, setHideCompleted] = useState(false);
+  const [borderVisible, setBorderVisible] = useState(false);
 
   const [
     { editingId, maxDepth, stateManagers },
     updatePlanningState
   ] = usePlanningState();
+
+  const handleScroll = e => {
+    if (e.target && e.target.scrollTop > 56) {
+      setBorderVisible(true);
+    } else {
+      setBorderVisible(false);
+    }
+  };
 
   let actions = [];
   if (!editingId) {
@@ -165,7 +174,10 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
 
   return (
     <SW.Wrapper>
-      <SW.ScrollableWrapper>
+      <SW.ScrollableWrapper
+        onScroll={handleScroll}
+        borderVisible={borderVisible}
+      >
         <PlanningList
           tasks={req.result.tasks}
           ownedBy={ownedBy}
