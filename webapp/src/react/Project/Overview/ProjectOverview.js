@@ -28,7 +28,6 @@ import useBeforeUnload from 'src/react/_hooks/useBeforeUnload';
 import useMyId from 'core/react/_hooks/useMyId';
 
 import SW from './ProjectOverview.swiss';
-import { max } from 'moment';
 
 ProjectOverview.sizes = [750];
 
