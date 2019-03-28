@@ -11,7 +11,7 @@ export default styleSheet('ProjectTask', {
       opacity: 1
     },
     isFocused: {
-      backgroundColor: '$green1',
+      backgroundColor: '$green2',
       opacity: 1
     },
     '&:hover': {
