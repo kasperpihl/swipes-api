@@ -19,6 +19,7 @@ export { default as ChecklistCheckmark } from './icons/checklist-checkmark.svg';
 export { default as Checkmark } from './icons/checkmark.svg';
 export { default as Close } from './icons/close.svg';
 export { default as CloseThick } from './icons/close-thick.svg';
+export { default as CircledCheckmark } from './icons/circled-checkmark.svg'; // new
 export { default as CircledPlus } from './icons/circled-plus.svg'; // new
 export { default as Comment } from './icons/comment.svg';
 export { default as Complete } from './icons/complete.svg'; // new
@@ -39,7 +40,8 @@ export { default as Hashtag } from './icons/hashtag.svg';
 export { default as HeaderOne } from './icons/header-one.svg';
 export { default as HeaderTwo } from './icons/header-two.svg';
 export { default as Heart } from './icons/heart.svg';
-export { default as HideCompleted } from './icons/hide-completed.svg'; // new
+export { default as HeartEmpty } from './icons/heart-empty.svg'; // new
+export { default as HeartFull } from './icons/heart-full.svg'; // new
 export { default as Hyperlink } from './icons/hyperlink.svg';
 export { default as Itallic } from './icons/itallic.svg';
 export { default as Messages } from './icons/messages.svg';

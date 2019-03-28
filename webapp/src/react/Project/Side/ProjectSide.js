@@ -21,25 +21,11 @@ function ProjectSide({ stateManager }) {
   const [
     totalAmountOfTasks,
     completionPercentage,
-    maxIndention
-  ] = useProjectSlice(stateManager, (clientState, localState) => [
+  ] = useProjectSlice(stateManager, clientState => [
     clientState.get('sortedOrder').size,
     clientState.get('completion_percentage'),
-    localState.get('maxIndention')
   ]);
 
-  useEffect(() => {
-    if (stateManager && maxIndention > 0) {
-      setSliderValue(2);
-      stateManager.expandHandler.setDepth(1);
-    }
-  }, [stateManager]);
-
-  useEffect(() => {
-    if (sliderValue > maxIndention + 1) {
-      setSliderValue(maxIndention);
-    }
-  });
 
   const handleSliderChange = value => {
     stateManager.expandHandler.setDepth(value - 1);
@@ -98,13 +84,6 @@ function ProjectSide({ stateManager }) {
         )}
       </SW.ButtonWrapper>
       <Spacing height={6} />
-      {maxIndention > 0 && (
-        <Stepper
-          maxValue={maxIndention + 1}
-          value={sliderValue}
-          onChange={handleSliderChange}
-        />
-      )}
     </SW.Wrapper>
   );
 }

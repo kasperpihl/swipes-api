@@ -34,6 +34,7 @@ export default class CommentReaction extends PureComponent {
   }
   doILike = () => {
     const { optimist, reactions, myId } = this.props;
+    console.log(!!reactions[myId]);
     return optimist.get('like', !!reactions[myId]);
   };
   onReaction = () => {
@@ -101,7 +102,7 @@ export default class CommentReaction extends PureComponent {
           {this.size}
         </SW.LikeString>
         <SW.HeartButton className="heart-button" onClick={this.onReaction}>
-          <SW.HeartSvg icon="Heart" liked={this.doILike()} />
+          <SW.HeartSvg icon="HeartFull" liked={this.doILike()} />
         </SW.HeartButton>
       </SW.Container>
     );

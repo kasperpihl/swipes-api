@@ -8,7 +8,7 @@ export default styleSheet('InputToggle', {
 
   Switch: {
     _el: 'label',
-    _size: ['28px', '15px'],
+    _size: ['30px', '18px'],
     cursor: 'pointer'
   },
 
@@ -29,8 +29,8 @@ export default styleSheet('InputToggle', {
       borderRadius: '9px',
       position: 'absolute',
       content: '',
-      height: '11px',
-      width: '11px',
+      height: '14px',
+      width: '14px',
       left: '2px',
       bottom: '2px',
       backgroundColor: '$base',
@@ -41,7 +41,7 @@ export default styleSheet('InputToggle', {
       backgroundColor: '$green1',
 
       '&:before': {
-        left: '15px',
+        left: '14px',
         right: '2px',
         bottom: '2px'
       }

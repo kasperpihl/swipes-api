@@ -149,7 +149,7 @@ export default class CommentComposer extends PureComponent {
     return (
       <SW.Container>
         <SW.Picture>
-          <UserImage userId="me" size={36} />
+          <UserImage userId="me" size={30} />
         </SW.Picture>
         <SW.Content>
           <SW.TypingRow>

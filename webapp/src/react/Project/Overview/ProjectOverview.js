@@ -141,25 +141,27 @@ function ProjectOverview({ projectId }) {
       stateManager.filterHandler.setFilteredCompleted(!hideCompleted);
       setHideCompleted(!hideCompleted);
     };
-    actions.push(
-      <SW.ToggleWrapper key="hidecompleted">
-        <InputToggle value={hideCompleted} onChange={handleHideCompleted} />
-        <Button icon="HideCompleted" onClick={handleHideCompleted} />
-      </SW.ToggleWrapper>
-    );
 
     const handleOnlyMe = () => {
       stateManager.filterHandler.setFilteredAssignee(showOnlyMe ? null : myId);
       setShowOnlyMe(!showOnlyMe);
     };
+
     actions.push(
+      <>
+      <SW.ToggleWrapper key="hidecompleted">
+        <InputToggle value={hideCompleted} onChange={handleHideCompleted} />
+        <Button icon="CircledCheckmark" onClick={handleHideCompleted} />
+      </SW.ToggleWrapper>
       <SW.ToggleWrapper key="showMe">
         <InputToggle value={showOnlyMe} onChange={handleOnlyMe} />
         <Button onClick={handleOnlyMe}>
           <UserImage userId={myId} size={24} />
         </Button>
       </SW.ToggleWrapper>
+      </>
     );
+
 
     const handleChange = number => {
       stateManager.expandHandler.setDepth(number - 1);

@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { connect } from 'react-redux';
 import moment from 'moment';
 
 import WeekIndicator from '_shared/WeekIndicator/WeekIndicator';
@@ -9,8 +10,14 @@ import ProgressBar from '_shared/ProgressBar/ProgressBar';
 import usePlanningState from 'src/react/Planning/usePlanningState';
 
 import SW from './PlanningSide.swiss';
+import Dropdown from '_shared/dropdown/Dropdown';
 
-export default function PlanningSide({ yearWeek, setYearWeek }) {
+export default function PlanningSide({
+  yearWeek,
+  setYearWeek,
+  teams,
+  onChangeTeam
+}) {
   const [{ numberOfCompleted, totalNumberOfTasks }] = usePlanningState();
 
   const [isThisWeek, isNextWeek, nextWeekYearWeek] = useMemo(() => {
@@ -34,7 +41,6 @@ export default function PlanningSide({ yearWeek, setYearWeek }) {
   const handleNextWeek = () => {
     setYearWeek(nextWeekYearWeek);
   };
-  console.log('is this', isThisWeek, 'is next', isNextWeek);
 
   return (
     <SW.Wrapper>
@@ -53,6 +59,8 @@ export default function PlanningSide({ yearWeek, setYearWeek }) {
           <ProgressBar
             progress={Math.ceil((numberOfCompleted / totalNumberOfTasks) * 100)}
           />
+          <Spacing height={12} />
+          <Dropdown items={teams} onChange={onChangeTeam} />
         </>
       )}
     </SW.Wrapper>

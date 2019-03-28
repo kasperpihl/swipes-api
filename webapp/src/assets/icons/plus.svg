@@ -1,5 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-  <rect width="24" height="24" transform="translate(24) rotate(90)" stroke="transparent" fill="transparent"/>
-  <rect x="11" y="8" width="1" height="9" stroke="transparent"/>
-  <rect x="11" y="8" width="1" height="9" transform="translate(-1 24) rotate(-90)" stroke="transparent"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="atom/icon/plus">
+        <path d="M13,12 L16,12 L16,13 L13,13 L13,16 L12,16 L12,13 L9,13 L9,12 L12,12 L12,9 L13,9 L13,12 Z" id="Combined-Shape" fill="#121317"></path>
+    </g>
 </svg>

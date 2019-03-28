@@ -12,12 +12,12 @@ export default function Stepper({
     <SW.InputPackage>
       <Button
         disabled={value <= minValue}
-        title="-"
+        icon="Minus"
         onClick={() => onChange(value - 1)}
       />
       <SW.StepCounter>{value}</SW.StepCounter>
       <Button
-        title="+"
+        icon="Plus"
         disabled={value >= maxValue}
         onClick={() => onChange(value + 1)}
       />

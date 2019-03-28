@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import RequestLoader from '_shared/RequestLoader/RequestLoader';
 import PlanningModal from 'src/react/Planning/Modal/PlanningModal';
 import useRequest from 'core/react/_hooks/useRequest';
@@ -7,7 +7,6 @@ import EmptyState from '_shared/EmptyState/EmptyState';
 import useNav from 'src/react/_hooks/useNav';
 import Spacing from '_shared/Spacing/Spacing';
 import Button from '_shared/Button/Button';
-import Icon from '_shared/Icon/Icon';
 import ActionBar from '_shared/ActionBar/ActionBar';
 import Stepper from '_shared/Stepper/Stepper';
 import parseWeekLabel from '_shared/WeekPicker/parseWeekLabel';
@@ -84,12 +83,6 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
         });
         setHideCompleted(!hideCompleted);
       };
-      actions.push(
-        <SW.ToggleWrapper key="hidecompleted">
-          <InputToggle value={hideCompleted} onChange={handleHideCompleted} />
-          <Button icon="HideCompleted" onClick={handleHideCompleted} />
-        </SW.ToggleWrapper>
-      );
 
       const handleOnlyMe = () => {
         stateManagers.forEach(stateManager => {
@@ -99,14 +92,22 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
         });
         setShowOnlyMe(!showOnlyMe);
       };
+
       actions.push(
+        <>
+        <SW.ToggleWrapper key="hidecompleted">
+          <Button icon="CircledCheckmark" onClick={handleHideCompleted} />
+          <InputToggle value={hideCompleted} onChange={handleHideCompleted} />
+        </SW.ToggleWrapper>
         <SW.ToggleWrapper key="showMe">
-          <InputToggle value={showOnlyMe} onChange={handleOnlyMe} />
           <Button onClick={handleOnlyMe}>
             <UserImage userId={myId} size={24} />
           </Button>
+          <InputToggle value={showOnlyMe} onChange={handleOnlyMe} />
         </SW.ToggleWrapper>
+        </>
       );
+
 
       const handleChange = number => {
         stateManagers.forEach(stateManager => {

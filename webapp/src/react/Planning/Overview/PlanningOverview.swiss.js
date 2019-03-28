@@ -10,12 +10,23 @@ export default styleSheet('PlanningOverview', {
     _size: '100%',
     _flex: ['column', 'center', 'top'],
     overflowY: 'auto',
-    paddingRight: '18px',
-    paddingBottom: '60px',
     paddingTop: '42px',
+    paddingRight: '18px',
+    marginBottom: '78px',
 
     borderVisible: {
       borderTop: '1px solid $sw4'
+    },
+
+    '&::-webkit-scrollbar': {
+      '-webkit-appearance': 'none',
+      width: '6px',
+      backgroundColor: 'transparent',
+    },
+
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: '$sw3',
+      borderRadius: '3px',
     }
   },
 

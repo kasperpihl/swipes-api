@@ -8,9 +8,11 @@ export default styleSheet('CommentComposer', {
     width: '100%'
   },
   Picture: {
+    _size: ['54px', '30px'],
+    _flex: ['row', 'center', 'top'],
     flex: 'none',
     marginTop: '9px',
-    _size: '36px'
+
   },
   Content: {
     _flex: ['column', 'left', 'top'],
@@ -64,7 +66,7 @@ export default styleSheet('CommentComposer', {
     border: 'none',
     width: '100%',
     margin: '6px 0',
-    padding: '12px',
+    padding: '12px 0',
     resize: 'none',
     _textStyle: 'body',
     '&:focus': {

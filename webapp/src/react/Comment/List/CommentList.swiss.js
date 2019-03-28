@@ -6,7 +6,19 @@ export default styleSheet('CommentList', {
     _flex: ['column', 'left', 'bottom'],
     minHeight: '100%',
     marginTop: 'auto',
-    paddingLeft: '24px'
+    paddingLeft: '18px',
+    width: 'calc(100% - 9px)',
+
+    '&::-webkit-scrollbar': {
+      '-webkit-appearance': 'none',
+      width: '6px',
+      backgroundColor: 'transparent',
+    },
+
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: '$sw3',
+      borderRadius: '3px',
+    }
   },
 
   EmptyState: {

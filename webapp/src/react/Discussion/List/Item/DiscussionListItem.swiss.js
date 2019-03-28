@@ -2,9 +2,11 @@ import { styleSheet } from 'swiss-react';
 
 export default styleSheet('DiscussionListItem', {
   Wrapper: {
-    _flex: ['row', 'left', 'top'],
+    _flex: ['row', 'left', 'center'],
     width: 'auto',
-    padding: '6px 36px',
+    height: '36px',
+    padding: '6px 15px 6px 12px',
+    margin: '0 9px 0 24px',
     userSelect: 'none',
     selected: {
       background: '$green4'
@@ -36,9 +38,9 @@ export default styleSheet('DiscussionListItem', {
     _textStyle: 'caption',
     _flex: ['row', 'center', 'center'],
     flex: 'none',
-    position: 'absolute',
-    top: '9px',
-    right: '25px',
+    // position: 'absolute',
+    // top: '9px',
+    // right: '25px',
     color: '$sw2'
   },
   TeamName: {

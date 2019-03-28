@@ -12,6 +12,7 @@ export default styleSheet('Stepper', {
     _textStyle: 'caption',
     _flex: ['row', 'center', 'center'],
     _size: ['24px', '18px'],
+    backgroundColor: '$base',
     flex: 'none',
     border: '1px solid $sw2',
     borderRadius: '2px',
