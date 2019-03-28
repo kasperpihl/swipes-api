@@ -76,7 +76,7 @@ export default endpointCreate(
     job_name: 'job.sendEmail.queue',
     owned_by: team_id,
     unique_identifier: 'trial-1week',
-    run_at: 60 * 24 * 7
+    run_at: 60 * 24 * 23
   });
 
   // Trial 1 day left
@@ -84,7 +84,7 @@ export default endpointCreate(
     job_name: 'job.sendEmail.queue',
     owned_by: team_id,
     unique_identifier: 'trial-1day',
-    run_at: 60 * 24 * 13
+    run_at: 60 * 24 * 29
   });
 
   // Trial expired
@@ -92,7 +92,6 @@ export default endpointCreate(
     job_name: 'job.sendEmail.queue',
     owned_by: team_id,
     unique_identifier: 'trial-expired',
-    run_at: 60 * 24 * 15,
-    recurring: 60 * 24 * 3 // Re-send every 3 days
+    run_at: 60 * 24 * 31
   });
 });

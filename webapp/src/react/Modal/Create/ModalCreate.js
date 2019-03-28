@@ -173,24 +173,25 @@ export default class ModalCreate extends PureComponent {
                   {this.renderPrivacyCheckbox('private')}
                 </FMSW.InputWrapper>
                 <Spacing height={20} />
-                <FMSW.InputWrapper>
-                  <FMSW.Label>Members</FMSW.Label>
-                  <Spacing height={9} />
-                  <Assignees
-                    userIds={followers}
-                    teamId={ownedBy}
-                    size={36}
-                    maxImages={9}
-                    onClick={this.handleAssignClick}
-                  >
-                    <Button
-                      title="Tag people"
+                {(type !== 'project' || privacy === 'private') && (
+                  <FMSW.InputWrapper>
+                    <FMSW.Label>Members</FMSW.Label>
+                    <Spacing height={9} />
+                    <Assignees
+                      userIds={followers}
+                      teamId={ownedBy}
+                      size={36}
+                      maxImages={9}
                       onClick={this.handleAssignClick}
-                      disabled={privacy === 'private'}
-                      border
-                    />
-                  </Assignees>
-                </FMSW.InputWrapper>
+                    >
+                      <Button
+                        title="Tag people"
+                        onClick={this.handleAssignClick}
+                        border
+                      />
+                    </Assignees>
+                  </FMSW.InputWrapper>
+                )}
               </>
             )}
           </FMSW.InputContainer>
