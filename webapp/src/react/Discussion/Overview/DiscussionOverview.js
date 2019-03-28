@@ -9,8 +9,10 @@ import CommentList from 'src/react/Comment/List/CommentList';
 import CardContent from 'src/react/_components/Card/Content/CardContent';
 import useUpdate from 'core/react/_hooks/useUpdate';
 import useNav from 'src/react/_hooks/useNav';
+import useMyId from 'core/react/_hooks/useMyId';
+import useLocalStorageCache from 'src/react/_hooks/useLocalStorageCache';
 import useLoader from 'src/react/_hooks/useLoader';
-import ListMenu from '_shared/ListMenu/ListMenu.js'
+import ListMenu from '_shared/ListMenu/ListMenu.js';
 import contextMenu from 'src/utils/contextMenu';
 
 import SW from './DiscussionOverview.swiss';
@@ -21,16 +23,22 @@ import useRequest from 'core/react/_hooks/useRequest';
 import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
 
 export default connect(
-  state => ({
-    myId: state.me.get('user_id')
-  }),
+  null,
   {
     tooltip: mainActions.tooltip
   }
 )(DiscussionOverview);
 
-function DiscussionOverview({ tooltip, discussionId, myId }) {
+function DiscussionOverview({ tooltip, discussionId }) {
+  const myId = useMyId();
   const [attachmentsOnly, setAttachmentsOnly] = useState(false);
+  const [initialMessage, saveMessage] = useLocalStorageCache(
+    `${discussionId}-message`
+  );
+  const [initialAttachments, saveAttachments] = useLocalStorageCache(
+    `${discussionId}-attachments`
+  );
+
   const scrollRef = useRef();
   const nav = useNav();
   const loader = useLoader();
@@ -170,6 +178,11 @@ function DiscussionOverview({ tooltip, discussionId, myId }) {
       }
     });
   };
+
+  const handleUnload = (message, attachments) => {
+    saveMessage(message || null);
+    saveAttachments(attachments.size ? attachments.toJS() : null);
+  };
   const { discussion } = req.result;
 
   const subtitle = {
@@ -207,6 +220,9 @@ function DiscussionOverview({ tooltip, discussionId, myId }) {
       footer={
         <SW.FooterWrapper>
           <CommentComposer
+            onUnload={handleUnload}
+            initialMessage={initialMessage}
+            initialAttachments={initialAttachments}
             discussionId={discussion.discussion_id}
             ownedBy={discussion.owned_by}
             onSuccess={handleSendMessage}

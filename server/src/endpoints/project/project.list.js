@@ -28,7 +28,7 @@ export default endpointCreate(
 
     const projectQuery = {
       text: `
-        SELECT p.project_id, p.title, p.due_date, p.owned_by, p.completion_percentage, per.granted_at, po.opened_at
+        SELECT p.project_id, p.title, p.due_date, p.owned_by, p.completion_percentage, p.privacy, per.granted_at, po.opened_at
         FROM permissions as per
         INNER JOIN projects as p
         ON p.project_id = per.permission_from

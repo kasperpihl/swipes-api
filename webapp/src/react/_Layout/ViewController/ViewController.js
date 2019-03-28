@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as views from 'src/react/registerScreens';
 import * as mainActions from 'src/redux/main/mainActions';
+import * as navigationActions from 'src/redux/navigation/navigationActions';
 import throttle from 'core/utils/throttle';
 import NavProvider from 'src/react/_hocs/Nav/NavProvider';
 import Card from 'src/react/_Layout/Card/Card';
@@ -18,14 +19,21 @@ const kSidebarExpandedThreshold = 100; // pixels that sidebar needs to be expand
     navigation: state.navigation
   }),
   {
-    sidebarSetExpanded: mainActions.sidebarSetExpanded
+    sidebarSetExpanded: mainActions.sidebarSetExpanded,
+    navSet: navigationActions.set
   }
 )
 export default class ViewController extends PureComponent {
   state = {
     appWidth: -1
   };
+
   componentDidMount() {
+    const { navSet } = this.props;
+    const screen = getScreenFromGoTo();
+    if (screen) {
+      navSet('left', screen);
+    }
     this.updateAppWidth();
     this.updateSidebarExpanded();
     window.addEventListener('resize', this.updateAppWidth);
@@ -136,10 +144,8 @@ export default class ViewController extends PureComponent {
   }
   renderSide(side, { Comp, width, props, cardProps }) {
     const { navigation } = this.props;
-    const screenId = navigation
-      .get(side)
-      .last()
-      .get('screenId');
+    const screen = navigation.get(side).last();
+    const screenId = screen.get('screenId');
 
     const key = side + screenId + navigation.get(side).size;
     return (

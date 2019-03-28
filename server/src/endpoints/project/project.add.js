@@ -36,7 +36,8 @@ export default endpointCreate(
         owned_by,
         title,
         project_id: projectId,
-        created_by: user_id
+        created_by: user_id,
+        privacy
       }),
       sqlInsertQuery('project_tasks', {
         project_id: projectId

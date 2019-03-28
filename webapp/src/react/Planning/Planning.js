@@ -17,7 +17,7 @@ export default connect(state => ({
   teams: state.teams
 }))(Planning);
 
-function Planning({ teams }) {
+function Planning({ teams, initialYearWeek }) {
   const defaultYearWeek = useMemo(() => {
     const now = moment();
     let year = now.year();
@@ -27,7 +27,7 @@ function Planning({ teams }) {
     }
     return `${year}-${now.week()}`;
   }, []);
-  const [yearWeek, setYearWeek] = useState(defaultYearWeek);
+  const [yearWeek, setYearWeek] = useState(initialYearWeek || defaultYearWeek);
 
   const [tabs, tabIndex, setTabIndex] = useTeamTabs(teams);
 

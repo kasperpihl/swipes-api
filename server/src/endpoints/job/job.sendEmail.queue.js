@@ -6,10 +6,25 @@ export default queueCreateJob(async (req, res, next) => {
   console.log('running email!', res.locals);
   const { owned_by, unique_identifier, payload } = res.locals;
 
+  if (unique_identifier.startsWith('trial-')) {
+    const team = await fetchTeam(owned_by);
+    const admins = await fetchAdmins(owned_by);
+    for (let i = 0; i < admins.length; i++) {
+      // await emailTrialReminder();
+    }
+  }
+
+  if (unique_identifier === 'friday-reminder') {
+    const user = await fetchUser(owned_by);
+    await emailFridayReminder(user.email, user.first_name);
+  } else {
+    console.log('UNKNOWN EMAIL', unique_identifier);
+  }
+
   async function fetchUser(userId) {
     const userRes = await query(
       `
-        SELECT email, first_name 
+        SELECT first_name, last_name, email
         FROM users
         WHERE user_id = $1
       `,
@@ -18,14 +33,29 @@ export default queueCreateJob(async (req, res, next) => {
 
     return userRes.rows[0];
   }
-
-  switch (unique_identifier) {
-    case 'friday-reminder': {
-      const user = await fetchUser(owned_by);
-      await emailFridayReminder(user.email, user.first_name);
-      break;
-    }
-    default:
-      console.log('UNKNOWN EMAIL', unique_identifier);
+  async function fetchTeam(teamId) {
+    const teamRes = await query(
+      `
+        SELECT name
+        FROM teams
+        WHERE team_id = $1
+      `,
+      [teamId]
+    );
+    return teamRes.rows[0];
+  }
+  async function fetchAdmins(teamId) {
+    const teamRes = await query(
+      `
+        SELECT first_name, last_name, email
+        FROM team_users tu
+        INNER JOIN users u
+        ON u.user_id = tu.user_id
+        WHERE team_id = $1
+        AND admin = true
+      `,
+      [teamId]
+    );
+    return teamRes.rows;
   }
 });

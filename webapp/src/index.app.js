@@ -21,6 +21,9 @@ import CoreProvider from 'core/react/_hocs/CoreProvider';
 import { StripeProvider } from 'react-stripe-elements';
 
 // Init core!
+if (urlGetParameter('go_to')) {
+  localStorage.setItem('go_to', urlGetParameter('go_to'));
+}
 if (urlGetParameter('invitation_token')) {
   localStorage.setItem('invitation_token', urlGetParameter('invitation_token'));
 }

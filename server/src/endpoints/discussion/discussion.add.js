@@ -52,6 +52,7 @@ export default endpointCreate(
           last_comment_by: user_id,
           last_comment: 'just created this discussion.',
           last_comment_at: 'now()',
+          privacy,
           followers: followerString
         },
         {

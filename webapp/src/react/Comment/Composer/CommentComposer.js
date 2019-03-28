@@ -24,6 +24,19 @@ export default class CommentComposer extends PureComponent {
       commentVal: props.initialMessage || ''
     };
   }
+  componentDidMount() {
+    window.addEventListener('beforeunload', this.handleBeforeUnload);
+  }
+  componentWillUnmount() {
+    window.removeEventListener('beforeunload', this.handleBeforeUnload);
+    this.handleBeforeUnload();
+  }
+  handleBeforeUnload = () => {
+    const { onUnload } = this.props;
+    if (onUnload) {
+      onUnload(this.state.commentVal, this.state.attachments);
+    }
+  };
   handleChange = e => {
     const { onChangeMessage } = this.props;
     if (typeof onChangeMessage === 'function') {
@@ -164,7 +177,9 @@ export default class CommentComposer extends PureComponent {
             />
             <SW.ButtonWrapper>
               <AttachButton onAttach={this.handleAttach} ownedBy={ownedBy} />
-              <Button icon="Gif" onClick={this.openGiphySelector} />
+              {!commentVal && (
+                <Button icon="Gif" onClick={this.openGiphySelector} />
+              )}
               <Button icon="Emoji" onClick={this.openEmojiPicker} />
               <SW.SubmitButton
                 onClick={() => this.handleAddComment(commentVal)}

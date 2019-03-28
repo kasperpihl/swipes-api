@@ -19,6 +19,9 @@ function Card({ children, left, isOverlay, isUnderlay, dispatch }) {
       dispatch(navigationActions.focus(nav.side));
     }
   };
+  const handleClose = () => {
+    nav.set('right', null);
+  };
   return (
     <SW.Wrapper
       width={nav.width}
@@ -38,7 +41,11 @@ function Card({ children, left, isOverlay, isUnderlay, dispatch }) {
             />
           )}
           {nav.side !== 'left' && (
-            <SW.Button onClick={nav.pop} icon="Cross" isLocked={nav.isLocked} />
+            <SW.Button
+              onClick={handleClose}
+              icon="Cross"
+              isLocked={nav.isLocked}
+            />
           )}
         </SW.Actions>
       </SW.Header>

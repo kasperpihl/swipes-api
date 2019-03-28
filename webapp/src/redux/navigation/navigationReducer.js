@@ -67,7 +67,7 @@ export default function navigationReducer(state = initialState, action) {
     case types.NAV_SAVE_STATE: {
       return state.updateIn(
         [payload.side, state.get(payload.side).size - 1],
-        s => s.setIn(['props', 'savedState'], fromJS(payload.savedState))
+        s => s.set('savedState'), payload.savedState)
       );
     }
     case types.NAV_TOGGLE_LOCK: {
