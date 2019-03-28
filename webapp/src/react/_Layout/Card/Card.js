@@ -20,7 +20,7 @@ function Card({ children, left, isOverlay, isUnderlay, dispatch }) {
     }
   };
   const handleClose = () => {
-    nav.set('right', null);
+    nav.set(null);
   };
   return (
     <SW.Wrapper

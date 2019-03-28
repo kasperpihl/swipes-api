@@ -36,7 +36,7 @@ export default endpointCreate(
 
     const commentRes = await query(
       `
-        SELECT discussion_id, comment_id, reactions, message, attachments, sent_by, sent_at
+        SELECT discussion_id, comment_id, reactions, message, attachments, sent_by, sent_at, deleted
         FROM discussion_comments
         WHERE discussion_id = (
           SELECT permission_from

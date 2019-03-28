@@ -1,4 +1,4 @@
-export default function getScreenFromGoTo() {
+export default function screenFromGoTo() {
   const goTo = localStorage.getItem('go_to');
   if (!goTo) return null;
 

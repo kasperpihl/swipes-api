@@ -18,7 +18,9 @@ export default function PlanningSide({
   teams,
   onChangeTeam
 }) {
-  const [{ numberOfCompleted, totalNumberOfTasks }] = usePlanningState();
+  const [
+    { numberOfCompleted = 0, totalNumberOfTasks = 0 }
+  ] = usePlanningState();
 
   const [isThisWeek, isNextWeek, nextWeekYearWeek] = useMemo(() => {
     const dMoment = moment();
@@ -47,22 +49,18 @@ export default function PlanningSide({
       <WeekPicker value={yearWeek} onChange={setYearWeek} />
       <Spacing height={24} />
       <WeekIndicator yearWeek={yearWeek} />
-      {typeof numberOfCompleted === 'number' && (
-        <>
-          <Spacing height={30} />
-          <SideHeader
-            largeNumber={numberOfCompleted}
-            smallNumber={`/ ${totalNumberOfTasks}`}
-            subtitle="Tasks Completed"
-          />
-          <Spacing height={12} />
-          <ProgressBar
-            progress={Math.ceil((numberOfCompleted / totalNumberOfTasks) * 100)}
-          />
-          <Spacing height={12} />
-          <Dropdown items={teams} onChange={onChangeTeam} />
-        </>
-      )}
+      <Spacing height={30} />
+      <SideHeader
+        largeNumber={numberOfCompleted}
+        smallNumber={`/ ${totalNumberOfTasks}`}
+        subtitle="Tasks Completed"
+      />
+      <Spacing height={12} />
+      <ProgressBar
+        progress={Math.ceil((numberOfCompleted / totalNumberOfTasks) * 100)}
+      />
+      <Spacing height={12} />
+      <Dropdown items={teams} onChange={onChangeTeam} />
     </SW.Wrapper>
   );
 }

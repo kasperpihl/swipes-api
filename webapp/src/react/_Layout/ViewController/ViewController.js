@@ -6,6 +6,7 @@ import * as navigationActions from 'src/redux/navigation/navigationActions';
 import throttle from 'core/utils/throttle';
 import NavProvider from 'src/react/_hocs/Nav/NavProvider';
 import Card from 'src/react/_Layout/Card/Card';
+import screenFromGoTo from 'src/utils/screenFromGoTo';
 import SW from './ViewController.swiss';
 import ErrorBoundary from 'src/react/_Layout/ErrorBoundary/ErrorBoundary';
 
@@ -30,7 +31,7 @@ export default class ViewController extends PureComponent {
 
   componentDidMount() {
     const { navSet } = this.props;
-    const screen = getScreenFromGoTo();
+    const screen = screenFromGoTo();
     if (screen) {
       navSet('left', screen);
     }

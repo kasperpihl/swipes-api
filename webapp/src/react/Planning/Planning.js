@@ -54,6 +54,10 @@ function Planning({ teams, initialYearWeek }) {
     updatePlanningState('reset');
     setYearWeek(yW);
   };
+  const updateTeam = i => {
+    updatePlanningState('reset');
+    setTabIndex(i);
+  };
 
   const planningValue = useMemo(() => [planningState, updatePlanningState], [
     planningState,
@@ -76,7 +80,7 @@ function Planning({ teams, initialYearWeek }) {
               yearWeek={yearWeek}
               setYearWeek={updateYearWeek}
               teams={tabs}
-              onChangeTeam={setTabIndex}
+              onChangeTeam={updateTeam}
             />
           </SW.LeftSide>
           <Spacing width={48} />

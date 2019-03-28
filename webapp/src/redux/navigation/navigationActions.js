@@ -10,7 +10,7 @@ export function set(side, screen) {
   if (screen) {
     payload.screen = screen;
   }
-  if (payload.target === 'primary') {
+  if (payload.target === 'left') {
     payload.sideMenuId = screen.screenId;
   }
   return { type: types.NAV_SET, payload };

@@ -64,7 +64,7 @@ export default class CommentItem extends PureComponent {
   renderAttachments() {
     const { comment } = this.props;
 
-    if (!comment.attachments) {
+    if (!comment.attachments || comment.deleted) {
       return undefined;
     }
     return (
@@ -85,11 +85,7 @@ export default class CommentItem extends PureComponent {
     }
     return (
       <SW.Picture>
-        <UserImage
-          userId={comment.sent_by}
-          teamId={ownedBy}
-          size={30}
-        />
+        <UserImage userId={comment.sent_by} teamId={ownedBy} size={30} />
       </SW.Picture>
     );
   }
@@ -107,17 +103,34 @@ export default class CommentItem extends PureComponent {
       </SW.TopWrapper>
     );
   }
+  renderRightSide() {
+    const { comment, postId, discussionId, ownedBy, me } = this.props;
+    if (comment.deleted) return null;
 
-  render() {
-    const {
-      comment,
-      postId,
-      discussionId,
-      ownedBy,
-      isSingleLine,
-      me
-    } = this.props;
     const commentIsSentByMe = me.get('user_id') === comment.sent_by;
+
+    return (
+      <SW.RightSide>
+        {commentIsSentByMe && (
+          <SW.Button
+            icon="ThreeDots"
+            size={30}
+            onClick={this.openContextMenu}
+          />
+        )}
+        <SW.Reaction
+          ownedBy={ownedBy}
+          discussionId={discussionId}
+          reactions={comment.reactions}
+          postId={postId}
+          commentId={comment.comment_id}
+          liked={Object.keys(comment.reactions).length > 0}
+        />
+      </SW.RightSide>
+    );
+  }
+  render() {
+    const { comment, isSingleLine } = this.props;
 
     return (
       <SW.ProvideContext isSingleLine={isSingleLine}>
@@ -126,27 +139,15 @@ export default class CommentItem extends PureComponent {
           <SW.Center>
             {this.renderTopSide()}
             <SW.Message>
-              {chain(parseGiphys, parseNewLines, parseLinks)(comment.message)}
+              {comment.deleted
+                ? 'This message has been deleted'
+                : chain(parseGiphys, parseNewLines, parseLinks)(
+                    comment.message
+                  )}
             </SW.Message>
             {this.renderAttachments()}
           </SW.Center>
-          <SW.RightSide>
-            {commentIsSentByMe && (
-              <SW.Button
-                icon="ThreeDots"
-                size={30}
-                onClick={this.openContextMenu}
-              />
-            )}
-            <SW.Reaction
-              ownedBy={ownedBy}
-              discussionId={discussionId}
-              reactions={comment.reactions}
-              postId={postId}
-              commentId={comment.comment_id}
-              liked={Object.keys(comment.reactions).length > 0}
-            />
-          </SW.RightSide>
+          {this.renderRightSide()}
         </SW.Wrapper>
       </SW.ProvideContext>
     );
