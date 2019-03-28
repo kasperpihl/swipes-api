@@ -9,6 +9,17 @@ export default styleSheet('PlanningModalProjectList', {
       opacity: 0,
       visibility: 'hidden',
       position: 'absolute'
+    },
+
+    '&::-webkit-scrollbar': {
+      '-webkit-appearance': 'none',
+      width: '6px',
+      backgroundColor: 'transparent'
+    },
+
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: '$sw3',
+      borderRadius: '3px'
     }
   },
   EmptyWrapper: {

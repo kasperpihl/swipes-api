@@ -149,19 +149,18 @@ function ProjectOverview({ projectId }) {
 
     actions.push(
       <>
-      <SW.ToggleWrapper key="hidecompleted">
-        <InputToggle value={hideCompleted} onChange={handleHideCompleted} />
-        <Button icon="CircledCheckmark" onClick={handleHideCompleted} />
-      </SW.ToggleWrapper>
-      <SW.ToggleWrapper key="showMe">
-        <InputToggle value={showOnlyMe} onChange={handleOnlyMe} />
-        <Button onClick={handleOnlyMe}>
-          <UserImage userId={myId} size={24} />
-        </Button>
-      </SW.ToggleWrapper>
+        <SW.ToggleWrapper key="hidecompleted">
+          <InputToggle value={hideCompleted} onChange={handleHideCompleted} />
+          <Button icon="CircledCheckmark" onClick={handleHideCompleted} />
+        </SW.ToggleWrapper>
+        <SW.ToggleWrapper key="showMe">
+          <InputToggle value={showOnlyMe} onChange={handleOnlyMe} />
+          <Button onClick={handleOnlyMe}>
+            <UserImage userId={myId} size={24} />
+          </Button>
+        </SW.ToggleWrapper>
       </>
     );
-
 
     const handleChange = number => {
       stateManager.expandHandler.setDepth(number - 1);
@@ -197,8 +196,8 @@ function ProjectOverview({ projectId }) {
           <SW.RightSide>
             <SW.TaskWrapper>
               <ProjectTaskList />
-              <ActionBar actions={actions} />
             </SW.TaskWrapper>
+            <ActionBar actions={actions} />
           </SW.RightSide>
         </SW.Wrapper>
       </ProjectContext.Provider>

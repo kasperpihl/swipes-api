@@ -11,7 +11,19 @@ export default styleSheet('ProjectOverview', {
     _flex: ['column', 'center', 'top'],
     overflowY: 'auto',
     paddingTop: '48px',
-    paddingRight: '18px'
+    paddingRight: '18px',
+    marginBottom: '78px',
+
+    '&::-webkit-scrollbar': {
+      '-webkit-appearance': 'none',
+      width: '6px',
+      backgroundColor: 'transparent'
+    },
+
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: '$sw3',
+      borderRadius: '3px'
+    }
   },
 
   LeftSide: {
