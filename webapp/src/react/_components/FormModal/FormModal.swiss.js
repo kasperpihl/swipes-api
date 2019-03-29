@@ -43,7 +43,15 @@ export default styleSheet('FormModal', {
 
   InputWrapper: {
     _size: ['100%', 'auto'],
-    _flex: ['column', 'flex-start', 'flex-start']
+    _flex: ['column', 'flex-start', 'flex-start'],
+
+    nameChange: {
+      marginBottom: '18px',
+
+      '&:first-child': {
+        marginTop: '18px'
+      }
+    }
   },
 
   Input: {

@@ -1,6 +1,7 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import withLoader from 'src/react/_hocs/withLoader';
 import InputText from '_shared/Input/Text/InputText';
+import Spacing from '_shared/Spacing/Spacing';
 import SW from './FormModal.swiss';
 
 @withLoader
@@ -40,18 +41,20 @@ export default class FormModal extends PureComponent {
       return null;
     }
     return inputs.map((comp, i) => {
-      const { label, initialValue, ...rest } = comp;
+      const { label, initialValue, nameChange, ...rest } = comp;
       return (
-        <SW.InputWrapper key={i}>
-          <InputText
-            type="text"
-            onChange={this.handleInputCached(i)}
-            onKeyDown={this.handleKeyDownCached(i)}
-            placeholder={label}
-            value={this.state[i]}
-            {...rest}
-          />
-        </SW.InputWrapper>
+        <>
+          <SW.InputWrapper key={i} nameChange={nameChange}>
+            <InputText
+              type="text"
+              onChange={this.handleInputCached(i)}
+              onKeyDown={this.handleKeyDownCached(i)}
+              placeholder={label}
+              value={this.state[i]}
+              {...rest}
+            />
+          </SW.InputWrapper>
+        </>
       );
     });
   };

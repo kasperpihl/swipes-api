@@ -70,6 +70,9 @@ export default class ProfileHeader extends PureComponent {
           loader.clear('uploadImage');
           if (res.ok) {
             window.analytics.sendEvent('Profile photo updated', {});
+            console.log(res);
+          } else {
+            console.log(res);
           }
         }
       );
@@ -104,9 +107,15 @@ export default class ProfileHeader extends PureComponent {
           type: 'text',
           label: 'First name',
           autoFocus: true,
-          initialValue: me.get('first_name')
+          initialValue: me.get('first_name'),
+          nameChange: true
         },
-        { type: 'text', label: 'Last name', initialValue: me.get('last_name') }
+        {
+          type: 'text',
+          label: 'Last name',
+          initialValue: me.get('last_name'),
+          nameChange: true
+        }
       ],
       onConfirm: this.callbackProfileUpdate,
       confirmLabel: 'Update'

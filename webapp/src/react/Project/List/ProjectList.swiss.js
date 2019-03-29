@@ -5,7 +5,7 @@ export default styleSheet('ProjectList', {
   Wrapper: {
     _size: '100%',
     paddingLeft: '36px',
-    paddingRight: '18px',
+    paddingRight: '9px',
   },
 
   Name: {

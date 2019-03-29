@@ -73,7 +73,7 @@ export default styleSheet('ProfileHeader', {
   OverlaySVG: {
     _el: Icon,
     _size: ['24px'],
-    fill: 'white',
+    fill: '$base',
     opacity: '0',
     position: 'absolute',
 
