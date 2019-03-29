@@ -18,7 +18,7 @@ export default endpointCreate(
     const { user_id } = res.locals;
     const { discussion_id } = res.locals.input;
 
-    const discussionRes = await transaction([
+    const [discussionRes] = await transaction([
       {
         text: `
         UPDATE discussions
