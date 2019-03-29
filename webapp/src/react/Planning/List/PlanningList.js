@@ -61,7 +61,6 @@ export default function PlanningList({ tasks, ownedBy, yearWeek }) {
       if (p === 'removed') return;
       stateManagers.push(p.stateManager);
       dCompleted += p.numberOfCompleted;
-      console.log(p.numberOfTasks);
       dTotal += p.numberOfTasks;
       dDepth = Math.max(dDepth, p.maxIndention);
     });

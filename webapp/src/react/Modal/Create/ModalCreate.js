@@ -101,7 +101,8 @@ export default class ModalCreate extends PureComponent {
   };
 
   renderPrivacyCheckbox(iAmPrivacy) {
-    const { privacy } = this.state;
+    const { privacy, ownedBy } = this.state;
+    const { myId } = this.props;
     let label = 'Public - everyone from the team have access';
     if (iAmPrivacy !== 'public') {
       label = 'Private - only chosen people have access';
@@ -111,6 +112,7 @@ export default class ModalCreate extends PureComponent {
       <SW.CheckboxWrapper
         onClick={this.handlePrivacyCached(iAmPrivacy)}
         checked={privacy === iAmPrivacy}
+        disabled={ownedBy === myId}
       >
         <SW.Input
           onChange={this.handlePrivacyCached(iAmPrivacy)}
@@ -163,37 +165,34 @@ export default class ModalCreate extends PureComponent {
                 disablePersonal={type === 'discussion'}
               />
             </FMSW.InputWrapper>
-            {ownedBy !== myId && <Spacing height={24} />}
-            {ownedBy !== myId && (
-              <>
-                <FMSW.InputWrapper>
-                  <FMSW.Label>Access</FMSW.Label>
-                  <Spacing height={9} />
-                  {this.renderPrivacyCheckbox('public')}
-                  {this.renderPrivacyCheckbox('private')}
-                </FMSW.InputWrapper>
-                <Spacing height={20} />
-                {(type !== 'project' || privacy === 'private') && (
-                  <FMSW.InputWrapper>
-                    <FMSW.Label>Members</FMSW.Label>
-                    <Spacing height={9} />
-                    <Assignees
-                      userIds={followers}
-                      teamId={ownedBy}
-                      size={36}
-                      maxImages={9}
-                      onClick={this.handleAssignClick}
-                    >
-                      <Button
-                        title="Tag people"
-                        onClick={this.handleAssignClick}
-                        border
-                      />
-                    </Assignees>
-                  </FMSW.InputWrapper>
-                )}
-              </>
-            )}
+            <Spacing height={24} />
+            <>
+              <FMSW.InputWrapper>
+                <FMSW.Label>Access</FMSW.Label>
+                <Spacing height={9} />
+                {this.renderPrivacyCheckbox('public')}
+                {this.renderPrivacyCheckbox('private')}
+              </FMSW.InputWrapper>
+              <Spacing height={20} />
+              <FMSW.InputWrapper>
+                <FMSW.Label>Members</FMSW.Label>
+                <Spacing height={9} />
+                <Assignees
+                  userIds={followers}
+                  teamId={ownedBy}
+                  size={36}
+                  maxImages={9}
+                  onClick={this.handleAssignClick}
+                >
+                  <Button
+                    title="Tag people"
+                    onClick={this.handleAssignClick}
+                    border
+                    disabled={privacy === 'public' || ownedBy === myId}
+                  />
+                </Assignees>
+              </FMSW.InputWrapper>
+            </>
           </FMSW.InputContainer>
           <FMSW.ButtonWrapper>
             <FMSW.Button
