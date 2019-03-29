@@ -28,7 +28,6 @@ export default endpointCreate(
     permissionKey: 'project_id'
   },
   async (req, res) => {
-    const { user_id } = res.locals;
     let {
       project_id,
       ordering,
@@ -39,15 +38,6 @@ export default endpointCreate(
       rev,
       update_identifier = randomstring.generate(8)
     } = res.locals.input;
-
-    const addQuery = [];
-    if (!project_id) {
-      project_id = idGenerate('P', 8, true);
-      addQuery.push({
-        text: 'INSERT INTO projects (id, created_by) VALUES ($1, $2)',
-        values: [project_id, user_id]
-      });
-    }
 
     // Prepare for dynamic support of adding values
     const values = [];
@@ -80,7 +70,7 @@ export default endpointCreate(
       project_id
     )} RETURNING ${returning.join(', ')}`;
 
-    const queries = addQuery.concat([
+    const queries = [
       {
         text,
         values,
@@ -100,7 +90,7 @@ export default endpointCreate(
           }
         }
       }
-    ]);
+    ];
 
     if (tasks_by_id) {
       for (let task_id in tasks_by_id) {
@@ -132,10 +122,6 @@ export default endpointCreate(
     }
 
     const response = await transaction(queries);
-    if (addQuery.length) {
-      // If adding the project, don't include that query in results
-      response.shift();
-    }
 
     const updates = [{ type: 'project', data: response.shift().rows[0] }];
 

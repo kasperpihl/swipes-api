@@ -2,6 +2,8 @@ import { transaction } from 'src/utils/db/db';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import idGenerate from 'src/utils/idGenerate';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
+import sqlToIsoString from 'src/utils/sql/sqlToIsoString';
+
 import sqlPermissionInsertQuery from 'src/utils/sql/sqlPermissionInsertQuery';
 import update from 'src/utils/update';
 import { string, array, any } from 'valjs';
@@ -31,14 +33,27 @@ export default endpointCreate(
 
     const userIds = [...new Set(members).add(user_id)];
 
+    const memberString = `jsonb_build_object(
+      ${userIds.map(uId => `'${uId}', ${sqlToIsoString('now()')}`).join(', ')}
+    )`;
+
+    console.log(privacy, memberString);
+
     const [projectRes] = await transaction([
-      sqlInsertQuery('projects', {
-        owned_by,
-        title,
-        project_id: projectId,
-        created_by: user_id,
-        privacy
-      }),
+      sqlInsertQuery(
+        'projects',
+        {
+          owned_by,
+          title,
+          project_id: projectId,
+          created_by: user_id,
+          privacy,
+          members: privacy === 'private' ? memberString : null
+        },
+        {
+          dontPrepare: { members: true }
+        }
+      ),
       sqlInsertQuery('project_tasks', {
         project_id: projectId
       }),

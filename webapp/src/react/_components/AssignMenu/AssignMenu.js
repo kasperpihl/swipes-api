@@ -55,7 +55,15 @@ export default class AssignMenu extends PureComponent {
 
   render() {
     const { selectedIds } = this.state;
-    const { excludeMe, team, me, teamId, hide, hideRowOnSelect } = this.props;
+    const {
+      excludeMe,
+      team,
+      me,
+      teamId,
+      hide,
+      hideRowOnSelect,
+      title
+    } = this.props;
     const teamName = team ? team.get('name') : 'Personal';
     let users = team
       ? team
@@ -74,7 +82,7 @@ export default class AssignMenu extends PureComponent {
     return (
       <SW.Wrapper>
         <SW.OptionsRow>
-          <SW.TeamName>Choose from: {teamName}</SW.TeamName>
+          <SW.TeamName>{title || `Choose from: ${teamName}`}</SW.TeamName>
           {!hideRowOnSelect && !!selectedIds.length && (
             <SW.SelectedAmount>({selectedIds.length})</SW.SelectedAmount>
           )}

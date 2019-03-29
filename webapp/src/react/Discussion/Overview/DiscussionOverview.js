@@ -185,6 +185,7 @@ function DiscussionOverview({ tooltip, discussionId }) {
   const openAssignMenu = e => {
     contextMenu(AssignMenu, e, {
       excludeMe: true,
+      title: 'Add people',
       hideRowOnSelect: true,
       selectedIds: Object.keys(discussion.members),
       teamId: discussion.owned_by,
