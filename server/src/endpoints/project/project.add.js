@@ -37,8 +37,6 @@ export default endpointCreate(
       ${userIds.map(uId => `'${uId}', ${sqlToIsoString('now()')}`).join(', ')}
     )`;
 
-    console.log(privacy, memberString);
-
     const [projectRes] = await transaction([
       sqlInsertQuery(
         'projects',
