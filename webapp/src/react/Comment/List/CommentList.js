@@ -42,7 +42,7 @@ export default function CommentList({
     }
   });
 
-  const myLastRead = useMemo(() => discussion.followers[myId], []);
+  const myLastRead = useMemo(() => discussion.members[myId], []);
 
   useScrollComments(scrollRef, req.items);
 

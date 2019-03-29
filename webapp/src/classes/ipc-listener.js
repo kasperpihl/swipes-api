@@ -82,7 +82,7 @@ export default class IpcListener {
     ) {
       // Ensure I'm following the discussion.
       if (
-        !discussion.followers.filter(({ user_id }) => user_id === myId).length
+        !discussion.members.filter(({ user_id }) => user_id === myId).length
       ) {
         return;
       }

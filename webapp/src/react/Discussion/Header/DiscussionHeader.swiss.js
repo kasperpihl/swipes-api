@@ -34,7 +34,7 @@ export default styleSheet('DiscussionHeader', {
       marginTop: '-48px'
     }
   },
-  FollowerLabel: {
+  MemberLabel: {
     _flex: ['row', 'flex-start', 'center'],
     _textStyle: 'item',
     lineHeight: '24px',

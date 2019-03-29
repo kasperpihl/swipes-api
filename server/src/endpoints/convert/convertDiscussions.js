@@ -7,7 +7,7 @@ export default async function convertDiscussions({
   team_id,
   c,
   discussions,
-  followersByDiscussionId,
+  membersByDiscussionId,
   commentsByDiscussionId,
   filesById,
   notesById
@@ -19,9 +19,8 @@ export default async function convertDiscussions({
   for (let i = 0; i < discussions.length; i++) {
     const discussion = discussions[i];
     const comments = commentsByDiscussionId[discussion.id];
-    const followers = followersByDiscussionId[discussion.id];
-    if (!comments || !comments.length || !followers || !followers.length)
-      return;
+    const members = membersByDiscussionId[discussion.id];
+    if (!comments || !comments.length || !members || !members.length) return;
     const discussionId = idGenerate('C', 8, true);
     await c.query(
       sqlInsertQuery(
@@ -34,8 +33,8 @@ export default async function convertDiscussions({
           last_comment_at: discussion.last_comment_at,
           last_comment_by: discussion.last_comment_by,
           created_by: discussion.created_by,
-          followers: `jsonb_build_object(
-                ${followers
+          members: `jsonb_build_object(
+                ${members
                   .map(
                     f =>
                       `'${f.user_id}', '${new Date(f.read_at).toISOString()}'`
@@ -44,7 +43,7 @@ export default async function convertDiscussions({
               )`
         },
         {
-          dontPrepare: { followers: true }
+          dontPrepare: { members: true }
         }
       )
     );

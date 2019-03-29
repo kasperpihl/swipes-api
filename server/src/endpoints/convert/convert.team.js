@@ -29,7 +29,7 @@ export default endpointCreate(
     console.log('STARTING ' + team_id);
 
     const {
-      followersByDiscussionId,
+      membersByDiscussionId,
       commentsByDiscussionId,
       discussionsByContext,
       discussionsWithoutContext,
@@ -63,7 +63,7 @@ export default endpointCreate(
         filesById,
         notesById,
         commentsByDiscussionId,
-        followersByDiscussionId,
+        membersByDiscussionId,
         discussionsByContext
       });
 
@@ -75,14 +75,14 @@ export default endpointCreate(
         filesById,
         notesById,
         commentsByDiscussionId,
-        followersByDiscussionId,
+        membersByDiscussionId,
         discussionsByContext
       });
 
       await convertDiscussions({
         team_id,
         c,
-        followersByDiscussionId,
+        membersByDiscussionId,
         commentsByDiscussionId,
         discussions: discussionsWithoutContext,
         filesById,

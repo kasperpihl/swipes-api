@@ -13,12 +13,12 @@ export default function sqlOnboardingDiscussionQueries(teamId, userId) {
     last_comment_by: userId,
     last_comment: 'just created this discussion.',
     last_comment_at: 'now()',
-    followers: `jsonb_build_object('${userId}', ${sqlToIsoString('now()')})`
+    members: `jsonb_build_object('${userId}', ${sqlToIsoString('now()')})`
   }));
 
   return [
     sqlInsertQuery('discussions', discussions, {
-      dontPrepare: { followers: true }
+      dontPrepare: { members: true }
     }),
     ...discussions.map(d =>
       sqlPermissionInsertQuery(d.discussion_id, 'public', teamId)

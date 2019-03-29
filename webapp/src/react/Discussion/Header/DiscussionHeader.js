@@ -24,12 +24,12 @@ import request from 'core/utils/request';
 export default class DiscussionHeader extends PureComponent {
   onMouseEnter = e => {
     const { tooltip, discussion } = this.props;
-    if (!Object.keys(discussion.followers).length) return;
+    if (!Object.keys(discussion.members).length) return;
     tooltip({
       component: TooltipUsers,
       props: {
         teamId: discussion.owned_by,
-        userIds: Object.keys(discussion.followers),
+        userIds: Object.keys(discussion.members),
         size: 24
       },
       options: {
@@ -40,7 +40,7 @@ export default class DiscussionHeader extends PureComponent {
   };
   onMouseLeave = () => {
     const { tooltip, discussion } = this.props;
-    if (!Object.keys(discussion.followers).length) return;
+    if (!Object.keys(discussion.members).length) return;
     tooltip(null);
   };
   onTitleClick = e => {
@@ -70,7 +70,7 @@ export default class DiscussionHeader extends PureComponent {
     contextMenu(ListMenu, e, {
       onClick: this.onOptionClick,
       buttons: [
-        { title: discussion.followers[myId] ? 'Unfollow' : 'Follow' },
+        { title: discussion.members[myId] ? 'Unfollow' : 'Follow' },
         { title: 'Rename discussion' },
         { title: 'Delete discussion' }
       ]
@@ -91,7 +91,7 @@ export default class DiscussionHeader extends PureComponent {
 
     loader.set('following');
     let endpoint = 'discussion.follow';
-    if (discussion.followers[myId]) {
+    if (discussion.members[myId]) {
       endpoint = 'discussion.unfollow';
     }
     request(endpoint, {
@@ -131,7 +131,7 @@ export default class DiscussionHeader extends PureComponent {
 
     const subtitle = {
       ownedBy: discussion.owned_by,
-      members: Object.keys(discussion.followers),
+      members: Object.keys(discussion.members),
       privacy: 'public'
     };
 

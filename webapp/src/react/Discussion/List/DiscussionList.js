@@ -36,8 +36,8 @@ export default function DiscussionList({ type, onSelectItemId, selectedId }) {
       return req.mergeItem(update);
     }
     if (
-      (type === 'following' && update.followers[myId]) ||
-      (type === 'all other' && !update.followers[myId])
+      (type === 'following' && update.members[myId]) ||
+      (type === 'all other' && !update.members[myId])
     ) {
       req.fetchNew();
     }

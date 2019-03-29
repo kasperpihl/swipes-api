@@ -74,7 +74,7 @@ export default endpointCreate(
       {
         text: `
           UPDATE discussions
-          SET followers = followers || jsonb_build_object('${user_id}', ${sqlToIsoString(
+          SET members = members || jsonb_build_object('${user_id}', ${sqlToIsoString(
           'now()'
         )})
           WHERE owned_by = $1

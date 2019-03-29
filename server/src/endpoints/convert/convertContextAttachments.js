@@ -28,7 +28,7 @@ export default async function convertContextAttachments({
       title: milestone.title.slice(0, 254),
       owned_by: team_id,
       created_by: milestone.created_by,
-      followers: `jsonb_build_object(
+      members: `jsonb_build_object(
         ${team.active_users
           .map(user_id => `'${user_id}', '${new Date().toISOString()}'`)
           .join(', ')}
@@ -155,7 +155,7 @@ export default async function convertContextAttachments({
     // console.log(comments);
     await c.query(
       sqlInsertQuery('discussions', discussion, {
-        dontPrepare: { followers: true }
+        dontPrepare: { members: true }
       })
     );
     await c.query(sqlPermissionInsertQuery(discussionId, 'public', team_id));

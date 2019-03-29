@@ -70,10 +70,10 @@ export default endpointCreate(
         INNER JOIN discussions as d
         ON d.discussion_id = per.permission_from
         WHERE ${sqlCheckPermissions('per.granted_to', user_id)}
-        AND d.followers->>$1 IS NOT NULL
+        AND d.members->>$1 IS NOT NULL
         AND d.deleted=FALSE
-        AND d.followers->>$1 = 'n'
-        OR d.followers->>$1 < to_char(d.last_comment_at::timestamp at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"')
+        AND d.members->>$1 = 'n'
+        OR d.members->>$1 < to_char(d.last_comment_at::timestamp at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"')
       `,
       [user_id]
     );

@@ -25,27 +25,27 @@ export default class ModalCreate extends PureComponent {
       titleVal: '',
       privacy: 'public',
       ownedBy: undefined,
-      followers: fromJS([])
+      members: fromJS([])
     };
   }
 
   handleAssignClick = e => {
-    const { followers, ownedBy } = this.state;
+    const { members, ownedBy } = this.state;
 
     contextMenu(AssignMenu, e, {
       excludeMe: true,
-      selectedIds: followers,
+      selectedIds: members,
       teamId: ownedBy,
       onClose: this.handleAssignSelect
     });
   };
-  handleAssignSelect = followers => {
-    this.setState({ followers: fromJS(followers) });
+  handleAssignSelect = members => {
+    this.setState({ members: fromJS(members) });
   };
 
   handleCreate = async () => {
     const { hideModal, loader, myId, type, onSuccess } = this.props;
-    const { followers, titleVal, privacy, ownedBy } = this.state;
+    const { members, titleVal, privacy, ownedBy } = this.state;
 
     let endpoint = 'discussion.add';
     let analyticsEvent = 'Chat created';
@@ -54,7 +54,7 @@ export default class ModalCreate extends PureComponent {
       title: titleVal,
       owned_by: ownedBy,
       privacy,
-      followers: followers.toJS()
+      members: members.toJS()
     };
 
     loader.set('creating', 'Creating');
@@ -73,7 +73,7 @@ export default class ModalCreate extends PureComponent {
         window.analytics.sendEvent(analyticsEvent, {
           Privacy: privacy,
           'Owned By': ownedBy === myId ? 'Personal' : 'Company',
-          'Tagged people': followers.size
+          'Tagged people': members.size
         });
       } else {
         loader.error('creating', res.error, 3000);
@@ -84,7 +84,7 @@ export default class ModalCreate extends PureComponent {
   handleTeamChange = ownedBy => {
     this.setState({
       ownedBy,
-      followers: fromJS([])
+      members: fromJS([])
     });
   };
   handleTitleChange = e => {
@@ -125,7 +125,7 @@ export default class ModalCreate extends PureComponent {
     );
   }
   render() {
-    const { titleVal, ownedBy, followers, privacy } = this.state;
+    const { titleVal, ownedBy, members, privacy } = this.state;
     const { myId, loader, type } = this.props;
 
     let title = 'New Chat';
@@ -178,7 +178,7 @@ export default class ModalCreate extends PureComponent {
                 <FMSW.Label>Members</FMSW.Label>
                 <Spacing height={9} />
                 <Assignees
-                  userIds={followers}
+                  userIds={members}
                   teamId={ownedBy}
                   size={36}
                   maxImages={9}

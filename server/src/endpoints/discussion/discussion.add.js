@@ -11,7 +11,7 @@ const expectedInput = {
   title: string.min(1).require(),
   owned_by: string.require(),
   privacy: any.of('public', 'private'),
-  followers: array.of(string)
+  members: array.of(string)
 };
 
 export default endpointCreate(
@@ -24,16 +24,16 @@ export default endpointCreate(
     const { user_id } = res.locals;
     const {
       title,
-      followers = [],
+      members = [],
       owned_by,
       privacy = 'public'
     } = res.locals.input;
     const discussionId = idGenerate('C', 8, true);
 
-    const uniqueFollowers = [...new Set(followers).add(user_id)];
+    const uniqueMembers = [...new Set(members).add(user_id)];
 
-    const followerString = `jsonb_build_object(
-      ${uniqueFollowers
+    const memberString = `jsonb_build_object(
+      ${uniqueMembers
         .map(
           uId =>
             `'${uId}', ${uId === user_id ? sqlToIsoString('now()') : "'n'"}`
@@ -53,13 +53,13 @@ export default endpointCreate(
           last_comment: 'just created this discussion.',
           last_comment_at: 'now()',
           privacy,
-          followers: followerString
+          members: memberString
         },
         {
-          dontPrepare: { followers: true }
+          dontPrepare: { members: true }
         }
       ),
-      sqlPermissionInsertQuery(discussionId, privacy, owned_by, uniqueFollowers)
+      sqlPermissionInsertQuery(discussionId, privacy, owned_by, uniqueMembers)
     ]);
 
     res.locals.update = update.prepare(discussionId, [

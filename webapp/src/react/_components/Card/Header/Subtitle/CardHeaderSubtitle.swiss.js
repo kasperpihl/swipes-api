@@ -8,7 +8,7 @@ export default styleSheet('CardHeaderSubtitle', {
     userSelect: 'none'
   },
 
-  FollowerLabel: {
+  MemberLabel: {
     _flex: ['row', 'flex-start', 'center'],
     _textStyle: 'body',
     lineHeight: '24px',

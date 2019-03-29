@@ -1,7 +1,7 @@
 import { string } from 'valjs';
+import { transaction } from 'src/utils/db/db';
+
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
-import sqlToIsoString from 'src/utils/sql/sqlToIsoString';
-import { query } from 'src/utils/db/db';
 import update from 'src/utils/update';
 
 const expectedInput = {
@@ -13,24 +13,34 @@ export default endpointCreate(
     expectedInput,
     permissionKey: 'discussion_id'
   },
-  async (req, res) => {
+  async (req, res, next) => {
     // Get inputs
     const { user_id } = res.locals;
     const { discussion_id } = res.locals.input;
 
-    const discussionRes = await query(
-      `
+    const discussionRes = await transaction([
+      {
+        text: `
         UPDATE discussions
         SET
           updated_at = now(),
-          followers = followers || jsonb_build_object('${user_id}', ${sqlToIsoString(
-        'last_comment_at'
-      )})
+          members = jsonb_strip_nulls(
+            members || jsonb_build_object('${user_id}', null)
+          ) 
         WHERE discussion_id = $1
-        RETURNING followers, discussion_id
+        RETURNING members, discussion_id, last_comment_at
       `,
-      [discussion_id]
-    );
+        values: [discussion_id]
+      },
+      {
+        text: `
+          DELETE FROM permissions
+          WHERE permission_from = $1
+          AND granted_to = $2 
+        `,
+        values: [discussion_id, user_id]
+      }
+    ]);
 
     res.locals.update = update.prepare(discussion_id, [
       { type: 'discussion', data: discussionRes.rows[0] }

@@ -1,7 +1,7 @@
 import { string } from 'valjs';
-import { query } from 'src/utils/db/db';
-
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
+import sqlToIsoString from 'src/utils/sql/sqlToIsoString';
+import { query } from 'src/utils/db/db';
 import update from 'src/utils/update';
 
 const expectedInput = {
@@ -13,7 +13,7 @@ export default endpointCreate(
     expectedInput,
     permissionKey: 'discussion_id'
   },
-  async (req, res, next) => {
+  async (req, res) => {
     // Get inputs
     const { user_id } = res.locals;
     const { discussion_id } = res.locals.input;
@@ -23,11 +23,11 @@ export default endpointCreate(
         UPDATE discussions
         SET
           updated_at = now(),
-          followers = jsonb_strip_nulls(
-            followers || jsonb_build_object('${user_id}', null)
-          ) 
+          members = members || jsonb_build_object('${user_id}', ${sqlToIsoString(
+        'last_comment_at'
+      )})
         WHERE discussion_id = $1
-        RETURNING followers, discussion_id, last_comment_at
+        RETURNING members, discussion_id
       `,
       [discussion_id]
     );

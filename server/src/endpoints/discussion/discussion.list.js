@@ -32,12 +32,12 @@ export default endpointCreate(
 
     const discussionsRes = await query(
       `
-        SELECT d.discussion_id, d.title, d.owned_by, d.created_by, d.updated_at, d.last_comment, d.last_comment_at, d.last_comment_by, d.deleted, d.followers, d.privacy
+        SELECT d.discussion_id, d.title, d.owned_by, d.created_by, d.updated_at, d.last_comment, d.last_comment_at, d.last_comment_by, d.deleted, d.members, d.privacy
         FROM permissions as per
         INNER JOIN discussions as d
         ON d.discussion_id = per.permission_from
         WHERE ${sqlCheckPermissions('per.granted_to', user_id)}
-        AND d.followers->>$1 IS ${type === 'all other' ? 'NULL' : 'NOT NULL'}
+        AND d.members->>$1 IS ${type === 'all other' ? 'NULL' : 'NOT NULL'}
         AND d.deleted=FALSE
         ${pagination}
         ORDER BY d.last_comment_at DESC

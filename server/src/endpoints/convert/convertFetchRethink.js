@@ -80,18 +80,18 @@ export default async function convertFetchRethink({ team_id }) {
     commentsByDiscussionId[c.discussion_id].push(c);
   });
 
-  const followersByDiscussionId = {};
+  const membersByDiscussionId = {};
   _rFollowers.forEach(f => {
-    if (!followersByDiscussionId[f.discussion_id]) {
-      followersByDiscussionId[f.discussion_id] = [];
+    if (!membersByDiscussionId[f.discussion_id]) {
+      membersByDiscussionId[f.discussion_id] = [];
     }
-    followersByDiscussionId[f.discussion_id].push(f);
+    membersByDiscussionId[f.discussion_id].push(f);
   });
 
   console.log('FETCHED FROM RETHINKDB...');
 
   return {
-    followersByDiscussionId,
+    membersByDiscussionId,
     commentsByDiscussionId,
     discussionsByContext,
     discussionsWithoutContext,

@@ -48,13 +48,13 @@ function CardHeaderSubtitle({ subtitle, children, tooltip }) {
     <SW.Wrapper>
       <SW.TeamName>{teamGetBelonging(ownedBy)}</SW.TeamName>
       {members && privacy === 'private' && (
-        <SW.FollowerLabel
+        <SW.MemberLabel
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
           onClick={subtitle.onClick}
         >
           {`${members.length} member${members.length === 1 ? '' : 's'}`}
-        </SW.FollowerLabel>
+        </SW.MemberLabel>
       )}
       <SW.Actions>{children}</SW.Actions>
     </SW.Wrapper>

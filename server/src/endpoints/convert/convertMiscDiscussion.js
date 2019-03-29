@@ -24,7 +24,7 @@ export default async function convertMiscDiscussion({
     title: 'Misc',
     owned_by: team_id,
     created_by: team_id,
-    followers: `jsonb_build_object(
+    members: `jsonb_build_object(
         ${team.active_users
           .map(user_id => `'${user_id}', '${new Date().toISOString()}'`)
           .join(', ')}
@@ -142,7 +142,7 @@ export default async function convertMiscDiscussion({
   // console.log(comments);
   await c.query(
     sqlInsertQuery('discussions', discussion, {
-      dontPrepare: { followers: true }
+      dontPrepare: { members: true }
     })
   );
   await c.query(sqlPermissionInsertQuery(discussionId, 'public', team_id));

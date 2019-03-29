@@ -52,7 +52,7 @@ function DiscussionOverview({ tooltip, discussionId }) {
     },
     result => {
       const { discussion } = result;
-      const ts = discussion.followers[myId];
+      const ts = discussion.members[myId];
       if (ts === 'n' || ts < discussion.last_comment_at) {
         request('discussion.markAsRead', {
           read_at: discussion.last_comment_at,
@@ -83,12 +83,12 @@ function DiscussionOverview({ tooltip, discussionId }) {
 
   const onMouseEnter = e => {
     const { discussion } = req.result;
-    if (!Object.keys(discussion.followers).length) return;
+    if (!Object.keys(discussion.members).length) return;
     tooltip({
       component: TooltipUsers,
       props: {
         teamId: discussion.owned_by,
-        userIds: Object.keys(discussion.followers),
+        userIds: Object.keys(discussion.members),
         size: 24
       },
       options: {
@@ -99,7 +99,7 @@ function DiscussionOverview({ tooltip, discussionId }) {
   };
   const onMouseLeave = () => {
     const { discussion } = req.result;
-    if (!Object.keys(discussion.followers).length) return;
+    if (!Object.keys(discussion.members).length) return;
     tooltip(null);
   };
   const onTitleClick = e => {
@@ -127,7 +127,7 @@ function DiscussionOverview({ tooltip, discussionId }) {
   const openDiscussionOptions = e => {
     const { discussion } = req.result;
     const buttons = [
-      { title: discussion.followers[myId] ? 'Unfollow' : 'Follow' },
+      { title: discussion.members[myId] ? 'Unfollow' : 'Follow' },
       { title: 'Rename discussion' },
       { title: 'Delete discussion' }
     ];
@@ -151,7 +151,7 @@ function DiscussionOverview({ tooltip, discussionId }) {
 
     loader.set('following');
     let endpoint = 'discussion.follow';
-    if (discussion.followers[myId]) {
+    if (discussion.members[myId]) {
       endpoint = 'discussion.unfollow';
     }
     request(endpoint, {
@@ -187,7 +187,7 @@ function DiscussionOverview({ tooltip, discussionId }) {
     contextMenu(AssignMenu, e, {
       excludeMe: true,
       hideRowOnSelect: true,
-      selectedIds: Object.keys(discussion.followers),
+      selectedIds: Object.keys(discussion.members),
       teamId: ownedBy,
       onSelect: memberId => {
         request('discussion.addMember', {
@@ -207,7 +207,7 @@ function DiscussionOverview({ tooltip, discussionId }) {
 
   const subtitle = {
     ownedBy: discussion.owned_by,
-    members: Object.keys(discussion.followers),
+    members: Object.keys(discussion.members),
     privacy: discussion.privacy,
     onClick: openAssignMenu
   };

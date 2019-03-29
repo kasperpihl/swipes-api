@@ -16,16 +16,15 @@ export default memo(ProjectSide);
 function ProjectSide({ stateManager }) {
   const [sliderValue, setSliderValue] = useState(1);
 
-  const [followers, handleAssignSelect] = useState([]);
+  const [members, handleAssignSelect] = useState([]);
 
-  const [
-    totalAmountOfTasks,
-    completionPercentage,
-  ] = useProjectSlice(stateManager, clientState => [
-    clientState.get('sortedOrder').size,
-    clientState.get('completion_percentage'),
-  ]);
-
+  const [totalAmountOfTasks, completionPercentage] = useProjectSlice(
+    stateManager,
+    clientState => [
+      clientState.get('sortedOrder').size,
+      clientState.get('completion_percentage')
+    ]
+  );
 
   const handleSliderChange = value => {
     stateManager.expandHandler.setDepth(value - 1);
@@ -41,7 +40,7 @@ function ProjectSide({ stateManager }) {
     contextMenu(AssignMenu, e, {
       excludeMe: true,
       hideRowOnSelect: true,
-      selectedIds: followers,
+      selectedIds: members,
       teamId: ownedBy,
       onSelect: id => {
         console.log(id); // TODO: Add endpoint to add people to project

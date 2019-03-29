@@ -16,7 +16,7 @@ export default class DiscussionListItem extends PureComponent {
   render() {
     const { item, myId, selected, showTeam } = this.props;
 
-    const ts = item.followers[myId];
+    const ts = item.members[myId];
     const unread = ts === 'n' || ts < item.last_comment_at;
 
     return (

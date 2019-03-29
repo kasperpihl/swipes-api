@@ -10,7 +10,7 @@ const expectedInput = {
   title: string.min(1).require(),
   owned_by: string.require(),
   privacy: any.of('public', 'private'),
-  followers: array.of(string)
+  members: array.of(string)
 };
 
 export default endpointCreate(
@@ -23,13 +23,13 @@ export default endpointCreate(
     const {
       title,
       owned_by,
-      followers = [],
+      members = [],
       privacy = 'public'
     } = res.locals.input;
 
     const projectId = idGenerate('P', 8, true);
 
-    const userIds = [...new Set(followers).add(user_id)];
+    const userIds = [...new Set(members).add(user_id)];
 
     const [projectRes] = await transaction([
       sqlInsertQuery('projects', {
