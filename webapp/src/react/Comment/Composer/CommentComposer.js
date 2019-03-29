@@ -81,7 +81,7 @@ export default class CommentComposer extends PureComponent {
 
     request('comment.add', {
       discussion_id: discussionId,
-      attachments,
+      attachments: attachments.toJS(),
       message
     }).then(res => {
       if (res.ok) {
