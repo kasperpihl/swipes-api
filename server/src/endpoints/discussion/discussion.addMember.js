@@ -37,7 +37,7 @@ export default endpointCreate(
           UPDATE discussions
           SET
             updated_at = now(),
-            followers = followers || jsonb_build_object('${user_id}', ${sqlToIsoString(
+            followers = followers || jsonb_build_object('${target_user_id}', ${sqlToIsoString(
           'last_comment_at'
         )})
           WHERE discussion_id = $1
