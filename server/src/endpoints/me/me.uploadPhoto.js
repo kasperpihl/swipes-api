@@ -1,5 +1,5 @@
 import multer from 'multer';
-import sharp from 'sharp';
+// import sharp from 'sharp';
 import AWS from 'aws-sdk';
 import config from 'config';
 import fs from 'fs';
