@@ -150,9 +150,9 @@ function DiscussionOverview({ tooltip, discussionId }) {
     const { discussion } = req.result;
 
     loader.set('following');
-    let endpoint = 'discussion.follow';
+    let endpoint = 'discussion.join';
     if (discussion.members[myId]) {
-      endpoint = 'discussion.unfollow';
+      endpoint = 'discussion.leave';
     }
     request(endpoint, {
       discussion_id: discussion.discussion_id
@@ -168,30 +168,29 @@ function DiscussionOverview({ tooltip, discussionId }) {
         'This will delete the discussion permanently and cannot be undone.',
       onConfirm: () => {
         loader.set('dots');
-        // request('discussion.delete', {
-        //   discussion_id: discussion.discussion_id
-        // }).then(res => {
-        //   if (res.ok) {
-        //     window.analytics.sendEvent('Discussion archived', {});
-        //   }
-        //   if (!res || !res.ok) {
-        //     loader.error('dots', res.error, 3000);
-        //   }
-        // }); TODO: Wire up correct endpoint once it's fixed by Kasper
+        request('discussion.archive', {
+          discussion_id: discussion.discussion_id
+        }).then(res => {
+          if (res.ok) {
+            window.analytics.sendEvent('Discussion archived', {});
+          }
+          if (!res || !res.ok) {
+            loader.error('dots', res.error, 3000);
+          }
+        });
       }
     });
   };
 
   const openAssignMenu = e => {
-    const { ownedBy, id } = subtitle;
     contextMenu(AssignMenu, e, {
       excludeMe: true,
       hideRowOnSelect: true,
       selectedIds: Object.keys(discussion.members),
-      teamId: ownedBy,
+      teamId: discussion.owned_by,
       onSelect: memberId => {
         request('discussion.addMember', {
-          discussion_id: id,
+          discussion_id: discussion.discussion_id,
           target_user_id: memberId
         });
       }
