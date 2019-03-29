@@ -13,6 +13,8 @@ import useMyId from 'core/react/_hooks/useMyId';
 import useLocalStorageCache from 'src/react/_hooks/useLocalStorageCache';
 import useLoader from 'src/react/_hooks/useLoader';
 import ListMenu from '_shared/ListMenu/ListMenu.js';
+import AssignMenu from '_shared/AssignMenu/AssignMenu';
+import FormModal from '_shared/FormModal/FormModal';
 import contextMenu from 'src/utils/contextMenu';
 
 import SW from './DiscussionOverview.swiss';
@@ -124,23 +126,24 @@ function DiscussionOverview({ tooltip, discussionId }) {
   };
   const openDiscussionOptions = e => {
     const { discussion } = req.result;
+    const buttons = [
+      { title: discussion.followers[myId] ? 'Unfollow' : 'Follow' },
+      { title: 'Rename discussion' },
+      { title: 'Delete discussion' }
+    ];
     contextMenu(ListMenu, e, {
       onClick: onOptionClick,
-      buttons: [
-        { title: discussion.followers[myId] ? 'Unfollow' : 'Follow' },
-        { title: 'Rename discussion' },
-        { title: 'Delete discussion' }
-      ]
+      buttons
     });
   };
 
   const onOptionClick = (i, e) => {
     if (e.title === 'Unfollow' || e.title === 'Follow') {
-      this.onFollowClick();
+      onFollowClick();
     } else if (e.title === 'Delete discussion') {
-      this.onArchiveClick();
+      onArchiveClick();
     } else if (e.title === 'Rename discussion') {
-      this.onTitleClick();
+      onTitleClick();
     }
   };
   const onFollowClick = () => {
@@ -179,16 +182,34 @@ function DiscussionOverview({ tooltip, discussionId }) {
     });
   };
 
+  const openAssignMenu = e => {
+    const { ownedBy, id } = subtitle;
+    contextMenu(AssignMenu, e, {
+      excludeMe: true,
+      hideRowOnSelect: true,
+      selectedIds: Object.keys(discussion.followers),
+      teamId: ownedBy,
+      onSelect: memberId => {
+        request('discussion.addMember', {
+          discussion_id: id,
+          target_user_id: memberId
+        });
+      }
+    });
+  };
+
   const handleUnload = (message, attachments) => {
     saveMessage(message || null);
     saveAttachments(attachments.size ? attachments.toJS() : null);
   };
+
   const { discussion } = req.result;
 
   const subtitle = {
     ownedBy: discussion.owned_by,
     members: Object.keys(discussion.followers),
-    privacy: 'public'
+    privacy: discussion.privacy,
+    onClick: openAssignMenu
   };
 
   return (

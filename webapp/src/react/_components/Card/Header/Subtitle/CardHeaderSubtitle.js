@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import * as mainActions from 'src/redux/main/mainActions';
 import teamGetBelonging from 'core/utils/team/teamGetBelonging';
 import TooltipUsers from 'src/react/_components/TooltipUsers/TooltipUsers';
+
 import SW from './CardHeaderSubtitle.swiss';
 
 export default connect(
@@ -37,6 +38,7 @@ function CardHeaderSubtitle({ subtitle, children, tooltip }) {
       }
     });
   };
+
   const onMouseLeave = () => {
     if (!members || !members.length) return;
     tooltip(null);
@@ -49,8 +51,9 @@ function CardHeaderSubtitle({ subtitle, children, tooltip }) {
         <SW.FollowerLabel
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
+          onClick={subtitle.onClick}
         >
-          {`${members.length} follower${members.length === 1 ? '' : 's'}`}
+          {`${members.length} member${members.length === 1 ? '' : 's'}`}
         </SW.FollowerLabel>
       )}
       <SW.Actions>{children}</SW.Actions>

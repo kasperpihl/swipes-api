@@ -34,7 +34,6 @@ export default class CommentReaction extends PureComponent {
   }
   doILike = () => {
     const { optimist, reactions, myId } = this.props;
-    console.log(!!reactions[myId]);
     return optimist.get('like', !!reactions[myId]);
   };
   onReaction = () => {

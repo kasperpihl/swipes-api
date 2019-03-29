@@ -1,5 +1,6 @@
 import React, { memo, useState, useEffect } from 'react';
 import { ProjectContext } from 'src/react/contexts';
+import { connect } from 'react-redux';
 
 import Loader from 'src/react/_components/loaders/Loader';
 import CardContent from 'src/react/_components/Card/Content/CardContent';
@@ -31,9 +32,11 @@ import SW from './ProjectOverview.swiss';
 
 ProjectOverview.sizes = [750];
 
-export default memo(ProjectOverview);
+export default connect(state => ({
+  state
+}))(memo(ProjectOverview));
 
-function ProjectOverview({ projectId }) {
+function ProjectOverview({ projectId, state }) {
   const nav = useNav();
   const myId = useMyId();
   const stateManager = useSyncedProject(projectId);
@@ -42,11 +45,12 @@ function ProjectOverview({ projectId }) {
   const [showOnlyMe, setShowOnlyMe] = useState(false);
   const [hideCompleted, setHideCompleted] = useState(false);
 
-  const [projectTitle, maxIndention] = useProjectSlice(
+  const [projectTitle, maxIndention, privacy] = useProjectSlice(
     stateManager,
     (clientState, localState) => [
       clientState.get('title'),
-      localState.get('maxIndention')
+      localState.get('maxIndention'),
+      clientState.get('privacy')
     ]
   );
 
@@ -77,8 +81,8 @@ function ProjectOverview({ projectId }) {
 
   const subtitle = {
     ownedBy: stateManager.getClientState().get('owned_by'),
-    members: ['me'], // TODO: Wire up members for project header
-    privacy: 'public'
+    members: ['me'],
+    privacy
   };
 
   const callbackDeleteProject = () => {

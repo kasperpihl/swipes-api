@@ -55,7 +55,7 @@ export default function PaginationScrollToMore({ req, errorLabel }) {
       loader.set('more');
 
       const res = await req.fetchNext();
-      console.log(res);
+      // console.log(res);
       if (!res || res.ok) {
         loader.clear('more');
       } else {

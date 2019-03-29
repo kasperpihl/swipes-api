@@ -38,9 +38,6 @@ export default styleSheet('DiscussionListItem', {
     _textStyle: 'caption',
     _flex: ['row', 'center', 'center'],
     flex: 'none',
-    // position: 'absolute',
-    // top: '9px',
-    // right: '25px',
     color: '$sw2'
   },
   TeamName: {
@@ -52,8 +49,8 @@ export default styleSheet('DiscussionListItem', {
     opacity: '0',
     visibility: 'hidden',
     position: 'absolute',
-    top: '10px',
-    left: '14px',
+    top: '13px',
+    left: '-15px',
     borderRadius: '50%',
     backgroundColor: '$blue',
     unread: {
