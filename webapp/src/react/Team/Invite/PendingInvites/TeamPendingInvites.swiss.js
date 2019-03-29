@@ -6,7 +6,7 @@ export default styleSheet('TeamPendingInvites', {
   Wrapper: {
     _size: ['100%', 'auto'],
     _flex: ['column', 'flex-start', 'flex-start'],
-    marginTop: '24px'
+    margin: '24px 18px 0 36px'
   },
 
   SectionTitle: {

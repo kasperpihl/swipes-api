@@ -1,5 +1,5 @@
 import { styleSheet } from 'swiss-react';
-import Button from 'src/react/_components/Button/Button';
+import Button from '_shared/Button/Button';
 
 export default styleSheet('TeamInviteInput', {
   Wrapper: {
@@ -17,7 +17,8 @@ export default styleSheet('TeamInviteInput', {
   },
 
   InputWrapper: {
-    _flex: ['row', 'flex-start', 'center']
+    _flex: ['row', 'flex-start', 'center'],
+    width: '100%'
   },
 
   EmailInput: {
@@ -28,11 +29,8 @@ export default styleSheet('TeamInviteInput', {
     padding: '6px'
   },
 
-  SendButton: {
+  Button: {
     _el: Button,
-    border: '1px solid $sw3',
-    borderRadius: '300px',
-    overflow: 'hidden',
     marginLeft: '12px'
   }
 });

@@ -2,7 +2,7 @@ import { styleSheet } from 'swiss-react';
 
 export default styleSheet('ModalCreate', {
   Wrapper: {
-    _size: ['450px', '480px'],
+    _size: ['450px', '500px'],
     _flex: ['column', 'flex-start', 'flex-start']
   },
 

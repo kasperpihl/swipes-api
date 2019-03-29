@@ -67,11 +67,13 @@ export default class TeamPendingInvites extends PureComponent {
                   title="Resend"
                   onClick={() => this.handleSendInviteCached(email)}
                   status={loader.get(`${email}sendInvite`)}
+                  border
                 />
                 <SW.EmailButton
                   title="Revoke"
                   onClick={() => this.handleRevokeInviteCached(email)}
                   status={loader.get(`${email}revokeInvite`)}
+                  border
                 />
               </SW.InviteItem>
             ))

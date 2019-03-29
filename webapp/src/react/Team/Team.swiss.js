@@ -5,7 +5,7 @@ import TabBar from 'src/react/_components/TabBar/TabBar';
 export default styleSheet('Team', {
   Wrapper: {
     _size: ['100%', 'auto'],
-    _flex: ['row'],
+    _flex: ['row', 'center', 'top'],
     flexWrap: 'wrap'
   },
 

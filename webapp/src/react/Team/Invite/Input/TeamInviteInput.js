@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
+
 import useLoader from 'src/react/_hooks/useLoader';
 import request from 'core/utils/request';
+
+import InputText from '_shared/Input/Text/InputText';
+
 import SW from './TeamInviteInput.swiss';
 
 export default function TeamInviteInput({ teamId }) {
@@ -24,7 +28,7 @@ export default function TeamInviteInput({ teamId }) {
     });
   };
 
-  const handleKeyUp = e => {
+  const handleKeyDown = e => {
     if (e.keyCode === 13) {
       e.preventDefault();
       handleSendInvite();
@@ -35,18 +39,19 @@ export default function TeamInviteInput({ teamId }) {
     <SW.Wrapper>
       <SW.InviteText>Invite others to join</SW.InviteText>
       <SW.InputWrapper>
-        <SW.EmailInput
+        <InputText
           type="email"
           placeholder="Email"
           autoFocus
           onChange={handleEmailChange}
           value={emailValue}
-          onKeyUp={handleKeyUp}
+          onKeyDown={handleKeyDown}
         />
-        <SW.SendButton
+        <SW.Button
           title="Send Invite"
           onClick={handleSendInvite}
           status={loader.get('sendInvite')}
+          border
         />
       </SW.InputWrapper>
     </SW.Wrapper>

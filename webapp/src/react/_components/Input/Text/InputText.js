@@ -7,6 +7,8 @@ export default function InputText({
   placeholder,
   onChange,
   onKeyDown,
+  onFocus,
+  onBlur,
   value,
   ...rest
 }) {
@@ -17,6 +19,8 @@ export default function InputText({
       onKeyDown={onKeyDown}
       value={value}
       onChange={onChange}
+      onFocus={onFocus}
+      onBlur={onBlur}
       {...rest}
     />
   );

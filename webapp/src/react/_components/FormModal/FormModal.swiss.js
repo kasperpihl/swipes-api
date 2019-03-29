@@ -8,7 +8,8 @@ export default styleSheet('FormModal', {
     padding: '18px',
 
     create: {
-      _size: '100%'
+      _size: ['100%', 'auto'],
+      minHeight: '500px'
     }
   },
 
