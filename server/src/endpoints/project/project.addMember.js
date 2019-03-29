@@ -24,12 +24,12 @@ export default endpointCreate(
       `SELECT privacy, owned_by FROM projects WHERE project_id = $1`,
       [project_id]
     );
+    const proj = projectRes.rows[0];
 
     // Check that target user exists and is not owner.
-    await userTeamCheck(target_user_id, disc.owned_by);
+    await userTeamCheck(target_user_id, proj.owned_by);
 
-    const disc = projectRes.rows[0];
-    if (disc.privacy === 'public') {
+    if (proj.privacy === 'public') {
       throw Error('Project is public').toClient();
     }
 
@@ -47,7 +47,7 @@ export default endpointCreate(
         `,
         values: [project_id]
       },
-      sqlPermissionInsertQuery(project_id, disc.privacy, disc.owned_by, [
+      sqlPermissionInsertQuery(project_id, proj.privacy, proj.owned_by, [
         target_user_id
       ])
     ]);

@@ -18,7 +18,6 @@ export default endpointCreate(
   },
   async (req, res) => {
     // Get inputs
-    const { user_id } = res.locals;
     const { discussion_id, target_user_id } = res.locals.input;
 
     const discussionRes = await query(
