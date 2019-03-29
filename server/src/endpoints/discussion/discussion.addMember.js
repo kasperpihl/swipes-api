@@ -2,6 +2,7 @@ import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import sqlToIsoString from 'src/utils/sql/sqlToIsoString';
 import userTeamCheck from 'src/utils/userTeamCheck';
+import sqlPermissionInsertQuery from 'src/utils/sql/sqlPermissionInsertQuery';
 import { query } from 'src/utils/db/db';
 import update from 'src/utils/update';
 
