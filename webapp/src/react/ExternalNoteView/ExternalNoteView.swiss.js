@@ -1,10 +1,16 @@
-import { styleSheet } from 'swiss-react';
+import { styleSheet, addGlobalStyles } from 'swiss-react';
+
+addGlobalStyles({
+  'body, html': {
+    height: 'auto !important',
+    overflow: 'auto !important'
+  }
+});
 
 export default styleSheet('ExternalNoteView', {
   Wrapper: {
     padding: '0 15px',
-    _size: ['100%'],
-    overflowY: 'auto'
+    _size: ['100%']
   },
   Loading: {
     position: 'absolute',
