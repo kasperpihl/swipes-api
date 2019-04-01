@@ -2,27 +2,28 @@ import React, { useState, useRef } from 'react';
 import { connect } from 'react-redux';
 
 import * as mainActions from 'src/redux/main/mainActions';
-import CardHeader from 'src/react/_components/Card/Header/CardHeader';
-import Button from '_shared/Button/Button';
-import CommentComposer from 'src/react/Comment/Composer/CommentComposer';
-import CommentList from 'src/react/Comment/List/CommentList';
-import CardContent from 'src/react/_components/Card/Content/CardContent';
+
+import request from 'core/utils/request';
+import contextMenu from 'src/utils/contextMenu';
+
 import useUpdate from 'core/react/_hooks/useUpdate';
 import useNav from 'src/react/_hooks/useNav';
 import useMyId from 'core/react/_hooks/useMyId';
 import useLocalStorageCache from 'src/react/_hooks/useLocalStorageCache';
 import useLoader from 'src/react/_hooks/useLoader';
-import ListMenu from '_shared/ListMenu/ListMenu.js';
-import AssignMenu from '_shared/AssignMenu/AssignMenu';
-import FormModal from '_shared/FormModal/FormModal';
-import contextMenu from 'src/utils/contextMenu';
-
-import SW from './DiscussionOverview.swiss';
-
-import request from 'core/utils/request';
 import useRequest from 'core/react/_hooks/useRequest';
 
-import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
+import CardHeader from '_shared/Card/Header/CardHeader';
+import CommentComposer from 'src/react/Comment/Composer/CommentComposer';
+import CommentList from 'src/react/Comment/List/CommentList';
+import CardContent from '_shared/Card/Content/CardContent';
+import ListMenu from '_shared/ListMenu/ListMenu.js';
+import Button from '_shared/Button/Button';
+import AssignMenu from '_shared/AssignMenu/AssignMenu';
+import RequestLoader from '_shared/RequestLoader/RequestLoader';
+import FormModal from '_shared/FormModal/FormModal';
+
+import SW from './DiscussionOverview.swiss';
 
 export default connect(
   null,
@@ -79,28 +80,6 @@ function DiscussionOverview({ tooltip, discussionId }) {
   const handleSendMessage = () => {
     const el = scrollRef.current;
     el.scrollTop = el.scrollHeight - el.clientHeight;
-  };
-
-  const onMouseEnter = e => {
-    const { discussion } = req.result;
-    if (!Object.keys(discussion.members).length) return;
-    tooltip({
-      component: TooltipUsers,
-      props: {
-        teamId: discussion.owned_by,
-        userIds: Object.keys(discussion.members),
-        size: 24
-      },
-      options: {
-        boundingRect: e.target.getBoundingClientRect(),
-        position: 'right'
-      }
-    });
-  };
-  const onMouseLeave = () => {
-    const { discussion } = req.result;
-    if (!Object.keys(discussion.members).length) return;
-    tooltip(null);
   };
   const onTitleClick = e => {
     const { discussion } = req.result;

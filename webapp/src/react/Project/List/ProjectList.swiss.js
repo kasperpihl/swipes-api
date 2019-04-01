@@ -6,6 +6,10 @@ export default styleSheet('ProjectList', {
     _size: '100%',
     paddingLeft: '36px',
     paddingRight: '9px',
+
+    empty: {
+      _flex: ['column', 'center', 'center']
+    }
   },
 
   Name: {
@@ -33,9 +37,6 @@ export default styleSheet('ProjectList', {
 
   EmptyState: {
     _el: EmptyState,
-    position: 'absolute',
-    top: '45%',
-    left: '50%',
-    transform: 'translateX(-50%) translateY(-50%)'
+    marginBottom: '24px'
   }
 });

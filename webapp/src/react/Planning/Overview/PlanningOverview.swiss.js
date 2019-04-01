@@ -21,12 +21,12 @@ export default styleSheet('PlanningOverview', {
     '&::-webkit-scrollbar': {
       '-webkit-appearance': 'none',
       width: '6px',
-      backgroundColor: 'transparent',
+      backgroundColor: 'transparent'
     },
 
     '&::-webkit-scrollbar-thumb': {
       backgroundColor: '$sw3',
-      borderRadius: '3px',
+      borderRadius: '3px'
     }
   },
 
@@ -42,6 +42,7 @@ export default styleSheet('PlanningOverview', {
   },
 
   EmptyStateWrapper: {
-    _flex: ['column', 'center', 'center']
+    _flex: ['column', 'center', 'center'],
+    height: '100%'
   }
 });

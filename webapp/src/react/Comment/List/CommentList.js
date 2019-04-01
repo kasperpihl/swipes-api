@@ -54,8 +54,13 @@ export default function CommentList({
     return (
       <SW.EmptyState
         showIcon
-        title="IT’S STILL AND QUIET"
-        description={`Whenever someone comments on this discussion \n it will show up here.`}
+        title={attachmentsOnly ? 'No files here' : 'IT’S STILL AND QUIET'}
+        description={
+          attachmentsOnly
+            ? 'Seems like no one has attached any files yet.'
+            : `Start the conversation by writing a message,
+        attaching a file or sending a gif.`
+        }
       />
     );
   }

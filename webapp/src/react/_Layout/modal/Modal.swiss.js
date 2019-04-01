@@ -21,6 +21,11 @@ export default styleSheet('Modal', {
       boxShadow: '0 1px 20px 3px rgba($sw1  ,0.1)',
       background: '$base',
       borderRadius: '6px'
+    },
+
+    clickDisabled: {
+      pointerEvents: 'none',
+      userSelect: 'none'
     }
   }
 });

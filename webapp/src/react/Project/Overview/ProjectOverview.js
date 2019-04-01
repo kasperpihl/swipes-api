@@ -45,12 +45,13 @@ function ProjectOverview({ projectId, state }) {
   const [showOnlyMe, setShowOnlyMe] = useState(false);
   const [hideCompleted, setHideCompleted] = useState(false);
 
-  const [projectTitle, maxIndention, privacy] = useProjectSlice(
+  const [projectTitle, maxIndention, privacy, members] = useProjectSlice(
     stateManager,
     (clientState, localState) => [
       clientState.get('title'),
       localState.get('maxIndention'),
-      clientState.get('privacy')
+      clientState.get('privacy'),
+      clientState.get('members')
     ]
   );
 
@@ -79,9 +80,13 @@ function ProjectOverview({ projectId, state }) {
     return <Loader center />;
   }
 
+  let assignedMembers = [];
+  if (!!members) {
+    assignedMembers = Object.keys(members.toObject());
+  }
   const subtitle = {
     ownedBy: stateManager.getClientState().get('owned_by'),
-    members: ['me'],
+    members: assignedMembers,
     privacy
   };
 

@@ -76,11 +76,16 @@ export default function ProjectList({ openAdd }) {
           </CardHeader>
         }
       >
-        <SW.Wrapper>
+        <SW.Wrapper empty>
           <SW.EmptyState
-            showIcon
-            title="IT’S STILL AND QUIET"
-            description={`Whenever someone creates a project \n it will show up here.`}
+            icon="Typewriter"
+            title="No Projects"
+            description={`Create a new project and write down your tasks.`}
+          />
+          <Button
+            title="Add a project"
+            icon="CircledPlus"
+            onClick={handleNewProject}
           />
         </SW.Wrapper>
       </CardContent>
@@ -94,7 +99,7 @@ export default function ProjectList({ openAdd }) {
         <>
           <CardHeader padding={18} title="Projects">
             <Button icon="CircledPlus" onClick={handleNewProject} />
-          </CardHeader>{' '}
+          </CardHeader>
           <Spacing height={24} />
           <SectionHeader discussion>
             <SW.Name>Name</SW.Name>

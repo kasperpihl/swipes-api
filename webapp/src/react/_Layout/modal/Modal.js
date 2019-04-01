@@ -5,7 +5,8 @@ import SW from './Modal.swiss';
 
 export default connect(
   (state, props) => ({
-    modal: state.main.getIn(['modals', props.side])
+    modal: state.main.getIn(['modals', props.side]),
+    clickDisabled: state.main
   }),
   {
     clear: mainActions.modal
@@ -14,7 +15,11 @@ export default connect(
 
 function Modal({ modal, clear, side }) {
   const hideModal = () => {
-    clear(side);
+    if (modal.props.clickDisabled) {
+      return;
+    } else {
+      clear(side);
+    }
   };
 
   useEffect(() => {

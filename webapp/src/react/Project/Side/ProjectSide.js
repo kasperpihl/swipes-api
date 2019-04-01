@@ -2,48 +2,48 @@ import React, { useState, useEffect, memo } from 'react';
 import useProjectSlice from 'core/react/_hooks/useProjectSlice';
 import contextMenu from 'src/utils/contextMenu';
 import successGradient from 'src/utils/successGradient';
+import request from 'core/utils/request';
 
 import AssignMenu from '_shared/AssignMenu/AssignMenu';
 import SideHeader from '_shared/SideHeader/SideHeader';
 import ProgressBar from '_shared/ProgressBar/ProgressBar';
 import Spacing from '_shared/Spacing/Spacing';
-import Stepper from '_shared/Stepper/Stepper';
 
 import SW from './ProjectSide.swiss';
 
 export default memo(ProjectSide);
 
 function ProjectSide({ stateManager }) {
-  const [sliderValue, setSliderValue] = useState(1);
-
-  const [members, handleAssignSelect] = useState([]);
-
-  const [totalAmountOfTasks, completionPercentage] = useProjectSlice(
-    stateManager,
-    clientState => [
-      clientState.get('sortedOrder').size,
-      clientState.get('completion_percentage')
-    ]
-  );
-
-  const handleSliderChange = value => {
-    stateManager.expandHandler.setDepth(value - 1);
-    setSliderValue(value);
-  };
+  const [
+    totalAmountOfTasks,
+    completionPercentage,
+    members,
+    ownedBy,
+    projectId
+  ] = useProjectSlice(stateManager, clientState => [
+    clientState.get('sortedOrder').size,
+    clientState.get('completion_percentage'),
+    clientState.get('members'),
+    clientState.get('owned_by'),
+    clientState.get('project_id')
+  ]);
 
   const completedTasksAmount = Math.round(
     (completionPercentage / 100) * totalAmountOfTasks
   );
 
   const openAssignMenu = e => {
-    const ownedBy = stateManager.getClientState().get('owned_by');
+    const assignedMembers = members.toObject();
     contextMenu(AssignMenu, e, {
       excludeMe: true,
       hideRowOnSelect: true,
-      selectedIds: members,
+      selectedIds: Object.keys(assignedMembers),
       teamId: ownedBy,
       onSelect: id => {
-        console.log(id); // TODO: Add endpoint to add people to project
+        request('project.addMember', {
+          project_id: projectId,
+          target_user_id: id
+        });
       }
     });
   };
