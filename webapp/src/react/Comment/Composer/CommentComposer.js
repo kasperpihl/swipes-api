@@ -21,7 +21,8 @@ export default class CommentComposer extends PureComponent {
     super(props);
     this.state = {
       attachments: List(props.initialAttachments || []),
-      commentVal: props.initialMessage || ''
+      commentVal: props.initialMessage || '',
+      cursorIndex: 0
     };
   }
   componentDidMount() {
@@ -117,7 +118,14 @@ export default class CommentComposer extends PureComponent {
   };
 
   selectEmoji = emoji => {
-    this.setState({ commentVal: this.state.commentVal + emoji.native });
+    const newString =
+      this.state.commentVal.substring(0, this.state.cursorIndex) +
+      emoji.native +
+      this.state.commentVal.substring(
+        this.state.cursorIndex,
+        this.state.commentVal.length
+      );
+    this.setState({ commentVal: newString });
   };
 
   openGiphySelector = e => {
@@ -133,6 +141,13 @@ export default class CommentComposer extends PureComponent {
       },w:${entry.images.downsized.width}>`
     );
     contextMenu(null);
+  };
+
+  handleOnChange = e => {
+    this.setState({
+      commentVal: e.target.value,
+      cursorIndex: e.target.selectionStart
+    });
   };
 
   renderAttachments() {
@@ -173,7 +188,7 @@ export default class CommentComposer extends PureComponent {
               maxRows={8}
               value={commentVal}
               autoFocus
-              onChange={e => this.setState({ commentVal: e.target.value })}
+              onChange={this.handleOnChange}
             />
             <SW.ButtonWrapper>
               <AttachButton onAttach={this.handleAttach} ownedBy={ownedBy} />

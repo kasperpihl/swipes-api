@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useRef, useLayoutEffect } from 'react';
 import RequestLoader from '_shared/RequestLoader/RequestLoader';
 import PlanningModal from 'src/react/Planning/Modal/PlanningModal';
 import useRequest from 'core/react/_hooks/useRequest';
@@ -65,13 +65,24 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
     updatePlanningState
   ] = usePlanningState();
 
-  const handleScroll = e => {
-    if (e.target && e.target.scrollTop > 56) {
-      setBorderVisible(true);
-    } else {
-      setBorderVisible(false);
-    }
-  };
+  // const handleScroll = e => {
+  //   if (e.target && e.target.scrollTop > 56) {
+  //     setBorderVisible(true);
+  //   } else {
+  //     setBorderVisible(false);
+  //   }
+  // };
+
+  const scrollWrapper = useRef();
+
+  useLayoutEffect(() => {
+    // if (scrollWrapper.current.scrollTop > 56) {
+    //   setBorderVisible(true);
+    // }
+    console.log(scrollWrapper.current);
+  }, []);
+
+  console.log('render');
 
   let actions = [];
   if (!editingId) {
@@ -175,8 +186,9 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
   return (
     <SW.Wrapper>
       <SW.ScrollableWrapper
-        onScroll={handleScroll}
+        // onScroll={handleScroll}
         borderVisible={borderVisible}
+        innerRef={c => (scrollWrapper.current = c)}
       >
         <PlanningList
           tasks={req.result.tasks}

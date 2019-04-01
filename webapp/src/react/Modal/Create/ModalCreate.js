@@ -57,8 +57,6 @@ export default class ModalCreate extends PureComponent {
       members: members.toJS()
     };
 
-    console.log(members);
-
     loader.set('creating', 'Creating');
 
     if (type === 'project') {
