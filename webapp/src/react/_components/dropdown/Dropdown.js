@@ -10,9 +10,13 @@ export default function Dropdown({ rounded, items, onChange }) {
   };
 
   const handleRowClick = key => {
-    handleRowChange(key);
-    onChange(key);
-    toggleDropdown();
+    if (key === selectedRow) {
+      toggleDropdown();
+    } else {
+      handleRowChange(key);
+      onChange(key);
+      toggleDropdown();
+    }
   };
 
   return (
