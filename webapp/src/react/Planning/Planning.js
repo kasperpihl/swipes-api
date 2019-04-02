@@ -1,8 +1,7 @@
 import React, { useMemo, useState, useReducer } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import SW from './Planning.swiss';
-
+import timeGetDefaultWeekYear from 'core/utils/time/timeGetDefaultWeekYear';
 import useTeamTabs from './useTeamTabs';
 import CardHeader from '_shared/Card/Header/CardHeader';
 import CardContent from '_shared/Card/Content/CardContent';
@@ -12,22 +11,16 @@ import PlanningOverview from './Overview/PlanningOverview';
 import Button from '_shared/Button/Button';
 import TabBar from '_shared/TabBar/TabBar';
 import PlanningContext from './PlanningContext';
+import SW from './Planning.swiss';
 
 export default connect(state => ({
   teams: state.teams
 }))(Planning);
 
 function Planning({ teams, initialYearWeek }) {
-  const defaultYearWeek = useMemo(() => {
-    const now = moment();
-    let year = now.year();
-    // Ensure working when week 1 starts in december.
-    if (now.month() === 12 && now.week() < 4) {
-      year = year + 1;
-    }
-    return `${year}-${now.week()}`;
-  }, []);
-  const [yearWeek, setYearWeek] = useState(initialYearWeek || defaultYearWeek);
+  const [yearWeek, setYearWeek] = useState(
+    initialYearWeek || timeGetDefaultWeekYear()
+  );
 
   const [tabs, tabIndex, setTabIndex] = useTeamTabs(teams);
 
