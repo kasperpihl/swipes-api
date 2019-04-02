@@ -22,7 +22,8 @@ export default class CommentComposer extends PureComponent {
     this.state = {
       attachments: List(props.initialAttachments || []),
       commentVal: props.initialMessage || '',
-      cursorIndex: 0
+      cursorIndex: 0,
+      attachmentLoadingStatus: ''
     };
   }
   componentDidMount() {
@@ -67,9 +68,9 @@ export default class CommentComposer extends PureComponent {
     });
   };
   handleAddComment = message => {
-    const { attachments, commentVal } = this.state;
+    const { attachments, commentVal, attachmentLoadingStatus } = this.state;
     const { discussionId, editCommentId, onSuccess } = this.props;
-    if (!message) {
+    if (!message || attachmentLoadingStatus === 'loading') {
       return;
     }
     if (editCommentId) {
@@ -77,7 +78,8 @@ export default class CommentComposer extends PureComponent {
     }
     this.setState({
       attachments: List([]),
-      commentVal: ''
+      commentVal: '',
+      attachmentLoadingStatus: ''
     });
 
     request('comment.add', {
@@ -109,6 +111,9 @@ export default class CommentComposer extends PureComponent {
 
     attachments = attachments.push(att);
     this.setState({ attachments });
+  };
+  loadingAttachment = status => {
+    this.setState({ attachmentLoadingStatus: status });
   };
 
   openEmojiPicker = e => {
@@ -191,7 +196,11 @@ export default class CommentComposer extends PureComponent {
               onChange={this.handleOnChange}
             />
             <SW.ButtonWrapper>
-              <AttachButton onAttach={this.handleAttach} ownedBy={ownedBy} />
+              <AttachButton
+                onAttach={this.handleAttach}
+                onStatusChange={this.loadingAttachment}
+                ownedBy={ownedBy}
+              />
               {!commentVal && (
                 <Button icon="Gif" onClick={this.openGiphySelector} />
               )}

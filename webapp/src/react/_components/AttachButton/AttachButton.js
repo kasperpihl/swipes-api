@@ -21,16 +21,19 @@ export default class extends PureComponent {
   };
 
   onChangeFiles = e => {
+    const { onStatusChange } = this.props;
+    onStatusChange('loading');
     this.setState({ fileVal: e.target.value });
     this.onUploadFiles(e.target.files);
   };
   async onUploadFiles(files) {
-    const { loader, ownedBy } = this.props;
+    const { loader, ownedBy, onStatusChange } = this.props;
     loader.set('attach');
     const res = await fileUpload(files, ownedBy);
     if (res.ok) {
       loader.clear('attach');
       this.addAttachment('file', res.file.file_id, res.file.file_name);
+      onStatusChange('loaded');
       this.setState({ fileVal: '' });
     } else {
       loader.error('attach', res.error, 3000);
@@ -38,6 +41,7 @@ export default class extends PureComponent {
   }
   addAttachment(type, id, title) {
     const { onAttach } = this.props;
+
     onAttach &&
       onAttach({
         type,
