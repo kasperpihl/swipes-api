@@ -31,7 +31,11 @@ export default function sqlInsertQuery(
           if (typeof obj[key] === 'undefined') {
             throw `dbInsertQuery expected key "${key}" in row[${i}]`;
           }
-          if (options.dontPrepare && options.dontPrepare[key]) {
+          if (
+            options.dontPrepare &&
+            options.dontPrepare[key] &&
+            obj[key] !== null
+          ) {
             return obj[key];
           }
           return insertVariable(obj[key]);
@@ -53,6 +57,8 @@ export default function sqlInsertQuery(
       }
     `;
   }
+
+  console.log(text, values);
 
   return {
     text,
