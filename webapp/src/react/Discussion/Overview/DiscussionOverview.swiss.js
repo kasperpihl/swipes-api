@@ -2,9 +2,10 @@ import { styleSheet } from 'swiss-react';
 
 export default styleSheet('DiscussionOverview', {
   FooterWrapper: {
-    marginLeft: '24px',
-    marginRight: '33px',
-    borderTop: '1px solid $sw3'
+    marginLeft: '18px',
+    marginRight: '9px',
+    borderTop: '1px solid #B8B7B6',
+    width: 'calc(100% - 30px)'
   },
 
   HeaderWrapper: {

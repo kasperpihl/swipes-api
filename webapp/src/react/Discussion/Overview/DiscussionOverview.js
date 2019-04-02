@@ -211,8 +211,6 @@ function DiscussionOverview({ tooltip, discussionId }) {
 
   const { discussion } = req.result;
 
-  console.log(discussion.privacy);
-
   const subtitle = {
     ownedBy: discussion.owned_by,
     members: Object.keys(discussion.members),

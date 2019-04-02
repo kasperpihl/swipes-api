@@ -13,7 +13,11 @@ export default styleSheet('CardHeaderSubtitle', {
     _textStyle: 'body',
     lineHeight: '24px',
     marginLeft: '6px',
-    color: '$sw2'
+    color: '$sw2',
+
+    '&:hover': {
+      textDecoration: 'underline'
+    }
   },
   Icon: {
     _el: Icon,
