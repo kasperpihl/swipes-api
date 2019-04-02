@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import parseWeekLabel from './parseWeekLabel';
+import parseWeekLabel from 'core/utils/time/parseWeekLabel';
 import Button from '_shared/Button/Button';
 import Spacing from '_shared/Spacing/Spacing';
 import SW from './WeekPicker.swiss';
