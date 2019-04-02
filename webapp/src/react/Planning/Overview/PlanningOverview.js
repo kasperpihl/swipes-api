@@ -65,24 +65,13 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
     updatePlanningState
   ] = usePlanningState();
 
-  // const handleScroll = e => {
-  //   if (e.target && e.target.scrollTop > 56) {
-  //     setBorderVisible(true);
-  //   } else {
-  //     setBorderVisible(false);
-  //   }
-  // };
-
-  const scrollWrapper = useRef();
-
-  useLayoutEffect(() => {
-    // if (scrollWrapper.current.scrollTop > 56) {
-    //   setBorderVisible(true);
-    // }
-    console.log(scrollWrapper.current);
-  }, []);
-
-  console.log('render');
+  const handleScroll = e => {
+    if (e.target && e.target.scrollTop > 56) {
+      setBorderVisible(true);
+    } else {
+      setBorderVisible(false);
+    }
+  };
 
   let actions = [];
   if (!editingId) {
@@ -186,9 +175,8 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
   return (
     <SW.Wrapper>
       <SW.ScrollableWrapper
-        // onScroll={handleScroll}
+        onScroll={handleScroll}
         borderVisible={borderVisible}
-        innerRef={c => (scrollWrapper.current = c)}
       >
         <PlanningList
           tasks={req.result.tasks}

@@ -47,7 +47,7 @@ function CardHeaderSubtitle({ subtitle, children, tooltip }) {
   return (
     <SW.Wrapper>
       <SW.TeamName>{teamGetBelonging(ownedBy)}</SW.TeamName>
-      {members && privacy === 'private' && (
+      {members && (
         <SW.MemberLabel
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}

@@ -108,7 +108,13 @@ function DiscussionOverview({ tooltip, discussionId }) {
     const buttons = [
       { title: discussion.members[myId] ? 'Unfollow' : 'Follow' },
       { title: 'Rename discussion' },
-      { title: 'Delete discussion' }
+      { title: 'Delete discussion' },
+      {
+        title:
+          discussion.privacy === 'public'
+            ? 'Make chat private'
+            : 'Make chat public'
+      }
     ];
     contextMenu(ListMenu, e, {
       onClick: onOptionClick,
@@ -123,6 +129,11 @@ function DiscussionOverview({ tooltip, discussionId }) {
       onArchiveClick();
     } else if (e.title === 'Rename discussion') {
       onTitleClick();
+    } else if (
+      e.title === 'Make chat private' ||
+      e.title === 'Make chat public'
+    ) {
+      onChangePrivacy();
     }
   };
   const onFollowClick = () => {
@@ -161,6 +172,22 @@ function DiscussionOverview({ tooltip, discussionId }) {
     });
   };
 
+  const onChangePrivacy = e => {
+    contextMenu(AssignMenu, e, {
+      excludeMe: true,
+      title: 'Add people',
+      hideRowOnSelect: true,
+      selectedIds: Object.keys(discussion.members),
+      teamId: discussion.owned_by,
+      onSelect: memberId => {
+        request('discussion.addMember', {
+          discussion_id: discussion.discussion_id,
+          target_user_id: memberId
+        });
+      }
+    });
+  };
+
   const openAssignMenu = e => {
     contextMenu(AssignMenu, e, {
       excludeMe: true,
@@ -183,6 +210,8 @@ function DiscussionOverview({ tooltip, discussionId }) {
   };
 
   const { discussion } = req.result;
+
+  console.log(discussion.privacy);
 
   const subtitle = {
     ownedBy: discussion.owned_by,

@@ -188,7 +188,7 @@ export default class ModalCreate extends PureComponent {
                     title="Tag people"
                     onClick={this.handleAssignClick}
                     border
-                    disabled={privacy === 'public' || ownedBy === myId}
+                    disabled={ownedBy === myId}
                   />
                 </Assignees>
               </FMSW.InputWrapper>
