@@ -1,8 +1,9 @@
 import { styleSheet } from 'swiss-react';
+import InputToggle from '_shared/Input/Toggle/InputToggle';
 
 export default styleSheet('ModalCreate', {
   Wrapper: {
-    _size: ['450px', '500px'],
+    _size: ['450px', 'auto'],
     _flex: ['column', 'flex-start', 'flex-start']
   },
 
@@ -29,5 +30,15 @@ export default styleSheet('ModalCreate', {
   CheckboxValue: {
     _textStyle: 'body',
     userSelect: 'none'
+  },
+
+  ToggleWrapper: {
+    _flex: ['row', 'left', 'flex-end'],
+    height: '25px',
+    marginRight: 'auto'
+  },
+
+  InputWrapper: {
+    marginLeft: '12px'
   }
 });

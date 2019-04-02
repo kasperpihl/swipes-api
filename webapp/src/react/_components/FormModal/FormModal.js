@@ -60,7 +60,14 @@ export default class FormModal extends PureComponent {
   };
 
   render() {
-    const { hideModal, title, subtitle, confirmLabel, alert } = this.props;
+    const {
+      hideModal,
+      title,
+      subtitle,
+      confirmLabel,
+      alert,
+      children
+    } = this.props;
 
     return (
       <SW.Wrapper>
@@ -69,6 +76,7 @@ export default class FormModal extends PureComponent {
         </SW.Header>
         <SW.InputContainer>{this.renderInputs()}</SW.InputContainer>
         {!!subtitle && <SW.Subtitle>{subtitle}</SW.Subtitle>}
+        {children}
         <SW.ButtonWrapper>
           {!alert ? (
             <>

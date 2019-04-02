@@ -1,18 +1,22 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
+
 import request from 'core/utils/request';
-import withLoader from 'src/react/_hocs/withLoader';
-import TeamPicker from 'src/react/_components/TeamPicker/TeamPicker';
-import cachedCallback from 'src/utils/cachedCallback';
-import Assignees from 'src/react/_components/Assignees/Assignees';
-import AssignMenu from 'src/react/_components/AssignMenu/AssignMenu';
-import Button from 'src/react/_components/Button/Button';
-import SW from './ModalCreate.swiss';
-import FMSW from 'src/react/_components/FormModal/FormModal.swiss';
 import contextMenu from 'src/utils/contextMenu';
+import cachedCallback from 'src/utils/cachedCallback';
+import withLoader from 'src/react/_hocs/withLoader';
+
+import TeamPicker from '_shared/TeamPicker/TeamPicker';
+import InputToggle from '_shared/Input/Toggle/InputToggle';
 import InputText from '_shared/Input/Text/InputText';
 import Spacing from '_shared/Spacing/Spacing';
+import Assignees from '_shared/Assignees/Assignees';
+import AssignMenu from '_shared/AssignMenu/AssignMenu';
+import Button from '_shared/Button/Button';
+
+import SW from './ModalCreate.swiss';
+import FMSW from '_shared/FormModal/FormModal.swiss';
 
 @withLoader
 @connect(state => ({
@@ -142,7 +146,6 @@ export default class ModalCreate extends PureComponent {
           <FMSW.Header>
             <FMSW.Title>{title}</FMSW.Title>
           </FMSW.Header>
-          <Spacing height={30} />
           <FMSW.InputContainer>
             <FMSW.InputWrapper>
               <InputText
@@ -155,7 +158,6 @@ export default class ModalCreate extends PureComponent {
                 autoFocus
               />
             </FMSW.InputWrapper>
-            <Spacing height={27} />
             <FMSW.InputWrapper>
               <FMSW.Label>Team</FMSW.Label>
               <Spacing height={9} />
@@ -165,17 +167,17 @@ export default class ModalCreate extends PureComponent {
                 disablePersonal={type === 'discussion'}
               />
             </FMSW.InputWrapper>
-            <Spacing height={24} />
             <>
+              {type === 'project' && (
+                <FMSW.InputWrapper>
+                  <FMSW.Label>Access</FMSW.Label>
+                  <Spacing height={9} />
+                  {this.renderPrivacyCheckbox('public')}
+                  {this.renderPrivacyCheckbox('private')}
+                </FMSW.InputWrapper>
+              )}
               <FMSW.InputWrapper>
-                <FMSW.Label>Access</FMSW.Label>
-                <Spacing height={9} />
-                {this.renderPrivacyCheckbox('public')}
-                {this.renderPrivacyCheckbox('private')}
-              </FMSW.InputWrapper>
-              <Spacing height={20} />
-              <FMSW.InputWrapper>
-                <FMSW.Label>Members</FMSW.Label>
+                <FMSW.Label>Followers</FMSW.Label>
                 <Spacing height={9} />
                 <Assignees
                   userIds={members}
@@ -185,7 +187,7 @@ export default class ModalCreate extends PureComponent {
                   onClick={this.handleAssignClick}
                 >
                   <Button
-                    title="Tag people"
+                    title="Tag members"
                     onClick={this.handleAssignClick}
                     border
                     disabled={ownedBy === myId}
@@ -195,6 +197,21 @@ export default class ModalCreate extends PureComponent {
             </>
           </FMSW.InputContainer>
           <FMSW.ButtonWrapper>
+            {type === 'discussion' && (
+              <SW.ToggleWrapper>
+                <FMSW.Label>Secret Chat</FMSW.Label>
+                <SW.InputWrapper>
+                  <InputToggle
+                    value={privacy === 'private' ? true : false}
+                    onChange={
+                      privacy === 'private'
+                        ? this.handlePrivacyCached('public')
+                        : this.handlePrivacyCached('private')
+                    }
+                  />
+                </SW.InputWrapper>
+              </SW.ToggleWrapper>
+            )}
             <FMSW.Button
               title={createLabel}
               onClick={this.handleCreate}

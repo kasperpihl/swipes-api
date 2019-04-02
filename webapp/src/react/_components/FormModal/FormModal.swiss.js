@@ -8,8 +8,7 @@ export default styleSheet('FormModal', {
     padding: '18px',
 
     create: {
-      _size: ['100%', 'auto'],
-      minHeight: '500px'
+      _size: ['100%', 'auto']
     }
   },
 
@@ -45,13 +44,10 @@ export default styleSheet('FormModal', {
   InputWrapper: {
     _size: ['100%', 'auto'],
     _flex: ['column', 'flex-start', 'flex-start'],
+    marginBottom: '18px',
 
-    nameChange: {
-      marginBottom: '18px',
-
-      '&:first-child': {
-        marginTop: '18px'
-      }
+    '&:first-child': {
+      marginTop: '18px'
     }
   },
 
@@ -68,7 +64,8 @@ export default styleSheet('FormModal', {
     _size: ['100%', 'auto'],
     _flex: ['row', 'flex-end', 'center'],
     borderTop: '1px solid $sw3',
-    marginTop: 'auto'
+    marginTop: '6px',
+    flex: 'none'
   },
 
   Button: {
