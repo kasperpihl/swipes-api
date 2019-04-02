@@ -58,8 +58,6 @@ export default function sqlInsertQuery(
     `;
   }
 
-  console.log(text, values);
-
   return {
     text,
     values
