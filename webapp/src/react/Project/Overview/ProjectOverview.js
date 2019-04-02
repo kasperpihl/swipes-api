@@ -68,7 +68,7 @@ function ProjectOverview({ projectId, state }) {
       setSliderValue(2);
       stateManager.expandHandler.setDepth(1);
     }
-  }, [stateManager, maxIndention]);
+  }, [stateManager, typeof maxIndention === 'number']);
 
   useEffect(() => {
     if (sliderValue > maxIndention + 1) {
@@ -86,8 +86,25 @@ function ProjectOverview({ projectId, state }) {
   }
   const subtitle = {
     ownedBy: stateManager.getClientState().get('owned_by'),
-    members: assignedMembers,
-    privacy
+    members: privacy === 'public' ? null : assignedMembers,
+    privacy,
+    onClick: openAssignMenu
+  };
+
+  const openAssignMenu = e => {
+    contextMenu(AssignMenu, e, {
+      excludeMe: true,
+      title: 'Add people',
+      hideRowOnSelect: true,
+      selectedIds: Object.keys(discussion.members),
+      teamId: discussion.owned_by,
+      onSelect: memberId => {
+        request('discussion.addMember', {
+          discussion_id: discussion.discussion_id,
+          target_user_id: memberId
+        });
+      }
+    });
   };
 
   const callbackDeleteProject = () => {

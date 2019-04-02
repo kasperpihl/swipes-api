@@ -11,14 +11,12 @@ export default styleSheet('EmptyState', {
     }
   },
 
-  ImageWrapper: {
-
-  },
+  ImageWrapper: {},
 
   Image: {
     _el: Icon,
     _size: ['150px', 'auto'],
-    fill: "$green2",
+    fill: '$green2',
 
     large: {
       _size: ['300px', 'auto']
@@ -32,6 +30,11 @@ export default styleSheet('EmptyState', {
 
     large: {
       _font: ['18px', '24px']
+    },
+
+    small: {
+      _font: ['12px', '18px', '$regular'],
+      padding: '6px 0'
     }
   },
 

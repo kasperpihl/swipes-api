@@ -20,7 +20,10 @@ function ProjectTaskExpand({ taskId }) {
   const handleExpandClick = useCallback(
     e => {
       e.stopPropagation();
-      stateManager.expandHandler[expanded ? 'collapse' : 'expand'](taskId);
+      stateManager.expandHandler[expanded ? 'collapse' : 'expand'](
+        taskId,
+        true
+      );
     },
     [expanded]
   );

@@ -24,6 +24,7 @@ export default styleSheet('AssignMenu', {
     _flex: ['row', 'between', 'center'],
     flexShrink: '0',
     padding: '0 12px',
+    borderTop: '1px solid $sw4',
     borderBottom: '1px solid $sw4',
     backgroundColor: '$sw5'
   },
@@ -41,21 +42,28 @@ export default styleSheet('AssignMenu', {
     _flex: ['row', 'flex-start', 'center'],
     flexShrink: '0',
     padding: '0 12px',
-    borderBottom: '1px solid $sw4',
+
+    '&:not(:first-child)': {
+      borderBottom: '1px solid $sw4'
+    },
 
     '&:hover': {
-      backgroundColor: 'rgba($blue, 0.25)'
+      backgroundColor: '$green4'
     },
 
     selected: {
-      backgroundColor: 'rgba($blue, 0.5)',
+      backgroundColor: '$green4',
 
       '&:hover': {
-        backgroundColor: 'rgba($blue, 0.75)'
+        backgroundColor: '$green3'
       }
     },
 
     hideRow: {
+      display: 'none'
+    },
+
+    excludeMe: {
       display: 'none'
     }
   },

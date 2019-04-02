@@ -6,6 +6,7 @@ import SW from './AssignMenu.swiss';
 import UserImage from 'src/react/_components/UserImage/UserImage';
 import userGetFullName from 'core/utils/user/userGetFullName';
 import Button from 'src/react/_components/Button/Button';
+import EmptyState from '_shared/EmptyState/EmptyState';
 
 @connect((state, props) => ({
   team: state.teams.get(props.teamId),
@@ -53,6 +54,12 @@ export default class AssignMenu extends PureComponent {
     this.setState({ selectedIds: arr });
   };
 
+  renderEmptyState = () => {
+    return (
+      <EmptyState title="All members of this team are already added." small />
+    );
+  };
+
   render() {
     const { selectedIds } = this.state;
     const {
@@ -71,13 +78,10 @@ export default class AssignMenu extends PureComponent {
           .toList()
           .filter(u => u.get('status') === 'active')
       : fromJS([me]);
-    if (excludeMe) {
-      users = users.filter(u => u.get('user_id') !== me.get('user_id'));
-    } else {
-      users = users
-        .filter(u => u.get('user_id') !== me.get('user_id'))
-        .insert(0, me);
-    }
+    users = users
+      .filter(u => u.get('user_id') !== me.get('user_id'))
+      .insert(0, me);
+
     const allAreSelected = users.size === selectedIds.length;
     return (
       <SW.Wrapper>
@@ -87,26 +91,30 @@ export default class AssignMenu extends PureComponent {
             <SW.SelectedAmount>({selectedIds.length})</SW.SelectedAmount>
           )}
         </SW.OptionsRow>
-        <SW.Dropdown>
-          {users.map(u => {
-            const rowSelected = selectedIds.indexOf(u.get('user_id')) !== -1;
-            return (
-              <SW.Row
-                key={u.get('user_id')}
-                selected={rowSelected}
-                hideRow={hideRowOnSelect && rowSelected}
-                onClick={this.handleToggleCached(u.get('user_id'))}
-              >
-                <UserImage
-                  userId={u.get('user_id')}
-                  size={36}
-                  teamId={teamId}
-                />
-                <SW.UserName>{userGetFullName(u, teamId)}</SW.UserName>
-              </SW.Row>
-            );
-          })}
-        </SW.Dropdown>
+        {!allAreSelected && (
+          <SW.Dropdown>
+            {users.map(u => {
+              const rowSelected = selectedIds.indexOf(u.get('user_id')) !== -1;
+              return (
+                <SW.Row
+                  key={u.get('user_id')}
+                  selected={rowSelected}
+                  hideRow={hideRowOnSelect && rowSelected}
+                  onClick={this.handleToggleCached(u.get('user_id'))}
+                  excludeMe={u.get('user_id') === me.get('user_id')}
+                >
+                  <UserImage
+                    userId={u.get('user_id')}
+                    size={36}
+                    teamId={teamId}
+                  />
+                  <SW.UserName>{userGetFullName(u, teamId)}</SW.UserName>
+                </SW.Row>
+              );
+            })}
+          </SW.Dropdown>
+        )}
+        {allAreSelected && this.renderEmptyState()}
         <SW.OptionsRow>
           {!(hideRowOnSelect && allAreSelected) && (
             <SW.ButtonWrapper>
@@ -115,11 +123,12 @@ export default class AssignMenu extends PureComponent {
                 onClick={() =>
                   this.toggleSelectAllCached(users, allAreSelected)
                 }
+                border
               />
             </SW.ButtonWrapper>
           )}
           <SW.ButtonWrapper right>
-            <Button title="Done" onClick={hide} />
+            <Button title="Done" onClick={hide} border green />
           </SW.ButtonWrapper>
         </SW.OptionsRow>
       </SW.Wrapper>

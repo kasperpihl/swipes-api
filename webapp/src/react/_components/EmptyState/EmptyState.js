@@ -12,10 +12,12 @@ const EmptyState = props => {
             <SW.Image icon={props.icon} />
           </SW.ImageWrapper>
         )}
-        <SW.Title>{props.title}</SW.Title>
-        <SW.Description>
-          {parseLinks(parseNewLines(props.description))}
-        </SW.Description>
+        <SW.Title small={props.small}>{props.title}</SW.Title>
+        {props.description && (
+          <SW.Description>
+            {parseLinks(parseNewLines(props.description))}
+          </SW.Description>
+        )}
         {props.children}
       </SW.Wrapper>
     </SW.ProvideContext>
