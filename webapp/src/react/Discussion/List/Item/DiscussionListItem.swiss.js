@@ -43,7 +43,9 @@ export default styleSheet('DiscussionListItem', {
     _flex: ['row', 'center', 'center'],
     flex: 'none',
     color: '$sw2',
-    marginBottom: '12px'
+    multiRow: {
+      marginBottom: '12px'
+    }
   },
   TeamName: {
     _textStyle: 'caption',
