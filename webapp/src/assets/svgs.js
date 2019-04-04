@@ -45,6 +45,7 @@ export { default as Itallic } from './icons/itallic.svg';
 export { default as Messages } from './icons/messages.svg';
 export { default as Milestones } from './icons/milestones.svg';
 export { default as Minus } from './icons/minus.svg';
+export { default as Move } from './icons/move.svg'; // new
 export { default as Note } from './icons/note.svg';
 export { default as OrderedList } from './icons/ordered-list.svg';
 export { default as Person } from './icons/person.svg';

@@ -20,7 +20,11 @@ export default class DiscussionListItem extends PureComponent {
     const unread = ts === 'n' || ts < item.last_comment_at;
 
     return (
-      <SW.ProvideContext selected={selected} unread={unread}>
+      <SW.ProvideContext
+        selected={selected}
+        unread={unread}
+        multiRow={showTeam}
+      >
         <SW.Wrapper onClick={this.onClick}>
           <SW.UnreadCircle />
           <SW.MiddleWrapper>

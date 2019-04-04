@@ -7,10 +7,12 @@ import WeekPicker from '_shared/WeekPicker/WeekPicker';
 import Spacing from '_shared/Spacing/Spacing';
 import SideHeader from '_shared/SideHeader/SideHeader';
 import ProgressBar from '_shared/ProgressBar/ProgressBar';
+import Dropdown from '_shared/dropdown/Dropdown';
+import TransferTasks from '_shared/TransferTasks/TransferTasks';
+
 import usePlanningState from 'src/react/Planning/usePlanningState';
 
 import SW from './PlanningSide.swiss';
-import Dropdown from '_shared/dropdown/Dropdown';
 
 export default function PlanningSide({
   yearWeek,
@@ -22,13 +24,20 @@ export default function PlanningSide({
     { numberOfCompleted = 0, totalNumberOfTasks = 0 }
   ] = usePlanningState();
 
-  const [isThisWeek, isNextWeek, nextWeekYearWeek] = useMemo(() => {
+  const [
+    isFriday,
+    isPrevWeek,
+    isThisWeek,
+    isNextWeek,
+    nextWeekYearWeek
+  ] = useMemo(() => {
     const dMoment = moment();
     dMoment.year(yearWeek.split('-')[0]);
     dMoment.week(yearWeek.split('-')[1]);
 
     const now = moment();
     const isThisWeek = dMoment.isSame(now, 'week');
+    const isFriday = now.days() === 5;
 
     let year = now.year();
     let week = now.week();
@@ -37,7 +46,19 @@ export default function PlanningSide({
       year = year + 1;
     }
 
-    return [isThisWeek, dMoment.isSame(now, 'week'), `${year}-${now.week()}`];
+    let dPrevWeek = moment();
+    let isPrevWeek = false;
+    if (dMoment.week() < dPrevWeek.week()) {
+      isPrevWeek = true;
+    }
+
+    return [
+      isFriday,
+      isPrevWeek,
+      isThisWeek,
+      dMoment.isSame(now, 'week'),
+      `${year}-${now.week()}`
+    ];
   }, [yearWeek]);
 
   const handleNextWeek = () => {
@@ -53,7 +74,7 @@ export default function PlanningSide({
       <SideHeader
         largeNumber={numberOfCompleted}
         smallNumber={`/ ${totalNumberOfTasks}`}
-        subtitle="Tasks Completed"
+        subtitle="Completed"
       />
       <Spacing height={12} />
       <ProgressBar
@@ -61,6 +82,12 @@ export default function PlanningSide({
       />
       <Spacing height={24} />
       <Dropdown items={teams} onChange={onChangeTeam} />
+      <Spacing height={48} />
+      <TransferTasks
+        isPrevWeek={isPrevWeek}
+        isThisWeek={isThisWeek && isFriday}
+        isNextWeek={isNextWeek}
+      />
     </SW.Wrapper>
   );
 }

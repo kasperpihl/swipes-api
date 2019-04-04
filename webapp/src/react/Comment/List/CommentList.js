@@ -1,4 +1,4 @@
-import React, { Fragment, useMemo } from 'react';
+import React, { Fragment, useMemo, useEffect, useState } from 'react';
 import moment from 'moment';
 import RequestLoader from 'src/react/_components/RequestLoader/RequestLoader';
 import usePaginationRequest from 'core/react/_hooks/usePaginationRequest';
@@ -17,6 +17,7 @@ export default function CommentList({
   scrollRef
 }) {
   const myId = useMyId();
+  const [showReactionToLastComment, changeLastReaction] = useState(false);
   const req = usePaginationRequest(
     'comment.list',
     {
@@ -45,6 +46,20 @@ export default function CommentList({
   const myLastRead = useMemo(() => discussion.members[myId], []);
 
   useScrollComments(scrollRef, req.items);
+
+  useEffect(() => {
+    if (!!req.items && req.items.length > 0) {
+      if (!!req.items && discussion.last_comment_at !== req.items[0].sent_at) {
+        console.log(
+          'discussion',
+          discussion.last_comment_at,
+          'comment',
+          req.items[req.items.length - 1].sent_at
+        );
+        changeLastReaction(true);
+      }
+    }
+  }, [discussion.last_comment_at, req.items]);
 
   if (req.error || req.loading) {
     return <RequestLoader req={req} />;
@@ -77,7 +92,7 @@ export default function CommentList({
       {req.items
         .slice()
         .reverse()
-        .map(comment => {
+        .map((comment, i) => {
           const currentDate = moment(comment.sent_at);
           const showSectionHeader = currentDate.isAfter(deltaDate, 'days');
           const isSingleLine =
@@ -94,6 +109,7 @@ export default function CommentList({
           }
           deltaDate = currentDate;
           deltaSentBy = comment.sent_by;
+          const lastInOrder = i === req.items.length - 1;
 
           return (
             <Fragment key={comment.comment_id}>
@@ -111,6 +127,9 @@ export default function CommentList({
                 discussionId={discussion.discussion_id}
                 ownedBy={discussion.owned_by}
                 isSingleLine={isSingleLine}
+                showReactionToLastComment={
+                  showReactionToLastComment && lastInOrder
+                }
               />
             </Fragment>
           );

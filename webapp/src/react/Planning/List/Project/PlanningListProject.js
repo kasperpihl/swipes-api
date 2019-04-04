@@ -130,6 +130,7 @@ function PlanningListProject({
     return null;
   }
 
+
   const handleOpenProject = () => {
     nav.openRight({
       screenId: 'ProjectOverview',

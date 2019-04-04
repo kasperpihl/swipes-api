@@ -4,14 +4,19 @@ import Button from 'src/react/_components/Button/Button';
 
 export default styleSheet('CommentItem', {
   Wrapper: {
-    _flex: ['row', 'left', 'center'],
+    _flex: ['column', 'left', 'top'],
     width: '100%',
-    padding: '6px 0',
 
     '&:hover': {
       background: '$green4',
       borderRadius: '2px'
-    },
+    }
+  },
+
+  CommentWrapper: {
+    _flex: ['row', 'left', 'center'],
+    width: '100%',
+    padding: '6px 0',
 
     isSingleLine: {
       padding: '0'
@@ -92,6 +97,12 @@ export default styleSheet('CommentItem', {
     '.CommentItem_Wrapper:hover &': {
       opacity: '1',
       visibility: 'visible'
+    },
+
+    lastReaction: {
+      opacity: '1',
+      visibility: 'visible',
+      marginRight: '3px'
     }
   },
 
@@ -125,5 +136,16 @@ export default styleSheet('CommentItem', {
   Gif: {
     _el: 'img',
     width: '200px'
+  },
+
+  LastReaction: {
+    _flex: ['row', 'left', 'center'],
+    _size: ['100%', '30px']
+  },
+
+  LastReactionMessage: {
+    _flex: ['row', 'left', 'center'],
+    _textStyle: 'caption',
+    color: '$sw2'
   }
 });

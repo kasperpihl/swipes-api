@@ -30,11 +30,11 @@ export default function CardHeader({
       <SW.Title key="header-title" onClick={onTitleClick}>
         {title}
       </SW.Title>
-      {separator && <Spacing height={6} />}
       {!subtitle && <SW.Actions>{children}</SW.Actions>}
       {subtitle && (
         <CardHeaderSubtitle subtitle={subtitle} children={children} />
       )}
+      {separator && <Spacing height={6} />}
     </SW.Wrapper>
   );
 }

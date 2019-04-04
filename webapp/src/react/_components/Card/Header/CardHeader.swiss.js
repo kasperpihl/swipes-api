@@ -24,7 +24,12 @@ export default styleSheet('CardHeader', {
     _textStyle: 'H1',
     _size: ['100%', 'auto'],
     color: 'black',
-    userSelect: 'none'
+    userSelect: 'none',
+    fontWeight: '$bold',
+
+    '&:hover': {
+      cursor: 'pointer'
+    }
   },
 
   Subtitle: {

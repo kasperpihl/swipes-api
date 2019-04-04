@@ -17,6 +17,7 @@ import withNav from 'src/react/_hocs/Nav/withNav';
 import contextMenu from 'src/utils/contextMenu';
 
 import userGetFullName from 'core/utils/user/userGetFullName';
+import userGetFirstName from 'core/utils/user/userGetFirstName';
 
 import SW from './CommentItem.swiss';
 
@@ -35,7 +36,6 @@ export default class CommentItem extends PureComponent {
         onConfirm: this.callbackDeleteComment
       });
     } else if (button === 'Edit comment') {
-      console.log(comment);
       nav.openModal(EditCommentModal, {
         initialMessage: comment.message,
         initialAttachments: comment.attachments,
@@ -130,24 +130,55 @@ export default class CommentItem extends PureComponent {
     );
   }
   render() {
-    const { comment, isSingleLine } = this.props;
+    const {
+      comment,
+      isSingleLine,
+      ownedBy,
+      me,
+      showReactionToLastComment
+    } = this.props;
+    const lastPersonToReact = Object.keys(comment.reactions)[
+      Object.keys(comment.reactions).length - 1
+    ];
+    const firstName = userGetFirstName(lastPersonToReact, ownedBy);
 
     return (
       <SW.ProvideContext isSingleLine={isSingleLine}>
         <SW.Wrapper>
-          <SW.LeftSide>{this.renderLeftSide()}</SW.LeftSide>
-          <SW.Center>
-            {this.renderTopSide()}
-            <SW.Message>
-              {comment.deleted
-                ? 'This message has been deleted'
-                : chain(parseGiphys, parseNewLines, parseLinks)(
-                    comment.message
-                  )}
-            </SW.Message>
-            {this.renderAttachments()}
-          </SW.Center>
-          {this.renderRightSide()}
+          <SW.CommentWrapper>
+            <SW.LeftSide>{this.renderLeftSide()}</SW.LeftSide>
+            <SW.Center>
+              {this.renderTopSide()}
+              <SW.Message>
+                {comment.deleted
+                  ? 'This message has been deleted'
+                  : chain(parseGiphys, parseNewLines, parseLinks)(
+                      comment.message
+                    )}
+              </SW.Message>
+              {this.renderAttachments()}
+            </SW.Center>
+            {this.renderRightSide()}
+          </SW.CommentWrapper>
+          {showReactionToLastComment && typeof lastPersonToReact === 'string' && (
+            <SW.LastReaction>
+              <SW.LeftSide>
+                <UserImage
+                  userId={lastPersonToReact}
+                  teamId={ownedBy}
+                  size={18}
+                />
+              </SW.LeftSide>
+              <SW.LastReactionMessage>
+                <SW.TimeStamp lastReaction>
+                  {moment(comment.sent_at).format('LT')}
+                </SW.TimeStamp>
+                {`${firstName} liked ${
+                  comment.sent_by === me.get('user_id') ? 'your' : 'this'
+                } message.`}
+              </SW.LastReactionMessage>
+            </SW.LastReaction>
+          )}
         </SW.Wrapper>
       </SW.ProvideContext>
     );

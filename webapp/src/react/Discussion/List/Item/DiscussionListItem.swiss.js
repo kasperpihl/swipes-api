@@ -10,6 +10,10 @@ export default styleSheet('DiscussionListItem', {
     userSelect: 'none',
     selected: {
       background: '$green4'
+    },
+
+    multiRow: {
+      height: '54px'
     }
   },
   MiddleWrapper: {
@@ -38,7 +42,8 @@ export default styleSheet('DiscussionListItem', {
     _textStyle: 'caption',
     _flex: ['row', 'center', 'center'],
     flex: 'none',
-    color: '$sw2'
+    color: '$sw2',
+    marginBottom: '12px'
   },
   TeamName: {
     _textStyle: 'caption',
@@ -56,6 +61,9 @@ export default styleSheet('DiscussionListItem', {
     unread: {
       opacity: '1',
       visibility: 'visible'
+    },
+    multiRow: {
+      top: '15px'
     }
   },
   AttachmentWrapper: {
