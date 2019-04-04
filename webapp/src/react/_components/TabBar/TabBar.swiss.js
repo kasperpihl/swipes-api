@@ -5,6 +5,7 @@ export default styleSheet('TabBar', {
     _size: ['calc(100% - 54px)', '30px'],
     _flex: ['row', 'left', 'top'],
     margin: '0 18px 0 36px',
+    boxSizing: 'content-box',
     borderBottom: '1px solid $sw4'
   },
   Item: {

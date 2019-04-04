@@ -74,7 +74,7 @@ export default function PlanningSide({
       <SideHeader
         largeNumber={numberOfCompleted}
         smallNumber={`/ ${totalNumberOfTasks}`}
-        subtitle="Completed"
+        subtitle="Tasks"
       />
       <Spacing height={12} />
       <ProgressBar
