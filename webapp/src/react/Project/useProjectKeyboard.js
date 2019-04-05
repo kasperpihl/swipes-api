@@ -1,4 +1,5 @@
 import { useEffect, useCallback } from 'react';
+import request from 'core/utils/request';
 
 export default function useProjectKeyboard(stateManager) {
   const handleKeyDown = useCallback(
@@ -21,7 +22,18 @@ export default function useProjectKeyboard(stateManager) {
         else stateManager.indentHandler.indent(selectedId);
       } else if (e.keyCode === 13) {
         e.preventDefault();
-        stateManager.editHandler.enter(selectedId, e.target.selectionStart);
+        stateManager.editHandler.enter(
+          selectedId,
+          e.target.selectionStart,
+          (ownedBy, yearWeek, projectId, selectedId) => {
+            request('planning.addTask', {
+              owned_by: ownedBy,
+              year_week: yearWeek,
+              project_id: projectId,
+              task_id: selectedId
+            });
+          }
+        );
       } else if (e.keyCode === 38) {
         // Up arrow
         e.preventDefault();
