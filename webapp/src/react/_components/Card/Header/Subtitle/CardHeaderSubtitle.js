@@ -29,8 +29,7 @@ function CardHeaderSubtitle({ subtitle, children, tooltip }) {
       component: TooltipUsers,
       props: {
         teamId: ownedBy,
-        userIds: members,
-        size: 24
+        userIds: members
       },
       options: {
         boundingRect: e.target.getBoundingClientRect(),

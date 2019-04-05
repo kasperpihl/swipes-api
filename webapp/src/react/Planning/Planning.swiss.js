@@ -12,7 +12,8 @@ export default styleSheet('Planning', {
   },
 
   LeftSide: {
-    paddingTop: '42px'
+    paddingTop: '42px',
+    maxWidth: '165px'
   },
 
   RightSide: {

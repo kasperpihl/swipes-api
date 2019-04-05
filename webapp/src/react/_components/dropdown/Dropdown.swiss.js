@@ -32,6 +32,7 @@ export default styleSheet('Dropdown', {
 
   DropdownBox: {
     _size: ['100%', '0'],
+    backgroundColor: '$base',
     overflowY: 'hidden',
     position: 'absolute',
     borderRadius: '2px',
@@ -40,7 +41,8 @@ export default styleSheet('Dropdown', {
 
     show: {
       _size: ['calc(100% - 2px)', 'auto'],
-      boxShadow: '$popupShadow'
+      boxShadow: '$popupShadow',
+      zIndex: '999'
     }
   },
 

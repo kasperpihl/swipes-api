@@ -5,36 +5,32 @@ import SW from './Tooltip.swiss';
 const SPACING = 20;
 
 @connect(state => ({
-  tooltip: state.main.get('tooltip'),
+  tooltip: state.main.get('tooltip')
 }))
 export default class Tooltip extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       styles: {},
-      shown: false,
+      shown: false
     };
     this.timeout = null;
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.tooltip !== this.props.tooltip) {
       this.setState({
-        styles: this.getStyles(nextProps.tooltip),
+        styles: this.getStyles(nextProps.tooltip)
       });
       this.showWithDelay(nextProps.tooltip);
     }
   }
   componentDidUpdate() {
-    this.fitToScreen();
+    // this.fitToScreen();
   }
   showWithDelay(tooltip) {
     if (tooltip) {
-      const {
-        options
-      } = tooltip;
-      const {
-        delay = 0
-      } = options;
+      const { options } = tooltip;
+      const { delay = 0 } = options;
 
       this.timeout = setTimeout(() => {
         this.setState({
@@ -44,8 +40,8 @@ export default class Tooltip extends PureComponent {
     } else {
       clearTimeout(this.timeout);
       this.setState({
-        shown: false,
-      })
+        shown: false
+      });
     }
   }
   getStyles(tooltip) {
@@ -69,12 +65,12 @@ export default class Tooltip extends PureComponent {
       }
 
       if (position === 'left' || position === 'right') {
-        styles.top = `${boundingRect.top + (boundingRect.height / 2)}px`;
+        styles.top = `${boundingRect.top + boundingRect.height / 2}px`;
         styles.transform = transform += 'translateY(-50%) ';
       }
 
       if (position === 'top' || position === 'bottom') {
-        styles.left = `${boundingRect.left + (boundingRect.width / 2)}px`;
+        styles.left = `${boundingRect.left + boundingRect.width / 2}px`;
         styles.transform = transform += 'translateX(-50%) ';
       }
     }
@@ -95,43 +91,51 @@ export default class Tooltip extends PureComponent {
       let left = parseInt(styles.left);
       let top = parseInt(styles.top);
 
-    // Get correct positions
+      // Get correct positions
       if (position === 'left') {
         left -= tooltipBoundingRect.width;
-        top -= (tooltipBoundingRect.height / 2);
+        top -= tooltipBoundingRect.height / 2;
       }
 
       if (position === 'right') {
-        top -= (tooltipBoundingRect.height / 2);
+        top -= tooltipBoundingRect.height / 2;
       }
 
       if (position === 'top') {
         top -= tooltipBoundingRect.height;
-        left -= (tooltipBoundingRect.width / 2);
+        left -= tooltipBoundingRect.width / 2;
       }
 
       if (position === 'bottom') {
-        left -= (tooltipBoundingRect.width / 2);
+        left -= tooltipBoundingRect.width / 2;
       }
 
-
-    // Get new styles
+      // Get new styles
 
       if (position === 'left' || position === 'right') {
         let transform = '';
-        if (left < SPACING) { // Outbounds to left
-          newStyles.left = `${targetBoundingRect.left + targetBoundingRect.width + tooltipBoundingRect.width + SPACING}px`;
+        if (left < SPACING) {
+          // Outbounds to left
+          newStyles.left = `${targetBoundingRect.left +
+            targetBoundingRect.width +
+            tooltipBoundingRect.width +
+            SPACING}px`;
           newStyles.transform = transform += 'translateX(-100%) ';
         }
 
-        if ((left + tooltipBoundingRect.width) > (ww - SPACING)) { // Outbounds to right
-          newStyles.left = `${targetBoundingRect.left - tooltipBoundingRect.width - SPACING}px`;
+        if (left + tooltipBoundingRect.width > ww - SPACING) {
+          // Outbounds to right
+          newStyles.left = `${targetBoundingRect.left -
+            tooltipBoundingRect.width -
+            SPACING}px`;
           newStyles.transform = transform;
         }
 
-        if (top < SPACING) { // Outbounds to top
+        if (top < SPACING) {
+          // Outbounds to top
           newStyles.top = `${SPACING}px`;
-        } else if ((top + tooltipBoundingRect.height) > (wh - SPACING)) { // Outbounds to bottom
+        } else if (top + tooltipBoundingRect.height > wh - SPACING) {
+          // Outbounds to bottom
           newStyles.top = `${wh - tooltipBoundingRect.height - SPACING}px`;
         } else {
           newStyles.transform = transform += 'translateY(-50%) ';
@@ -139,19 +143,27 @@ export default class Tooltip extends PureComponent {
       } else if (position === 'top' || position === 'bottom') {
         let transform = '';
 
-        if (top < SPACING) { // Outbounds to top
-          newStyles.top = `${targetBoundingRect.top + targetBoundingRect.height + SPACING}px`;
+        if (top < SPACING) {
+          // Outbounds to top
+          newStyles.top = `${targetBoundingRect.top +
+            targetBoundingRect.height +
+            SPACING}px`;
           newStyles.transform = transform;
         }
 
-        if ((top + tooltipBoundingRect.height) > (wh - SPACING)) { // Outbounds to bottom
-          newStyles.top = `${targetBoundingRect.top - tooltipBoundingRect.height - SPACING}px`;
+        if (top + tooltipBoundingRect.height > wh - SPACING) {
+          // Outbounds to bottom
+          newStyles.top = `${targetBoundingRect.top -
+            tooltipBoundingRect.height -
+            SPACING}px`;
           newStyles.transform = transform;
         }
 
-        if (left < SPACING) { // Outbounds to left
+        if (left < SPACING) {
+          // Outbounds to left
           newStyles.left = `${SPACING}px`;
-        } else if ((left + tooltipBoundingRect.width) > (ww - SPACING)) { // Outbounds to right
+        } else if (left + tooltipBoundingRect.width > ww - SPACING) {
+          // Outbounds to right
           newStyles.left = `${ww - tooltipBoundingRect.width - SPACING}px`;
         } else {
           newStyles.transform = transform += 'translateX(-50%) ';
@@ -174,14 +186,14 @@ export default class Tooltip extends PureComponent {
       return undefined;
     }
 
-    const {
-      props,
-    } = tooltip;
+    const { props } = tooltip;
     const Comp = tooltip.component;
 
     return (
       <SW.Content
-        innerRef={(r) => { this.tooltipRef = r; }}
+        innerRef={r => {
+          this.tooltipRef = r;
+        }}
         {...this.state.styles}
       >
         <Comp {...props} />
@@ -191,10 +203,6 @@ export default class Tooltip extends PureComponent {
   render() {
     const { shown } = this.state;
 
-    return (
-      <SW.Wrapper shown={shown}>
-        {this.renderTooltip()}
-      </SW.Wrapper>
-    );
+    return <SW.Wrapper shown={shown}>{this.renderTooltip()}</SW.Wrapper>;
   }
 }

@@ -50,12 +50,6 @@ export default function CommentList({
   useEffect(() => {
     if (!!req.items && req.items.length > 0) {
       if (!!req.items && discussion.last_comment_at !== req.items[0].sent_at) {
-        console.log(
-          'discussion',
-          discussion.last_comment_at,
-          'comment',
-          req.items[req.items.length - 1].sent_at
-        );
         changeLastReaction(true);
       }
     }
