@@ -23,7 +23,9 @@ export default function valPermissions({ permissionKey, permissionCreateKey }) {
           [user_id, res.locals.input[permissionCreateKey]]
         );
         if (!permissionRes || !permissionRes.rows.length) {
-          throw Error('Forbidden').code(403);
+          throw Error('Forbidden')
+            .code(403)
+            .toClient();
         }
       }
     } else {
