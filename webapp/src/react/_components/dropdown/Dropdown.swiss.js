@@ -11,7 +11,9 @@ export default styleSheet('Dropdown', {
     _size: ['100%', '30px'],
     _flex: ['row', 'between', 'center'],
     borderRadius: '2px',
-    border: '1px solid $sw3'
+    '&:hover': {
+      border: '1px solid $sw3'
+    }
   },
 
   Text: {

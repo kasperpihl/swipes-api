@@ -7,19 +7,13 @@ import WeekPicker from '_shared/WeekPicker/WeekPicker';
 import Spacing from '_shared/Spacing/Spacing';
 import SideHeader from '_shared/SideHeader/SideHeader';
 import ProgressBar from '_shared/ProgressBar/ProgressBar';
-import Dropdown from '_shared/dropdown/Dropdown';
 import TransferTasks from '_shared/TransferTasks/TransferTasks';
 
 import usePlanningState from 'src/react/Planning/usePlanningState';
 
 import SW from './PlanningSide.swiss';
 
-export default function PlanningSide({
-  yearWeek,
-  setYearWeek,
-  teams,
-  onChangeTeam
-}) {
+export default function PlanningSide({ yearWeek, setYearWeek }) {
   const [
     { numberOfCompleted = 0, totalNumberOfTasks = 0 }
   ] = usePlanningState();
@@ -80,8 +74,6 @@ export default function PlanningSide({
       <ProgressBar
         progress={Math.ceil((numberOfCompleted / totalNumberOfTasks) * 100)}
       />
-      <Spacing height={24} />
-      <Dropdown items={teams} onChange={onChangeTeam} />
       <Spacing height={48} />
       <TransferTasks
         isPrevWeek={isPrevWeek}

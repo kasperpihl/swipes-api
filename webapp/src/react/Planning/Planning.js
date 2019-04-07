@@ -8,8 +8,8 @@ import CardContent from '_shared/Card/Content/CardContent';
 import Spacing from '_shared/Spacing/Spacing';
 import PlanningSide from './Side/PlanningSide';
 import PlanningOverview from './Overview/PlanningOverview';
-import Button from '_shared/Button/Button';
-import TabBar from '_shared/TabBar/TabBar';
+import Dropdown from '_shared/dropdown/Dropdown';
+
 import PlanningContext from './PlanningContext';
 import SW from './Planning.swiss';
 
@@ -62,19 +62,17 @@ function Planning({ teams, initialYearWeek }) {
       <CardContent
         header={
           <SW.HeaderWrapper>
-            <CardHeader title="Planning" />
+            <CardHeader
+              title="Planning"
+              dropdown={<Dropdown items={tabs} onChange={updateTeam} />}
+            />
           </SW.HeaderWrapper>
         }
         noframe
       >
         <SW.ParentWrapper>
           <SW.LeftSide>
-            <PlanningSide
-              yearWeek={yearWeek}
-              setYearWeek={updateYearWeek}
-              teams={tabs}
-              onChangeTeam={updateTeam}
-            />
+            <PlanningSide yearWeek={yearWeek} setYearWeek={updateYearWeek} />
           </SW.LeftSide>
           <Spacing width={48} />
 

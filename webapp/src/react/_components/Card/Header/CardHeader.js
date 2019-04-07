@@ -20,6 +20,7 @@ CardHeader.propTypes = {
 export default function CardHeader({
   title,
   subtitle,
+  dropdown,
   separator,
   onTitleClick,
   children,
@@ -27,9 +28,12 @@ export default function CardHeader({
 }) {
   return (
     <SW.Wrapper separator={separator} {...rest} subtitle={!subtitle}>
-      <SW.Title key="header-title" onClick={onTitleClick}>
-        {title}
-      </SW.Title>
+      <SW.TitleWrapper>
+        <SW.Title key="header-title" onClick={onTitleClick}>
+          {title}
+        </SW.Title>
+        {dropdown && <SW.DropdownWrapper>{dropdown}</SW.DropdownWrapper>}
+      </SW.TitleWrapper>
       {!subtitle && <SW.Actions>{children}</SW.Actions>}
       {subtitle && (
         <CardHeaderSubtitle subtitle={subtitle} children={children} />

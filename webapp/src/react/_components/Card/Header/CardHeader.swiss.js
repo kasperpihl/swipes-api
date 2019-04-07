@@ -17,12 +17,20 @@ export default styleSheet('CardHeader', {
       _flex: ['row', 'left', 'bottom']
     }
   },
+  DropdownWrapper: {
+    marginLeft: '6px',
+    width: '100px'
+  },
+  TitleWrapper: {
+    _flex: ['row', 'left', 'center'],
+    width: '100%'
+  },
 
   Title: {
     _el: 'p',
     _truncateString: '',
     _textStyle: 'H1',
-    _size: ['100%', 'auto'],
+    _size: ['auto', 'auto'],
     color: 'black',
     userSelect: 'none',
     fontWeight: '$bold',

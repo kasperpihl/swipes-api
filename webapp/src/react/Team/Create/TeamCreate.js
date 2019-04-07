@@ -63,6 +63,8 @@ export default connect(
   }
 )(TeamCreate);
 
+TeamCreate.sizes = [540];
+
 function TeamCreate({ fromRouter, redirectTo }) {
   const [teamName, handleTeamNameChange] = useState('');
   const [members, dispatch] = useTeamCreateFields();
