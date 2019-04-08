@@ -72,7 +72,11 @@ function Planning({ teams, initialYearWeek }) {
       >
         <SW.ParentWrapper>
           <SW.LeftSide>
-            <PlanningSide yearWeek={yearWeek} setYearWeek={updateYearWeek} />
+            <PlanningSide
+              yearWeek={yearWeek}
+              setYearWeek={updateYearWeek}
+              ownedBy={ownedBy}
+            />
           </SW.LeftSide>
           <Spacing width={48} />
 

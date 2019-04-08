@@ -1,12 +1,16 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
+
 import cachedCallback from 'src/utils/cachedCallback';
-import SW from './AssignMenu.swiss';
-import UserImage from 'src/react/_components/UserImage/UserImage';
 import userGetFullName from 'core/utils/user/userGetFullName';
-import Button from 'src/react/_components/Button/Button';
+import UserImage from '_shared/UserImage/UserImage';
+
+import Button from '_shared/Button/Button';
 import EmptyState from '_shared/EmptyState/EmptyState';
+import Spacing from '_shared/Spacing/Spacing';
+
+import SW from './AssignMenu.swiss';
 
 @connect((state, props) => ({
   team: state.teams.get(props.teamId),
@@ -54,43 +58,26 @@ export default class AssignMenu extends PureComponent {
     this.setState({ selectedIds: arr });
   };
 
+  goToCreateTeam = e => {
+    const { nav, hide } = this.props;
+    nav.push({
+      screenId: 'TeamCreate',
+      crumbTitle: 'TeamCreate'
+    });
+    hide();
+  };
+
   renderEmptyState = () => {
     return (
       <EmptyState title="All members of this team are already added." small />
     );
   };
 
-  render() {
+  renderTeamAssignees = (users, allAreSelected) => {
     const { selectedIds } = this.state;
-    const {
-      excludeMe,
-      team,
-      me,
-      teamId,
-      hide,
-      hideRowOnSelect,
-      title
-    } = this.props;
-    const teamName = team ? team.get('name') : 'Personal';
-    let users = team
-      ? team
-          .get('users')
-          .toList()
-          .filter(u => u.get('status') === 'active')
-      : fromJS([me]);
-    users = users
-      .filter(u => u.get('user_id') !== me.get('user_id'))
-      .insert(0, me);
-
-    const allAreSelected = users.size === selectedIds.length;
+    const { excludeMe, teamId, hide, hideRowOnSelect } = this.props;
     return (
-      <SW.Wrapper>
-        <SW.OptionsRow>
-          <SW.TeamName>{title || `Choose from: ${teamName}`}</SW.TeamName>
-          {!hideRowOnSelect && !!selectedIds.length && (
-            <SW.SelectedAmount>({selectedIds.length})</SW.SelectedAmount>
-          )}
-        </SW.OptionsRow>
+      <>
         {!allAreSelected && (
           <SW.Dropdown>
             {users.map(u => {
@@ -101,7 +88,7 @@ export default class AssignMenu extends PureComponent {
                   selected={rowSelected}
                   hideRow={hideRowOnSelect && rowSelected}
                   onClick={this.handleToggleCached(u.get('user_id'))}
-                  excludeMe={u.get('user_id') === me.get('user_id')}
+                  excludeMe={excludeMe}
                 >
                   <UserImage
                     userId={u.get('user_id')}
@@ -115,7 +102,7 @@ export default class AssignMenu extends PureComponent {
           </SW.Dropdown>
         )}
         {allAreSelected && this.renderEmptyState()}
-        <SW.OptionsRow>
+        <SW.OptionsRow row>
           {!(hideRowOnSelect && allAreSelected) && (
             <SW.ButtonWrapper>
               <Button
@@ -131,6 +118,77 @@ export default class AssignMenu extends PureComponent {
             <Button title="Done" onClick={hide} border green />
           </SW.ButtonWrapper>
         </SW.OptionsRow>
+      </>
+    );
+  };
+
+  renderCreateTeamNudge = () => {
+    const { me, teamId } = this.props;
+    const { selectedIds } = this.state;
+    const rowSelected = selectedIds.indexOf(me.get('user_id')) !== -1;
+    return (
+      <>
+        <SW.Dropdown>
+          <SW.Row
+            selected={rowSelected}
+            onClick={this.handleToggleCached(me.get('user_id'))}
+          >
+            <UserImage userId={me.get('user_id')} size={36} />
+            <SW.UserName>
+              {userGetFullName(me.get('user_id'), teamId)}
+            </SW.UserName>
+          </SW.Row>
+        </SW.Dropdown>
+        <SW.OptionsRow>
+          <SW.NudgeText>
+            When collaborating with a team, you’ll be able to assign team
+            members to tasks here.
+          </SW.NudgeText>
+          <Spacing height={20} />
+          <SW.ButtonWrapper>
+            <Button
+              title="Create a team"
+              onClick={this.goToCreateTeam}
+              border
+            />
+          </SW.ButtonWrapper>
+        </SW.OptionsRow>
+      </>
+    );
+  };
+
+  render() {
+    const { selectedIds } = this.state;
+    const { excludeMe, team, me, hideRowOnSelect, title } = this.props;
+    const teamName = team ? team.get('name') : 'Personal';
+
+    let users = team
+      ? team
+          .get('users')
+          .toList()
+          .filter(u => u.get('status') === 'active')
+          .filter(u => u.get('user_id') !== me.get('user_id'))
+      : fromJS([me]);
+
+    if (!excludeMe) {
+      users = users
+        .filter(u => u.get('user_id') !== me.get('user_id'))
+        .insert(0, me);
+    }
+
+    const allAreSelected = users.size === selectedIds.length;
+
+    return (
+      <SW.Wrapper>
+        <SW.OptionsRow row>
+          <SW.TeamName>{title || `Choose from: ${teamName}`}</SW.TeamName>
+          {!hideRowOnSelect && !!selectedIds.length && (
+            <SW.SelectedAmount>({selectedIds.length})</SW.SelectedAmount>
+          )}
+        </SW.OptionsRow>
+        {!!team
+          ? this.renderTeamAssignees(users, allAreSelected)
+          : this.renderCreateTeamNudge()}
       </SW.Wrapper>
     );
   }

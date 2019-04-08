@@ -1,9 +1,16 @@
 import React from 'react';
-import SW from './TransferTasks.swiss';
+
 import Spacing from '_shared/Spacing/Spacing';
 import Button from '_shared/Button/Button';
 
-export default function TransferTasks({ isPrevWeek, isThisWeek, isNextWeek }) {
+import SW from './TransferTasks.swiss';
+
+export default function TransferTasks({
+  isPrevWeek,
+  isThisWeek,
+  isNextWeek,
+  handleClick
+}) {
   let title = '';
   let subtitle = '';
   let shouldShow = true;
@@ -21,12 +28,12 @@ export default function TransferTasks({ isPrevWeek, isThisWeek, isNextWeek }) {
   }
 
   return (
-    <SW.Wrapper show={!shouldShow}>
+    <SW.Wrapper show={shouldShow}>
       <SW.Title>{title}</SW.Title>
       <Spacing height={12} />
       <SW.Subtitle>{subtitle}</SW.Subtitle>
       <Spacing height={50} />
-      <Button title="Move Tasks" icon="Move" />
+      <Button title="Move Tasks" icon="Move" onClick={handleClick} />
     </SW.Wrapper>
   );
 }

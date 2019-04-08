@@ -41,10 +41,10 @@ export default class FormModal extends PureComponent {
       return null;
     }
     return inputs.map((comp, i) => {
-      const { label, initialValue, nameChange, ...rest } = comp;
+      const { label, initialValue, ...rest } = comp;
       return (
         <Fragment key={i}>
-          <SW.InputWrapper nameChange={nameChange}>
+          <SW.InputWrapper>
             <InputText
               type="text"
               onChange={this.handleInputCached(i)}

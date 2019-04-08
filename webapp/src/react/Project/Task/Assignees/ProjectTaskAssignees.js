@@ -7,6 +7,7 @@ import contextMenu from 'src/utils/contextMenu';
 import useProjectSlice from 'core/react/_hooks/useProjectSlice';
 import { ProjectContext } from 'src/react/contexts';
 import useMyId from 'core/react/_hooks/useMyId';
+import useNav from 'src/react/_hooks/useNav';
 
 import SW from './ProjectTaskAssignees.swiss';
 
@@ -14,6 +15,7 @@ export default memo(ProjectTaskAssignees);
 function ProjectTaskAssignees({ taskId }) {
   const myId = useMyId();
   const stateManager = useContext(ProjectContext);
+  const nav = useNav();
 
   const [assignees, ownedBy, isSelected] = useProjectSlice(
     stateManager,
@@ -25,7 +27,6 @@ function ProjectTaskAssignees({ taskId }) {
   );
 
   const handleAssigneeSelect = useCallback(newAssignees => {
-    console.log(newAssignees);
     stateManager.editHandler.updateAssignees(taskId, fromJS(newAssignees));
   });
 
@@ -35,7 +36,8 @@ function ProjectTaskAssignees({ taskId }) {
         excludeMe: false,
         selectedIds: assignees,
         teamId: stateManager.getClientState().get('owned_by'),
-        onClose: handleAssigneeSelect
+        onClose: handleAssigneeSelect,
+        nav
       });
     },
     [assignees]

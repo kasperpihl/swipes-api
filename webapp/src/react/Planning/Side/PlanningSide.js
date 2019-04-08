@@ -11,15 +11,20 @@ import TransferTasks from '_shared/TransferTasks/TransferTasks';
 
 import usePlanningState from 'src/react/Planning/usePlanningState';
 
+import request from 'core/utils/request';
+
 import SW from './PlanningSide.swiss';
 
-export default function PlanningSide({ yearWeek, setYearWeek }) {
+export default function PlanningSide({ yearWeek, setYearWeek, ownedBy }) {
   const [
     { numberOfCompleted = 0, totalNumberOfTasks = 0 }
   ] = usePlanningState();
 
+  const allTasksCompleted =
+    numberOfCompleted > 0 && numberOfCompleted === totalNumberOfTasks;
+
   const [
-    isFriday,
+    isEndOfWeek,
     isPrevWeek,
     isThisWeek,
     isNextWeek,
@@ -31,7 +36,7 @@ export default function PlanningSide({ yearWeek, setYearWeek }) {
 
     const now = moment();
     const isThisWeek = dMoment.isSame(now, 'week');
-    const isFriday = now.days() === 5;
+    const isEndOfWeek = (now.days() > 4 && now.days() <= 6) || now.days() === 0;
 
     let year = now.year();
     let week = now.week();
@@ -47,7 +52,7 @@ export default function PlanningSide({ yearWeek, setYearWeek }) {
     }
 
     return [
-      isFriday,
+      isEndOfWeek,
       isPrevWeek,
       isThisWeek,
       dMoment.isSame(now, 'week'),
@@ -57,6 +62,29 @@ export default function PlanningSide({ yearWeek, setYearWeek }) {
 
   const handleNextWeek = () => {
     setYearWeek(nextWeekYearWeek);
+  };
+
+  const handleTransferTasks = () => {
+    let now = moment();
+    let fromYearkWeek;
+    let toYearWeek;
+    if (isPrevWeek) {
+      toYearWeek = now.year() + '-' + now.week();
+      now = now.subtract(1, 'week');
+      fromYearkWeek = now.year() + '-' + now.week();
+    }
+    if (isThisWeek || isNextWeek) {
+      fromYearkWeek = now.year() + '-' + now.week();
+      now = now.add(1, 'week');
+      toYearWeek = now.year() + '-' + now.week();
+    }
+    if (numberOfCompleted > 0 && numberOfCompleted < totalNumberOfTasks) {
+      request('planning.moveTasks', {
+        owned_by: ownedBy,
+        from_year_week: fromYearkWeek,
+        to_year_week: toYearWeek
+      });
+    }
   };
 
   return (
@@ -76,9 +104,15 @@ export default function PlanningSide({ yearWeek, setYearWeek }) {
       />
       <Spacing height={48} />
       <TransferTasks
-        isPrevWeek={isPrevWeek}
-        isThisWeek={isThisWeek && isFriday}
-        isNextWeek={isNextWeek}
+        isPrevWeek={isPrevWeek && !allTasksCompleted && totalNumberOfTasks > 0}
+        isThisWeek={
+          isThisWeek &&
+          isEndOfWeek &&
+          !allTasksCompleted &&
+          totalNumberOfTasks > 0
+        }
+        isNextWeek={isNextWeek && !allTasksCompleted}
+        handleClick={handleTransferTasks}
       />
     </SW.Wrapper>
   );

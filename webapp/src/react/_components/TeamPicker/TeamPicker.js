@@ -52,9 +52,11 @@ function TeamPicker({ teams, value, onChange, disablePersonal }) {
         name: inputVal
       }).then(res => {
         if (res.ok) {
-          loader.success('createTeam');
+          loader.success('createTeam', 1500);
           window.analytics.sendEvent('Team created', {});
           handleShowInput(false);
+        } else {
+          loader.error(res.error, 1500);
         }
       });
     }

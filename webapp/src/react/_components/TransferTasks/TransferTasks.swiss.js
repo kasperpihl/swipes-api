@@ -2,13 +2,13 @@ import { styleSheet } from 'swiss-react';
 
 export default styleSheet('TransferTasks', {
   Wrapper: {
-    _flex: ['column', 'left', 'top'],
     _size: ['100%', 'auto'],
+    display: 'none',
     backgroundColor: '$green4',
-    padding: '16px 6px 12px 6px',
+    padding: '16px 12px 12px 6px',
 
     show: {
-      display: 'none'
+      _flex: ['column', 'left', 'top']
     }
   },
 

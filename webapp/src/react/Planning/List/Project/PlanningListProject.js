@@ -1,4 +1,5 @@
 import React, { memo, useEffect, useMemo, useRef } from 'react';
+import { ProjectContext } from 'src/react/contexts';
 
 import useSyncedProject from 'core/react/_hooks/useSyncedProject';
 import useProjectSlice from 'core/react/_hooks/useProjectSlice';
@@ -8,7 +9,8 @@ import useTaskSelect from 'src/react/Planning/useTaskSelect';
 import SectionHeader from '_shared/SectionHeader/SectionHeader';
 import usePlanningState from 'src/react/Planning/usePlanningState';
 import useNav from 'src/react/_hooks/useNav';
-import { ProjectContext } from 'src/react/contexts';
+
+import request from 'core/utils/request';
 
 import ProjectTaskList from 'src/react/Project/Task/List/ProjectTaskList';
 
@@ -32,12 +34,22 @@ function PlanningListProject({
     [tasks]
   );
 
+  // const onTaskAdded = taskId => {
+  //   request('planning.addTask', {
+  //     owned_by: ownedBy,
+  //     year_week: yearWeek,
+  //     project_id: projectId,
+  //     task_id: taskId
+  //   });
+  // };
+
   const taskIdsRef = useRef();
   const selectingRef = useRef();
   const stateManager = useSyncedProject(
     projectId,
     {
       filteredTaskIds
+      // onTaskAdded
     },
     (err, res) => {
       if (err && err === 'Not found') {

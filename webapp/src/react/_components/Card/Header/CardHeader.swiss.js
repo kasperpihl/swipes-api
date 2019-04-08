@@ -19,7 +19,7 @@ export default styleSheet('CardHeader', {
   },
   DropdownWrapper: {
     marginLeft: '6px',
-    width: '100px'
+    width: '130px'
   },
   TitleWrapper: {
     _flex: ['row', 'left', 'center'],

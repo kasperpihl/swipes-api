@@ -20,13 +20,18 @@ export default styleSheet('AssignMenu', {
   },
 
   OptionsRow: {
-    _size: ['100%', '48px'],
-    _flex: ['row', 'between', 'center'],
+    _size: ['100%', 'auto'],
+    _flex: ['column', 'left', 'top'],
+    minHeight: '48px',
     flexShrink: '0',
-    padding: '0 12px',
+    padding: '16px 24px 24px 12px',
     borderTop: '1px solid $sw4',
     borderBottom: '1px solid $sw4',
-    backgroundColor: '$sw5'
+    backgroundColor: '$sw5',
+
+    row: {
+      _flex: ['row', 'between', 'center']
+    }
   },
 
   ButtonWrapper: {
@@ -89,5 +94,12 @@ export default styleSheet('AssignMenu', {
     marginLeft: '6px',
     marginRight: 'auto',
     userSelect: 'none'
+  },
+
+  NudgeText: {
+    _el: 'p',
+    _textStyle: 'body',
+    width: '100%',
+    color: '$sw2'
   }
 });
