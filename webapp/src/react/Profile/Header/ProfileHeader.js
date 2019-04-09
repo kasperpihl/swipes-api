@@ -10,11 +10,13 @@ import request from 'core/utils/request';
 import Loader from 'src/react/_components/loaders/Loader';
 
 import withNav from 'src/react/_hocs/Nav/withNav';
+import Spacing from '_shared/Spacing/Spacing';
 
 @withNav
 @withLoader
 @connect(
   state => ({
+    state,
     me: state.me
   }),
   {
@@ -153,13 +155,18 @@ export default class ProfileHeader extends PureComponent {
   };
   render() {
     const { me, loader } = this.props;
+    console.log(this.props.state.teams.toJS());
     const fullName = `${me.get('first_name')} ${me.get('last_name')}`;
     return (
       <SW.Wrapper>
         {this.renderProfileImage()}
-        <SW.NameField onClick={this.handleOpenProfileUpdate}>
-          {fullName}
-        </SW.NameField>
+        <SW.UserInfo>
+          <SW.NameField onClick={this.handleOpenProfileUpdate}>
+            {fullName}
+          </SW.NameField>
+          <Spacing height={2} />
+          <SW.Subtitle>{`Member of ${2} teams`}</SW.Subtitle>
+        </SW.UserInfo>
         <SW.OptionsButton
           icon="ThreeDots"
           onClick={this.handleThreeDots}

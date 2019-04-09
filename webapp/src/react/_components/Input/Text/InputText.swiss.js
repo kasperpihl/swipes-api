@@ -3,7 +3,7 @@ import { styleSheet } from 'swiss-react';
 export default styleSheet('InputText', {
   Input: {
     _el: 'input',
-    _size: ['100%', '36px'],
+    _size: ['100%', '30px'],
     _textStyle: 'body',
     color: '$sw1',
     transition: '.2s ease',

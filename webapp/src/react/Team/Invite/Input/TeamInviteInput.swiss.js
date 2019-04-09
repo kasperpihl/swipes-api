@@ -21,16 +21,21 @@ export default styleSheet('TeamInviteInput', {
     width: '100%'
   },
 
-  EmailInput: {
-    _el: 'input',
-    _size: ['250px', 'auto'],
-    _textStyle: 'body',
-    border: '1px solid $sw3',
-    padding: '6px'
-  },
-
   Button: {
     _el: Button,
-    marginLeft: '12px'
+    marginLeft: '100px'
+  },
+
+  Text: {
+    _textStyle: 'caption',
+    color: '$sw2'
+  },
+
+  ButtonWrapper: {
+    marginLeft: 'auto',
+
+    clicked: {
+      transform: 'rotate(180deg)'
+    }
   }
 });

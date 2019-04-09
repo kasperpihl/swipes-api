@@ -6,8 +6,10 @@ import request from 'core/utils/request';
 import InputText from '_shared/Input/Text/InputText';
 
 import SW from './TeamInviteInput.swiss';
+import SectionHeader from '_shared/SectionHeader/SectionHeader';
+import Button from '_shared/Button/Button';
 
-export default function TeamInviteInput({ teamId }) {
+export default function TeamInviteInput({ teamId, handleClick, showInvites }) {
   const loader = useLoader();
   const [emailValue, setEmailValue] = useState('');
 
@@ -37,7 +39,12 @@ export default function TeamInviteInput({ teamId }) {
 
   return (
     <SW.Wrapper>
-      <SW.InviteText>Invite others to join</SW.InviteText>
+      <SectionHeader>
+        <SW.Text>Invite new members</SW.Text>
+        <SW.ButtonWrapper clicked={showInvites}>
+          <Button icon="ArrowDown" onClick={handleClick} />
+        </SW.ButtonWrapper>
+      </SectionHeader>
       <SW.InputWrapper>
         <InputText
           type="email"

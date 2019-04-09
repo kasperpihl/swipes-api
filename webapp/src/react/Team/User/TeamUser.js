@@ -178,7 +178,7 @@ export default class TeamUser extends PureComponent {
   };
 
   render() {
-    const { user, team, meInTeam, loader } = this.props;
+    const { user, team, meInTeam, loader, showInvites } = this.props;
     const isOwner = this.getUserTag(user) === 'Owner';
     const meUser =
       this.getUserTag(meInTeam) !== 'Owner' &&
@@ -189,23 +189,23 @@ export default class TeamUser extends PureComponent {
         <UserImage
           userId={user.get('user_id')}
           teamId={team.get('team_id')}
-          size={36}
+          size={24}
         />
-        <SW.UserDetails>
-          <SW.Name>
-            {user.get('first_name')} {user.get('last_name')}
-          </SW.Name>
-          <SW.Email>{user.get('email')}</SW.Email>
-        </SW.UserDetails>
+        <SW.Name>
+          {user.get('first_name')} {user.get('last_name')}
+        </SW.Name>
+        <SW.Email>{user.get('email')}</SW.Email>
+        <SW.UserType>{this.getUserTag(user)}</SW.UserType>
         {(isOwner && this.getUserTag(user) !== 'active') ||
         (meUser && this.getUserTag(user) !== 'active') ? null : (
-          <Button
-            icon="ThreeDots"
-            onClick={this.openListMenu}
-            status={loader.get('buttonClicked')}
-          />
+          <SW.ButtonWrapper show={showInvites}>
+            <Button
+              icon="ThreeDots"
+              onClick={this.openListMenu}
+              status={loader.get('buttonClicked')}
+            />
+          </SW.ButtonWrapper>
         )}
-        <SW.UserType>{this.getUserTag(user)}</SW.UserType>
       </SW.Wrapper>
     );
   }

@@ -1,20 +1,16 @@
-import React, { PureComponent } from 'react';
-import withLoader from 'src/react/_hocs/withLoader';
+import React from 'react';
+
+import useLoader from 'src/react/_hooks/useLoader';
 import request from 'core/utils/request';
+
+import Button from '_shared/Button/Button';
+
 import SW from './TeamPendingInvites.swiss';
 
-@withLoader
-export default class TeamPendingInvites extends PureComponent {
-  constructor(props) {
-    super(props);
+export default function TeamPendingInvites({ team, showInvites }) {
+  const loader = useLoader();
 
-    this.state = {
-      showPendingInvites: false
-    };
-  }
-
-  handleSendInviteCached = email => {
-    const { team, loader } = this.props;
+  const handleSendInviteCached = email => {
     const loadingKey = `${email}sendInvite`;
     loader.set(loadingKey);
     request('team.inviteUser', {
@@ -29,8 +25,7 @@ export default class TeamPendingInvites extends PureComponent {
     });
   };
 
-  handleRevokeInviteCached = email => {
-    const { team, loader } = this.props;
+  const handleRevokeInviteCached = email => {
     const loadingKey = `${email}revokeInvite`;
 
     loader.set(loadingKey);
@@ -46,68 +41,36 @@ export default class TeamPendingInvites extends PureComponent {
     });
   };
 
-  togglePendingInvites = () => {
-    const { showPendingInvites } = this.state;
-    this.setState({ showPendingInvites: !showPendingInvites });
-  };
+  const pendingUsersArr = team.get('pending_users').keySeq();
 
-  renderPendingInvites = () => {
-    const { showPendingInvites } = this.state;
-    const { team, loader } = this.props;
-
-    if (showPendingInvites) {
-      return (
-        <SW.PendingInvites>
-          {team
-            .get('pending_users')
-            .map((ts, email) => (
-              <SW.InviteItem key={email}>
-                <SW.InviteEmail>{email}</SW.InviteEmail>
-                <SW.EmailButton
-                  title="Resend"
-                  onClick={() => this.handleSendInviteCached(email)}
-                  status={loader.get(`${email}sendInvite`)}
-                  border
-                />
-                <SW.EmailButton
-                  title="Revoke"
-                  onClick={() => this.handleRevokeInviteCached(email)}
-                  status={loader.get(`${email}revokeInvite`)}
-                  border
-                />
-              </SW.InviteItem>
-            ))
-            .toList()}
-        </SW.PendingInvites>
-      );
-    }
+  if (!pendingUsersArr.size) {
     return null;
-  };
-
-  render() {
-    const { showPendingInvites } = this.state;
-    const { team } = this.props;
-    const pendingUsersArr = team.get('pending_users').keySeq();
-
-    if (!pendingUsersArr.size) {
-      return null;
-    }
-
-    return (
-      <SW.Wrapper>
-        <SW.SectionTitle onClick={this.togglePendingInvites}>
-          Pending invitations ({pendingUsersArr.size})
-          <SW.IconWrapper>
-            <SW.Icon
-              icon="ArrowRightFull"
-              width="24"
-              height="24"
-              showInvites={showPendingInvites}
-            />
-          </SW.IconWrapper>
-        </SW.SectionTitle>
-        {this.renderPendingInvites()}
-      </SW.Wrapper>
-    );
   }
+
+  return (
+    <SW.Wrapper show={showInvites}>
+      {team
+        .get('pending_users')
+        .map((ts, email) => (
+          <SW.InviteItem key={email}>
+            <SW.InviteEmail>{email}</SW.InviteEmail>
+            <SW.ButtonWrapper>
+              <Button
+                title="Resend"
+                onClick={() => handleSendInviteCached(email)}
+                status={loader.get(`${email}sendInvite`)}
+              />
+            </SW.ButtonWrapper>
+            <SW.ButtonWrapper>
+              <Button
+                title="Revoke"
+                onClick={() => handleRevokeInviteCached(email)}
+                status={loader.get(`${email}revokeInvite`)}
+              />
+            </SW.ButtonWrapper>
+          </SW.InviteItem>
+        ))
+        .toList()}
+    </SW.Wrapper>
+  );
 }

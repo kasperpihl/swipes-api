@@ -5,43 +5,38 @@ export default styleSheet('TeamUser', {
   Wrapper: {
     _size: ['100%', 'auto'],
     _flex: ['row', 'flex-start', 'center'],
-    _textStyle: 'body',
-    fontWeight: '$medium',
     color: '$sw1',
-    borderBottom: '1px solid $sw3',
-    padding: '12px 0'
-  },
-
-  UserDetails: {
-    _size: ['100%', 'auto'],
-    _flex: ['column', 'flex-start', 'flex-start'],
-    marginLeft: '12px'
+    padding: '6px 0',
+    minHeight: '30px',
+    boxSizing: 'content-box'
   },
 
   Name: {
-    _el: 'p'
+    _textStyle: 'body',
+    width: '150px',
+    marginLeft: '12px'
   },
 
   Email: {
-    _el: 'p',
     _textStyle: 'body',
-    color: '$sw2'
+    color: '$sw2',
+    width: '150px'
   },
 
   UserType: {
-    _el: 'p',
-    _size: ['40px', 'auto'],
+    _size: ['100px', 'auto'],
     _flex: ['row', 'flex-end', 'center'],
     _textStyle: 'body',
-    marginLeft: '18px',
     flexShrink: '0',
     color: '$sw2'
   },
 
-  Button: {
-    _el: Button,
-    flexShrink: '0',
-    justifySelf: 'flex-end'
+  ButtonWrapper: {
+    marginLeft: '18px',
+
+    show: {
+      transform: 'rotate(180deg)'
+    }
   },
 
   OptionsButton: {

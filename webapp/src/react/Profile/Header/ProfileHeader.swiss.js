@@ -4,19 +4,30 @@ import Icon from 'src/react/_components/Icon/Icon';
 
 export default styleSheet('ProfileHeader', {
   Wrapper: {
-    _size: ['100%', 'auto'],
-    _flex: ['row', 'flex-start', 'center'],
-    _font: ['27px', '27px', '$regular']
+    _size: ['calc(100% - 18px)', '100%'],
+    _flex: ['row', 'left', 'top'],
+    marginLeft: '18px'
+  },
+
+  UserInfo: {
+    _flex: ['column', 'left', 'top'],
+    height: '100%'
   },
 
   NameField: {
-    _size: 'auto',
+    _textStyle: 'H1',
+    fontWeight: 'bold',
     userSelect: 'none',
     cursor: 'pointer'
   },
 
+  Subtitle: {
+    _textStyle: 'body',
+    color: '$sw2'
+  },
+
   ProfileImage: {
-    _size: '72px',
+    _size: '60px',
     _flex: ['row', 'center', 'center'],
     flex: 'none',
     backgroundColor: 'grey',
@@ -26,7 +37,7 @@ export default styleSheet('ProfileHeader', {
     userSelect: 'none',
 
     '&': {
-      _size: '72px',
+      _size: '60px',
       borderRadius: '50%'
     }
   },
@@ -86,6 +97,7 @@ export default styleSheet('ProfileHeader', {
 
   OptionsButton: {
     _el: Button,
-    marginLeft: 'auto'
+    marginLeft: 'auto',
+    marginTop: '6px'
   }
 });

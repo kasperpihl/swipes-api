@@ -1,14 +1,19 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import moment from 'moment';
+
 import TeamHeader from 'src/react/Team/Header/TeamHeader';
 import TeamUser from 'src/react/Team/User/TeamUser';
 import TeamInviteInput from 'src/react/Team/Invite/Input/TeamInviteInput';
 import TeamPendingInvites from 'src/react/Team/Invite/PendingInvites/TeamPendingInvites';
-import SW from './Team.swiss';
+import TabBar from 'src/react/_components/TabBar/TabBar';
+import TeamBillingStatus from './BillingStatus/TeamBillingStatus';
 
 import propsOrPop from 'src/react/_hocs/propsOrPop';
 import CardContent from 'src/react/_components/Card/Content/CardContent';
 import Spacing from '_shared/Spacing/Spacing';
+
+import SW from './Team.swiss';
 
 @connect((state, props) => ({
   meInTeam: state.teams.getIn([props.teamId, 'users', state.me.get('user_id')]),
@@ -21,7 +26,8 @@ export default class Team extends PureComponent {
     super(props);
 
     this.state = {
-      tabIndex: 0
+      tabIndex: 0,
+      showPendingInvites: false
     };
   }
 
@@ -31,39 +37,35 @@ export default class Team extends PureComponent {
     }
   };
 
-  renderHeader = () => {
-    const {
-      team,
-      activeSubscription,
-      trialExpired,
-      daysLeft,
-      meInTeam
-    } = this.props;
+  renderHeader = ({ text, color }) => {
+    const { team, meInTeam } = this.props;
     return (
       <TeamHeader
         name={team.get('name')}
         team={team}
         meInTeam={meInTeam}
         admin={team.getIn(['users', meInTeam.get('user_id'), 'admin'])}
-        activeSubscription={activeSubscription}
-        trialExpired={trialExpired}
-        daysLeft={daysLeft}
+        text={text}
+        color={color}
       />
     );
   };
 
   renderTabBar = () => {
     const { team } = this.props;
+    const activeMembers = team
+      .get('users')
+      .filter(u => u.get('status') === 'active').size;
     const disabledUsersAmount = team
       .get('users')
       .filter(u => u.get('status') === 'disabled').size;
 
-    let tabs = ['Active users'];
+    let tabs = [`Active members (${activeMembers})`];
     if (disabledUsersAmount > 0) {
-      tabs.push('Disabled users');
+      tabs.push(`Disabled members (${disabledUsersAmount})`);
     }
     return (
-      <SW.TabBar
+      <TabBar
         tabs={tabs}
         value={this.state.tabIndex}
         onChange={this.handleTabChange}
@@ -71,17 +73,57 @@ export default class Team extends PureComponent {
     );
   };
 
+  showPendingInvites = () => {
+    this.setState({ showPendingInvites: !this.state.showPendingInvites });
+  };
+
+  getTeamStatus = () => {
+    const { team } = this.props;
+    const now = moment();
+    const endingAt = moment(team.get('trial_ending'));
+    const trialExpired = endingAt.isBefore(now);
+    const daysLeft = endingAt.diff(now, 'days');
+    const activeSubscription = team.get('stripe_subscription_id') !== null;
+    let status = {
+      type: '',
+      color: '',
+      daysLeft
+    };
+    if (activeSubscription) {
+      status.type = 'Active';
+      status.color = '$green1';
+    }
+    if (!activeSubscription && daysLeft > 0) {
+      status.type = 'Trial';
+      status.color = '$red';
+    }
+    if (!activeSubscription && trialExpired) {
+      status.type = 'Expired';
+      status.color = '$red';
+    }
+
+    return status;
+  };
+
   render() {
-    const { tabIndex } = this.state;
+    const { tabIndex, showPendingInvites } = this.state;
     const { team, meInTeam } = this.props;
     const userStatus = tabIndex === 0 ? 'active' : 'disabled';
+    const { type, color, daysLeft } = this.getTeamStatus();
 
     return (
-      <CardContent noframe header={this.renderHeader()}>
+      <CardContent noframe header={this.renderHeader(type, color)}>
         <SW.Wrapper>
-          <TeamInviteInput teamId={team.get('team_id')} />
-          <Spacing height={18} />
-          <TeamPendingInvites team={team} />
+          <Spacing height={24} />
+          <TeamBillingStatus subType={type} daysLeft={daysLeft} team={team} />
+          <Spacing height={48} />
+          <TeamInviteInput
+            teamId={team.get('team_id')}
+            handleClick={this.showPendingInvites}
+            showInvites={showPendingInvites}
+          />
+          <TeamPendingInvites team={team} showInvites={showPendingInvites} />
+          <Spacing height={24} />
           {this.renderTabBar()}
           <SW.UsersWrapper>
             {team

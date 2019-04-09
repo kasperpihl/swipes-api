@@ -56,9 +56,7 @@ export default class ProfileTeam extends PureComponent {
         <SW.TeamName>{team.get('name')}</SW.TeamName>
         <SW.Options>
           {this.renderSubscriptionStatus()}
-          <SW.TeamInfo right>
-            {activeCount} {activeCount === 1 ? 'user' : 'users'}
-          </SW.TeamInfo>
+          <SW.TeamInfo right>{activeCount}</SW.TeamInfo>
         </SW.Options>
       </SW.Wrapper>
     );

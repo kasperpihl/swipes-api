@@ -7,7 +7,6 @@ export default styleSheet('ProfileTeam', {
     _textStyle: 'body',
     fontWeight: '$medium',
     color: '$sw1',
-    borderBottom: '1px solid $sw3',
     padding: '12px 0',
     userSelect: 'none',
 
@@ -22,15 +21,15 @@ export default styleSheet('ProfileTeam', {
 
   TeamName: {
     _el: 'h1',
-    _size: ['100%', 'auto'],
-    _flex: ['column', 'flex-start', 'center'],
-    _textStyle: 'body'
+    _size: ['150px', 'auto'],
+    _textStyle: 'body',
+    color: '$dark',
+    flex: 'none'
   },
 
   Options: {
-    _size: ['160px', 'auto'],
-    _flex: ['row', 'flex-end', 'center'],
-    flexShrink: '0'
+    _size: ['100%', 'auto'],
+    _flex: ['row', 'left', 'center']
   },
 
   TeamInfo: {
@@ -38,6 +37,7 @@ export default styleSheet('ProfileTeam', {
     _textStyle: 'body',
     color: '$sw2',
     flexShrink: '0',
+    width: '150px',
 
     error: {
       color: '$red'
@@ -45,8 +45,7 @@ export default styleSheet('ProfileTeam', {
 
     right: {
       _size: ['50px', 'auto'],
-      _flex: ['row', 'flex-end', 'center'],
-      marginLeft: '12px'
+      _flex: ['row', 'left', 'center']
     }
   }
 });

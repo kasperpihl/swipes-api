@@ -26,17 +26,7 @@ const kLeave = {
   }
 )
 export default class TeamHeader extends PureComponent {
-  openBillingView = () => {
-    const { nav, team } = this.props;
-
-    nav.push({
-      screenId: 'Billing',
-      crumbTitle: 'Billing',
-      props: {
-        teamId: team.get('team_id')
-      }
-    });
-  };
+ 
 
   openRenameModal = () => {
     const { nav, team } = this.props;
@@ -174,14 +164,14 @@ export default class TeamHeader extends PureComponent {
       return this.openFormModal(modalOptions);
     }
   };
+
   render() {
-    const { name, loader, meInTeam } = this.props;
+    const { name, loader, meInTeam, text, color } = this.props;
     const isAdmin = meInTeam.get('admin');
+
     return (
       <CardHeader title={name} onTitleClick={this.openRenameModal}>
-        {isAdmin && (
-          <SW.Button title="Billing" onClick={this.openBillingView} />
-        )}
+        {isAdmin && <SW.StatusBox color={color}>{text}</SW.StatusBox>}
         <SW.Button
           icon="ThreeDots"
           onClick={this.openContextMenu}

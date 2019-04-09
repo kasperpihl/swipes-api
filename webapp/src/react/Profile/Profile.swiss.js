@@ -3,10 +3,11 @@ import Button from 'src/react/_components/Button/Button';
 
 export default styleSheet('Profile', {
   Wrapper: {
-    _size: ['100%', 'auto'],
+    _size: ['calc(100% - 18px)', 'auto'],
     _flex: ['row'],
     flexWrap: 'wrap',
-    paddingTop: '24px'
+    paddingTop: '24px',
+    marginLeft: '18px'
   },
 
   Button: {
@@ -21,5 +22,28 @@ export default styleSheet('Profile', {
     fontWeight: '800',
     _flex: 'center',
     userSelect: 'none'
+  },
+
+  HeaderItem: {
+    _textStyle: 'caption',
+    color: '$sw2',
+
+    team: {
+      width: '150px'
+    },
+
+    status: {
+      width: '150px'
+    },
+
+    members: {}
+  },
+
+  ActionBarWrapper: {
+    _flex: ['row', 'center', 'center'],
+    width: '100%',
+    margin: '0 auto',
+    position: 'absolute',
+    bottom: '0'
   }
 });

@@ -14,7 +14,7 @@ export default styleSheet('CardHeader', {
       width: '100%'
     },
     subtitle: {
-      _flex: ['row', 'left', 'bottom']
+      _flex: ['row', 'left', 'center']
     }
   },
   DropdownWrapper: {
@@ -22,8 +22,7 @@ export default styleSheet('CardHeader', {
     width: '130px'
   },
   TitleWrapper: {
-    _flex: ['row', 'left', 'center'],
-    width: '100%'
+    _flex: ['row', 'left', 'center']
   },
 
   Title: {
@@ -70,7 +69,7 @@ export default styleSheet('CardHeader', {
 
   Actions: {
     _flex: ['row', 'right', 'center'],
-    marginLeft: '30px',
+    width: '100%',
 
     '&:empty': {
       display: 'none'
