@@ -62,7 +62,7 @@ function ProjectSide({ stateManager }) {
       <SideHeader
         largeNumber={completedTasksAmount}
         smallNumber={`/ ${totalAmountOfTasks}`}
-        subtitle="Tasks Completed"
+        subtitle="Tasks"
       />
       <Spacing height={18} />
       <ProgressBar progress={completionPercentage} />

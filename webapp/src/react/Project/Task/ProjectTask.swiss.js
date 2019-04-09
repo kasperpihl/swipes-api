@@ -18,6 +18,7 @@ export default styleSheet('ProjectTask', {
       opacity: 1
     },
     cursor: 'pointer',
-    borderRadius: '4px'
+    borderRadius: '4px',
+    flex: 'none'
   }
 });
