@@ -75,7 +75,8 @@ export default class AssignMenu extends PureComponent {
 
   renderTeamAssignees = (users, allAreSelected) => {
     const { selectedIds } = this.state;
-    const { excludeMe, teamId, hide, hideRowOnSelect } = this.props;
+    const { me, excludeMe, teamId, hide, hideRowOnSelect } = this.props;
+    console.log(users);
     return (
       <>
         {!allAreSelected && (
@@ -88,7 +89,9 @@ export default class AssignMenu extends PureComponent {
                   selected={rowSelected}
                   hideRow={hideRowOnSelect && rowSelected}
                   onClick={this.handleToggleCached(u.get('user_id'))}
-                  excludeMe={excludeMe}
+                  excludeMe={
+                    excludeMe && u.get('user_id') === me.get('user_id')
+                  }
                 >
                   <UserImage
                     userId={u.get('user_id')}

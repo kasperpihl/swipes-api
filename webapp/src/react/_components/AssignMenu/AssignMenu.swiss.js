@@ -30,7 +30,8 @@ export default styleSheet('AssignMenu', {
     backgroundColor: '$sw5',
 
     row: {
-      _flex: ['row', 'between', 'center']
+      _flex: ['row', 'between', 'center'],
+      padding: '16px 12px'
     }
   },
 
