@@ -26,8 +26,6 @@ const kLeave = {
   }
 )
 export default class TeamHeader extends PureComponent {
- 
-
   openRenameModal = () => {
     const { nav, team } = this.props;
 
@@ -166,12 +164,12 @@ export default class TeamHeader extends PureComponent {
   };
 
   render() {
-    const { name, loader, meInTeam, text, color } = this.props;
+    const { name, loader, meInTeam, subType, color } = this.props;
     const isAdmin = meInTeam.get('admin');
 
     return (
       <CardHeader title={name} onTitleClick={this.openRenameModal}>
-        {isAdmin && <SW.StatusBox color={color}>{text}</SW.StatusBox>}
+        {isAdmin && <SW.StatusBox color={color}>{subType}</SW.StatusBox>}
         <SW.Button
           icon="ThreeDots"
           onClick={this.openContextMenu}

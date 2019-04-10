@@ -29,7 +29,7 @@ export default class ProfileTeam extends PureComponent {
     const daysLeft = endingAt.diff(now, 'days');
 
     if (team.get('stripe_subscription_id')) {
-      return;
+      return <SW.TeamInfo>Active subscription</SW.TeamInfo>;
     }
     if (daysLeft > 0) {
       return (

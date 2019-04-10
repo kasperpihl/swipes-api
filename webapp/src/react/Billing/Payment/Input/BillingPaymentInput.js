@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import SW from './BillingPaymentInput.swiss';
+import SectionHeader from '_shared/SectionHeader/SectionHeader';
+import Spacing from '_shared/Spacing/Spacing';
 
 const style = {
   base: {
@@ -18,7 +20,12 @@ const style = {
   }
 };
 
-export default function BillingPaymentInput({ label }) {
+export default function BillingPaymentInput({
+  label,
+  billedAmount,
+  activeUsersAmount,
+  plan
+}) {
   const [cardState, setCardState] = useState();
 
   const handleChange = cs => {
@@ -30,7 +37,21 @@ export default function BillingPaymentInput({ label }) {
   return (
     <SW.Billing>
       <div>
-        <SW.FormRowLabel htmlFor="card-element">{label}</SW.FormRowLabel>
+        <SectionHeader>
+          <SW.FormRowLabel htmlFor="card-element">{label}</SW.FormRowLabel>
+        </SectionHeader>
+        <Spacing height={24} />
+        <SW.PriceWrapper>
+          <SW.Amount>{`$${billedAmount}`}</SW.Amount>
+          <SW.DueDate>due today</SW.DueDate>
+        </SW.PriceWrapper>
+        <Spacing height={6} />
+        <SW.Subtitle>{`${
+          plan === 'monthly' ? '$7.5' : '$6'
+        } X ${activeUsersAmount} members X ${
+          plan === 'monthly' ? '1 month' : '12 months'
+        }`}</SW.Subtitle>
+        <Spacing height={18} />
         <SW.ElementWrapper>
           <SW.StripeElement
             hidePostalCode

@@ -9,7 +9,12 @@ import SW from './TeamInviteInput.swiss';
 import SectionHeader from '_shared/SectionHeader/SectionHeader';
 import Button from '_shared/Button/Button';
 
-export default function TeamInviteInput({ teamId, handleClick, showInvites }) {
+export default function TeamInviteInput({
+  teamId,
+  handleClick,
+  showInvites,
+  pendingUsers
+}) {
   const loader = useLoader();
   const [emailValue, setEmailValue] = useState('');
 
@@ -41,9 +46,11 @@ export default function TeamInviteInput({ teamId, handleClick, showInvites }) {
     <SW.Wrapper>
       <SectionHeader>
         <SW.Text>Invite new members</SW.Text>
-        <SW.ButtonWrapper clicked={showInvites}>
-          <Button icon="ArrowDown" onClick={handleClick} />
-        </SW.ButtonWrapper>
+        {pendingUsers > 0 ? (
+          <SW.ButtonWrapper clicked={showInvites}>
+            <Button icon="ArrowDown" onClick={handleClick} />
+          </SW.ButtonWrapper>
+        ) : null}
       </SectionHeader>
       <SW.InputWrapper>
         <InputText

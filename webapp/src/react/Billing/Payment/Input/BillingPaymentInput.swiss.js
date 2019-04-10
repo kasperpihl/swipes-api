@@ -3,24 +3,43 @@ import { CardElement } from 'react-stripe-elements';
 
 export default styleSheet('BillingPaymentInput', {
   Billing: {
-    _size: ['420px', '90px'],
-    paddingBottom: '30px'
+    _size: ['100%', 'auto']
   },
 
   FormRowLabel: {
-    _font: ['18px', '24px'],
-    marginBottom: '9px'
+    _textStyle: 'caption',
+    textTransform: 'uppercase'
+  },
+
+  PriceWrapper: {
+    _flex: ['row', 'left', 'baseline']
+  },
+
+  Amount: {
+    _textStyle: 'title',
+    color: '$dark'
+  },
+
+  DueDate: {
+    _textStyle: 'H2',
+    marginLeft: '6px'
+  },
+
+  Subtitle: {
+    _textStyle: 'caption',
+    textTransform: 'uppercase',
+    color: '$sw2'
   },
 
   ElementWrapper: {
     _el: 'label',
-    _size: ['100%', 'auto'],
+    _size: ['420px', 'auto'],
     paddingTop: '9px'
   },
 
   StripeElement: {
     _el: CardElement,
-    _size: ['100%', 'auto'],
+    _size: ['420px', 'auto'],
     backgroundColor: 'white',
     padding: '8px 12px',
     borderRadius: '3px',

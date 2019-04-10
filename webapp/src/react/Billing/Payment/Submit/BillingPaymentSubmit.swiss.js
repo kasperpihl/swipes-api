@@ -3,24 +3,16 @@ import Button from 'src/react/_components/Button/Button';
 
 export default styleSheet('BillingPaymentSubmit', {
   Wrapper: {
-    _size: ['420px', 'auto'],
-    _flex: ['column', 'center']
-  },
-  SubmitButton: {
-    _el: Button,
-    marginTop: '20px'
-  },
-  Subtitle: {
-    _font: ['12px', '15px', '$medium'],
-    color: '$sw2',
-    marginTop: '9px'
+    _size: ['100%', 'auto'],
+    _flex: ['column', 'left', 'top']
   },
   Terms: {
     _el: 'p',
-    _font: ['12px', '18px'],
+    _textStyle: 'caption',
+    width: '420px',
     color: '$sw2',
-    textAlign: 'left',
-    marginTop: '20px'
+    lineHeight: '24px',
+    textAlign: 'left'
   },
   Link: {
     _el: 'a',
@@ -33,5 +25,10 @@ export default styleSheet('BillingPaymentSubmit', {
       textDecoration: 'underline',
       cursor: 'pointer'
     }
+  },
+
+  Button: {
+    _el: Button,
+    _size: ['144px', '42px !important']
   }
 });

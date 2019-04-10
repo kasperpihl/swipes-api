@@ -1,10 +1,14 @@
 import React from 'react';
 import useLoader from 'src/react/_hooks/useLoader';
 import { injectStripe } from 'react-stripe-elements';
-import SW from './BillingPaymentSubmit.swiss';
-import BillingPaymentInput from 'src/react/Billing/Payment/Input/BillingPaymentInput';
+
 import request from 'core/utils/request';
 import billingGetPrice from 'src/utils/billing/billingGetPrice';
+
+import BillingPaymentInput from 'src/react/Billing/Payment/Input/BillingPaymentInput';
+
+import SW from './BillingPaymentSubmit.swiss';
+import Spacing from '_shared/Spacing/Spacing';
 
 export default injectStripe(function BillingPaymentSubmit({
   stripe,
@@ -39,32 +43,41 @@ export default injectStripe(function BillingPaymentSubmit({
       });
   };
 
+  const activeUsersAmount = team
+    .get('users')
+    .filter(u => u.get('status') === 'active').size;
+
+  console.log(team.toJS());
+
   return (
     <SW.Wrapper>
-      <BillingPaymentInput label="Credit or debit card" />
-      <SW.SubmitButton
-        status={loader.get('submit')}
-        title="Submit Payment"
-        onClick={handleSubmit}
+      <BillingPaymentInput
+        label="Payments information"
+        billedAmount={billingGetPrice(team, plan)}
+        activeUsersAmount={activeUsersAmount}
+        plan={plan}
       />
-      <SW.Subtitle>
-        You will be billed ${billingGetPrice(team, plan)}.
-      </SW.Subtitle>
 
       <SW.Terms>
-        Your subscription will automatically renew every {everyString}. You can
-        always cancel your account by writing to us on help@swipesapp.com.
-        <br />
-        <br />
-        By Clicking the 'Submit Payment' button above, you are agreeing to our{' '}
+        {`To ensure uninterrupted service, your subscription will be set to continuous auto-renewal payments of $${billingGetPrice(
+          team,
+          plan
+        )} per ${everyString} (plus applicable taxes), with your next payment due on Apr 4, 2020. You can cancel your subscription at any time from your Billing page, or by contacting our Customer Service on help@swipesapp.com. Yearly subscriptions can be canceled with a full refund 14 days after purchase. You also agree to our `}
         <SW.Link
           target="_blank"
           href="https://s3.amazonaws.com/cdn.swipesapp.com/downloads/Policies.pdf"
         >
           Terms of Service
         </SW.Link>
-        .
+        {` and confirm that you have read and understood our Privacy Policy.`}
       </SW.Terms>
+      <Spacing height={30} />
+      <SW.Button
+        status={loader.get('submit')}
+        title="Submit Payment"
+        onClick={handleSubmit}
+        green
+      />
     </SW.Wrapper>
   );
 });

@@ -28,9 +28,11 @@ export default function TeamBillingStatus({ subType, daysLeft, team }) {
         <SW.StatusWrapper>
           <SW.SubscriptionType>{subType}</SW.SubscriptionType>
           <Spacing height={2} />
-          <SW.DaysLeft>{`${daysLeft} ${
-            daysLeft === 1 ? 'day' : 'days'
-          }`}</SW.DaysLeft>
+          <SW.DaysLeft>
+            {subType === 'Active'
+              ? null
+              : `${daysLeft} ${daysLeft === 1 ? 'day' : 'days'} remaining`}
+          </SW.DaysLeft>
         </SW.StatusWrapper>
         <SW.ButtonWrapper>
           <Button

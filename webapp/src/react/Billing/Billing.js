@@ -9,13 +9,14 @@ import CardContent from 'src/react/_components/Card/Content/CardContent';
 
 import withNav from 'src/react/_hocs/Nav/withNav';
 import FormModal from 'src/react/_components/FormModal/FormModal';
-import BillingHeader from './Header/BillingHeader';
+import CardHeader from '_shared/Card/Header/CardHeader';
 import BillingPaymentActive from './Payment/Active/BillingPaymentActive';
 import BillingPaymentSubmit from './Payment/Submit/BillingPaymentSubmit';
 
 import BillingPlan from './Plan/BillingPlan';
 
 import SW from './Billing.swiss';
+import Spacing from '_shared/Spacing/Spacing';
 
 @withNav
 @withLoader
@@ -54,15 +55,19 @@ export default class Billing extends PureComponent {
   render() {
     const { team, nav } = this.props;
     const { plan } = this.state;
+    const title = `Billing: ${team.get('name')}`;
 
     return (
       <Elements>
-        <CardContent header={<BillingHeader team={team} />}>
+        <CardContent header={<CardHeader title={title} />} noframe>
           <SW.Wrapper>
-            <BillingPlan
-              value={team.get('plan') || plan}
-              onChange={this.handlePlanChange}
-            />
+            <Spacing height={36} />
+            {team.get('stripe_subscription_id') ? null : (
+              <BillingPlan
+                value={team.get('plan') || plan}
+                onChange={this.handlePlanChange}
+              />
+            )}
             <SW.PaymentSection>
               {team.get('stripe_subscription_id') ? (
                 <BillingPaymentActive openModal={nav.openModal} team={team} />

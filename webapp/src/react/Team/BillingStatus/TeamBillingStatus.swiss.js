@@ -13,8 +13,8 @@ export default styleSheet('TeamBillingStatus', {
   },
 
   Row: {
-    _flex: ['row', 'left', 'top'],
-    width: '100%',
+    _flex: ['row', 'left', 'center'],
+    width: '100%'
   },
 
   StatusWrapper: {
@@ -31,6 +31,6 @@ export default styleSheet('TeamBillingStatus', {
   },
 
   ButtonWrapper: {
-    marginLeft: 'auto',
+    marginLeft: 'auto'
   }
 });

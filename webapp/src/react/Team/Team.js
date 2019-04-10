@@ -37,7 +37,7 @@ export default class Team extends PureComponent {
     }
   };
 
-  renderHeader = ({ text, color }) => {
+  renderHeader = (subType, color) => {
     const { team, meInTeam } = this.props;
     return (
       <TeamHeader
@@ -45,7 +45,7 @@ export default class Team extends PureComponent {
         team={team}
         meInTeam={meInTeam}
         admin={team.getIn(['users', meInTeam.get('user_id'), 'admin'])}
-        text={text}
+        subType={subType}
         color={color}
       />
     );
@@ -62,7 +62,7 @@ export default class Team extends PureComponent {
 
     let tabs = [`Active members (${activeMembers})`];
     if (disabledUsersAmount > 0) {
-      tabs.push(`Disabled members (${disabledUsersAmount})`);
+      tabs.push(`Deactivated members (${disabledUsersAmount})`);
     }
     return (
       <TabBar
@@ -85,20 +85,20 @@ export default class Team extends PureComponent {
     const daysLeft = endingAt.diff(now, 'days');
     const activeSubscription = team.get('stripe_subscription_id') !== null;
     let status = {
-      type: '',
+      subType: '',
       color: '',
       daysLeft
     };
     if (activeSubscription) {
-      status.type = 'Active';
+      status.subType = 'Active';
       status.color = '$green1';
     }
     if (!activeSubscription && daysLeft > 0) {
-      status.type = 'Trial';
+      status.subType = 'Trial';
       status.color = '$red';
     }
     if (!activeSubscription && trialExpired) {
-      status.type = 'Expired';
+      status.subType = 'Expired';
       status.color = '$red';
     }
 
@@ -109,18 +109,23 @@ export default class Team extends PureComponent {
     const { tabIndex, showPendingInvites } = this.state;
     const { team, meInTeam } = this.props;
     const userStatus = tabIndex === 0 ? 'active' : 'disabled';
-    const { type, color, daysLeft } = this.getTeamStatus();
+    const { subType, color, daysLeft } = this.getTeamStatus();
 
     return (
-      <CardContent noframe header={this.renderHeader(type, color)}>
+      <CardContent noframe header={this.renderHeader(subType, color)}>
         <SW.Wrapper>
           <Spacing height={24} />
-          <TeamBillingStatus subType={type} daysLeft={daysLeft} team={team} />
+          <TeamBillingStatus
+            subType={subType}
+            daysLeft={daysLeft}
+            team={team}
+          />
           <Spacing height={48} />
           <TeamInviteInput
             teamId={team.get('team_id')}
             handleClick={this.showPendingInvites}
             showInvites={showPendingInvites}
+            pendingUsers={team.get('pending_users').size}
           />
           <TeamPendingInvites team={team} showInvites={showPendingInvites} />
           <Spacing height={24} />

@@ -1,40 +1,32 @@
 import { styleSheet } from 'swiss-react';
-import Button from 'src/react/_components/Button/Button';
 
 export default styleSheet('BillingPaymentActive', {
   Wrapper: {
     _size: ['420px', 'auto'],
-    _flex: ['column', 'center', 'center']
+    _flex: ['column', 'left', 'top']
   },
   Title: {
-    _font: ['27px', '36px'],
-    color: 'black',
-    textAlign: 'center',
-    paddingBottom: '12px'
+    _textStyle: 'H1'
   },
   StatusWrapper: {
     _flex: ['row', 'left', 'center']
   },
 
   StatusLabel: {
-    _font: ['12px', '21px', '$medium'],
-    color: '$sw2',
-    _size: ['160px', 'auto']
-  },
-  ChangeDetailsButton: {
-    _el: Button,
-    marginTop: '20px'
+    _textStyle: 'caption',
+    color: '$sw2'
   },
 
   Status: {
-    _font: ['12px', '21px', '$medium'],
-    color: '$blue',
+    _size: ['54px', '24px'],
+    _textStyle: 'caption',
+    _flex: ['column', 'center', 'center'],
+    backgroundColor: '$green1',
+    textTransform: 'uppercase',
+    color: '$base',
     borderRadius: '2px',
-    marginLeft: '6px',
-    height: '21px',
-    padding: '0 6px',
-
-    color: 'white',
-    backgroundColor: '$blue'
+    margin: '0 auto auto 24px',
+    pointerEvents: 'none',
+    userSelect: 'none'
   }
 });

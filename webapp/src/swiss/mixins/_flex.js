@@ -49,6 +49,9 @@ addMixin('flex', (direction, horizontal, vertical) => {
       case 'stretch':
         flex.alignItems = 'stretch';
         break;
+      case 'baseline':
+        flex.alignItems = 'baseline';
+        break;
     }
   }
 

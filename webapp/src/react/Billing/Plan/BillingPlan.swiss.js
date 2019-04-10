@@ -2,56 +2,58 @@ import { styleSheet } from 'swiss-react';
 
 export default styleSheet('BillingPlan', {
   Wrapper: {
-    _size: ['420px', '213px'],
-    _flex: ['row'],
-    color: '$blue',
-    border: '1px solid $blue',
-    borderRadius: '3px',
-    overflow: 'hidden'
+    _size: '100%',
+    _flex: ['column', 'left', 'top']
   },
 
-  Toggle: {
-    _size: ['100%'],
-    cursor: 'pointer',
-    backgroundColor: '$blue',
-    color: 'white',
-    '& > *': {
-      pointerEvents: 'none',
-      userSelect: 'none'
-    },
+  Text: {
+    _textStyle: 'caption'
+  },
 
-    '!selected': {
-      backgroundColor: 'transparent',
-      transition: '.2s ease',
-      color: 'black',
-      '&:hover': {
-        backgroundColor: '$sw3',
-        transition: '.2s ease'
-      }
+  ToggleWrapper: {
+    _flex: ['row', 'left', 'center'],
+
+    '&:hover > .checkbox': {
+      border: '1px solid #05A851'
     }
   },
 
-  Price: {
-    _font: ['42px', '54px'],
-    paddingTop: '24px',
-    paddingLeft: '21px'
+  TextWrapper: {
+    _flex: ['column', 'left', 'top'],
+    marginLeft: '18px'
   },
 
-  PriceLabel: {
-    _font: ['18px', '24px', '$regular'],
-    paddingLeft: '21px',
-    paddingTop: '9px'
+  ToggleLabel: {
+    _textStyle: 'H2'
   },
 
   Subtitle: {
-    _font: ['12px', '15px', '$medium'],
-    paddingTop: '57px',
-    paddingLeft: '21px'
+    _textStyle: 'caption',
+    color: '$sw2'
   },
 
-  SaveLabel: {
-    _el: 'span',
-    backgroundColor: '$yellow !important',
-    color: 'black'
+  Checkbox: {
+    _size: '24px',
+    _flex: ['column', 'center', 'center'],
+    border: '1px solid $sw3',
+    pointerEvents: 'none',
+    borderRadius: '12px',
+    checked: {
+      background: '#05A851',
+      border: 'none'
+    }
+  },
+
+  StatusBox: {
+    _size: ['78px', '24px'],
+    _textStyle: 'caption',
+    _flex: ['column', 'center', 'center'],
+    backgroundColor: '$yellow',
+    textTransform: 'uppercase',
+    color: '$dark',
+    borderRadius: '2px',
+    margin: '0 auto auto 24px',
+    pointerEvents: 'none',
+    userSelect: 'none'
   }
 });
