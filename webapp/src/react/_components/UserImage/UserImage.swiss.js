@@ -4,7 +4,7 @@ export default styleSheet('UserImage', {
   Wrapper: {
     _size: '100%',
     _flex: ['column', 'center', 'center'],
-    overflow: 'hidden',
+    // overflow: 'hidden',
     flexShrink: '0',
     userSelect: 'none',
 

@@ -155,8 +155,8 @@ export default class ProfileHeader extends PureComponent {
   };
   render() {
     const { me, loader } = this.props;
-    console.log(this.props.state.teams.toJS());
     const fullName = `${me.get('first_name')} ${me.get('last_name')}`;
+
     return (
       <SW.Wrapper>
         {this.renderProfileImage()}

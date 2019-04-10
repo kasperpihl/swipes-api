@@ -63,10 +63,7 @@ export default class Billing extends PureComponent {
           <SW.Wrapper>
             <Spacing height={36} />
             {team.get('stripe_subscription_id') ? null : (
-              <BillingPlan
-                value={team.get('plan') || plan}
-                onChange={this.handlePlanChange}
-              />
+              <BillingPlan value={plan} onChange={this.handlePlanChange} />
             )}
             <SW.PaymentSection>
               {team.get('stripe_subscription_id') ? (

@@ -21,7 +21,7 @@ export default styleSheet('TeamHeader', {
     _size: ['56px', '24px'],
     _textStyle: 'caption',
     _flex: ['column', 'center', 'center'],
-    backgroundColor: get => `${get('color')}`,
+    backgroundColor: get => get('color'),
     textTransform: 'uppercase',
     color: '$base',
     borderRadius: '2px',

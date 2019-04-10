@@ -12,10 +12,6 @@ export default function BillingPlan({ onChange, value }) {
     return onChange(plan);
   };
 
-  const testClick = () => {
-    console.log('test');
-  };
-
   return (
     <SW.Wrapper>
       <SectionHeader>
