@@ -53,7 +53,7 @@ function TeamPicker({ teams, value, onChange, disablePersonal }) {
       }).then(res => {
         if (res.ok) {
           loader.success('createTeam', 1500);
-          window.analytics.sendEvent('Team created', {});
+          window.analytics.sendEvent('Team created', res.team_id);
           handleShowInput(false);
         } else {
           loader.error(res.error, 1500);

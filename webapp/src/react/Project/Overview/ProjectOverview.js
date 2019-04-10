@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect } from 'react';
+import React, { memo, useState, useEffect, useCallback } from 'react';
 import { ProjectContext } from 'src/react/contexts';
 import { connect } from 'react-redux';
 
@@ -75,6 +75,19 @@ function ProjectOverview({ projectId, state }) {
       setSliderValue(maxIndention + 1);
     }
   });
+
+  const handleComplete = useCallback(
+    (taskId, isCompleted) => {
+      window.analytics.sendEvent(
+        isCompleted ? 'Task completed' : 'Task incompleted',
+        stateManager.getClientState().get('owned_by'),
+        {
+          From: 'Project'
+        }
+      );
+    },
+    [stateManager]
+  );
 
   if (!projectTitle) {
     return <Loader center />;
@@ -220,7 +233,7 @@ function ProjectOverview({ projectId, state }) {
           <Spacing width={48} />
           <SW.RightSide>
             <SW.TaskWrapper>
-              <ProjectTaskList />
+              <ProjectTaskList onComplete={handleComplete} />
             </SW.TaskWrapper>
             <ActionBar actions={actions} />
           </SW.RightSide>

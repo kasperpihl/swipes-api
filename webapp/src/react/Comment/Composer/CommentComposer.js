@@ -48,7 +48,14 @@ export default class CommentComposer extends PureComponent {
   };
   handleEditComment = () => {
     const { attachments, commentVal } = this.state;
-    const { discussionId, editCommentId, onSuccess, loader } = this.props;
+    const {
+      discussionId,
+      editCommentId,
+      onSuccess,
+      loader,
+      ownedBy
+    } = this.props;
+
     loader.set('editing');
     request('comment.edit', {
       discussion_id: discussionId,
@@ -58,7 +65,7 @@ export default class CommentComposer extends PureComponent {
     }).then(res => {
       if (res.ok) {
         loader.clear('editing');
-        window.analytics.sendEvent('Comment edited', {});
+        window.analytics.sendEvent('Comment edited', ownedBy);
         if (typeof onSuccess === 'function') {
           onSuccess();
         }
@@ -69,7 +76,7 @@ export default class CommentComposer extends PureComponent {
   };
   handleAddComment = message => {
     const { attachments, commentVal, attachmentLoadingStatus } = this.state;
-    const { discussionId, editCommentId, onSuccess } = this.props;
+    const { discussionId, editCommentId, onSuccess, ownedBy } = this.props;
     if (!message || attachmentLoadingStatus === 'loading') {
       return;
     }
@@ -88,7 +95,7 @@ export default class CommentComposer extends PureComponent {
       message
     }).then(res => {
       if (res.ok) {
-        window.analytics.sendEvent('Comment added', {});
+        window.analytics.sendEvent('Comment sent', ownedBy);
         if (typeof onSuccess === 'function') {
           onSuccess();
         }

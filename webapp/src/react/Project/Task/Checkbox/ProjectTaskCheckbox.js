@@ -8,7 +8,7 @@ import { ProjectContext } from 'src/react/contexts';
 
 export default memo(ProjectTaskCheckbox);
 
-function ProjectTaskCheckbox({ taskId }) {
+function ProjectTaskCheckbox({ taskId, onComplete }) {
   const stateManager = useContext(ProjectContext);
   const [completion] = useProjectSlice(stateManager, clientState => [
     clientState.getIn(['completion', taskId])
@@ -21,6 +21,9 @@ function ProjectTaskCheckbox({ taskId }) {
       } else {
         stateManager.completeHandler.complete(taskId);
         successGradient('green');
+      }
+      if (typeof onComplete === 'function') {
+        onComplete(taskId, !completion);
       }
     },
     [completion]

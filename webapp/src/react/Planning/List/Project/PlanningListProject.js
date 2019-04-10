@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useMemo, useRef } from 'react';
+import React, { memo, useEffect, useMemo, useRef, useCallback } from 'react';
 import { ProjectContext } from 'src/react/contexts';
 
 import useSyncedProject from 'core/react/_hooks/useSyncedProject';
@@ -138,6 +138,16 @@ function PlanningListProject({
     }
   }, [editingId, stateManager]);
 
+  const handleComplete = useCallback((taskId, isCompleted) => {
+    window.analytics.sendEvent(
+      isCompleted ? 'Task completed' : 'Task incompleted',
+      ownedBy,
+      {
+        From: 'Planning'
+      }
+    );
+  }, []);
+
   if (!visibleOrder || !stateManager || !visibleOrder.size) {
     return null;
   }
@@ -162,6 +172,7 @@ function PlanningListProject({
           selectable={editingId === projectId}
           onToggleTask={handleToggleTask}
           selectedTasks={selectedTasks}
+          onComplete={handleComplete}
         />
       </SW.Wrapper>
     </ProjectContext.Provider>

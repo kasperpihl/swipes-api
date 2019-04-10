@@ -74,9 +74,8 @@ export default class ModalCreate extends PureComponent {
           onSuccess(res);
         }
         hideModal();
-        window.analytics.sendEvent(analyticsEvent, {
+        window.analytics.sendEvent(analyticsEvent, ownedBy, {
           Privacy: privacy,
-          'Owned By': ownedBy === myId ? 'Personal' : 'Company',
           'Tagged people': members.size
         });
       } else {

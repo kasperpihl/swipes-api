@@ -151,7 +151,7 @@ function DiscussionOverview({ tooltip, discussionId }) {
           discussion_id: discussion.discussion_id
         }).then(res => {
           if (res.ok) {
-            window.analytics.sendEvent('Discussion archived', {});
+            window.analytics.sendEvent('Discussion archived');
           }
           if (!res || !res.ok) {
             loader.error('dots', res.error, 3000);

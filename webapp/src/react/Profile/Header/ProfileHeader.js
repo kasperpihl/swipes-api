@@ -71,7 +71,7 @@ export default class ProfileHeader extends PureComponent {
         res => {
           loader.clear('uploadImage');
           if (res.ok) {
-            window.analytics.sendEvent('Profile photo updated', {});
+            window.analytics.sendEvent('Profile photo updated');
             console.log(res);
           } else {
             console.log(res);

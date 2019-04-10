@@ -13,7 +13,7 @@ import SW from './ProjectTask.swiss';
 
 export default memo(ProjectTask);
 
-function ProjectTask({ taskId, selected, onSelect }) {
+function ProjectTask({ taskId, selected, onSelect, onComplete }) {
   const stateManager = useContext(ProjectContext);
 
   const [
@@ -39,7 +39,9 @@ function ProjectTask({ taskId, selected, onSelect }) {
       isSelected={selected}
     >
       <ProjectTaskExpand taskId={taskId} />
-      {(isCompleted || !onSelect) && <ProjectTaskCheckbox taskId={taskId} />}
+      {(isCompleted || !onSelect) && (
+        <ProjectTaskCheckbox taskId={taskId} onComplete={onComplete} />
+      )}
       {!isCompleted && onSelect && (
         <ProjectTaskSelect
           onSelect={onSelect}

@@ -1,14 +1,14 @@
 import mixpanel from 'mixpanel-browser';
-const blockedMixpanelEvents = [];
 
 export default class Analytics {
   constructor(store) {
-    this.enable = !store.getState().global.get('isDev');
+    this.enable = !!store.getState().global.get('isDev');
     // this.enable = true; // for testing on dev. turn off when done.
     if (this.enable) {
-      // amplitude.getInstance().init("fea8942630d7141403673df1c646ecc7");
-      mixpanel.init('a1b6f31fc988c7e4a7f40c267e315f5d');
+      mixpanel.init('280f53ea477a89ca86e0f7c8825528ca');
+      // mixpanel.init('cdb182baa17a94f1a4ace32ad04c2322');
     }
+
     this.store = store;
     this.userId = null;
     store.subscribe(this.storeChange);
@@ -20,12 +20,12 @@ export default class Analytics {
     const platform = global.get('platform');
     const electronVersion = global.get('sw-electron-version');
     const defs = {
-      _Client: isElectron ? 'Electron' : 'Web',
-      '_Web version': version,
-      _Platform: platform
+      sw_client: isElectron ? 'electron' : 'web',
+      sw_version: version,
+      sw_platform: platform
     };
     if (electronVersion) {
-      defs['_Electron version'] = electronVersion;
+      defs['sw_electron_version'] = electronVersion;
     }
     return defs;
   }
@@ -34,24 +34,35 @@ export default class Analytics {
       mixpanel.reset();
     }
   }
-  sendEvent = (name, data) => {
+  sendEvent = (name, ownedBy, data) => {
+    if (typeof ownedBy === 'object') {
+      data = ownedBy;
+      ownedBy = null;
+    }
     const defs = this.getDefaultEventProps();
     if (this.enable) {
       const props = Object.assign(defs, data);
-      if (blockedMixpanelEvents.indexOf(name) === -1) {
-        mixpanel.track(name, props);
-      } else {
-        console.log('blocked mixpanel event', name);
+      if (typeof ownedBy === 'string' && ownedBy.startsWith('T')) {
+        props.team_id = ownedBy;
       }
+      console.log('tracking', name, props);
+      mixpanel.track(name, props);
     }
   };
   storeChange = () => {
     const { me } = this.store.getState();
 
-    if (me && me.get('id') && me.get('id') !== this.userId) {
-      this.userId = me.get('id');
+    if (me && me.get('user_id') && me.get('user_id') !== this.userId) {
+      this.userId = me.get('user_id');
       if (this.enable) {
+        console.log('userId', this.userId);
         mixpanel.identify(this.userId);
+        mixpanel.people.set_once({
+          $email: me.get('email'), // only special properties need the $
+          $created: me.get('created_at'),
+          $first_name: me.get('first_name'),
+          $last_name: me.get('last_name')
+        });
       }
     }
   };

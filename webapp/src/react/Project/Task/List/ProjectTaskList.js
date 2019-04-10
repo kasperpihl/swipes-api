@@ -6,7 +6,8 @@ import ProjectTask from 'src/react/Project/Task/ProjectTask';
 export default function ProjectTaskList({
   selectable,
   selectedTasks,
-  onToggleTask
+  onToggleTask,
+  ...props
 }) {
   const stateManager = useContext(ProjectContext);
 
@@ -23,7 +24,7 @@ export default function ProjectTaskList({
   if (!selectable) {
     // Filtered version
     return visibleOrder.map(taskId => (
-      <ProjectTask taskId={taskId} key={taskId} />
+      <ProjectTask taskId={taskId} key={taskId} {...props} />
     ));
   }
 
@@ -59,6 +60,7 @@ export default function ProjectTaskList({
         taskId={taskId}
         selected={isSelected}
         onSelect={handlePlanSelect}
+        {...props}
       />
     );
   });

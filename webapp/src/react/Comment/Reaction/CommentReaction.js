@@ -37,7 +37,7 @@ export default class CommentReaction extends PureComponent {
     return optimist.get('like', !!reactions[myId]);
   };
   onReaction = () => {
-    const { optimist, commentId, discussionId } = this.props;
+    const { optimist, commentId, discussionId, ownedBy } = this.props;
 
     successGradient('red');
     optimist.set({
@@ -51,7 +51,7 @@ export default class CommentReaction extends PureComponent {
         }).then(res => {
           next();
           if (res.ok) {
-            window.analytics.sendEvent('Reaction added', {});
+            window.analytics.sendEvent('Reaction added', ownedBy);
           }
         });
       }
