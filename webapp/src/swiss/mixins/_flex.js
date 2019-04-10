@@ -70,6 +70,9 @@ addMixin('flex', (direction, horizontal, vertical) => {
       case 'flex-end':
         flex.alignItems = 'flex-end';
         break;
+      case 'baseline':
+        flex.alignItems = 'baseline';
+        break;
     }
 
     switch (vertical) {
@@ -91,7 +94,7 @@ addMixin('flex', (direction, horizontal, vertical) => {
       case 'around':
       case 'space-around':
         flex.justifyContent = 'space-around';
-        break;
+        break; 
     }
   }
 

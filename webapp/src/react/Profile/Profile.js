@@ -35,6 +35,25 @@ export default class Profile extends PureComponent {
         onClick={this.openCreateTeam}
       />
     ];
+
+    if (teams.keySeq().size === 0) {
+      return (
+        <CardContent header={this.renderHeader()}>
+          <SW.Wrapper empty>
+            <SW.EmptyState
+              icon="Team"
+              title="No teams"
+              description="Create your first team and invite your colleagues"
+            />
+            <Button
+              title="New team"
+              icon="CircledPlus"
+              onClick={this.openCreateTeam}
+            />
+          </SW.Wrapper>
+        </CardContent>
+      );
+    }
     return (
       <CardContent header={this.renderHeader()}>
         <SW.Wrapper>

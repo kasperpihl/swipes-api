@@ -1,5 +1,6 @@
 import { styleSheet } from 'swiss-react';
 import Button from 'src/react/_components/Button/Button';
+import EmptyState from '_shared/EmptyState/EmptyState';
 
 export default styleSheet('Profile', {
   Wrapper: {
@@ -7,7 +8,17 @@ export default styleSheet('Profile', {
     _flex: ['row'],
     flexWrap: 'wrap',
     paddingTop: '24px',
-    marginLeft: '18px'
+    marginLeft: '18px',
+
+    empty: {
+      _size: ['calc(100% - 18px)', '100%'],
+      _flex: ['column', 'center', 'top'],
+    }
+  },
+
+  EmptyState: {
+    _el: EmptyState,
+    marginTop: '96px',
   },
 
   Button: {
