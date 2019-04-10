@@ -96,7 +96,7 @@ export default class TeamUser extends PureComponent {
       buttonMessage = 'Promoted';
     } else if (title === kDisable) {
       endpoint = 'team.disableUser';
-      buttonMessage = 'Disabled';
+      buttonMessage = 'Deactivated';
     } else if (title === kInvite) {
       delete options.target_user_id;
       options.target_email = user.get('email');
@@ -131,7 +131,7 @@ export default class TeamUser extends PureComponent {
     if (meTag === 'Owner') {
       buttons.push(kTransfer);
     }
-    if (targetTag === 'Disabled') {
+    if (targetTag === 'Deactivated') {
       buttons = [kInvite];
     }
 
@@ -172,7 +172,7 @@ export default class TeamUser extends PureComponent {
       return 'Admin';
     }
     if (user.get('status') === 'disabled') {
-      return 'Disabled';
+      return 'Deactivated';
     }
     return 'User';
   };
@@ -189,7 +189,7 @@ export default class TeamUser extends PureComponent {
         <UserImage
           userId={user.get('user_id')}
           teamId={team.get('team_id')}
-          size={24}
+          size={28}
         />
         <SW.Name>
           {user.get('first_name')} {user.get('last_name')}

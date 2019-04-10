@@ -47,8 +47,6 @@ export default injectStripe(function BillingPaymentSubmit({
     .get('users')
     .filter(u => u.get('status') === 'active').size;
 
-  console.log(team.toJS());
-
   return (
     <SW.Wrapper>
       <BillingPaymentInput

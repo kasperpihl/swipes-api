@@ -7,8 +7,8 @@ export default styleSheet('TeamUser', {
     _flex: ['row', 'flex-start', 'center'],
     color: '$sw1',
     padding: '6px 0',
-    minHeight: '30px',
-    boxSizing: 'content-box'
+    minHeight: '30px'
+    // boxSizing: 'content-box'
   },
 
   Name: {
