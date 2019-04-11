@@ -154,7 +154,7 @@ export default class ProfileHeader extends PureComponent {
     );
   };
   render() {
-    const { me, loader } = this.props;
+    const { me, loader, numberOfTeams } = this.props;
     const fullName = `${me.get('first_name')} ${me.get('last_name')}`;
 
     return (
@@ -165,7 +165,9 @@ export default class ProfileHeader extends PureComponent {
             {fullName}
           </SW.NameField>
           <Spacing height={2} />
-          <SW.Subtitle>{`Member of ${2} teams`}</SW.Subtitle>
+          <SW.Subtitle>{`Member of ${numberOfTeams} ${
+            numberOfTeams === 1 ? 'team' : 'teams'
+          }`}</SW.Subtitle>
         </SW.UserInfo>
         <SW.OptionsButton
           icon="ThreeDots"

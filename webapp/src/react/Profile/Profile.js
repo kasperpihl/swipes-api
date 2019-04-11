@@ -25,7 +25,11 @@ export default class Profile extends PureComponent {
       crumbTitle: 'Create a team'
     });
   };
-  renderHeader = () => <ProfileHeader />;
+  renderHeader = () => {
+    const { teams } = this.props;
+    const numberOfTeams = teams.keySeq().size;
+    return <ProfileHeader numberOfTeams={numberOfTeams} />;
+  };
   render() {
     const { teams } = this.props;
     const actions = [
