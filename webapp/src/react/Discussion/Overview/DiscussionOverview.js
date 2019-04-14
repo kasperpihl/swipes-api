@@ -147,7 +147,7 @@ function DiscussionOverview({ tooltip, discussionId }) {
         'This will delete the discussion permanently and cannot be undone.',
       onConfirm: () => {
         loader.set('dots');
-        request('discussion.archive', {
+        request('discussion.delete', {
           discussion_id: discussion.discussion_id
         }).then(res => {
           if (res.ok) {

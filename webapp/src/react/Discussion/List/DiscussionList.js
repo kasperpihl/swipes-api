@@ -32,6 +32,20 @@ export default function DiscussionList({ type, onSelectItemId, selectedId }) {
   });
 
   useUpdate('discussion', update => {
+    if (update.deleted) {
+      req.removeItem(update);
+      if (update.discussion_id === selectedId) {
+        let nextId = req.items[0].discussion_id;
+        if (nextId === update.discussion_id) {
+          nextId = req.items[1].discussion_id;
+        }
+        onSelectItemId(nextId);
+      }
+      return;
+    }
+    if (update.created_at) {
+      onSelectItemId(update.discussion_id);
+    }
     if (!update.last_comment_by) {
       return req.mergeItem(update);
     }
