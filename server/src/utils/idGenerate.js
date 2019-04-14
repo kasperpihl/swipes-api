@@ -14,7 +14,6 @@ export default function idGenerate(
     length: number
   };
   if (upperCase) {
-    console.log('upper lupper');
     options.capitalization = 'uppercase';
   }
 
