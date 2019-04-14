@@ -1,12 +1,12 @@
 import mixpanel from 'mixpanel-browser';
+import { mixpanelToken } from 'src/utils/configKeys';
 
 export default class Analytics {
   constructor(store) {
     this.enable = !store.getState().global.get('isDev');
     // this.enable = true; // for testing on dev. turn off when done.
     if (this.enable) {
-      mixpanel.init('cdb182baa17a94f1a4ace32ad04c2322'); // staging
-      // mixpanel.init('280f53ea477a89ca86e0f7c8825528ca'); // live
+      mixpanel.init(mixpanelToken);
     }
 
     this.store = store;

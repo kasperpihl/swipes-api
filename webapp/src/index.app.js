@@ -19,6 +19,7 @@ import Socket from 'core/classes/Socket';
 import CoreProvider from 'core/react/_hocs/CoreProvider';
 
 import { StripeProvider } from 'react-stripe-elements';
+import { stripeToken } from 'src/utils/configKeys';
 
 // Init core!
 if (urlGetParameter('go_to')) {
@@ -53,22 +54,13 @@ if (process.env.NODE_ENV !== 'production') {
 window.ipcListener = new IpcListener(store);
 window.analytics = new Analytics(store);
 
-let token = 'pk_live_vLIRvcBoJ4AA9sFUpmVT11gQ';
-
-if (
-  process.env.NODE_ENV !== 'production' ||
-  window.location.hostname === 'staging.swipesapp.com'
-) {
-  token = 'pk_test_0pUn7s5EyQy7GeAg93QrsJl9';
-}
-
 render(
   <Provider store={store}>
     <PersistGate persistor={persistor}>
       <SwissProvider>
         <BrowserRouter>
           <OptimistProvider>
-            <StripeProvider apiKey={token}>
+            <StripeProvider apiKey={stripeToken}>
               <CoreProvider>
                 <Root />
               </CoreProvider>
