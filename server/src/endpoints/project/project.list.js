@@ -22,8 +22,7 @@ export default endpointCreate(
 
     let ownedByFilter = '';
     if (owned_by) {
-      ownedByFilter = 'AND p.owned_by = $4';
-      values.push(owned_by);
+      ownedByFilter = `AND p.owned_by = $${values.push(owned_by)}`;
     }
 
     const projectQuery = {

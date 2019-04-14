@@ -8,7 +8,8 @@ const expectedInput = {
   type: any.of('following', 'all other').require(),
   cursor: string,
   fetch_new: bool,
-  limit: number.gte(1).lte(100)
+  limit: number.gte(1).lte(100),
+  owned_by: string
 };
 
 export default endpointCreate(
@@ -18,7 +19,7 @@ export default endpointCreate(
   async (req, res) => {
     // Get inputs
     const { input, user_id } = res.locals;
-    const { type, cursor, fetch_new } = input;
+    const { type, cursor, fetch_new, owned_by } = input;
 
     const limit = input.limit || 20;
 
@@ -26,8 +27,14 @@ export default endpointCreate(
 
     let pagination = '';
     if (cursor) {
-      pagination = `AND d.last_comment_at ${fetch_new ? '>=' : '<='} $3`;
-      values.push(cursor);
+      pagination = `AND d.last_comment_at ${
+        fetch_new ? '>=' : '<='
+      } $${values.push(cursor)}`;
+    }
+
+    let ownedByFilter = '';
+    if (owned_by) {
+      ownedByFilter = `AND d.owned_by = $${values.push(owned_by)}`;
     }
 
     const discussionsRes = await query(
@@ -37,6 +44,7 @@ export default endpointCreate(
         INNER JOIN discussions as d
         ON d.discussion_id = per.permission_from
         WHERE ${sqlCheckPermissions('per.granted_to', user_id)}
+        ${ownedByFilter}
         AND d.members->>$1 IS ${type === 'all other' ? 'NULL' : 'NOT NULL'}
         AND d.deleted=FALSE
         ${pagination}
