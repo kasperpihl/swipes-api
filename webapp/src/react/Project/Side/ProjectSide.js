@@ -15,21 +15,21 @@ export default memo(ProjectSide);
 
 function ProjectSide({ stateManager }) {
   const [
-    totalAmountOfTasks,
-    completionPercentage,
+    numberOfCompleted,
+    numberOfLeafs,
     members,
     ownedBy,
     projectId
-  ] = useProjectSlice(stateManager, clientState => [
-    clientState.get('sortedOrder').size,
-    clientState.get('completion_percentage'),
+  ] = useProjectSlice(stateManager, (clientState, localState) => [
+    localState.get('numberOfCompleted'),
+    localState.get('numberOfLeafs'),
     clientState.get('members'),
     clientState.get('owned_by'),
     clientState.get('project_id')
   ]);
 
-  const completedTasksAmount = Math.round(
-    (completionPercentage / 100) * totalAmountOfTasks
+  const completionPercentage = Math.ceil(
+    (numberOfCompleted / numberOfLeafs) * 100
   );
 
   const openAssignMenu = e => {
@@ -60,8 +60,8 @@ function ProjectSide({ stateManager }) {
   return (
     <SW.Wrapper>
       <SideHeader
-        largeNumber={completedTasksAmount}
-        smallNumber={`/ ${totalAmountOfTasks}`}
+        largeNumber={numberOfCompleted}
+        smallNumber={`/ ${numberOfLeafs}`}
         subtitle="Tasks"
       />
       <Spacing height={18} />
