@@ -64,28 +64,28 @@ export default function PlanningSide({ yearWeek, setYearWeek, ownedBy }) {
     setYearWeek(nextWeekYearWeek);
   };
 
-  const handleTransferTasks = () => {
-    let now = moment();
-    let fromYearkWeek;
-    let toYearWeek;
-    if (isPrevWeek) {
-      toYearWeek = now.year() + '-' + now.week();
-      now = now.subtract(1, 'week');
-      fromYearkWeek = now.year() + '-' + now.week();
-    }
-    if (isThisWeek || isNextWeek) {
-      fromYearkWeek = now.year() + '-' + now.week();
-      now = now.add(1, 'week');
-      toYearWeek = now.year() + '-' + now.week();
-    }
-    if (numberOfCompleted > 0 && numberOfCompleted < totalNumberOfTasks) {
-      request('planning.moveTasks', {
-        owned_by: ownedBy,
-        from_year_week: fromYearkWeek,
-        to_year_week: toYearWeek
-      });
-    }
-  };
+  // const handleTransferTasks = () => {
+  //   let now = moment();
+  //   let fromYearkWeek;
+  //   let toYearWeek;
+  //   if (isPrevWeek) {
+  //     toYearWeek = now.year() + '-' + now.week();
+  //     now = now.subtract(1, 'week');
+  //     fromYearkWeek = now.year() + '-' + now.week();
+  //   }
+  //   if (isThisWeek || isNextWeek) {
+  //     fromYearkWeek = now.year() + '-' + now.week();
+  //     now = now.add(1, 'week');
+  //     toYearWeek = now.year() + '-' + now.week();
+  //   }
+  //   if (numberOfCompleted > 0 && numberOfCompleted < totalNumberOfTasks) {
+  //     request('planning.moveTasks', {
+  //       owned_by: ownedBy,
+  //       from_year_week: fromYearkWeek,
+  //       to_year_week: toYearWeek
+  //     });
+  //   }
+  // };
 
   return (
     <SW.Wrapper>
@@ -104,15 +104,16 @@ export default function PlanningSide({ yearWeek, setYearWeek, ownedBy }) {
       />
       <Spacing height={48} />
       <TransferTasks
-        isPrevWeek={isPrevWeek && !allTasksCompleted && totalNumberOfTasks > 0}
+        // isPrevWeek={isPrevWeek && !allTasksCompleted && totalNumberOfTasks > 0}
         isThisWeek={
           isThisWeek &&
           isEndOfWeek &&
           !allTasksCompleted &&
           totalNumberOfTasks > 0
         }
-        isNextWeek={isNextWeek && !allTasksCompleted}
-        handleClick={handleTransferTasks}
+        // isNextWeek={isNextWeek && !allTasksCompleted}
+        // handleClick={handleTransferTasks}
+        handleClick={handleNextWeek}
       />
     </SW.Wrapper>
   );
