@@ -8,8 +8,11 @@ import Spacing from '_shared/Spacing/Spacing';
 import SideHeader from '_shared/SideHeader/SideHeader';
 import ProgressBar from '_shared/ProgressBar/ProgressBar';
 import TransferTasks from '_shared/TransferTasks/TransferTasks';
+import FormModal from '_shared/FormModal/FormModal';
 
+import useNav from 'src/react/_hooks/useNav';
 import usePlanningState from 'src/react/Planning/usePlanningState';
+import useLoader from 'src/react/_hooks/useLoader';
 
 import request from 'core/utils/request';
 
@@ -19,6 +22,9 @@ export default function PlanningSide({ yearWeek, setYearWeek, ownedBy }) {
   const [
     { numberOfCompleted = 0, totalNumberOfTasks = 0 }
   ] = usePlanningState();
+
+  const nav = useNav();
+  const loader = useLoader();
 
   const allTasksCompleted =
     numberOfCompleted > 0 && numberOfCompleted === totalNumberOfTasks;

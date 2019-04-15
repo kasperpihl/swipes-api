@@ -64,7 +64,6 @@ export default styleSheet('FormModal', {
     _size: ['100%', 'auto'],
     _flex: ['row', 'flex-end', 'center'],
     borderTop: '1px solid $sw3',
-    marginTop: '6px',
     flex: 'none'
   },
 

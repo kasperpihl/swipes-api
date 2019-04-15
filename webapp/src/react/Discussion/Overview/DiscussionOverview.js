@@ -84,10 +84,10 @@ function DiscussionOverview({ tooltip, discussionId }) {
   const onTitleClick = e => {
     const { discussion } = req.result;
     nav.openModal(FormModal, {
-      title: 'Rename discussion',
+      title: 'Rename chat',
       inputs: [
         {
-          placeholder: 'Title of discussion',
+          placeholder: 'Title of chat',
           initialValue: discussion.title,
           autoFocus: true
         }
@@ -107,8 +107,8 @@ function DiscussionOverview({ tooltip, discussionId }) {
     const { discussion } = req.result;
     const buttons = [
       { title: discussion.members[myId] ? 'Unfollow' : 'Follow' },
-      { title: 'Rename discussion' },
-      { title: 'Delete discussion' }
+      { title: 'Rename chat' },
+      { title: 'Delete chat' }
     ];
     contextMenu(ListMenu, e, {
       onClick: onOptionClick,
@@ -119,9 +119,9 @@ function DiscussionOverview({ tooltip, discussionId }) {
   const onOptionClick = (i, e) => {
     if (e.title === 'Unfollow' || e.title === 'Follow') {
       onFollowClick();
-    } else if (e.title === 'Delete discussion') {
+    } else if (e.title === 'Delete chat') {
       onArchiveClick();
-    } else if (e.title === 'Rename discussion') {
+    } else if (e.title === 'Rename chat') {
       onTitleClick();
     }
   };
@@ -142,16 +142,15 @@ function DiscussionOverview({ tooltip, discussionId }) {
   const onArchiveClick = () => {
     const { discussion } = req.result;
     nav.openModal(FormModal, {
-      title: 'Delete discussion',
-      subtitle:
-        'This will delete the discussion permanently and cannot be undone.',
+      title: 'Delete chat',
+      subtitle: 'This will delete the chat permanently and cannot be undone.',
       onConfirm: () => {
         loader.set('dots');
         request('discussion.delete', {
           discussion_id: discussion.discussion_id
         }).then(res => {
           if (res.ok) {
-            window.analytics.sendEvent('Discussion archived');
+            window.analytics.sendEvent('Chat archived');
           }
           if (!res || !res.ok) {
             loader.error('dots', res.error, 3000);

@@ -10,9 +10,9 @@ import withNav from 'src/react/_hocs/Nav/withNav';
 import request from 'core/utils/request';
 import SW from './TeamUser.swiss';
 
-const kPromote = 'Promote to admin';
-const kDemote = 'Demote to user';
-const kDisable = 'Disable user';
+const kPromote = 'Change to admin';
+const kDemote = 'Change to user';
+const kDisable = 'Deactivate user';
 const kTransfer = 'Transfer ownership';
 const kInvite = 'Invite user';
 
@@ -90,7 +90,7 @@ export default class TeamUser extends PureComponent {
     };
     if (title === kDemote) {
       endpoint = 'team.demoteAdmin';
-      buttonMessage = 'Demoted';
+      buttonMessage = 'Changed';
     } else if (title === kPromote) {
       endpoint = 'team.promoteAdmin';
       buttonMessage = 'Promoted';
