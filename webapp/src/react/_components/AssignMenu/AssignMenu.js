@@ -76,7 +76,7 @@ export default class AssignMenu extends PureComponent {
   renderTeamAssignees = (users, allAreSelected) => {
     const { selectedIds } = this.state;
     const { me, excludeMe, teamId, hide, hideRowOnSelect } = this.props;
-    console.log(users);
+
     return (
       <>
         {!allAreSelected && (
