@@ -1,6 +1,7 @@
 import React from 'react';
 import useLoader from 'src/react/_hooks/useLoader';
 import { injectStripe } from 'react-stripe-elements';
+import moment from 'moment';
 
 import request from 'core/utils/request';
 import billingGetPrice from 'src/utils/billing/billingGetPrice';
@@ -47,6 +48,17 @@ export default injectStripe(function BillingPaymentSubmit({
     .get('users')
     .filter(u => u.get('status') === 'active').size;
 
+  const getDueDate = planType => {
+    const now = moment();
+    let dueDate;
+    if (planType === 'yearly') {
+      dueDate = now.add(1, 'years').format('MMM DD, YYYY');
+    } else if (planType === 'monthly') {
+      dueDate = now.add(1, 'months').format('MMM DD, YYYY');
+    }
+    return dueDate;
+  };
+
   return (
     <SW.Wrapper>
       <BillingPaymentInput
@@ -55,12 +67,13 @@ export default injectStripe(function BillingPaymentSubmit({
         activeUsersAmount={activeUsersAmount}
         plan={plan}
       />
-
       <SW.Terms>
         {`To ensure uninterrupted service, your subscription will be set to continuous auto-renewal payments of $${billingGetPrice(
           team,
           plan
-        )} per ${everyString} (plus applicable taxes), with your next payment due on Apr 4, 2020. You can cancel your subscription at any time from your Billing page, or by contacting our Customer Service on help@swipesapp.com. Yearly subscriptions can be canceled with a full refund 14 days after purchase. You also agree to our `}
+        )} per ${everyString} (plus applicable taxes), with your next payment due on ${getDueDate(
+          plan
+        )}. You can cancel your subscription at any time from your Billing page, or by contacting our Customer Service on help@swipesapp.com. Yearly subscriptions can be canceled with a full refund 14 days after purchase. You also agree to our `}
         <SW.Link
           target="_blank"
           href="https://s3.amazonaws.com/cdn.swipesapp.com/downloads/Policies.pdf"

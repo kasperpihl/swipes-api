@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Elements } from 'react-stripe-elements';
 import { connect } from 'react-redux';
+import moment from 'moment';
 
 import withLoader from 'src/react/_hocs/withLoader';
 import request from 'core/utils/request';
@@ -36,6 +37,19 @@ export default class Billing extends PureComponent {
       team_id: team.get('team_id')
     });
   };
+
+  testBilling = () => {
+    const { team } = this.props;
+    request('billing.get', {
+      team_id: team.get('team_id')
+    }).then(res => {
+      if (res.customer) {
+        const periodStart =
+          res.customer.subscriptions.data[0].current_period_end;
+        const time = moment(periodStart).format('MMM DD, YYYY');
+      }
+    });
+  };
   handlePlanChange = plan => {
     const { nav, team } = this.props;
     if (!team.get('stripe_subscription_id')) {
@@ -60,6 +74,7 @@ export default class Billing extends PureComponent {
     return (
       <Elements>
         <CardContent header={<CardHeader title={title} />} noframe>
+          {this.testBilling()}
           <SW.Wrapper>
             <Spacing height={36} />
             {team.get('stripe_subscription_id') ? null : (
