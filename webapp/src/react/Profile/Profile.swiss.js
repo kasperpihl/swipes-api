@@ -12,13 +12,13 @@ export default styleSheet('Profile', {
 
     empty: {
       _size: ['calc(100% - 18px)', '100%'],
-      _flex: ['column', 'center', 'top'],
+      _flex: ['column', 'center', 'top']
     }
   },
 
   EmptyState: {
     _el: EmptyState,
-    marginTop: '96px',
+    marginTop: '96px'
   },
 
   Button: {
@@ -45,9 +45,7 @@ export default styleSheet('Profile', {
 
     status: {
       width: '150px'
-    },
-
-    members: {}
+    }
   },
 
   ActionBarWrapper: {

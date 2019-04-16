@@ -165,7 +165,7 @@ export default class ProfileHeader extends PureComponent {
             {fullName}
           </SW.NameField>
           <Spacing height={2} />
-          <SW.Subtitle>{`Member of ${numberOfTeams} ${
+          <SW.Subtitle>{`Part of ${numberOfTeams} ${
             numberOfTeams === 1 ? 'team' : 'teams'
           }`}</SW.Subtitle>
         </SW.UserInfo>

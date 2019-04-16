@@ -24,7 +24,7 @@ export default function BillingPlan({ onChange, value }) {
           )}
         </SW.Checkbox>
         <SW.TextWrapper>
-          <SW.ToggleLabel>Pay Annually ($6/month per member)</SW.ToggleLabel>
+          <SW.ToggleLabel>Pay Annually ($6/month per user)</SW.ToggleLabel>
           <Spacing height={3} />
           <SW.Subtitle>Cancel within 14 days for a full refund</SW.Subtitle>
         </SW.TextWrapper>
@@ -38,7 +38,7 @@ export default function BillingPlan({ onChange, value }) {
           )}
         </SW.Checkbox>
         <SW.TextWrapper>
-          <SW.ToggleLabel>Pay Monthly ($7.50/month per member)</SW.ToggleLabel>
+          <SW.ToggleLabel>Pay Monthly ($7.50/month per user)</SW.ToggleLabel>
           <Spacing height={3} />
           <SW.Subtitle>Cancel anytime</SW.Subtitle>
         </SW.TextWrapper>

@@ -64,7 +64,7 @@ export default class Profile extends PureComponent {
           <SectionHeader>
             <SW.HeaderItem team>Team</SW.HeaderItem>
             <SW.HeaderItem status>Status</SW.HeaderItem>
-            <SW.HeaderItem members>Members</SW.HeaderItem>
+            <SW.HeaderItem>Users</SW.HeaderItem>
           </SectionHeader>
           {teams
             .map(team => <ProfileTeam key={team.get('team_id')} team={team} />)

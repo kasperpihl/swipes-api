@@ -60,9 +60,9 @@ export default class Team extends PureComponent {
       .get('users')
       .filter(u => u.get('status') === 'disabled').size;
 
-    let tabs = [`Active members (${activeMembers})`];
+    let tabs = [`Active users (${activeMembers})`];
     if (disabledUsersAmount > 0) {
-      tabs.push(`Deactivated members (${disabledUsersAmount})`);
+      tabs.push(`Deactivated users (${disabledUsersAmount})`);
     }
     return (
       <TabBar
