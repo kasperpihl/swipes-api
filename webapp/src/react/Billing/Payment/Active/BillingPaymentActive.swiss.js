@@ -3,7 +3,12 @@ import { styleSheet } from 'swiss-react';
 export default styleSheet('BillingPaymentActive', {
   Wrapper: {
     _size: ['420px', 'auto'],
-    _flex: ['column', 'left', 'top']
+    _flex: ['column', 'left', 'top'],
+
+    loading: {
+      _size: '100%',
+      _flex: ['column', 'center', 'center']
+    }
   },
   Title: {
     _textStyle: 'H1'
@@ -25,8 +30,13 @@ export default styleSheet('BillingPaymentActive', {
     textTransform: 'uppercase',
     color: '$base',
     borderRadius: '2px',
-    margin: '0 auto auto 24px',
+    margin: '0 auto auto 12px',
     pointerEvents: 'none',
     userSelect: 'none'
+  },
+
+  NextPaymentDate: {
+    _textStyle: 'caption',
+    color: '$sw2'
   }
 });
