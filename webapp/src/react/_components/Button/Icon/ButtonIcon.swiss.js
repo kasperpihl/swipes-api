@@ -34,8 +34,15 @@ export default styleSheet('ButtonIcon', {
     _el: Icon,
     _size: '24px',
     flex: 'none',
+
     selected: {
       fill: '$base'
+    },
+    green: {
+      fill: '$base',
+      '.Button_Wrapper:hover &': {
+        fill: '$dark'
+      }
     },
     'status=Success': {
       fill: '$green1'

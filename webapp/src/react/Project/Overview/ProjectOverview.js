@@ -45,15 +45,19 @@ function ProjectOverview({ projectId, state }) {
   const [showOnlyMe, setShowOnlyMe] = useState(false);
   const [hideCompleted, setHideCompleted] = useState(false);
 
-  const [projectTitle, maxIndention, privacy, members] = useProjectSlice(
-    stateManager,
-    (clientState, localState) => [
-      clientState.get('title'),
-      localState.get('maxIndention'),
-      clientState.get('privacy'),
-      clientState.get('members')
-    ]
-  );
+  const [
+    projectTitle,
+    maxIndention,
+    privacy,
+    members,
+    editing
+  ] = useProjectSlice(stateManager, (clientState, localState) => [
+    clientState.get('title'),
+    localState.get('maxIndention'),
+    clientState.get('privacy'),
+    clientState.get('members'),
+    localState.get('editing')
+  ]);
 
   useRequest('project.mark', { project_id: projectId });
 
@@ -213,6 +217,20 @@ function ProjectOverview({ projectId, state }) {
       />
     );
   }
+  if (editing) {
+    // Editing!
+    actions = [
+      <Button
+        key="done"
+        title="Done editing"
+        green
+        icon="Checkmark"
+        onClick={() => {
+          stateManager.editHandler.doneEditing();
+        }}
+      />
+    ];
+  }
 
   return (
     <CardContent
@@ -235,7 +253,7 @@ function ProjectOverview({ projectId, state }) {
             <SW.TaskWrapper>
               <ProjectTaskList onComplete={handleComplete} />
             </SW.TaskWrapper>
-            <ActionBar actions={actions} />
+            <ActionBar actions={actions} green={editing} />
           </SW.RightSide>
         </SW.Wrapper>
       </ProjectContext.Provider>

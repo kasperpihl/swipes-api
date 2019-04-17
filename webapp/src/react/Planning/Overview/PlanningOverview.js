@@ -141,6 +141,9 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
         icon="Checkmark"
         onClick={() => {
           updatePlanningState({ editingId: null });
+          stateManagers.forEach(stateManager => {
+            stateManager.editHandler.doneEditing();
+          });
         }}
       />
     ];
