@@ -5,6 +5,7 @@ export default styleSheet('ProjectTaskExpand', {
   Wrapper: {
     _size: ['24px', '24px'],
     _flex: ['row', 'center', 'center'],
+    marginTop: '1px',
     flex: 'none',
     cursor: 'pointer',
     userSelect: 'none',

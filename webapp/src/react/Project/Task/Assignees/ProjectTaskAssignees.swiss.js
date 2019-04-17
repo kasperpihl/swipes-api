@@ -3,7 +3,7 @@ import { styleSheet } from 'swiss-react';
 export default styleSheet('ProjectTaskAssignees', {
   Wrapper: {
     _flex: ['row', 'center', 'center'],
-    height: '24px',
+    height: '26px',
     userSelect: 'none',
 
     hide: {

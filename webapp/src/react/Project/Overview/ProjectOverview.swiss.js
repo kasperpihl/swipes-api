@@ -8,7 +8,6 @@ export default styleSheet('ProjectOverview', {
   },
   TaskWrapper: {
     _size: ['100%', '100%'],
-    _flex: ['column', 'center', 'top'],
     overflowY: 'auto',
     paddingTop: '48px',
     paddingRight: '18px',

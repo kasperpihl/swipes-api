@@ -4,6 +4,7 @@ export default styleSheet('ProjectTaskCheckbox', {
   Wrapper: {
     _size: ['24px', '24px'],
     _flex: 'center',
+    marginTop: '1px',
     flex: 'none',
     cursor: 'pointer',
     userSelect: 'none'
