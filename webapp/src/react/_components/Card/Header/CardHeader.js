@@ -32,7 +32,7 @@ export default function CardHeader({
         <SW.Title key="header-title" onClick={onTitleClick}>
           {title}
         </SW.Title>
-        {dropdown && <SW.DropdownWrapper>{dropdown}</SW.DropdownWrapper>}
+        {dropdown}
       </SW.TitleWrapper>
       {!subtitle && <SW.Actions>{children}</SW.Actions>}
       {subtitle && (

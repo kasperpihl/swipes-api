@@ -1,4 +1,4 @@
-import React, { useState, useRef, useLayoutEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import RequestLoader from '_shared/RequestLoader/RequestLoader';
 import PlanningModal from 'src/react/Planning/Modal/PlanningModal';
 import useRequest from 'core/react/_hooks/useRequest';
@@ -64,6 +64,28 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
     { editingId, maxDepth, stateManagers },
     updatePlanningState
   ] = usePlanningState();
+
+  const doneEditing = useCallback(() => {
+    updatePlanningState({ editingId: null });
+    stateManagers.forEach(stateManager => {
+      stateManager.editHandler.doneEditing();
+    });
+  }, [updatePlanningState, stateManagers]);
+
+  useEffect(() => {
+    if (editingId) {
+      const onKeyDown = e => {
+        if (e.keyCode === 27) {
+          e.target.blur();
+          doneEditing();
+        }
+      };
+      window.addEventListener('keydown', onKeyDown);
+      return () => {
+        window.removeEventListener('keydown', onKeyDown);
+      };
+    }
+  }, [editingId, doneEditing]);
 
   const handleScroll = e => {
     if (e.target && e.target.scrollTop > 56) {
@@ -139,12 +161,7 @@ export default function PlanningOverview({ ownedBy, yearWeek }) {
         title="Done editing"
         green
         icon="Checkmark"
-        onClick={() => {
-          updatePlanningState({ editingId: null });
-          stateManagers.forEach(stateManager => {
-            stateManager.editHandler.doneEditing();
-          });
-        }}
+        onClick={doneEditing}
       />
     ];
   }

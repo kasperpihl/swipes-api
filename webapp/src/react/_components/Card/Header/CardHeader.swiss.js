@@ -17,12 +17,8 @@ export default styleSheet('CardHeader', {
       _flex: ['row', 'left', 'center']
     }
   },
-  DropdownWrapper: {
-    marginLeft: '6px',
-    width: '130px'
-  },
   TitleWrapper: {
-    _flex: ['row', 'left', 'center']
+    // _flex: ['column', 'left', 'center']
   },
 
   Title: {
