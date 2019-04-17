@@ -99,6 +99,9 @@ export default endpointCreate(
         if (keys.assignees) {
           keys.assignees = JSON.stringify(keys.assignees);
         }
+        if (keys.title) {
+          keys.title = keys.title.substr(0, 255);
+        }
         queries.push(
           sqlInsertQuery(
             'project_tasks',
