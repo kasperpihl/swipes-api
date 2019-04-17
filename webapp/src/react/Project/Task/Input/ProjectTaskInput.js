@@ -45,7 +45,7 @@ function ProjectTaskInput({ taskId, onClick, isCompleted }) {
     if (e.keyCode === 13) {
       e.preventDefault();
     }
-    stateManager.editHandler.updateTitle(taskId, e.target.value);
+    stateManager.editHandler.updateTitle(taskId, e.target.value.substr(0, 255));
   });
 
   useEffect(() => {
