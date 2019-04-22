@@ -1,4 +1,4 @@
-export { default as PDF } from './pdf/PDF';
+// export { default as PDF } from './pdf/PDF';
 export { default as Audio } from './audio/Audio';
 export { default as Image } from './image/Image';
 export { default as Jpeg } from './jpeg/Jpeg';
