@@ -30,8 +30,10 @@ export default styleSheet('CardHeader', {
     userSelect: 'none',
     fontWeight: '$bold',
 
-    '&:hover': {
-      cursor: 'pointer'
+    cursorHover: {
+      '&:hover': {
+        cursor: 'pointer'
+      }
     }
   },
 

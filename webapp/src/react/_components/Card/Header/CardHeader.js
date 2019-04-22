@@ -24,12 +24,17 @@ export default function CardHeader({
   separator,
   onTitleClick,
   children,
+  cursorHover,
   ...rest
 }) {
   return (
     <SW.Wrapper separator={separator} {...rest} subtitle={!subtitle}>
       <SW.TitleWrapper>
-        <SW.Title key="header-title" onClick={onTitleClick}>
+        <SW.Title
+          key="header-title"
+          onClick={onTitleClick}
+          cursorHover={cursorHover}
+        >
           {title}
         </SW.Title>
         {dropdown}

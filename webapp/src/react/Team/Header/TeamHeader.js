@@ -168,7 +168,7 @@ export default class TeamHeader extends PureComponent {
     const isAdmin = meInTeam.get('admin');
 
     return (
-      <CardHeader title={name} onTitleClick={this.openRenameModal}>
+      <CardHeader title={name} onTitleClick={this.openRenameModal} cursorHover>
         {isAdmin && <SW.StatusBox color={color}>{subType}</SW.StatusBox>}
         <SW.Button
           icon="ThreeDots"

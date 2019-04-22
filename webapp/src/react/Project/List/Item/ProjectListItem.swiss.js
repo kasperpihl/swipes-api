@@ -55,5 +55,14 @@ export default styleSheet('ProjectListItem', {
     _flex: ['row', 'left', 'center'],
     _textStyle: 'body',
     color: '$sw2'
+  },
+
+  Label: {
+    _el: 'span',
+    padding: '3px 9px',
+    borderRadius: '2px',
+    backgroundColor: '$blue',
+    color: '$base',
+    textTransform: 'uppercase'
   }
 });

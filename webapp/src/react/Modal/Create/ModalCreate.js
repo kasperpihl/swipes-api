@@ -176,7 +176,7 @@ export default class ModalCreate extends PureComponent {
                 </FMSW.InputWrapper>
               )}
               <FMSW.InputWrapper>
-                <FMSW.Label>Followers</FMSW.Label>
+                <FMSW.Label>Members</FMSW.Label>
                 <Spacing height={9} />
                 <Assignees
                   userIds={members}
@@ -189,7 +189,10 @@ export default class ModalCreate extends PureComponent {
                     title="Tag members"
                     onClick={this.handleAssignClick}
                     border
-                    disabled={ownedBy === myId}
+                    disabled={
+                      ownedBy === myId ||
+                      (type === 'project' && privacy === 'public')
+                    }
                   />
                 </Assignees>
               </FMSW.InputWrapper>

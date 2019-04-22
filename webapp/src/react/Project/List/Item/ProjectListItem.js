@@ -70,7 +70,7 @@ export default function ProjectListItem({
           </SW.Subtitle>
         )}
         <SW.DateOpened>
-          {isNew && <span>New</span>}
+          {isNew && <SW.Label>New</SW.Label>}
           {!isNew && <span>{openedAt}</span>}
         </SW.DateOpened>
       </SW.TextWrapper>
