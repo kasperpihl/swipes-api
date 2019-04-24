@@ -56,6 +56,10 @@ export default class CommentComposer extends PureComponent {
       ownedBy
     } = this.props;
 
+    if (commentVal.trim().length === 0) {
+      return;
+    }
+
     loader.set('editing');
     request('comment.edit', {
       discussion_id: discussionId,
@@ -82,6 +86,9 @@ export default class CommentComposer extends PureComponent {
     }
     if (editCommentId) {
       return this.handleEditComment();
+    }
+    if (commentVal.trim().length === 0) {
+      return;
     }
     this.setState({
       attachments: List([]),

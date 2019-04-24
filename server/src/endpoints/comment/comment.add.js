@@ -10,7 +10,16 @@ import pushSend from 'src/utils/push/pushSend';
 
 const expectedInput = {
   discussion_id: string.require(),
-  message: string.require(),
+  message: string
+    .min(1)
+    .custom(value => {
+      let trimmedStr = value.trim();
+      if (trimmedStr.length === 0) {
+        return 'Value cannot contain only whitespaces';
+      }
+      return null;
+    })
+    .require(),
   attachments: array.of(
     object
       .as({
@@ -36,7 +45,7 @@ export default endpointCreate(
     const [commentRes, discussionRes] = await transaction([
       sqlInsertQuery('discussion_comments', {
         discussion_id,
-        message,
+        message: message.trim(),
         comment_id: idGenerate(6),
         sent_at: 'now()',
         attachments:

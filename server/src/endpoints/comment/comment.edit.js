@@ -6,7 +6,16 @@ import update from 'src/utils/update';
 const expectedInput = {
   discussion_id: string.require(),
   comment_id: string.require(),
-  message: string.require(),
+  message: string
+    .min(1)
+    .custom(value => {
+      let trimmedStr = value.trim();
+      if (trimmedStr.length === 0) {
+        return 'Value cannot contain only whitespaces';
+      }
+      return null;
+    })
+    .require(),
   attachments: array.of(
     object
       .as({
@@ -45,7 +54,7 @@ export default endpointCreate(
         AND sent_by = $5
         RETURNING discussion_id, comment_id, updated_at, deleted
       `,
-      [message, parsedAttachments, discussion_id, comment_id, user_id]
+      [message.trim(), parsedAttachments, discussion_id, comment_id, user_id]
     );
 
     if (!commentRes.rows.length) {

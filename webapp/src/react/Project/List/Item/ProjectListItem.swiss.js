@@ -63,6 +63,6 @@ export default styleSheet('ProjectListItem', {
     borderRadius: '2px',
     backgroundColor: '$blue',
     color: '$base',
-    textTransform: 'uppercase'
+    textTransform: 'capitalize'
   }
 });
