@@ -51,14 +51,17 @@ export default valUtil(
         // contents: { en: history.message },
         // headings: { en: headingsMessage },
         // subtitle: { en: `about ${goal.title}` },
+        android_group: options.targetId,
+        thread_id: options.targetId,
         data: {
-          group_id: 'swipesAndroid',
           target_id: options.targetId,
           targetType: options.targetType || null
         },
         priority: 10,
         content_available: true,
-        android_visibility: 0
+        android_visibility: 0,
+        ios_badgeType: 'Increase',
+        ios_badgeCount: 1
       };
 
       const reqOptions = {

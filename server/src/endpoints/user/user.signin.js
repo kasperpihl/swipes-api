@@ -54,7 +54,8 @@ export default endpointCreate(
 
     // Create response data.
     res.locals.output = {
-      token
+      token,
+      user_id: user.user_id
     };
   }
 );
