@@ -73,7 +73,7 @@ export default (req, res, next) => {
         'itms-apps://itunes.apple.com/app/apple-store/id1250630942?mt=8',
         'ios-build-number'
       );
-      testReload(null, 'ios-code-push-version');
+      // testReload(null, 'ios-code-push-version');
       break;
     }
     case 'android': {
@@ -81,7 +81,7 @@ export default (req, res, next) => {
         'market://details?id=com.swipesapp.release',
         'android-build-number'
       );
-      testReload(null, 'android-code-push-version');
+      // testReload(null, 'android-code-push-version');
       break;
     }
     case 'darwin':
