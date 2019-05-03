@@ -20,7 +20,8 @@ const makeUpdateHandler = (res, next) => {
     if (isRequired) {
       _locals[`${prefix}_required`] = true;
 
-      return next(Error(`${prefix}_required`, _locals));
+      throw Error(`${prefix}_required`).toClient();
+      // return next(Error(`${prefix}_required`, _locals));
     }
 
     res.locals.__updatesAvailable = _locals;
@@ -35,8 +36,8 @@ const makeUpdateHandler = (res, next) => {
 };
 
 export default (req, res, next) => {
-  const { versions } = res.locals.config;
-
+  const platform = req.header('sw-platform');
+  const { requiredVersions, newestVersions } = res.locals.config;
   const handleUpdate = makeUpdateHandler(res, next);
 
   const testHeaders = (prefix, url, ...headers) => {
@@ -45,8 +46,8 @@ export default (req, res, next) => {
     let version = null;
     headers.forEach(header => {
       const clientVersion = req.header(`sw-${header}`);
-      const newestServerVersion = versions[`newest-${header}`];
-      const requiredServerVersion = versions[`required-${header}`];
+      const newestServerVersion = newestVersions[platform];
+      const requiredServerVersion = requiredVersions[platform];
 
       if (newerVersionExist(clientVersion, newestServerVersion)) {
         hasNewerVersion = true;
@@ -66,7 +67,6 @@ export default (req, res, next) => {
   const testReload = (...args) => testHeaders('reload', ...args);
   const testUpdate = (...args) => testHeaders('update', ...args);
 
-  const platform = req.header('sw-platform');
   switch (platform) {
     case 'ios': {
       testUpdate(
