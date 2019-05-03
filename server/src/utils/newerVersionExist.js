@@ -1,6 +1,6 @@
 export default (client, server) => {
-  server = server || '0';
-  client = client || '0';
+  server = '' + (server || 0);
+  client = '' + (client || 0);
 
   let newerVersion = false;
   if (server.indexOf('.') > -1) {

@@ -21,6 +21,10 @@ export default (error, req, res, next) => {
     error: 'Something went wrong',
     log_id: logObject.request_id
   };
+  if (res.locals.__clientUpdate) {
+    result.client_update = res.locals.__clientUpdate;
+  }
+
   let code = 400;
 
   if (error.errorCode) {

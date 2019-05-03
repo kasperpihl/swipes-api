@@ -8,6 +8,9 @@ export default schema => async (req, res, next) => {
   if (res.locals.update) {
     output.update = res.locals.update;
   }
+  if (res.locals.__clientUpdate) {
+    output.client_update = res.locals.__clientUpdate;
+  }
 
   if (schema) {
     const validationError = valjs(output, object.as(schema));
