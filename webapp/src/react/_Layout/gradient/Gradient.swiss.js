@@ -3,7 +3,7 @@ import { styleSheet } from 'swiss-react';
 export default styleSheet('Gradient', {
   Wrapper: {
     _size: '100%',
-    backgroundImage: 'linear-gradient(#0D315B, #40A3E7, #2D7EDB)',
+    backgroundImage: 'linear-gradient(#0D315B, #40A3E7, #2D9DDB, #F2FCFE)',
     backgroundSize: '100% 200%',
     backgroundPosition: '0% 100%',
     transition: '2.0s ease-in',
