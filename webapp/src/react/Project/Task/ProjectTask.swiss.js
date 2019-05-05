@@ -12,6 +12,8 @@ export default styleSheet('ProjectTask', {
     }
   },
   ButtonWrapper: {
+    _flex: ['row', 'center', 'center'],
+    height: '26px',
     opacity: '0',
     visbility: 'hidden',
     '.ProjectTask_Wrapper:hover &': {
