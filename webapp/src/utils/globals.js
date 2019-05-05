@@ -70,7 +70,7 @@ export default function getGlobals() {
     withoutNotes: false,
     platform: 'web',
     apiHeaders: {
-      'sw-web-version': version,
+      'sw-web': version,
       'sw-platform': 'web'
     }
   };
@@ -80,7 +80,7 @@ export default function getGlobals() {
     globals.platform = window.process.platform;
     globals.apiHeaders['sw-platform'] = window.process.platform;
     globals.apiHeaders['sw-electron-arch'] = window.process.arch;
-    globals.apiHeaders['sw-electron-version'] = remote.getGlobal('version');
+    globals.apiHeaders['sw-electron'] = remote.getGlobal('version');
   }
   return fromJS(globals);
 }

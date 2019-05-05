@@ -11,7 +11,8 @@ import './topbar.scss';
   isBrowserSupported: state.global.get('isBrowserSupported'),
   isElectron: state.global.get('isElectron'),
   nextRetry: state.connection.get('nextRetry'),
-  versionInfo: state.connection.get('versionInfo'),
+  clientUpdate: state.connection.get('clientUpdate'),
+  maintenance: state.connection.get('maintenance'),
   reconnectAttempt: state.connection.get('reconnectAttempt'),
   isMaximized: state.main.get('isMaximized'),
   isFullscreen: state.main.get('isFullscreen'),
@@ -37,8 +38,8 @@ export default class Topbar extends PureComponent {
     window.ipcListener[name]();
   });
   onDownload = () => {
-    const { versionInfo } = this.props;
-    window.open(versionInfo.get('updateUrl'));
+    const { clientUpdate } = this.props;
+    window.open(clientUpdate.get('url'));
   };
   onReload() {
     window.ipcListener.reload();
@@ -63,7 +64,13 @@ export default class Topbar extends PureComponent {
   }
 
   renderStatusIndicator() {
-    const { status, versionInfo, token, reconnectAttempt } = this.props;
+    const {
+      status,
+      clientUpdate,
+      maintenance,
+      token,
+      reconnectAttempt
+    } = this.props;
     if (!token) {
       return undefined;
     }
@@ -74,21 +81,19 @@ export default class Topbar extends PureComponent {
 
     if (status === 'connecting') {
       statusMessage = 'Connecting...';
-    } else if (versionInfo && versionInfo.get('maintenance')) {
+    }
+    if (maintenance) {
       statusMessage = 'Offline - under maintenance.';
       btn = this.renderRetryBtn();
-    } else if (versionInfo && versionInfo.get('updateRequired')) {
-      statusMessage = 'Offline - new version required';
-      btn = this.renderDownloadBtn();
-    } else if (versionInfo && versionInfo.get('updateAvailable')) {
-      statusMessage = 'New version available';
-      btn = this.renderDownloadBtn();
-    } else if (versionInfo && versionInfo.get('reloadRequired')) {
-      statusMessage = 'Offline - new version required';
+    } else if (clientUpdate) {
       btn = this.renderReloadBtn();
-    } else if (versionInfo && versionInfo.get('reloadAvailable')) {
       statusMessage = 'New version available';
-      btn = this.renderReloadBtn();
+      if (clientUpdate.get('url')) {
+        btn = this.renderDownloadBtn();
+      }
+      if (clientUpdate.get('required')) {
+        statusMessage = 'Offline - new version required';
+      }
     } else if (status === 'offline') {
       if (reconnectAttempt > 0) {
         statusMessage = `Offline - retrying in ${secondsLeft} seconds`;
