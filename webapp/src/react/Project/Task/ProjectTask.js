@@ -9,7 +9,7 @@ import ProjectTaskInput from './Input/ProjectTaskInput';
 import ProjectTaskAssignees from './Assignees/ProjectTaskAssignees';
 import ProjectTaskAttach from './Attach/ProjectTaskAttach';
 import Button from '_shared/Button/Button';
-import AttachmentHOC from '_shared/Attachment/AttachmentHOC';
+import AttachmentHOC from '_shared/attachment/AttachmentHOC';
 
 import SW from './ProjectTask.swiss';
 
