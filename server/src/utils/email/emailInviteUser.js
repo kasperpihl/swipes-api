@@ -1,62 +1,20 @@
 import config from 'config';
 import mandrillSendTemplate from 'src/utils/mandrill/mandrillSendTemplate';
+import emailIncludeFooter from './emailIncludeFooter';
 
 export default (email, invitationToken, teamName, inviterFirstName) => {
   const host = config.get('emailHost');
-  const template_name = 'welcome-invitation';
-  const template_content = [
-    {
-      name: '',
-      content: ''
-    }
-  ];
-  const merge_vars = [
-    {
-      rcpt: email,
-      vars: [
-        {
-          name: 'NAME',
-          content: 'there'
-        },
-        {
-          name: 'NAME_INVITER',
-          content: inviterFirstName
-        },
-        {
-          name: 'COMPANY_NAME',
-          content: teamName
-        },
-        {
-          name: 'INVITATION_LINK',
-          content: `${host}register?invitation_token=${invitationToken}`
-        }
-      ]
-    }
-  ];
-  const to = [
-    {
-      email,
-      type: 'to'
-    }
-  ];
-  const subject = `${inviterFirstName} invited you to join ${teamName} on Swipes Workspace`;
-  const message = {
-    to,
-    subject,
-    merge_vars,
-    from_email: 'noreply@swipesapp.com',
-    from_name: 'Swipes Team',
-    headers: {
-      'Reply-To': 'noreply@swipesapp.com'
-    },
-    important: false,
-    merge: true,
-    merge_language: 'mailchimp'
+
+  const mergeVars = {
+    INVITER: inviterFirstName,
+    TEAM: teamName,
+    INVITATION_LINK: `${host}register?invitation_token=${invitationToken}`,
+    FOOTER: emailIncludeFooter()
   };
 
-  return mandrillSendTemplate({
-    template_name,
-    template_content,
-    message
+  return mandrillSendTemplate('subject-join-your-team-at-swipes', {
+    email,
+    subject: `${inviterFirstName} invited you to join ${teamName} in Swipes`,
+    mergeVars
   });
 };

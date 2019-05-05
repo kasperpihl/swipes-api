@@ -13,7 +13,7 @@ export default endpointCreate(
   async (req, res, next) => {
     await queueScheduleBatch({
       job_name: 'job.sendEmail.queue',
-      unique_identifier: 'friday-reminder',
+      unique_identifier: 'onboarding-1h',
       run_at: 1,
       owned_by: res.locals.user_id
     });

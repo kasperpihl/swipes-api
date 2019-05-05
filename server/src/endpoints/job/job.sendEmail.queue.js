@@ -1,20 +1,22 @@
 import { query } from 'src/utils/db/db';
 import queueCreateJob from 'src/utils/queue/queueCreateJob';
 import emailFridayReminder from 'src/utils/email/emailFridayReminder';
+import emailOnboarding from 'src/utils/email/emailOnboarding';
 
 export default queueCreateJob(async (req, res, next) => {
   console.log('running email!', res.locals);
   const { owned_by, unique_identifier, payload } = res.locals;
+  if (unique_identifier === 'onboarding-1h') {
+    const user = await fetchUser(owned_by);
 
-  if (unique_identifier.startsWith('trial-')) {
+    await emailOnboarding(user.email, user.first_name);
+  } else if (unique_identifier.startsWith('trial-')) {
     const team = await fetchTeam(owned_by);
     const admins = await fetchAdmins(owned_by);
     for (let i = 0; i < admins.length; i++) {
       // await emailTrialReminder();
     }
-  }
-
-  if (unique_identifier === 'friday-reminder') {
+  } else if (unique_identifier === 'friday-reminder') {
     const user = await fetchUser(owned_by);
     await emailFridayReminder(user.email, user.first_name);
   } else {

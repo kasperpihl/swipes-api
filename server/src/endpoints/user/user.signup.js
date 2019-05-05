@@ -91,6 +91,12 @@ export default endpointCreate(
       {
         owned_by: userId,
         job_name: 'job.sendEmail.queue',
+        unique_identifier: 'onboarding-1h',
+        run_at: 60
+      },
+      {
+        owned_by: userId,
+        job_name: 'job.sendEmail.queue',
         unique_identifier: 'friday-reminder',
         run_at: runFridayAt.toDate(),
         recurring: 60 * 24 * 7
