@@ -108,9 +108,9 @@ export default class Team extends PureComponent {
   render() {
     const { tabIndex, showPendingInvites } = this.state;
     const { team, meInTeam } = this.props;
+    if (!team) return null;
     const userStatus = tabIndex === 0 ? 'active' : 'disabled';
     const { subType, color, daysLeft } = this.getTeamStatus();
-
     return (
       <CardContent noframe header={this.renderHeader(subType, color)}>
         <SW.Wrapper>

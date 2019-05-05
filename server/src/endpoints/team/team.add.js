@@ -1,11 +1,12 @@
 import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
-import { transaction } from 'src/utils/db/db';
+import { transaction, query } from 'src/utils/db/db';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
 import sqlOnboardingDiscussionQueries from 'src/utils/sql/sqlOnboardingDiscussionQueries';
 import update from 'src/utils/update';
 import redisPublish from 'src/utils/redis/redisPublish';
 import idGenerate from 'src/utils/idGenerate';
+import emailTeamTrialStarted from 'src/utils/email/emailTeamTrialStarted';
 import queueScheduleBatch from 'src/utils/queue/queueScheduleBatch';
 
 const expectedInput = {
@@ -54,7 +55,8 @@ export default endpointCreate(
     });
 
     res.locals.backgroundInput = {
-      team_id: teamId
+      team_id: teamId,
+      team_name: name
     };
 
     res.locals.output = {
@@ -68,15 +70,26 @@ export default endpointCreate(
   }
 ).background(async (req, res) => {
   update.send(res.locals.update);
+  const { user_id } = res.locals;
+  const { team_id, team_name } = res.locals.input;
+  console.log(team_id, team_name, user_id);
+  const userRes = await query(
+    `
+      SELECT first_name, email
+      FROM users
+      WHERE user_id = $1
+    `,
+    [user_id]
+  );
 
-  const { team_id } = res.locals.input;
-
+  const user = userRes.rows[0];
+  await emailTeamTrialStarted(user.email, user.first_name, team_name, team_id);
   // Trial email 1 week left
   await queueScheduleBatch({
     job_name: 'job.sendEmail.queue',
     owned_by: team_id,
     unique_identifier: 'trial-1week',
-    run_at: 60 * 24 * 23
+    run_at: 60 * 24 * 24
   });
 
   // Trial 1 day left
@@ -84,7 +97,7 @@ export default endpointCreate(
     job_name: 'job.sendEmail.queue',
     owned_by: team_id,
     unique_identifier: 'trial-1day',
-    run_at: 60 * 24 * 29
+    run_at: 60 * 24 * 30
   });
 
   // Trial expired

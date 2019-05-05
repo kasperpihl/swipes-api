@@ -119,16 +119,17 @@ export default class ViewController extends PureComponent {
 
     return (
       <>
-        {this.renderSide('left', {
-          Comp: LeftComp,
-          props: leftProps,
-          width: sizes[0],
-          cardProps: {
-            left: hasOverlay ? 0 : startX,
-            isOverlay: hasOverlay && onTopSide === 'left',
-            isUnderlay: hasOverlay && onTopSide !== 'left'
-          }
-        })}
+        {LeftComp &&
+          this.renderSide('left', {
+            Comp: LeftComp,
+            props: leftProps,
+            width: sizes[0],
+            cardProps: {
+              left: hasOverlay ? 0 : startX,
+              isOverlay: hasOverlay && onTopSide === 'left',
+              isUnderlay: hasOverlay && onTopSide !== 'left'
+            }
+          })}
         {RightComp &&
           this.renderSide('right', {
             Comp: RightComp,
