@@ -15,7 +15,14 @@ export default styleSheet('ProjectTaskInput', {
     outline: 'none',
     boxShadow: 'none',
     overflowY: 'hidden',
-
+    isAttachment: {
+      pointerEvents: 'none',
+      '.ProjectTask_Wrapper:hover &': {
+        '&:not(:focus)': {
+          color: '$blue'
+        }
+      }
+    },
     isCompleted: {
       opacity: '0.5'
     }

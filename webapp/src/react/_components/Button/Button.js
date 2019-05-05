@@ -24,6 +24,7 @@ export default function Button({
   onClick,
   selected,
   green,
+  small,
   children,
   ...rest
 }) {
@@ -36,6 +37,7 @@ export default function Button({
       status={parsedStatus}
       selected={selected}
       green={green}
+      small={small}
       withTitle={!!parsedTitle}
     >
       <SW.Wrapper

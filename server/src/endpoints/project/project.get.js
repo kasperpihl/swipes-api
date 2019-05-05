@@ -15,7 +15,7 @@ export default endpointCreate(
     const { project_id } = res.locals.input;
     const projectRes = await query(
       `
-        SELECT project_id, title, discussion_id, due_date, ordering, indention, completion, rev, owned_by, members, completion_percentage, privacy
+        SELECT project_id, title, due_date, ordering, indention, completion, rev, owned_by, members, completion_percentage, privacy
         FROM projects
         WHERE project_id = $1
         AND deleted = FALSE
@@ -31,7 +31,7 @@ export default endpointCreate(
 
     const tasksRes = await query(
       `
-        SELECT task_id, title, due_date, assignees
+        SELECT task_id, title, due_date, assignees, attachment
         FROM project_tasks
         WHERE "project_id" = $1 
         AND deleted = FALSE

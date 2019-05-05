@@ -14,7 +14,7 @@ import SW from './ProjectTaskInput.swiss';
 
 export default memo(ProjectTaskInput);
 
-function ProjectTaskInput({ taskId, onClick, isCompleted }) {
+function ProjectTaskInput({ taskId, onClick, isCompleted, isAttachment }) {
   const stateManager = useContext(ProjectContext);
   const unmountedRef = useUnmountedRef();
   const inputRef = useRef();
@@ -73,6 +73,7 @@ function ProjectTaskInput({ taskId, onClick, isCompleted }) {
       onFocus={handleFocus}
       onBlur={handleBlur}
       placeholder="Write a task"
+      isAttachment={isAttachment}
       value={title}
       isCompleted={isCompleted}
       inputRef={c => (inputRef.current = c)}

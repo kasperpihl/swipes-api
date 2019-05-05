@@ -23,7 +23,7 @@ export default class CommentComposer extends PureComponent {
       attachments: List(props.initialAttachments || []),
       commentVal: props.initialMessage || '',
       cursorIndex: 0,
-      attachmentLoadingStatus: ''
+      attachmentLoadingStatus: false
     };
   }
   componentDidMount() {
@@ -81,7 +81,7 @@ export default class CommentComposer extends PureComponent {
   handleAddComment = message => {
     const { attachments, commentVal, attachmentLoadingStatus } = this.state;
     const { discussionId, editCommentId, onSuccess, ownedBy } = this.props;
-    if (!message || attachmentLoadingStatus === 'loading') {
+    if (!message || attachmentLoadingStatus) {
       return;
     }
     if (editCommentId) {
@@ -92,8 +92,7 @@ export default class CommentComposer extends PureComponent {
     }
     this.setState({
       attachments: List([]),
-      commentVal: '',
-      attachmentLoadingStatus: ''
+      commentVal: ''
     });
 
     request('comment.add', {

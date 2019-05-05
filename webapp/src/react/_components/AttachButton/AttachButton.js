@@ -21,19 +21,18 @@ export default class extends PureComponent {
   };
 
   onChangeFiles = e => {
-    const { onStatusChange } = this.props;
-    onStatusChange('loading');
     this.setState({ fileVal: e.target.value });
     this.onUploadFiles(e.target.files);
   };
   async onUploadFiles(files) {
     const { loader, ownedBy, onStatusChange } = this.props;
     loader.set('attach');
+    onStatusChange(true);
     const res = await fileUpload(files, ownedBy);
+    onStatusChange(false);
     if (res.ok) {
       loader.clear('attach');
       this.addAttachment('file', res.file.file_id, res.file.file_name);
-      onStatusChange('loaded');
       this.setState({ fileVal: '' });
     } else {
       loader.error('attach', res.error, 3000);
@@ -50,12 +49,14 @@ export default class extends PureComponent {
       });
   }
   createNote(title) {
-    const { loader, ownedBy } = this.props;
+    const { loader, ownedBy, onStatusChange } = this.props;
     loader.set('attach');
+    onStatusChange(true);
     request('note.add', {
       title,
       owned_by: ownedBy
     }).then(res => {
+      onStatusChange(false);
       if (res.ok) {
         loader.clear('attach');
         this.addAttachment('note', res.note.note_id, title);
@@ -112,7 +113,7 @@ export default class extends PureComponent {
   };
 
   render() {
-    const { loader } = this.props;
+    const { loader, buttonProps } = this.props;
     const { fileVal } = this.state;
 
     return (
@@ -121,6 +122,7 @@ export default class extends PureComponent {
           onClick={this.handleChooseType}
           status={loader.get('attach')}
           icon="Attach"
+          {...buttonProps}
         />
         <SW.HiddenInput
           value={fileVal}

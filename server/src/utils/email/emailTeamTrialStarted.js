@@ -19,6 +19,6 @@ export default async function emailOnboarding(
   return mandrillSendTemplate('your-30-day-trial-for-swipes-starts-today', {
     email,
     mergeVars,
-    subject: 'Your 30-day trial  for Swipes starts today'
+    subject: 'Your 30-day trial for Swipes starts today'
   });
 }

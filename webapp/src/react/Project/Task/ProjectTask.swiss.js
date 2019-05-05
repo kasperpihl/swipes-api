@@ -1,6 +1,24 @@
 import { styleSheet } from 'swiss-react';
+import Icon from '_shared/Icon/Icon';
 
 export default styleSheet('ProjectTask', {
+  Icon: {
+    _el: Icon,
+    _size: '24px',
+    flex: 'none',
+    pointerEvents: 'none',
+    '.ProjectTask_Wrapper:hover &': {
+      fill: '$blue'
+    }
+  },
+  ButtonWrapper: {
+    opacity: '0',
+    visbility: 'hidden',
+    '.ProjectTask_Wrapper:hover &': {
+      opacity: '1',
+      visbility: 'visible'
+    }
+  },
   Wrapper: {
     _flex: ['row', 'left', 'top'],
     width: '100%',

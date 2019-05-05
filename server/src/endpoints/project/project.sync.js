@@ -99,6 +99,9 @@ export default endpointCreate(
         if (keys.assignees) {
           keys.assignees = JSON.stringify(keys.assignees);
         }
+        if (keys.attachment) {
+          keys.attachment = JSON.stringify(keys.attachment);
+        }
         if (keys.title) {
           keys.title = keys.title.substr(0, 255);
         }

@@ -1,5 +1,4 @@
 import React, { useContext, memo } from 'react';
-
 import { ProjectContext } from 'src/react/contexts';
 import useProjectSlice from 'core/react/_hooks/useProjectSlice';
 
@@ -8,6 +7,9 @@ import ProjectTaskCheckbox from './Checkbox/ProjectTaskCheckbox';
 import ProjectTaskSelect from './Select/ProjectTaskSelect';
 import ProjectTaskInput from './Input/ProjectTaskInput';
 import ProjectTaskAssignees from './Assignees/ProjectTaskAssignees';
+import ProjectTaskAttach from './Attach/ProjectTaskAttach';
+import Button from '_shared/Button/Button';
+import AttachmentHOC from '_shared/Attachment/AttachmentHOC';
 
 import SW from './ProjectTask.swiss';
 
@@ -21,16 +23,44 @@ function ProjectTask({ taskId, selected, onSelect, onComplete }) {
     isFocused,
     indentComp,
     isCompleted,
-    projectId
+    projectId,
+    attachment
   ] = useProjectSlice(stateManager, (clientState, localState) => [
     clientState.getIn(['indention', taskId]),
     localState.get('selectedId') === taskId,
     localState.getIn(['indentComp', taskId]) || 0, // Indent compensation for filters
     clientState.getIn(['completion', taskId]),
-    clientState.get('project_id')
+    clientState.get('project_id'),
+    clientState.getIn(['tasks_by_id', taskId, 'attachment'])
   ]);
 
   if (typeof indention === 'undefined') return null;
+
+  if (attachment) {
+    const handleEdit = e => {
+      e.preventDefault();
+      e.stopPropagation();
+      stateManager.selectHandler.select(taskId);
+    };
+    return (
+      <AttachmentHOC attachment={attachment.toJS()}>
+        {(icon, onClick) => (
+          <SW.Wrapper
+            indention={indention - indentComp}
+            isFocused={isFocused}
+            onClick={onClick}
+          >
+            <ProjectTaskExpand taskId={taskId} />
+            <SW.Icon icon={icon} />
+            <ProjectTaskInput taskId={taskId} isAttachment />
+            <SW.ButtonWrapper>
+              <Button icon="ThreeDots" onClick={handleEdit} small />
+            </SW.ButtonWrapper>
+          </SW.Wrapper>
+        )}
+      </AttachmentHOC>
+    );
+  }
 
   return (
     <SW.Wrapper
@@ -51,6 +81,7 @@ function ProjectTask({ taskId, selected, onSelect, onComplete }) {
         />
       )}
       <ProjectTaskInput taskId={taskId} isCompleted={isCompleted} />
+      <ProjectTaskAttach taskId={taskId} />
       <ProjectTaskAssignees taskId={taskId} />
     </SW.Wrapper>
   );

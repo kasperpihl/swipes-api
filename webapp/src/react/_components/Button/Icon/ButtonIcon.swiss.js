@@ -1,5 +1,5 @@
 import { styleSheet, addGlobalStyles } from 'swiss-react';
-import Icon from 'src/react/_components/Icon/Icon';
+import Icon from '_shared/Icon/Icon';
 
 addGlobalStyles({
   '@keyframes button-loader': {
