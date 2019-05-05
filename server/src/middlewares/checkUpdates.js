@@ -19,8 +19,12 @@ export default async (req, res, next) => {
 
   let clientUpdate;
   Object.entries(headers).forEach(([header, url]) => {
-    if (clientUpdate && clientUpdate.required) return;
     const clientVersion = req.header(header);
+    if (
+      (clientUpdate && clientUpdate.required) ||
+      typeof clientVersion === 'undefined'
+    )
+      return;
 
     if (newerVersionExist(clientVersion, newestVersions[header])) {
       clientUpdate = {
@@ -34,7 +38,7 @@ export default async (req, res, next) => {
   });
 
   res.locals.__clientUpdate = clientUpdate;
-  if (clientUpdate) {
+  if (clientUpdate && clientUpdate.required) {
     throw Error('update_required');
   }
 };

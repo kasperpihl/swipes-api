@@ -66,7 +66,7 @@ app.use('/v1', async (req, res, next) => {
 });
 
 // Checking for updates
-// app.use('/v1', checkUpdates);
+app.use('/v1', checkUpdates);
 
 // Not authed routes goes here
 app.use('/v1', endpoints.notAuthed);
