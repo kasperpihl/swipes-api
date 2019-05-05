@@ -32,7 +32,7 @@ export default class Attachment extends PureComponent {
       <AttachmentHOC attachment={attachment}>
         {(icon, onClick) => (
           <SW.ATag
-            onClick={this.handleClick}
+            onClick={onClick}
             onMouseEnter={onClose && this.onMouseEnter}
             onMouseLeave={onClose && this.onMouseLeave}
           >
