@@ -13,6 +13,22 @@ export default function screenFromGoTo(goTo) {
       }
     };
   }
+  if (goTo.startsWith('team-')) {
+    const teamId = goTo.split('-')[1];
+    return {
+      screenId: 'Team',
+      crumbTitle: 'Team',
+      props: {
+        teamId
+      }
+    };
+  }
+  if (goTo === 'teamCreate') {
+    return {
+      screenId: 'TeamCreate',
+      crumbTitle: 'Create Team'
+    };
+  }
 
   if (goTo === 'planNextWeek') {
     const now = moment();
