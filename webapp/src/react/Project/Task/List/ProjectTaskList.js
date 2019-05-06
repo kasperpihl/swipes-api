@@ -29,31 +29,13 @@ export default function ProjectTaskList({
   }
 
   // Selectable version
-  let lastSelectedTaskId;
-  let lastSelectedIndention = -1;
-
   return visibleOrder.map(taskId => {
     let isSelected = selectedTasks.indexOf(`${projectId}_-_${taskId}`) > -1;
 
-    if (isSelected) {
-      lastSelectedTaskId = taskId;
-      lastSelectedIndention = indention.get(taskId);
-    }
+    let handlePlanSelect = () => {
+      onToggleTask(projectId, taskId);
+    };
 
-    if (!isSelected && lastSelectedTaskId) {
-      isSelected = indention.get(taskId) > lastSelectedIndention;
-      if (!isSelected) {
-        lastSelectedTaskId = null;
-        lastSelectedIndention = -1;
-      }
-    }
-
-    let handlePlanSelect;
-    if (!isSelected || taskId === lastSelectedTaskId) {
-      handlePlanSelect = () => {
-        onToggleTask(projectId, taskId);
-      };
-    }
     return (
       <ProjectTask
         key={taskId}

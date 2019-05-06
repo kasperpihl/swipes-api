@@ -6,13 +6,9 @@ import TooltipUsers from 'src/react/_components/TooltipUsers/TooltipUsers';
 
 import SW from './CardHeaderSubtitle.swiss';
 
-export default connect(
-  null,
-  {
-    tooltip: mainActions.tooltip
-  }
-)(CardHeaderSubtitle);
-function CardHeaderSubtitle({ subtitle, children, tooltip }) {
+export default connect()(CardHeaderSubtitle);
+
+function CardHeaderSubtitle({ subtitle, children, dispatch }) {
   if (typeof subtitle === 'string') {
     return (
       <SW.Wrapper>
@@ -23,24 +19,28 @@ function CardHeaderSubtitle({ subtitle, children, tooltip }) {
   }
 
   const { ownedBy, members, privacy } = subtitle;
+
   const onMouseEnter = e => {
     if (!members || !members.length) return;
-    tooltip({
-      component: TooltipUsers,
-      props: {
-        teamId: ownedBy,
-        userIds: members
-      },
-      options: {
-        boundingRect: e.target.getBoundingClientRect(),
-        position: 'right'
-      }
-    });
+
+    dispatch(
+      mainActions.tooltip({
+        component: TooltipUsers,
+        props: {
+          teamId: ownedBy,
+          userIds: members
+        },
+        options: {
+          boundingRect: e.target.getBoundingClientRect(),
+          position: 'right'
+        }
+      })
+    );
   };
 
   const onMouseLeave = () => {
     if (!members || !members.length) return;
-    tooltip(null);
+    dispatch(mainActions.tooltip(null));
   };
 
   return (

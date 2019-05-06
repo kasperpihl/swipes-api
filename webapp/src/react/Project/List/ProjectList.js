@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
+import { connect } from 'react-redux';
 import SW from './ProjectList.swiss';
 import useNav from 'src/react/_hooks/useNav';
 import useUpdate from 'core/react/_hooks/useUpdate';
@@ -16,30 +17,38 @@ import Spacing from '_shared/Spacing/Spacing';
 
 ProjectList.sizes = [750];
 
-export default function ProjectList({ openAdd }) {
-  const nav = useNav();
-  const [ownedBy, setOwnedBy] = useState();
-  const params = {};
-  if (ownedBy) {
-    params.owned_by = ownedBy;
-  }
+export default connect(state => ({
+  selectedTeamId: state.main.get('selectedTeamId')
+}))(ProjectList);
 
-  const req = usePaginationRequest('project.list', params, {
-    cursorKey: 'skip',
-    idAttribute: 'project_id',
-    resultPath: 'projects'
-  });
+function ProjectList({ openAdd, selectedTeamId }) {
+  const nav = useNav();
+  const selectedRef = useRef(selectedTeamId);
+
+  const req = usePaginationRequest(
+    'project.list',
+    {
+      owned_by: selectedTeamId
+    },
+    {
+      cursorKey: 'skip',
+      idAttribute: 'project_id',
+      resultPath: 'projects'
+    }
+  );
+
+  useEffect(() => {
+    if (selectedTeamId !== selectedRef.current) {
+      req.retry(true);
+    }
+    selectedRef.current = selectedTeamId;
+  }, [selectedTeamId]);
 
   useUpdate('project', update => {
     if (update.created_at) {
       req.prependItem(update);
     }
   });
-
-  const handleFilter = ownedBy => {
-    setOwnedBy(ownedBy);
-    req.retry(true);
-  };
 
   const handleNewProject = () => {
     nav.openModal(ModalCreate, {
@@ -63,7 +72,18 @@ export default function ProjectList({ openAdd }) {
   }, []);
 
   if (!req.items) {
-    return <RequestLoader req={req} />;
+    return (
+      <CardContent
+        noframe
+        header={
+          <CardHeader padding={18} title="Projects" teamPicker>
+            <Button icon="CircledPlus" onClick={handleNewProject} />
+          </CardHeader>
+        }
+      >
+        <RequestLoader req={req} />
+      </CardContent>
+    );
   }
 
   if (!req.items.length) {
@@ -71,7 +91,7 @@ export default function ProjectList({ openAdd }) {
       <CardContent
         noframe
         header={
-          <CardHeader padding={18} title="Projects">
+          <CardHeader padding={18} title="Projects" teamPicker>
             <Button icon="CircledPlus" onClick={handleNewProject} />
           </CardHeader>
         }
@@ -97,13 +117,12 @@ export default function ProjectList({ openAdd }) {
       noframe
       header={
         <>
-          <CardHeader padding={18} title="Projects">
+          <CardHeader padding={18} title="Projects" teamPicker>
             <Button icon="CircledPlus" onClick={handleNewProject} />
           </CardHeader>
           <Spacing height={24} />
           <SectionHeader discussion>
             <SW.Name>Name</SW.Name>
-            <SW.Team>Team</SW.Team>
             <SW.LastOpened>Last Opened</SW.LastOpened>
           </SectionHeader>
         </>
@@ -111,12 +130,7 @@ export default function ProjectList({ openAdd }) {
     >
       <SW.Wrapper>
         {req.items.map(project => (
-          <ProjectListItem
-            key={project.project_id}
-            project={project}
-            onFilter={handleFilter}
-            isFiltered={!!ownedBy}
-          />
+          <ProjectListItem key={project.project_id} project={project} />
         ))}
         <PaginationScrollToMore req={req} errorLabel="Couldn't get projects." />
       </SW.Wrapper>

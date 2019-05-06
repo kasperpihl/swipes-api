@@ -5,6 +5,7 @@ import randomString from 'core/utils/randomString';
 
 const initialState = fromJS({
   overlay: null,
+  selectedTeamId: null,
   isHydrated: false,
   successState: false,
   modals: {
@@ -23,6 +24,16 @@ export default function main(state = initialState, action) {
   switch (type) {
     case REHYDRATE:
       return state.set('isHydrated', true);
+    case 'me.init': {
+      let selectedTeamId = payload.me.user_id;
+      if (payload.teams.length) {
+        selectedTeamId = payload.teams[0].team_id;
+      }
+      return state.set('selectedTeamId', selectedTeamId);
+    }
+    case types.SET_SELECTED_TEAM_ID: {
+      return state.set('selectedTeamId', payload.selectedTeamId);
+    }
     case types.SET_MAXIMIZED: {
       return state.set('isMaximized', payload.toggle);
     }

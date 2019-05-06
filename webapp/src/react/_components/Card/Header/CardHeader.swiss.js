@@ -13,8 +13,12 @@ export default styleSheet('CardHeader', {
       margin: '0',
       width: '100%'
     },
-    subtitle: {
+
+    noSubtitle: {
       _flex: ['row', 'left', 'center']
+    },
+    hasTeamPicker: {
+      _flex: ['row', 'left', 'top']
     }
   },
   TitleWrapper: {
@@ -30,10 +34,8 @@ export default styleSheet('CardHeader', {
     userSelect: 'none',
     fontWeight: '$bold',
 
-    cursorHover: {
-      '&:hover': {
-        cursor: 'pointer'
-      }
+    hasClickHandler: {
+      cursor: 'pointer'
     }
   },
 

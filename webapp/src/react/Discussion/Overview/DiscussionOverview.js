@@ -200,7 +200,6 @@ function DiscussionOverview({ tooltip, discussionId }) {
             onTitleClick={onTitleClick}
             noSpacing
             separator
-            cursorHover
           >
             <Button
               title={'See attachments'}

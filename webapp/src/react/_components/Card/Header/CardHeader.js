@@ -2,10 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SW from './CardHeader.swiss';
 import CardHeaderSubtitle from './Subtitle/CardHeaderSubtitle';
+import CardHeaderPicker from './Picker/CardHeaderPicker';
+
 import Spacing from '_shared/Spacing/Spacing';
 
 CardHeader.propTypes = {
   title: PropTypes.string.isRequired,
+  teamPicker: PropTypes.bool,
   subtitle: PropTypes.oneOfType([
     PropTypes.shape({
       ownedBy: PropTypes.string.isRequired,
@@ -20,29 +23,34 @@ CardHeader.propTypes = {
 export default function CardHeader({
   title,
   subtitle,
-  dropdown,
   separator,
   onTitleClick,
+  teamPicker,
   children,
-  cursorHover,
   ...rest
 }) {
   return (
-    <SW.Wrapper separator={separator} {...rest} subtitle={!subtitle}>
+    <SW.Wrapper
+      separator={separator}
+      {...rest}
+      noSubtitle={!subtitle}
+      hasTeamPicker={!!teamPicker}
+    >
       <SW.TitleWrapper>
         <SW.Title
           key="header-title"
           onClick={onTitleClick}
-          cursorHover={cursorHover}
+          hasClickHandler={!!onTitleClick}
         >
           {title}
         </SW.Title>
-        {dropdown}
+        {teamPicker && <CardHeaderPicker />}
       </SW.TitleWrapper>
-      {!subtitle && <SW.Actions>{children}</SW.Actions>}
-      {subtitle && (
+
+      {subtitle && !teamPicker && (
         <CardHeaderSubtitle subtitle={subtitle} children={children} />
       )}
+      {!subtitle && <SW.Actions>{children}</SW.Actions>}
       {separator && <Spacing height={6} />}
     </SW.Wrapper>
   );

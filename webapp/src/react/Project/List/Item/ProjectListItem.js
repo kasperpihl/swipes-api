@@ -52,23 +52,6 @@ export default function ProjectListItem({
       </SW.LeftSideWrapper>
       <SW.TextWrapper>
         <SW.Title>{project.title}</SW.Title>
-        {!hideTeam && (
-          <SW.Subtitle
-            title={
-              isFiltered
-                ? 'Remove filter'
-                : `Filter: ${teamGetBelonging(project.owned_by)}`
-            }
-            onClick={e => {
-              e.preventDefault();
-              e.stopPropagation();
-              onFilter(isFiltered ? null : project.owned_by);
-            }}
-            isFiltered={isFiltered}
-          >
-            {teamGetBelonging(project.owned_by)}
-          </SW.Subtitle>
-        )}
         <SW.DateOpened>
           {isNew && <SW.Label>New</SW.Label>}
           {!isNew && <span>{openedAt}</span>}
