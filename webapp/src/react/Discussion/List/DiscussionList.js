@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { connect } from 'react-redux';
 import DiscussionListItems from 'src/react/Discussion/List/Items/DiscussionListItems';
 import PaginationScrollToMore from 'src/react/_components/pagination/PaginationScrollToMore';
 
@@ -9,12 +10,17 @@ import useMyId from 'core/react/_hooks/useMyId';
 
 import SW from './DiscussionList.swiss';
 
-export default function DiscussionList({ type, onSelectItemId, selectedId }) {
+export default connect(state => ({
+  selectedTeamId: state.main.get('selectedTeamId')
+}))(DiscussionList);
+
+function DiscussionList({ type, onSelectItemId, selectedId, selectedTeamId }) {
   const myId = useMyId();
   const req = usePaginationRequest(
     'discussion.list',
     {
-      type
+      type,
+      owned_by: selectedTeamId
     },
     {
       idAttribute: 'discussion_id',
@@ -30,6 +36,16 @@ export default function DiscussionList({ type, onSelectItemId, selectedId }) {
       didSelectRef.current = true;
     }
   });
+
+  const selectedRef = useRef(selectedTeamId);
+  useEffect(() => {
+    if (selectedTeamId !== selectedRef.current) {
+      req.retry(true);
+      onSelectItemId(null);
+      didSelectRef.current = false;
+    }
+    selectedRef.current = selectedTeamId;
+  }, [selectedTeamId]);
 
   useUpdate('discussion', update => {
     if (update.deleted) {
@@ -56,6 +72,10 @@ export default function DiscussionList({ type, onSelectItemId, selectedId }) {
       req.fetchNew();
     }
   });
+
+  if (selectedTeamId === myId) {
+    return <SW.Wrapper>No chat for Personal. *missing empty state</SW.Wrapper>;
+  }
 
   if (req.error || req.loading) {
     return (

@@ -45,10 +45,9 @@ function Discuss({ teams }) {
   const renderLeftHeader = () => {
     return (
       <SW.LeftHeaderWrapper>
-        <CardHeader title="Chat">
+        <CardHeader title="Chat" teamPicker separator>
           <Button onClick={handleNewDiscussion} icon="CircledPlus" />
         </CardHeader>
-        <TabBar tabs={tabs} onChange={handleTabChange} value={tabIndex} />
       </SW.LeftHeaderWrapper>
     );
   };
