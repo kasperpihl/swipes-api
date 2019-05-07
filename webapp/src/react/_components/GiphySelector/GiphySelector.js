@@ -14,7 +14,7 @@ export default class GiphySelector extends PureComponent {
     return (
       <SW.Wrapper>
         <GiphySelect
-          requestKey="dc6zaTOxFJmzC"
+          requestKey="1YZHVzT1opsINgxZkmdyaB8Y9VdESZB5"
           requestRating="r"
           onEntrySelect={onEntrySelect}
           theme={theme}

@@ -87,19 +87,22 @@ export default class CommentComposer extends PureComponent {
     if (editCommentId) {
       return this.handleEditComment();
     }
-    if (commentVal.trim().length === 0) {
-      return;
-    }
+    // if (commentVal.trim().length === 0) {
+    //   return;
+    // }
     this.setState({
       attachments: List([]),
       commentVal: ''
     });
+
+    console.log('executed function');
 
     request('comment.add', {
       discussion_id: discussionId,
       attachments: attachments.toJS(),
       message
     }).then(res => {
+      console.log(res);
       if (res.ok) {
         window.analytics.sendEvent('Comment sent', ownedBy);
         if (typeof onSuccess === 'function') {

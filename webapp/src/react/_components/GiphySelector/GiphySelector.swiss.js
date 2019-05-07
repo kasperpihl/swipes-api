@@ -16,7 +16,8 @@ export default styleSheet('GiphySelector', {
     },
 
     '& > .wrapper > .attribution': {
-      display: 'none'
+      _textStyle: 'H2',
+      margin: '0 15px 15px 15px'
     }
   }
 });
