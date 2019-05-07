@@ -12,17 +12,25 @@ export default styleSheet('CardHeader', {
     noSpacing: {
       margin: '0',
       width: '100%'
-    },
+    }
+  },
+
+  ContentWrapper: {
+    _flex: ['column', 'left', 'top'],
+    width: '100%',
 
     noSubtitle: {
       _flex: ['row', 'left', 'center']
     },
+
     hasTeamPicker: {
       _flex: ['row', 'left', 'top']
     }
   },
+
   TitleWrapper: {
-    // _flex: ['column', 'left', 'center']
+    _flex: ['column', 'left', 'center'],
+    width: '100%'
   },
 
   Title: {

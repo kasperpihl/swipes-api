@@ -32,7 +32,7 @@ export default styleSheet('ProjectList', {
     _textStyle: 'caption',
     textTransform: 'uppercase',
     color: '$sw2',
-    marginLeft: '60px'
+    marginLeft: '150px'
   },
 
   EmptyState: {

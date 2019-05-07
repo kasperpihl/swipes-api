@@ -25,7 +25,7 @@ export default styleSheet('TeamHeader', {
     textTransform: 'uppercase',
     color: '$base',
     borderRadius: '2px',
-    margin: '0 auto 0 24px',
+    // margin: '0 auto 0 24px',
     pointerEvents: 'none',
     userSelect: 'none'
   }

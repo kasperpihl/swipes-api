@@ -30,27 +30,24 @@ export default function CardHeader({
   ...rest
 }) {
   return (
-    <SW.Wrapper
-      separator={separator}
-      {...rest}
-      noSubtitle={!subtitle}
-      hasTeamPicker={!!teamPicker}
-    >
-      <SW.TitleWrapper>
-        <SW.Title
-          key="header-title"
-          onClick={onTitleClick}
-          hasClickHandler={!!onTitleClick}
-        >
-          {title}
-        </SW.Title>
-        {teamPicker && <CardHeaderPicker />}
-      </SW.TitleWrapper>
+    <SW.Wrapper separator={separator} {...rest}>
+      <SW.ContentWrapper noSubtitle={!subtitle} hasTeamPicker={!!teamPicker}>
+        <SW.TitleWrapper>
+          <SW.Title
+            key="header-title"
+            onClick={onTitleClick}
+            hasClickHandler={!!onTitleClick}
+          >
+            {title}
+          </SW.Title>
+          {teamPicker && <CardHeaderPicker />}
+        </SW.TitleWrapper>
 
-      {subtitle && !teamPicker && (
-        <CardHeaderSubtitle subtitle={subtitle} children={children} />
-      )}
-      {!subtitle && <SW.Actions>{children}</SW.Actions>}
+        {subtitle && !teamPicker && (
+          <CardHeaderSubtitle subtitle={subtitle} children={children} />
+        )}
+        {!subtitle && <SW.Actions>{children}</SW.Actions>}
+      </SW.ContentWrapper>
       {separator && <Spacing height={6} />}
     </SW.Wrapper>
   );

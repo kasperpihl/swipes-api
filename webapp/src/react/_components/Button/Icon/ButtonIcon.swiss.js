@@ -36,7 +36,11 @@ export default styleSheet('ButtonIcon', {
     flex: 'none',
 
     selected: {
-      fill: '$base'
+      fill: '$base',
+
+      '.Button_Wrapper:hover &': {
+        fill: '$dark'
+      }
     },
     green: {
       fill: '$base',
