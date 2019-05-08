@@ -11,7 +11,7 @@ export default async (req, res, next) => {
   const { requiredVersions, newestVersions } = res.locals.config;
 
   const headers = {
-    'sw-ios': 'itms-apps://itunes.apple.com/app/apple-store/id1250630942?mt=8',
+    'sw-ios': 'itms-apps://itunes.apple.com/app/id1460366630',
     'sw-android': 'market://details?id=com.swipesapp.release',
     'sw-electron': downloadLinks[platform],
     'sw-web': false // reload only
