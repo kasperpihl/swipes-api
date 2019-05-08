@@ -220,7 +220,7 @@ function DiscussionOverview({ tooltip, discussionId }) {
         <SW.FooterWrapper>
           <CommentComposer
             onUnload={handleUnload}
-            initialMessage={initialMessage}
+            initialMessage={!!initialMessage ? initialMessage : ''}
             initialAttachments={initialAttachments}
             discussionId={discussion.discussion_id}
             ownedBy={discussion.owned_by}

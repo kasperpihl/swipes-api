@@ -22,7 +22,7 @@ export default class CommentComposer extends PureComponent {
     this.state = {
       attachments: List(props.initialAttachments || []),
       commentVal: props.initialMessage || '',
-      cursorIndex: 0,
+      cursorIndex: 0 || props.initialMessage.length,
       attachmentLoadingStatus: false
     };
   }
@@ -87,15 +87,10 @@ export default class CommentComposer extends PureComponent {
     if (editCommentId) {
       return this.handleEditComment();
     }
-    // if (commentVal.trim().length === 0) {
-    //   return;
-    // }
     this.setState({
       attachments: List([]),
       commentVal: ''
     });
-
-    console.log('executed function');
 
     request('comment.add', {
       discussion_id: discussionId,
@@ -146,7 +141,7 @@ export default class CommentComposer extends PureComponent {
         this.state.cursorIndex,
         this.state.commentVal.length
       );
-    this.setState({ commentVal: newString });
+    this.setState({ commentVal: newString, cursorIndex: newString.length });
   };
 
   openGiphySelector = e => {
@@ -167,7 +162,7 @@ export default class CommentComposer extends PureComponent {
   handleOnChange = e => {
     this.setState({
       commentVal: e.target.value,
-      cursorIndex: e.target.selectionStart
+      cursorIndex: e.target.selectionStart + 1
     });
   };
 
@@ -190,6 +185,10 @@ export default class CommentComposer extends PureComponent {
     );
   }
 
+  handleClick = e => {
+    this.setState({ cursorIndex: e.target.selectionStart });
+  };
+
   render() {
     const { commentVal } = this.state;
     const { ownedBy, loader } = this.props;
@@ -210,6 +209,8 @@ export default class CommentComposer extends PureComponent {
               value={commentVal}
               autoFocus
               onChange={this.handleOnChange}
+              onFocus={this.handleOnFocus}
+              onClick={this.handleClick}
             />
             <SW.ButtonWrapper>
               <AttachButton
