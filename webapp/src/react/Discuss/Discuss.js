@@ -35,7 +35,6 @@ function Discuss({ teams }) {
   };
   const selectDiscussionId = selectedId => {
     handleChangeSelectedId(selectedId);
-    nav.setUniqueId(selectedId);
   };
   const onSelectItemId = id => {
     if (id !== selectedId) {

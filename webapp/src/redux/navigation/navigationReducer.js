@@ -8,6 +8,9 @@ const initialState = fromJS({
   left: [
     {
       screenId: 'Planning',
+      uniqueId: Math.random()
+        .toString(36)
+        .substring(7),
       crumbTitle: 'Planning'
     }
   ],
@@ -22,6 +25,9 @@ const testerState = initialState.set('sideMenuId', 'Tester').set(
   fromJS([
     {
       screenId: 'Tester',
+      uniqueId: Math.random()
+        .toString(36)
+        .substring(7),
       crumbTitle: 'Tester'
     }
   ])
@@ -58,12 +64,6 @@ export default function navigationReducer(state = initialState, action) {
       return initialState;
     }
 
-    case types.NAV_SET_UNIQUE_ID: {
-      return state.setIn(
-        [payload.side, state.get(payload.side).size - 1, 'uniqueId'],
-        payload.uniqueId
-      );
-    }
     case types.NAV_SAVE_STATE: {
       return state.updateIn(
         [payload.side, state.get(payload.side).size - 1],

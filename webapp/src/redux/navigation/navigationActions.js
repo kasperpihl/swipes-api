@@ -1,11 +1,22 @@
 import * as types from '../constants';
 
+function ensureUniqueId(screen) {
+  if (screen) {
+    screen.uniqueId =
+      screen.uniqueId ||
+      Math.random()
+        .toString(36)
+        .substring(7);
+  }
+}
+
 export const redirectTo = (url, options) => (d, getState) => {
   if (getState().navigation.get('url') === url) return;
   d({ type: types.NAV_URL, payload: { url, options } });
 };
 
 export function set(side, screen) {
+  ensureUniqueId(screen);
   const payload = { side };
   if (screen) {
     payload.screen = screen;
@@ -20,10 +31,6 @@ export function reset() {
   return { type: types.NAV_RESET };
 }
 
-export function setUniqueId(side, uniqueId) {
-  return { type: types.NAV_SET_UNIQUE_ID, payload: { side, uniqueId } };
-}
-
 export function saveState(side, savedState) {
   const payload = { savedState, side };
   return { type: types.NAV_SAVE_STATE, payload };
@@ -34,6 +41,7 @@ export function toggleLock(side) {
 }
 
 export function push(side, screen) {
+  ensureUniqueId(screen);
   const payload = { screen, side };
   return { type: types.NAV_PUSH, payload };
 }
@@ -43,6 +51,7 @@ export function focus(side) {
 }
 
 export const openRight = (fromSide, screen) => (d, getState) => {
+  ensureUniqueId(screen);
   const navState = getState().navigation;
 
   const isLocked = navState.get('locked');

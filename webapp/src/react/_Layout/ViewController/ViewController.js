@@ -151,7 +151,7 @@ export default class ViewController extends PureComponent {
     const screen = navigation.get(side).last();
     const screenId = screen.get('screenId');
 
-    const key = side + screenId + navigation.get(side).size;
+    const key = side + screenId + screen.get('uniqueId');
     return (
       <NavProvider
         isLocked={side === 'right' && navigation.get('locked')}

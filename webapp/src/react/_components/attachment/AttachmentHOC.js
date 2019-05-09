@@ -25,6 +25,7 @@ function AttachmentHOC({ attachment, children, dispatch }) {
       return nav.openRight({
         screenId: 'Note',
         crumbTitle: 'Note',
+        uniqueId: attachment.id,
         props: {
           noteId: attachment.id
         }
@@ -34,6 +35,7 @@ function AttachmentHOC({ attachment, children, dispatch }) {
     nav.openRight({
       screenId: 'File',
       crumbTitle: 'File',
+      uniqueId: attachment.id,
       props: {
         fileId: attachment.id
       }
