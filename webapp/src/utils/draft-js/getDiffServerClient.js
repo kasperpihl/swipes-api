@@ -44,41 +44,46 @@ const isEqualBlocks = (block1, block2, entityMap1, entityMap2) => {
 };
 
 const bumpOffsets = (block, bump) => {
-  block.entityRanges.forEach((er) => {
+  block.entityRanges.forEach(er => {
     er.offset += bump;
   });
-  block.inlineStyleRanges.forEach((isr) => {
+  block.inlineStyleRanges.forEach(isr => {
     isr.offset += bump;
   });
 };
 
-
-
 export default function(serverOrg, serverMod, clientMod) {
   const orgBlocks = {};
 
-  serverOrg.blocks.forEach((b) => {
+  serverOrg.blocks.forEach(b => {
     orgBlocks[b.key] = b;
   });
 
-  const getChanges = (eState) => {
+  const getChanges = eState => {
     const diffObj = {
       edited: {},
       added: [],
       allKeys: {},
-      entityMap: eState.entityMap,
+      entityMap: eState.entityMap
     };
     let lastKnown = null;
-    eState.blocks.forEach((b) => {
+    eState.blocks.forEach(b => {
       if (orgBlocks[b.key]) {
         lastKnown = b.key;
-        if (!isEqualBlocks(orgBlocks[b.key], b, serverOrg.entityMap, eState.entityMap)) {
+        if (
+          !isEqualBlocks(
+            orgBlocks[b.key],
+            b,
+            serverOrg.entityMap,
+            eState.entityMap
+          )
+        ) {
           diffObj.edited[b.key] = b;
         }
       } else {
         diffObj.added.push({
           block: b,
-          insertAfter: lastKnown,
+          insertAfter: lastKnown
         });
       }
       diffObj.allKeys[b.key] = true;
@@ -92,12 +97,12 @@ export default function(serverOrg, serverMod, clientMod) {
 
   const newState = {
     blocks: [],
-    entityMap: {},
+    entityMap: {}
   };
   let entityCounter = 0;
   const addBlockToState = (block, entityMap) => {
     if (block.entityRanges.length) {
-      block.entityRanges = block.entityRanges.map((en) => {
+      block.entityRanges = block.entityRanges.map(en => {
         newState.entityMap[entityCounter] = entityMap[en.key];
         en.key = entityCounter;
         entityCounter += 1;
@@ -106,7 +111,7 @@ export default function(serverOrg, serverMod, clientMod) {
     }
     newState.blocks.push(block);
   };
-  const addForKey = (key) => {
+  const addForKey = key => {
     let didInsert;
     do {
       didInsert = false;
@@ -155,20 +160,19 @@ export default function(serverOrg, serverMod, clientMod) {
       if (!serEdit && !cliEdit) {
         addBlockToState(b, serverOrg.entityMap);
       } else if (serEdit && cliEdit) {
-        if (isEqualBlocks(serEdit, cliEdit, serverChanges.entityMap, clientChanges.entityMap)) {
+        if (
+          isEqualBlocks(
+            serEdit,
+            cliEdit,
+            serverChanges.entityMap,
+            clientChanges.entityMap
+          )
+        ) {
           addBlockToState(serEdit, serverChanges.entityMap);
         } else {
           numberOfConflicts += 1;
-          const serPre = '[CONFLICT]';
-          serEdit.text = `${serPre} ${serEdit.text}`;
-          bumpOffsets(serEdit, serPre.length + 1);
-
-          addBlockToState(serEdit, serverChanges.entityMap);
-          cliEdit.key = randomString(5);
-          const cliPre = '[YOU WROTE]';
-          cliEdit.text = `${cliPre} ${cliEdit.text}`;
-          bumpOffsets(cliEdit, cliPre.length + 1);
-          addBlockToState(cliEdit, clientChanges.entityMap);
+          serEdit.text = cliEdit.text;
+          addBlockToState(serEdit, clientChanges.entityMap);
         }
       } else if (serEdit) {
         addBlockToState(serEdit, serverChanges.entityMap);
@@ -182,6 +186,6 @@ export default function(serverOrg, serverMod, clientMod) {
 
   return {
     conflicts: numberOfConflicts,
-    editorState: newState,
+    editorState: newState
   };
 }
