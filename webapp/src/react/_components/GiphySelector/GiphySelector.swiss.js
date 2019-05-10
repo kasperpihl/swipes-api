@@ -1,5 +1,5 @@
 import { styleSheet } from 'swiss-react';
-
+import GiphyImage from './GiphyImage.png';
 export default styleSheet('GiphySelector', {
   Wrapper: {
     _size: '100%',
@@ -17,7 +17,11 @@ export default styleSheet('GiphySelector', {
 
     '& > .wrapper > .attribution': {
       _textStyle: 'H2',
-      margin: '0 15px 15px 15px'
+      minHeight: '50px',
+      content: '',
+      background: `url(${GiphyImage})`,
+      backgroundSize: 'contain',
+      backgroundRepeat: 'no-repeat'
     }
   }
 });
