@@ -12,7 +12,7 @@ export default async (req, res, next) => {
 
   const headers = {
     'sw-ios': 'itms-apps://itunes.apple.com/app/id1460366630',
-    'sw-android': 'market://details?id=com.swipesapp.release',
+    'sw-android': 'market://details?id=com.workspacemobile',
     'sw-electron': downloadLinks[platform],
     'sw-web': false // reload only
   };
