@@ -105,7 +105,7 @@ function DiscussionOverview({ tooltip, discussionId }) {
   };
   const openDiscussionOptions = e => {
     const { discussion } = req.result;
-    const buttons = [
+    let buttons = [
       { title: discussion.members[myId] ? 'Unfollow' : 'Follow' },
       { title: 'Rename chat' },
       { title: 'Delete chat' }
@@ -190,6 +190,24 @@ function DiscussionOverview({ tooltip, discussionId }) {
     onClick: openAssignMenu
   };
 
+  if (discussion.is_system) {
+    delete subtitle.members;
+    delete subtitle.privacy;
+  }
+
+  const renderedFooter = discussion.is_system ? null : (
+    <SW.FooterWrapper>
+      <CommentComposer
+        onUnload={handleUnload}
+        initialMessage={!!initialMessage ? initialMessage : ''}
+        initialAttachments={initialAttachments}
+        discussionId={discussion.discussion_id}
+        ownedBy={discussion.owned_by}
+        onSuccess={handleSendMessage}
+      />
+    </SW.FooterWrapper>
+  );
+
   return (
     <CardContent
       header={
@@ -207,27 +225,18 @@ function DiscussionOverview({ tooltip, discussionId }) {
               onClick={handleClick}
               selected={attachmentsOnly}
             />
-            <Button
-              icon="ThreeDots"
-              onClick={openDiscussionOptions}
-              status={loader.get('following')}
-            />
+            {!discussion.is_system && (
+              <Button
+                icon="ThreeDots"
+                onClick={openDiscussionOptions}
+                status={loader.get('following')}
+              />
+            )}
           </CardHeader>
         </SW.HeaderWrapper>
       }
       noframe
-      footer={
-        <SW.FooterWrapper>
-          <CommentComposer
-            onUnload={handleUnload}
-            initialMessage={!!initialMessage ? initialMessage : ''}
-            initialAttachments={initialAttachments}
-            discussionId={discussion.discussion_id}
-            ownedBy={discussion.owned_by}
-            onSuccess={handleSendMessage}
-          />
-        </SW.FooterWrapper>
-      }
+      footer={renderedFooter}
       scrollRef={c => {
         scrollRef.current = c;
       }}

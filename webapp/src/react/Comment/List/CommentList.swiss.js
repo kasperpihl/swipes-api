@@ -8,16 +8,18 @@ export default styleSheet('CommentList', {
     marginTop: 'auto',
     paddingLeft: '18px',
     width: 'calc(100% - 9px)',
-
+    isSystem: {
+      paddingBottom: '12px'
+    },
     '&::-webkit-scrollbar': {
       '-webkit-appearance': 'none',
       width: '6px',
-      backgroundColor: 'transparent',
+      backgroundColor: 'transparent'
     },
 
     '&::-webkit-scrollbar-thumb': {
       backgroundColor: '$sw3',
-      borderRadius: '3px',
+      borderRadius: '3px'
     }
   },
 

@@ -91,12 +91,13 @@ export default styleSheet('CommentItem', {
   TimeStamp: {
     _textStyle: 'caption',
     color: '$sw2',
-    opacity: '0',
-    visibility: 'hidden',
-
-    '.CommentItem_Wrapper:hover &': {
-      opacity: '1',
-      visibility: 'visible'
+    '!isSystem': {
+      opacity: '0',
+      visibility: 'hidden',
+      '.CommentItem_Wrapper:hover &': {
+        opacity: '1',
+        visibility: 'visible'
+      }
     },
 
     lastReaction: {

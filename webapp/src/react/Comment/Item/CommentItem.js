@@ -133,6 +133,7 @@ export default class CommentItem extends PureComponent {
     const {
       comment,
       isSingleLine,
+      isSystem,
       ownedBy,
       me,
       showReactionToLastComment
@@ -143,7 +144,7 @@ export default class CommentItem extends PureComponent {
     const firstName = userGetFirstName(lastPersonToReact, ownedBy);
 
     return (
-      <SW.ProvideContext isSingleLine={isSingleLine}>
+      <SW.ProvideContext isSingleLine={isSingleLine} isSystem={isSystem}>
         <SW.Wrapper>
           <SW.CommentWrapper>
             <SW.LeftSide>{this.renderLeftSide()}</SW.LeftSide>

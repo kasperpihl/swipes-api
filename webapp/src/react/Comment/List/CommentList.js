@@ -78,7 +78,7 @@ export default function CommentList({
   let indicatorDate;
 
   return (
-    <SW.Wrapper>
+    <SW.Wrapper isSystem={discussion.is_system}>
       <PaginationScrollToMore
         req={req}
         errorLabel="Couldn't get discussions."
@@ -90,7 +90,8 @@ export default function CommentList({
           const currentDate = moment(comment.sent_at);
           const showSectionHeader = currentDate.isAfter(deltaDate, 'days');
           const isSingleLine =
-            !showSectionHeader && deltaSentBy === comment.sent_by;
+            discussion.is_system ||
+            (!showSectionHeader && deltaSentBy === comment.sent_by);
 
           let showNewIndicator = false;
           if (
@@ -121,6 +122,7 @@ export default function CommentList({
                 discussionId={discussion.discussion_id}
                 ownedBy={discussion.owned_by}
                 isSingleLine={isSingleLine}
+                isSystem={discussion.is_system}
                 showReactionToLastComment={
                   showReactionToLastComment && lastInOrder
                 }
