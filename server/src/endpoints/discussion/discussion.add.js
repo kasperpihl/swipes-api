@@ -1,11 +1,10 @@
 import { array, string, any } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
-import idGenerate from 'src/utils/idGenerate';
 import { transaction } from 'src/utils/db/db';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
-import sqlToIsoString from 'src/utils/sql/sqlToIsoString';
 import sqlPermissionInsertQuery from 'src/utils/sql/sqlPermissionInsertQuery';
 import update from 'src/utils/update';
+import channelCreate from 'src/utils/channel/channelCreate';
 
 const expectedInput = {
   title: string.min(1).require(),
@@ -28,46 +27,34 @@ export default endpointCreate(
       owned_by,
       privacy = 'public'
     } = res.locals.input;
-    const discussionId = idGenerate('C', 8, true);
 
     const uniqueMembers = [...new Set(members).add(user_id)];
-
-    const memberString = `jsonb_build_object(
-      ${uniqueMembers
-        .map(
-          uId =>
-            `'${uId}', ${uId === user_id ? sqlToIsoString('now()') : "'n'"}`
-        )
-        .join(', ')}
-    )`;
+    const channel = channelCreate(
+      owned_by,
+      privacy,
+      title,
+      user_id,
+      uniqueMembers
+    );
 
     const [discussionRes] = await transaction([
-      sqlInsertQuery(
-        'discussions',
-        {
-          discussion_id: discussionId,
-          owned_by,
-          title,
-          created_by: user_id,
-          last_comment_by: user_id,
-          last_comment: 'just created this discussion.',
-          last_comment_at: 'now()',
-          privacy,
-          members: memberString
-        },
-        {
-          dontPrepare: { members: true }
-        }
-      ),
-      sqlPermissionInsertQuery(discussionId, privacy, owned_by, uniqueMembers)
+      sqlInsertQuery('discussions', channel, {
+        dontPrepare: { members: true }
+      }),
+      sqlPermissionInsertQuery(
+        channel.discussion_id,
+        privacy,
+        owned_by,
+        uniqueMembers
+      )
     ]);
 
-    res.locals.update = update.prepare(discussionId, [
+    res.locals.update = update.prepare(channel.discussion_id, [
       { type: 'discussion', data: discussionRes.rows[0] }
     ]);
 
     res.locals.output = {
-      discussion_id: discussionId
+      discussion_id: channel.discussion_id
     };
   }
 ).background(async (req, res) => {

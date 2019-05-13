@@ -6,6 +6,8 @@ import update from 'src/utils/update';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
 import tokenParse from 'src/utils/token/tokenParse';
 import sqlToIsoString from 'src/utils/sql/sqlToIsoString';
+import channelCreate from 'src/utils/channel/channelCreate';
+import sqlPermissionInsertQuery from 'src/utils/sql/sqlPermissionInsertQuery';
 import stripeUpdateQuantity from 'src/utils/stripe/stripeUpdateQuantity';
 
 const expectedInput = {
@@ -47,13 +49,29 @@ export default endpointCreate(
         .toClient();
     }
 
-    const [teamUserRes, teamInsertRes] = await transaction([
+    const channel = channelCreate(
+      team_id,
+      'private',
+      'Notifications',
+      user_id,
+      [user_id]
+    );
+    channel.is_system = true;
+
+    const [_dQ, _pQ, teamUserRes, teamInsertRes] = await transaction([
+      sqlInsertQuery('discussions', channel, {
+        dontPrepare: { members: true }
+      }),
+      sqlPermissionInsertQuery(channel.discussion_id, 'private', team_id, [
+        user_id
+      ]),
       sqlInsertQuery(
         'team_users',
         {
           user_id,
           team_id,
-          status: 'active'
+          status: 'active',
+          notifications_channel_id: channel.discussion_id
         },
         {
           upsert: 'team_users_pkey'

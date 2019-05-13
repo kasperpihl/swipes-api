@@ -2,12 +2,15 @@ import { string } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import { transaction, query } from 'src/utils/db/db';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
+import sqlPermissionInsertQuery from 'src/utils/sql/sqlPermissionInsertQuery';
+
 import sqlOnboardingDiscussionQueries from 'src/utils/sql/sqlOnboardingDiscussionQueries';
 import update from 'src/utils/update';
 import redisPublish from 'src/utils/redis/redisPublish';
 import idGenerate from 'src/utils/idGenerate';
 import emailTeamTrialStarted from 'src/utils/email/emailTeamTrialStarted';
 import queueScheduleBatch from 'src/utils/queue/queueScheduleBatch';
+import channelCreate from 'src/utils/channel/channelCreate';
 
 const expectedInput = {
   name: string.min(1).require()
@@ -22,18 +25,30 @@ export default endpointCreate(
     const { name } = input;
 
     const teamId = idGenerate('T', 8, true);
-    // creating a new user from scratch
-    const [teamRes, userInsertQuery, userRes] = await transaction([
+
+    const channel = channelCreate(teamId, 'private', 'Notifications', user_id, [
+      user_id
+    ]);
+    channel.is_system = true;
+
+    const [teamRes, _dQ, _pQ, _uQ, userRes] = await transaction([
       sqlInsertQuery('teams', {
         team_id: teamId,
         name,
         owner_id: user_id
       }),
+      sqlInsertQuery('discussions', channel, {
+        dontPrepare: { members: true }
+      }),
+      sqlPermissionInsertQuery(channel.discussion_id, 'private', teamId, [
+        user_id
+      ]),
       sqlInsertQuery('team_users', {
         team_id: teamId,
         user_id: user_id,
         admin: true,
-        status: 'active'
+        status: 'active',
+        notifications_channel_id: channel.discussion_id
       }),
       {
         text: `
