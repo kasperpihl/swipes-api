@@ -22,6 +22,8 @@ export default endpointCreate(
         UPDATE discussions
         SET archived = true
         WHERE discussion_id = $1
+        AND is_system = false
+        AND is_default = false
 
         RETURNING discussion_id, archived
       `,

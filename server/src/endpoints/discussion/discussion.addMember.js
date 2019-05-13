@@ -21,10 +21,20 @@ export default endpointCreate(
     const { discussion_id, target_user_id } = res.locals.input;
 
     const discussionRes = await query(
-      `SELECT privacy, owned_by FROM discussions WHERE discussion_id = $1`,
+      `
+        SELECT privacy, owned_by
+        FROM discussions 
+        WHERE discussion_id = $1 
+        AND is_system = false
+      `,
       [discussion_id]
     );
 
+    if (!discussionRes.rows.length) {
+      throw Error('Not found')
+        .code(404)
+        .toClient();
+    }
     const disc = discussionRes.rows[0];
 
     // Check that target user exists and is not owner.
