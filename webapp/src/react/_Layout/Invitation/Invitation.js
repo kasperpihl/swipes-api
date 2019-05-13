@@ -31,7 +31,7 @@ export default class Invitation extends PureComponent {
         loader.clear('loader');
         invitationClear();
       } else {
-        loader.error('loader', res.error);
+        loader.error('loader', res.error, 3000);
       }
     });
   };

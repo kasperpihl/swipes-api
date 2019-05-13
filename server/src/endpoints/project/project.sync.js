@@ -1,7 +1,7 @@
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
-import { transaction } from 'src/utils/db/db';
+import { transaction, query } from 'src/utils/db/db';
 import { string, object, array, number, bool } from 'valjs';
-import idGenerate from 'src/utils/idGenerate';
+import channelAddSystemMessage from 'src/utils/channel/channelAddSystemMessage';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
 import update from 'src/utils/update';
 import randomstring from 'randomstring';
@@ -105,25 +105,32 @@ export default endpointCreate(
         if (keys.title) {
           keys.title = keys.title.substr(0, 255);
         }
-        queries.push(
-          sqlInsertQuery(
-            'project_tasks',
-            {
-              project_id,
-              task_id,
-              ...keys
-            },
-            {
-              upsert: 'project_tasks_pkey',
-              returning: [
-                'project_id',
-                'task_id',
-                'updated_at',
-                ...Object.keys(keys)
-              ].join(', ')
-            }
-          )
+        const query = sqlInsertQuery(
+          'project_tasks',
+          {
+            project_id,
+            task_id,
+            ...keys
+          },
+          {
+            upsert: 'project_tasks_pkey',
+            returning: [
+              'project_id',
+              'task_id',
+              'updated_at',
+              ...Object.keys(keys)
+            ].join(', ')
+          }
         );
+        if (keys.assignees) {
+          query.text += `, (
+            SELECT assignees
+            FROM project_tasks 
+            WHERE project_id = $${query.values.push(project_id)}
+            AND task_id = $${query.values.push(task_id)}
+          ) as old_assignees`;
+        }
+        queries.push(query);
       }
     }
 
@@ -132,15 +139,76 @@ export default endpointCreate(
     const updates = [{ type: 'project', data: response.shift().rows[0] }];
 
     updates[0].data.tasks_by_id = {};
+    const itemsWithOldAssignees = [];
     response.forEach(res => {
       const item = res.rows[0];
+      if (item.old_assignees) {
+        itemsWithOldAssignees.push({
+          ...item
+        });
+        delete item.old_assignees;
+      }
       updates[0].data.tasks_by_id[item.task_id] = item;
     });
 
     // Create response data.
+    res.locals.backgroundInput = {
+      itemsWithOldAssignees,
+      project_id
+    };
+
     res.locals.output = { update_identifier, rev: updates[0].data.rev };
     res.locals.update = update.prepare(project_id, updates);
   }
 ).background(async (req, res) => {
+  const { itemsWithOldAssignees, project_id } = res.locals.input;
+  const { user_id } = res.locals;
   await update.send(res.locals.update);
+
+  const projectRes = await query(
+    `
+      SELECT owned_by, title
+      FROM projects
+      WHERE project_id = $1
+    `,
+    [project_id]
+  );
+
+  const project = projectRes.rows[0];
+
+  // Don't notify for personal projects
+  if (project.owned_by.startsWith('U')) {
+    return;
+  }
+
+  const userRes = await query(
+    `
+      SELECT first_name
+      FROM users
+      WHERE user_id = $1
+    `,
+    [user_id]
+  );
+  const assignor = userRes.rows[0];
+
+  for (let i = 0; i < itemsWithOldAssignees.length; i++) {
+    const item = itemsWithOldAssignees[i];
+    for (let j = 0; j < item.assignees.length; j++) {
+      const newAssigneeId = item.assignees[j];
+      if (
+        // newAssigneeId !== user_id &&
+        !item.old_assignees ||
+        item.old_assignees.indexOf(newAssigneeId) === -1
+      ) {
+        await channelAddSystemMessage(
+          project.owned_by,
+          newAssigneeId,
+          `${assignor.first_name} assigned you to a task in ${project.title}`
+        );
+
+        console.log('new assignee', newAssigneeId);
+      }
+    }
+  }
+  // console.log(itemsWithOldAssignees);
 });
