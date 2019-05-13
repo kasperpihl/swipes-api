@@ -2,15 +2,13 @@ import { object, array } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import sqlCheckPermissions from 'src/utils/sql/sqlCheckPermissions';
 import { query } from 'src/utils/db/db';
-import sofiCreate from 'src/utils/sofiCreate';
 
 const expectedInput = {};
 const expectedOutput = {
   me: object.require(),
   users: array.require(),
   teams: array.require(),
-  unread: object.require(),
-  sofi: object.require()
+  unread: object.require()
 };
 
 export default endpointCreate(
@@ -86,8 +84,7 @@ export default endpointCreate(
       teams: teamRes.rows,
       unread,
       timestamp: now,
-      users: usersRes.rows,
-      sofi: sofiCreate()
+      users: usersRes.rows
     };
   }
 );
