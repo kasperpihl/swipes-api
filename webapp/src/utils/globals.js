@@ -59,7 +59,7 @@ const isBrowserSupported = (browser, ver) => {
 
 export default function getGlobals() {
   const globals = {
-    apiUrl: 'https://teams.swipesapp.com', //location.origin,
+    apiUrl: location.origin,
     browser: browserRes[0],
     browserVersion: browserRes[1],
     isBrowserSupported: isBrowserSupported(browserRes[0], browserRes[1]),
