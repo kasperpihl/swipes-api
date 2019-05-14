@@ -15,13 +15,11 @@ import TeamCreate from 'src/react/Team/Create/TeamCreate';
 import ConfirmAccount from 'src/react/ConfirmAccount/ConfirmAccount';
 import SwipesLoader from 'src/react/_components/loaders/SwipesLoader';
 import Redirect from 'src/react/_Layout/redirect/Redirect';
-// import HOCAutoCompleting from 'src/react/_Layout/auto-completing/HOCAutoCompleting';
 import Tooltip from 'src/react/_Layout/tooltip/Tooltip';
 import Topbar from 'src/react/_Layout/topbar/Topbar';
 import ContextMenu from 'src/react/_Layout/ContextMenu/ContextMenu';
 import Gradient from 'src/react/_Layout/gradient/Gradient';
 import * as invitationActions from 'src/redux/invitation/invitationActions';
-// import HOCDragAndDrop from 'src/react/_components/drag-and-drop/HOCDragAndDrop';
 import 'src/scss/reset.scss';
 import 'src/scss/app.scss';
 
@@ -110,12 +108,9 @@ export default class Root extends PureComponent {
         <Redirect />
         <Gradient />
         <ContextMenu />
-        {/* <HOCAutoCompleting /> */}
         <Tooltip />
-        {/* <HOCDragAndDrop> */}
         <Topbar />
         {this.renderRoutes()}
-        {/* </HOCDragAndDrop> */}
       </div>
     );
   }
