@@ -99,5 +99,30 @@ export default styleSheet('ProfileHeader', {
     _el: Button,
     marginLeft: 'auto',
     marginTop: '6px'
+  },
+
+  ErrorTooltip: {
+    _size: ['180px', '60px'],
+    _font: ['12px', '18px', '$medium'],
+    _flex: ['row', 'center', 'center'],
+    borderRadius: '6px',
+    color: '$red',
+    boxShadow: '0 1px 20px 3px rgba($sw1  ,0.1)',
+    backgroundColor: '$sw5',
+    overflowY: 'auto',
+    padding: '9px 0',
+    maxHeight: '400px',
+    opacity: '0',
+    visibility: 'hidden',
+    position: 'absolute',
+    top: '0',
+    left: '70px',
+    zIndex: '999',
+    transition: '.25s ease-in',
+
+    show: {
+      opacity: '1',
+      visibility: 'visible'
+    }
   }
 });

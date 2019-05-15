@@ -97,7 +97,6 @@ export default class CommentComposer extends PureComponent {
       attachments: attachments.toJS(),
       message
     }).then(res => {
-      console.log(res);
       if (res.ok) {
         window.analytics.sendEvent('Comment sent', ownedBy);
         if (typeof onSuccess === 'function') {

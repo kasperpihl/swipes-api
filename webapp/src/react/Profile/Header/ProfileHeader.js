@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import withLoader from 'src/react/_hocs/withLoader';
 import * as mainActions from 'src/redux/main/mainActions';
@@ -23,7 +23,14 @@ import Spacing from '_shared/Spacing/Spacing';
     contextMenu: mainActions.contextMenu
   }
 )
-export default class ProfileHeader extends PureComponent {
+export default class ProfileHeader extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      uploadError: false
+    };
+  }
   logout() {
     const { nav, loader } = this.props;
     nav.openModal(FormModal, {
@@ -62,6 +69,16 @@ export default class ProfileHeader extends PureComponent {
     });
   };
 
+  showImageUploadError = error => {
+    if (error.includes('Entity Too Large')) {
+      this.setState({ uploadError: error });
+    }
+    this.setState({ uploadError: 'Upload image error' });
+    setTimeout(() => {
+      this.setState({ uploadError: '' });
+    }, 5000);
+  };
+
   handleImageChange = e => {
     const { loader } = this.props;
     const file = e.target.files[0];
@@ -72,9 +89,8 @@ export default class ProfileHeader extends PureComponent {
           loader.clear('uploadImage');
           if (res.ok) {
             window.analytics.sendEvent('Profile photo updated');
-            console.log(res);
           } else {
-            console.log(res);
+            this.showImageUploadError(res.error);
           }
         }
       );
@@ -174,6 +190,9 @@ export default class ProfileHeader extends PureComponent {
           onClick={this.handleThreeDots}
           status={loader.get('ThreeDots')}
         />
+        <SW.ErrorTooltip show={this.state.uploadError.length > 0}>
+          {this.state.uploadError}
+        </SW.ErrorTooltip>
       </SW.Wrapper>
     );
   }
