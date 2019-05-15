@@ -195,7 +195,11 @@ export default class Authentication extends PureComponent {
     return (
       <SW.Switch>
         By signing up you agree to the{'   '}
-        <a target="_blank" href="http://swipesapp.com/workspacepolicies.pdf">
+        <a
+          target="_blank"
+          href="https://swipesapp.com/privacy-policy"
+          style={{ marginLeft: '4px' }}
+        >
           Terms of service
         </a>
       </SW.Switch>
