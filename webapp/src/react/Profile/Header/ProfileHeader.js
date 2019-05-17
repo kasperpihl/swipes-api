@@ -41,6 +41,9 @@ export default class ProfileHeader extends Component {
         request('user.signout').then(res => {
           if (res.error) {
             loader.error('ThreeDots', res.error, 3000);
+          } else {
+            window.analytics.sendEvent('Logged out');
+            window.analytics.logout();
           }
         });
       }
