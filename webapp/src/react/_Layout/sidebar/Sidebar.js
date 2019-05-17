@@ -13,11 +13,18 @@ const kNavItems = [
 ];
 
 @connect(
-  state => ({
-    sidebarExpanded: state.main.get('sidebarExpanded'),
-    sideMenuId: state.navigation.get('sideMenuId'),
-    unreadCounter: state.connection.get('unread').size
-  }),
+  state => {
+    let unreadCounter = 0;
+    state.connection
+      .get('unreadByTeam')
+      .forEach(team => (unreadCounter += team.size));
+
+    return {
+      sidebarExpanded: state.main.get('sidebarExpanded'),
+      sideMenuId: state.navigation.get('sideMenuId'),
+      unreadCounter
+    };
+  },
   {
     navSet: navigationActions.set
   }

@@ -8,6 +8,7 @@ export default styleSheet('CardHeaderPicker', {
   },
   Text: {
     _el: 'span',
+    position: 'relative',
     _textStyle: 'body',
     lineHeight: '24px',
     color: '$sw2',
@@ -21,6 +22,18 @@ export default styleSheet('CardHeaderPicker', {
     fill: '$sw2',
     '.CardHeaderPicker_Wrapper:hover &': {
       fill: '$sw1'
+    }
+  },
+  NotificationCounter: {
+    _size: ['18px', '18px'],
+    _flex: ['row', 'center', 'center'],
+    _font: ['10px', '12px', 'bold'],
+    color: '$sw5',
+    background: '$red',
+    borderRadius: '9px',
+    display: 'none',
+    show: {
+      display: 'flex'
     }
   }
 });

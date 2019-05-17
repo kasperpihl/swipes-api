@@ -9,14 +9,23 @@ import SW from './CardHeaderPicker.swiss';
 
 export default connect(state => ({
   selectedTeamId: state.main.get('selectedTeamId'),
-  teams: state.teams
+  teams: state.teams,
+  unreadByTeam: state.connection.get('unreadByTeam')
 }))(CardHeaderPicker);
 
-function CardHeaderPicker({ teams, selectedTeamId, dispatch }) {
+function CardHeaderPicker({ teams, selectedTeamId, unreadByTeam, dispatch }) {
   const myId = useMyId();
+
   const buttons = teams
     .toArray()
-    .map(team => ({ title: team.get('name'), id: team.get('team_id') }))
+    .map(team => {
+      const id = team.get('team_id');
+      const count = unreadByTeam.get(id) ? unreadByTeam.get(id).size : 0;
+      return {
+        title: `${team.get('name')}${count ? ` (${count})` : ''}`,
+        id: team.get('team_id')
+      };
+    })
     .concat([{ title: 'Personal', id: myId }]);
 
   const onSelect = i => {
@@ -29,18 +38,35 @@ function CardHeaderPicker({ teams, selectedTeamId, dispatch }) {
   };
 
   const onClick = e => {
-    contextMenu(ListMenu, e, {
-      onClick: onSelect,
-      buttons: buttons
-    });
+    contextMenu(
+      ListMenu,
+      {
+        boundingRect: e.target.getBoundingClientRect()
+      },
+      {
+        onClick: onSelect,
+        buttons: buttons
+      }
+    );
   };
+
+  let additionalNotifications = 0;
+  unreadByTeam.forEach((unread, teamId) => {
+    if (teamId !== selectedTeamId) {
+      additionalNotifications += unread.size;
+    }
+  });
 
   const teamName = teams.getIn([selectedTeamId, 'name']) || 'Personal';
 
   return (
     <SW.Wrapper onClick={onClick}>
       <SW.Text>{teamName}</SW.Text>
+
       <SW.Icon icon="ArrowDown" />
+      <SW.NotificationCounter show={!!additionalNotifications}>
+        {additionalNotifications}
+      </SW.NotificationCounter>
     </SW.Wrapper>
   );
 }
