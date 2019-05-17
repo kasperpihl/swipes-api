@@ -39,7 +39,7 @@ export default endpointCreate(
 
     const discussionsRes = await query(
       `
-        SELECT d.discussion_id, d.title, d.owned_by, d.created_by, d.updated_at, d.last_comment, d.last_comment_at, d.last_comment_by, d.deleted, d.members, d.privacy
+        SELECT d.discussion_id, d.title, d.owned_by, d.created_by, d.updated_at, d.last_comment, d.last_comment_at, d.last_comment_by, d.deleted, d.members, d.privacy, d.is_system
         FROM permissions as per
         INNER JOIN discussions as d
         ON d.discussion_id = per.permission_from
