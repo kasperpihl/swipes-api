@@ -196,9 +196,9 @@ export default endpointCreate(
     for (let j = 0; j < item.assignees.length; j++) {
       const newAssigneeId = item.assignees[j];
       if (
-        // newAssigneeId !== user_id &&
-        !item.old_assignees ||
-        item.old_assignees.indexOf(newAssigneeId) === -1
+        newAssigneeId !== user_id &&
+        (!item.old_assignees ||
+          item.old_assignees.indexOf(newAssigneeId) === -1)
       ) {
         await channelAddSystemMessage(
           project.owned_by,
