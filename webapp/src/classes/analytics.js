@@ -3,7 +3,7 @@ import { mixpanelToken } from 'src/utils/configKeys';
 
 export default class Analytics {
   constructor(store) {
-    this.enable = !store.getState().global.get('isDev');
+    this.enable = store.getState().global.get('isDev');
     // this.enable = true; // for testing on dev. turn off when done.
     if (this.enable) {
       mixpanel.init(mixpanelToken);
@@ -42,26 +42,32 @@ export default class Analytics {
     const defs = this.getDefaultEventProps();
     if (this.enable) {
       const props = Object.assign(defs, data);
+      props['Team ID'] = 'Personal';
       if (typeof ownedBy === 'string' && ownedBy.startsWith('T')) {
-        props.team_id = ownedBy;
+        props['Team ID'] = ownedBy;
       }
-      console.log('tracking', name, props);
       mixpanel.track(name, props);
     }
   };
   storeChange = () => {
-    const { me } = this.store.getState();
+    const { me, teams } = this.store.getState();
 
     if (me && me.get('user_id') && me.get('user_id') !== this.userId) {
       this.userId = me.get('user_id');
       if (this.enable) {
-        console.log('userId', this.userId);
         mixpanel.identify(this.userId);
         mixpanel.people.set_once({
           $email: me.get('email'), // only special properties need the $
           $created: me.get('created_at'),
           $first_name: me.get('first_name'),
           $last_name: me.get('last_name')
+        });
+        teams.forEach(team => {
+          mixpanel.get_group('team_id', team.get('team_id')).set({
+            name: team.get('name'),
+            'Number of users': team.get('users').size,
+            'Is paying': !!team.get('stripe_subscription_id')
+          });
         });
       }
     }

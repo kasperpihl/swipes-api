@@ -150,7 +150,7 @@ function DiscussionOverview({ tooltip, discussionId }) {
           discussion_id: discussion.discussion_id
         }).then(res => {
           if (res.ok) {
-            window.analytics.sendEvent('Chat archived');
+            window.analytics.sendEvent('Chat archived', discussion.owned_by);
           }
           if (!res || !res.ok) {
             loader.error('dots', res.error, 3000);
