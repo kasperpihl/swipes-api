@@ -7,7 +7,7 @@ const { accessKeyId, secretAccessKey, region } = config.get('aws');
 const logger = winston.createLogger();
 export const setupLogger = type => {
   const logConfig = {
-    logGroupName: `workspace-${env}`,
+    logGroupName: `swipes-${env}`,
     logStreamName: type,
     createLogGroup: true,
     createLogStream: true,
