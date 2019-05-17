@@ -33,9 +33,7 @@ export default function CommentList({
 
   useUpdate('comment', comment => {
     if (comment.discussion_id === discussion.discussion_id) {
-      if (comment.deleted) {
-        req.removeItem(comment);
-      } else if (comment.sent_at) {
+      if (comment.sent_at) {
         req.prependItem(comment);
       } else {
         req.mergeItem(comment);
