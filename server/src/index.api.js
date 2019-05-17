@@ -59,7 +59,10 @@ app.use('/v1', redirectToStaging);
 
 // Ensure maintenance is respected
 app.use('/v1', async (req, res, next) => {
-  if (res.locals.config.flags.maintenance) {
+  if (
+    res.locals.config.flags.maintenance &&
+    !req.header('Bypass-Maintenance')
+  ) {
     throw Error('maintenance').toClient();
   }
   return next();

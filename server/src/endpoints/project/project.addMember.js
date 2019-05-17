@@ -5,6 +5,7 @@ import userTeamCheck from 'src/utils/userTeamCheck';
 import sqlPermissionInsertQuery from 'src/utils/sql/sqlPermissionInsertQuery';
 import { query, transaction } from 'src/utils/db/db';
 import update from 'src/utils/update';
+import channelAddSystemMessage from 'src/utils/channel/channelAddSystemMessage';
 
 const expectedInput = {
   project_id: string.require(),
@@ -52,10 +53,37 @@ export default endpointCreate(
       ])
     ]);
 
+    res.locals.backgroundInput = {
+      target_user_id,
+      project: proj
+    };
+
     res.locals.update = update.prepare(project_id, [
       { type: 'project', data: projectUpdateRes.rows[0] }
     ]);
   }
 ).background(async (req, res) => {
   await update.send(res.locals.update);
+
+  const { user_id } = res.locals;
+
+  const userRes = await query(
+    `
+      SELECT first_name
+      FROM users
+      WHERE user_id = $1
+    `,
+    [user_id]
+  );
+  const user = userRes.rows[0];
+
+  const { target_user_id, project } = res.locals.input;
+  if (project.owned_by.startsWith('U')) {
+    return;
+  }
+  channelAddSystemMessage(
+    project.owned_by,
+    target_user_id,
+    `You have been added by ${user.first_name} to the project ${project.title}`
+  );
 });

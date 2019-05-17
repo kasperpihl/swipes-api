@@ -205,8 +205,6 @@ export default endpointCreate(
           newAssigneeId,
           `${assignor.first_name} assigned you to a task in ${project.title}`
         );
-
-        console.log('new assignee', newAssigneeId);
       }
     }
   }
