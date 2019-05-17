@@ -15,9 +15,11 @@ const kNavItems = [
 @connect(
   state => {
     let unreadCounter = 0;
-    state.connection
-      .get('unreadByTeam')
-      .forEach(team => (unreadCounter += team.size));
+    if (state.connection.get('unreadByTeam')) {
+      state.connection
+        .get('unreadByTeam')
+        .forEach(team => (unreadCounter += team.size));
+    }
 
     return {
       sidebarExpanded: state.main.get('sidebarExpanded'),

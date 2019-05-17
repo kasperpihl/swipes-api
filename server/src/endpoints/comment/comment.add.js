@@ -63,7 +63,7 @@ export default endpointCreate(
             last_comment = $3,
             members = members || jsonb_build_object('${user_id}', '${results[0].rows[0].sent_at.toISOString()}')
           WHERE discussion_id = $4
-          RETURNING discussion_id, last_comment, last_comment_at, last_comment_by, members, title
+          RETURNING owned_by, discussion_id, last_comment, last_comment_at, last_comment_by, members, title
         `,
         values: [
           results[0].rows[0].sent_at,

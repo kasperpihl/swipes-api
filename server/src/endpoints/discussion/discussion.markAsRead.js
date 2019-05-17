@@ -26,7 +26,7 @@ export default endpointCreate(
         'last_comment_at'
       )})
         WHERE discussion_id = $1
-        RETURNING members, discussion_id, last_comment_at
+        RETURNING members, discussion_id, last_comment_at, owned_by
       `,
       [discussion_id]
     );

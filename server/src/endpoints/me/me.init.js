@@ -63,7 +63,7 @@ export default endpointCreate(
 
     const unreadRes = await query(
       `
-        SELECT d.discussion_id, d.last_comment_at
+        SELECT d.discussion_id, d.last_comment_at, d.owned_by
         FROM permissions as per
         INNER JOIN discussions as d
         ON d.discussion_id = per.permission_from
@@ -76,13 +76,21 @@ export default endpointCreate(
       [user_id]
     );
     const unread = {};
-    unreadRes.rows.forEach(r => (unread[r.discussion_id] = r.last_comment_at));
+    const unreadByTeam = {};
+    unreadRes.rows.forEach(r => {
+      if (!unreadByTeam[r.owned_by]) {
+        unreadByTeam[r.owned_by] = {};
+      }
+      unreadByTeam[r.owned_by][r.discussion_id] = r.last_comment_at;
+      unread[r.discussion_id] = r.last_comment_at;
+    });
 
     // Create response data.
     res.locals.output = {
       me: meRes.rows[0],
       teams: teamRes.rows,
       unread,
+      unread_by_team: unreadByTeam,
       timestamp: now,
       users: usersRes.rows
     };

@@ -49,7 +49,7 @@ export default async function channelAddSystemMessage(
           last_comment_by = $2,
           last_comment = $3
         WHERE discussion_id = $4
-        RETURNING discussion_id, last_comment, last_comment_at, last_comment_by, members, title
+        RETURNING discussion_id, last_comment, last_comment_at, last_comment_by, members, title, owned_by
       `,
       values: [
         results[0].rows[0].sent_at,
