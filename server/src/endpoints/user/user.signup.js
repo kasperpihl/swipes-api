@@ -38,9 +38,10 @@ export default endpointCreate(
     email = email.toLowerCase();
 
     // check if this user is available
-    const checkUserQ = await query('SELECT email FROM users WHERE email=$1', [
-      email
-    ]);
+    const checkUserQ = await query(
+      'SELECT email FROM users WHERE email=$1 AND deleted = false',
+      [email]
+    );
     const user = checkUserQ.rows[0];
 
     if (user) {

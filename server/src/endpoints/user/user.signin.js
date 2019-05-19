@@ -25,7 +25,7 @@ export default endpointCreate(
 
     // check if this user is available
     const getUserQ = await query(
-      'SELECT user_id, password FROM users WHERE email=$1',
+      'SELECT user_id, password FROM users WHERE email=$1 AND deleted = false',
       [email]
     );
     const user = getUserQ.rows[0];

@@ -20,6 +20,7 @@ export default endpointCreate(
         SELECT user_id, first_name, username, email
         FROM users 
         WHERE email = $1
+        AND deleted = false
       `,
       [email]
     );
