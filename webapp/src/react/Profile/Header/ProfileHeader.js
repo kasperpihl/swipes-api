@@ -17,7 +17,8 @@ import Spacing from '_shared/Spacing/Spacing';
 @connect(
   state => ({
     state,
-    me: state.me
+    me: state.me,
+    teams: state.teams
   }),
   {
     contextMenu: mainActions.contextMenu
@@ -49,9 +50,53 @@ export default class ProfileHeader extends Component {
       }
     });
   }
-  handleListClick = (i, button) => {
-    if (button === 'Log out') {
+  handleDeleteUser = ([password]) => {
+    const { loader } = this.props;
+    loader.set('ThreeDots');
+    request('user.delete', {
+      password
+    }).then(res => {
+      if (res.error) {
+        loader.error('ThreeDots', res.error, 3000);
+      } else {
+        window.analytics.sendEvent('Deleted User');
+        window.analytics.logout();
+      }
+    });
+  };
+  confirmDeleteUser = () => {
+    const { nav, teams, me } = this.props;
+    const isOwner = !!teams.filter(
+      team => team.get('owner_id') === me.get('user_id')
+    ).size;
+    if (isOwner) {
+      return nav.openModal(FormModal, {
+        title: 'Error: Undeleted teams',
+        subtitle:
+          'You are currently the owner of 1 or more active teams. You have to transfer ownership or delete them before you can delete your account',
+        alert: true
+      });
+    }
+    return nav.openModal(FormModal, {
+      title: 'Delete account',
+      subtitle:
+        'Are you sure you want to delete your account? Deleting it is permanent and cannot be reversed. All personal data will be deleted',
+      inputs: [
+        {
+          type: 'password',
+          placeholder: 'Password',
+          autoFocus: true,
+          label: `Confirm deleting your account`
+        }
+      ],
+      onConfirm: this.handleDeleteUser
+    });
+  };
+  handleListClick = i => {
+    if (i === 0) {
       this.logout();
+    } else if (i === 1) {
+      this.confirmDeleteUser();
     }
   };
   handleThreeDots = e => {
@@ -66,7 +111,7 @@ export default class ProfileHeader extends Component {
       },
       component: ListMenu,
       props: {
-        buttons: ['Log out'],
+        buttons: ['Log out', 'Delete account'],
         onClick: this.handleListClick
       }
     });
