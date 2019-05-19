@@ -17,7 +17,9 @@ export const setupLogger = type => {
       region
     },
     formatLog: item => {
-      return `${item.level}: ${item.message} ${JSON.stringify(item.meta)}`;
+      return `${item.level} ${item.endpoint || ''}: ${
+        item.message
+      } ${JSON.stringify(item.meta || {})}`;
     }
   };
 
