@@ -119,16 +119,10 @@ export default class TeamHeader extends PureComponent {
     });
   };
 
-  openFormModal = ({ ...props }) => {
-    const { nav } = this.props;
-
-    nav.openModal(FormModal, props);
-  };
-
   handleListClick = (i, button) => {
-    const { team } = this.props;
+    const { team, nav } = this.props;
     if (button.title === kDelete.title) {
-      const modalOptions = {
+      return nav.openModal(FormModal, {
         title: 'Delete team',
         subtitle:
           'Are you sure you want to delete this team? Deleting it is permanent and cannot be reversed.',
@@ -141,11 +135,10 @@ export default class TeamHeader extends PureComponent {
           }
         ],
         onConfirm: this.handleDeleteTeam
-      };
-      return this.openFormModal(modalOptions);
+      });
     }
     if (button.title === kLeave.title) {
-      const modalOptions = {
+      nav.openModal(FormModal, {
         title: 'Leave team',
         subtitle: 'Are you sure that you want to leave this team?',
         inputs: [
@@ -157,9 +150,7 @@ export default class TeamHeader extends PureComponent {
           }
         ],
         onConfirm: this.handleLeaveTeam
-      };
-
-      return this.openFormModal(modalOptions);
+      });
     }
   };
 
