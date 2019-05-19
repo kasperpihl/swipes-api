@@ -75,6 +75,20 @@ export default endpointCreate(
           WHERE owned_by = $1
         `,
         values: [team_id]
+      },
+      {
+        text: `
+          DELETE FROM notes
+          WHERE owned_by = $1
+        `,
+        values: [team_id]
+      },
+      {
+        text: `
+          DELETE FROM files
+          WHERE owned_by = $1
+        `,
+        values: [team_id]
       }
     ]);
 
