@@ -13,14 +13,26 @@ export default connect(state => ({
   unreadByTeam: state.connection.get('unreadByTeam')
 }))(CardHeaderPicker);
 
-function CardHeaderPicker({ teams, selectedTeamId, unreadByTeam, dispatch }) {
+function CardHeaderPicker({
+  teams,
+  selectedTeamId,
+  unreadByTeam,
+  dispatch,
+  showUnreadCounter
+}) {
   const myId = useMyId();
 
   const buttons = teams
     .toArray()
     .map(team => {
       const id = team.get('team_id');
-      const count = unreadByTeam.get(id) ? unreadByTeam.get(id).size : 0;
+      const count =
+        showUnreadCounter &&
+        unreadByTeam &&
+        id !== selectedTeamId &&
+        unreadByTeam.get(id)
+          ? unreadByTeam.get(id).size
+          : 0;
       return {
         title: `${team.get('name')}${count ? ` (${count})` : ''}`,
         id: team.get('team_id')
@@ -51,11 +63,13 @@ function CardHeaderPicker({ teams, selectedTeamId, unreadByTeam, dispatch }) {
   };
 
   let additionalNotifications = 0;
-  unreadByTeam.forEach((unread, teamId) => {
-    if (teamId !== selectedTeamId) {
-      additionalNotifications += unread.size;
-    }
-  });
+  if (showUnreadCounter && unreadByTeam) {
+    unreadByTeam.forEach((unread, teamId) => {
+      if (teamId !== selectedTeamId) {
+        additionalNotifications += unread.size;
+      }
+    });
+  }
 
   const teamName = teams.getIn([selectedTeamId, 'name']) || 'Personal';
 

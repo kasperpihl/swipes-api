@@ -44,7 +44,7 @@ function Discuss({ teams }) {
   const renderLeftHeader = () => {
     return (
       <SW.LeftHeaderWrapper>
-        <CardHeader title="Chat" teamPicker separator>
+        <CardHeader title="Chat" teamPicker separator showUnreadCounter>
           <Button onClick={handleNewDiscussion} icon="CircledPlus" />
         </CardHeader>
       </SW.LeftHeaderWrapper>

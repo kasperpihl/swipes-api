@@ -25,6 +25,7 @@ export default function CardHeader({
   subtitle,
   separator,
   onTitleClick,
+  showUnreadCounter,
   teamPicker,
   children,
   ...rest
@@ -40,7 +41,9 @@ export default function CardHeader({
           >
             {title}
           </SW.Title>
-          {teamPicker && <CardHeaderPicker />}
+          {teamPicker && (
+            <CardHeaderPicker showUnreadCounter={showUnreadCounter} />
+          )}
         </SW.TitleWrapper>
 
         {subtitle && !teamPicker && (
