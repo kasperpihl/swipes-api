@@ -87,7 +87,9 @@ export default class Authentication extends PureComponent {
     }).then(res => {
       if (res.ok) {
         loader.clear('authButton');
-        window.analytics.sendEvent(analyticsEvent);
+        window.analytics.sendEvent(analyticsEvent, {
+          email: formData.get('email')
+        });
         if (!this.isLogin) {
           navSet('left', {
             screenId: 'ProjectList',
