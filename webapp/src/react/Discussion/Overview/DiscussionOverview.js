@@ -1,8 +1,5 @@
 import React, { useState, useRef } from 'react';
 import { connect } from 'react-redux';
-
-import * as mainActions from 'src/redux/main/mainActions';
-
 import request from 'core/utils/request';
 import contextMenu from 'src/utils/contextMenu';
 
@@ -25,14 +22,9 @@ import FormModal from '_shared/FormModal/FormModal';
 
 import SW from './DiscussionOverview.swiss';
 
-export default connect(
-  null,
-  {
-    tooltip: mainActions.tooltip
-  }
-)(DiscussionOverview);
+export default connect(state => ({}))(DiscussionOverview);
 
-function DiscussionOverview({ tooltip, discussionId }) {
+function DiscussionOverview({ discussionId }) {
   const myId = useMyId();
   const [attachmentsOnly, setAttachmentsOnly] = useState(false);
   const [initialMessage, saveMessage] = useLocalStorageCache(

@@ -7,7 +7,6 @@ export default styleSheet('DiscussionOverview', {
     borderTop: '1px solid #B8B7B6',
     width: 'calc(100% - 30px)'
   },
-
   HeaderWrapper: {
     margin: '0 18px'
   }

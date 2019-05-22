@@ -4,19 +4,20 @@ import SW from './Discuss.swiss';
 import CardHeader from 'src/react/_components/Card/Header/CardHeader';
 import DiscussionList from 'src/react/Discussion/List/DiscussionList';
 import DiscussionOverview from 'src/react/Discussion/Overview/DiscussionOverview';
-import TabBar from 'src/react/_components/TabBar/TabBar';
 import CardContent from 'src/react/_components/Card/Content/CardContent';
 import ModalCreate from 'src/react/Modal/Create/ModalCreate';
-import Button from 'src/react/_components/Button/Button';
 import useNav from 'src/react/_hooks/useNav';
-import Spacing from '_shared/Spacing/Spacing';
+import useMyId from 'core/react/_hooks/useMyId';
 import CreateTeamModal from '_shared/CreateTeamModal/CreateTeamModal';
+import Button from '_shared/Button/Button';
 
 const sizes = [800, 910];
 export default connect(state => ({
-  teams: state.teams
+  teams: state.teams,
+  selectedTeamId: state.main.get('selectedTeamId')
 }))(Discuss);
-function Discuss({ teams }) {
+function Discuss({ teams, selectedTeamId }) {
+  const myId = useMyId();
   const nav = useNav();
   const [tabs, handleChangeTabs] = useState(['Following', 'All other']);
   const [tabIndex, handleChangeTabIndex] = useState(0);
@@ -45,7 +46,9 @@ function Discuss({ teams }) {
     return (
       <SW.LeftHeaderWrapper>
         <CardHeader title="Chat" teamPicker separator showUnreadCounter>
-          <Button onClick={handleNewDiscussion} icon="CircledPlus" />
+          {selectedTeamId !== myId && (
+            <Button onClick={handleNewDiscussion} icon="CircledPlus" />
+          )}
         </CardHeader>
       </SW.LeftHeaderWrapper>
     );
@@ -54,6 +57,13 @@ function Discuss({ teams }) {
   const renderCreateTeamModal = () => {
     nav.openModal(CreateTeamModal, {
       clickDisabled: true
+    });
+  };
+
+  const openTeamCreate = () => {
+    nav.push({
+      screenId: 'TeamCreate',
+      crumbTitle: 'TeamCreate'
     });
   };
 
@@ -75,6 +85,22 @@ function Discuss({ teams }) {
         </CardContent>
       </SW.LeftSide>
       <SW.RightSide viewWidth={nav.width}>
+        {teams.size > 0 && selectedTeamId === myId && (
+          <SW.EmptyState
+            title={`Chats are better when there's someone to talk to`}
+            description={`Create a team and invite your colleagues to start collaborating!`}
+          >
+            <SW.EmptyStateButtonWrapper>
+              <Button
+                title="Create team"
+                green={true}
+                onClick={() => {
+                  openTeamCreate();
+                }}
+              />
+            </SW.EmptyStateButtonWrapper>
+          </SW.EmptyState>
+        )}
         {selectedId && (
           <DiscussionOverview key={selectedId} discussionId={selectedId} />
         )}

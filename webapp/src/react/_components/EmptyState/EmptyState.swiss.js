@@ -5,7 +5,6 @@ export default styleSheet('EmptyState', {
   Wrapper: {
     _size: ['100%', 'auto'],
     _flex: ['column', 'center', 'center'],
-    pointerEvents: 'none',
     fill: {
       height: '100%'
     }

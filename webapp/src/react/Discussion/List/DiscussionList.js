@@ -74,7 +74,7 @@ function DiscussionList({ type, onSelectItemId, selectedId, selectedTeamId }) {
   });
 
   if (selectedTeamId === myId) {
-    return <SW.Wrapper>No chat for Personal. *missing empty state</SW.Wrapper>;
+    return null;
   }
 
   if (req.error || req.loading) {
