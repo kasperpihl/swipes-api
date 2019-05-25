@@ -63,7 +63,7 @@ export default function useSyncedNote(noteId) {
     }
   }
 
-  async function saveToServer(rawState, _rev) {
+  async function saveToServer(rawState, _rev, onSuccess) {
     _rev = _rev || syncRef.current.lastServerRev;
     let res = await request('note.update', {
       note_id: noteId,
@@ -78,6 +78,9 @@ export default function useSyncedNote(noteId) {
 
     if (syncRef.current.unmounted) return;
     if (res.ok && res.rev > syncRef.current.lastServerRev) {
+      if (typeof onSuccess === 'function') {
+        onSuccess(res);
+      }
       syncRef.current.lastServerRev = res.rev;
     }
     return res;
@@ -91,10 +94,18 @@ export default function useSyncedNote(noteId) {
   });
 
   const bouncedSaveToServer = useDebouncedCallback(
-    () =>
-      saveToServer(
-        convertToRaw(syncRef.current.editorState.getCurrentContent())
-      ),
+    () => {
+      const contentStateToSave = syncRef.current.editorState.getCurrentContent();
+      return saveToServer(
+        convertToRaw(syncRef.current.editorState.getCurrentContent()),
+        null,
+        () => {
+          syncRef.current.lastServerContentState = contentStateToSave;
+          forceUpdate();
+        }
+      );
+    },
+
     5000
   );
 
@@ -119,8 +130,16 @@ export default function useSyncedNote(noteId) {
     forceUpdate();
   };
 
+  let isDirty = false;
+  if (syncRef.current.editorState && syncRef.current.lastServerContentState) {
+    isDirty =
+      syncRef.current.lastServerContentState !==
+      syncRef.current.editorState.getCurrentContent();
+  }
+
   return {
     editorState: syncRef.current.editorState,
+    isDirty,
     req,
     setEditorState,
     rawState: syncRef.current.rawState
