@@ -56,6 +56,11 @@ export default server => {
       redisClient.unsubscribe();
       redisClient.quit();
     });
+    socket.on('message', message => {
+      if (message === 'ping') {
+        socket.send('pong');
+      }
+    });
     socket.on('error', err => {
       // Don't crash the server when a connection breaks unexpected
       console.log('Socket client error', err);
