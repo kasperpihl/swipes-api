@@ -37,6 +37,8 @@ const { store, persistor } = configureStore({
 });
 
 window.socket = new Socket(store);
+window.addEventListener('offline', window.socket.checkConnection);
+
 // END Init core
 
 import Root from './react/Root';
