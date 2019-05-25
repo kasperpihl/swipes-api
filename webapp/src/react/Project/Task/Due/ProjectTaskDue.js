@@ -1,10 +1,7 @@
-import 'react-dates/initialize';
-import 'react-datepicker/dist/react-datepicker.css';
 import React, { useContext } from 'react';
 import moment from 'moment';
-import DatePicker from 'react-datepicker';
 import contextMenu from 'src/utils/contextMenu';
-
+import Calendar from 'react-calendar';
 import { ProjectContext } from 'src/react/contexts';
 import useProjectSlice from 'core/react/_hooks/useProjectSlice';
 
@@ -27,12 +24,13 @@ export default function ProjectTaskDue({ taskId }) {
         };
         return (
           <SW.ModalWrapper>
-            <DatePicker inline selected={initialDate} onChange={handleSelect} />
-            <Button title="Remove due date" onClick={handleSelect} />
+            {initialDate && (
+              <Button title="Clear due date" onClick={handleSelect} />
+            )}
+            <Calendar value={initialDate} onChange={handleSelect} />
           </SW.ModalWrapper>
         );
       },
-
       e,
       {
         onSelect: d =>
