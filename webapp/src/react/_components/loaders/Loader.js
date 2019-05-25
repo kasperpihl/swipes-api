@@ -25,35 +25,8 @@ class Loader extends Component {
   constructor(props) {
     super(props);
     this.state = initialState;
-    this.setNextState = this.setNextState.bind(this);
   }
-  componentDidMount() {
-    this.setTimer(TIMER);
-  }
-  componentWillUnmount() {
-    clearInterval(this.timer);
-  }
-  setTimer(time) {
-    if (this.timer) {
-      clearInterval(this.timer);
-    }
-    this.timer = setInterval(this.setNextState, time);
-  }
-  setNextState() {
-    const currentPositions = this.state.positions;
-    const emptyIndex = this.positionForTile(null);
-    const indexToMove = this.tileIndexToMove();
-    const newPositions = Object.assign({}, currentPositions, {
-      [indexToMove]: null,
-      [emptyIndex]: currentPositions[indexToMove]
-    });
 
-    const currentState = this.state.stateNumber;
-    const maxState = this.props.mini ? 3 : 7;
-    const nextState = currentState === maxState ? 0 : currentState + 1;
-
-    this.setState({ stateNumber: nextState, positions: newPositions });
-  }
   clipPathForPosition(position) {
     const { mini } = this.props;
     position = parseInt(position, 10);
@@ -100,28 +73,7 @@ class Loader extends Component {
       }
     }
   }
-  tileIndexToMove() {
-    switch (this.state.stateNumber) {
-      case 0:
-        return 3;
-      case 1:
-        return 2;
-      case 2:
-        return 1;
-      case 3:
-        return 4;
-      case 4:
-        return 7;
-      case 5:
-        return 6;
-      case 6:
-        return 5;
-      case 7:
-        return 4;
-      default:
-        return 3;
-    }
-  }
+
   positionForTile(radioCommand) {
     const keys = Object.keys(this.state.positions);
     let foundKey;
