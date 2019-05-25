@@ -7,6 +7,7 @@ import ProjectTaskCheckbox from './Checkbox/ProjectTaskCheckbox';
 import ProjectTaskSelect from './Select/ProjectTaskSelect';
 import ProjectTaskInput from './Input/ProjectTaskInput';
 import ProjectTaskAssignees from './Assignees/ProjectTaskAssignees';
+import ProjectTaskDue from './Due/ProjectTaskDue';
 import ProjectTaskAttach from './Attach/ProjectTaskAttach';
 import Button from '_shared/Button/Button';
 import AttachmentHOC from '_shared/attachment/AttachmentHOC';
@@ -81,6 +82,7 @@ function ProjectTask({ taskId, selected, onSelect, onComplete }) {
         />
       )}
       <ProjectTaskInput taskId={taskId} isCompleted={isCompleted} />
+      <ProjectTaskDue taskId={taskId} />
       <ProjectTaskAttach taskId={taskId} />
       <ProjectTaskAssignees taskId={taskId} />
     </SW.Wrapper>

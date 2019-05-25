@@ -6,7 +6,7 @@ import useProjectSlice from 'core/react/_hooks/useProjectSlice';
 import AttachButton from '_shared/AttachButton/AttachButton';
 import SW from './ProjectTaskAttach.swiss';
 
-export default function ProjectTask({ taskId }) {
+export default function ProjectTaskAttach({ taskId }) {
   const stateManager = useContext(ProjectContext);
 
   const [ownedBy] = useProjectSlice(stateManager, (clientState, localState) => [

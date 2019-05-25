@@ -1,12 +1,16 @@
 import { styleSheet } from 'swiss-react';
 
-export default styleSheet('ProjectTaskAssignees', {
+export default styleSheet('ProjectTaskDue', {
+  ModalWrapper: {
+    _flex: ['column', 'center', 'center'],
+    background: '$base'
+  },
   Wrapper: {
     _flex: ['row', 'center', 'center'],
-    marginLeft: '2px',
     height: '26px',
-    userSelect: 'none',
     flex: 'none',
+    userSelect: 'none',
+
     hide: {
       opacity: '0',
       visbility: 'hidden',

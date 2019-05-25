@@ -5,7 +5,7 @@ export default styleSheet('ProjectTaskAttach', {
     _flex: ['row', 'center', 'center'],
     height: '26px',
     userSelect: 'none',
-
+    flex: 'none',
     hide: {
       opacity: '0',
       visbility: 'hidden',
