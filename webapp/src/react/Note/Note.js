@@ -35,7 +35,7 @@ export default function Note({ noteId }) {
   if (!isDirty) {
     subtitle = 'All changes saved to Swipes';
     if (!wasDirty.current) {
-      const d = moment(note.updated_at).subtract(10, 'days');
+      const d = moment(note.updated_at);
       subtitle = 'Last edit was ';
       if (d.diff(moment(), 'days') > -7) {
         subtitle += d.fromNow();
@@ -47,7 +47,9 @@ export default function Note({ noteId }) {
   }
 
   return (
-    <CardContent header={<CardHeader title={note.title} subtitle={subtitle} />}>
+    <CardContent
+      header={<CardHeader separator title={note.title} subtitle={subtitle} />}
+    >
       <SW.Wrapper>
         <NoteEditor
           mediumEditor
