@@ -42,7 +42,7 @@ export default function Note({ noteId }) {
       } else {
         subtitle += `on ${d.format('ll')}`;
       }
-      subtitle += ` by ${userGetFirstName(note.owned_by, note.updated_by)}`;
+      subtitle += ` by ${userGetFirstName(note.updated_by, note.owned_by)}`;
     }
   }
 
