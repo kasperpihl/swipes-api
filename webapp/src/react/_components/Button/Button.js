@@ -25,6 +25,7 @@ export default function Button({
   selected,
   green,
   small,
+  dueSoon,
   children,
   ...rest
 }) {
@@ -49,7 +50,9 @@ export default function Button({
         ) : (
           <>
             <ButtonIcon icon={icon} status={parsedStatus} selected={selected} />
-            {!!parsedTitle && <SW.Title>{parsedTitle}</SW.Title>}
+            {!!parsedTitle && (
+              <SW.Title dueSoon={dueSoon}>{parsedTitle}</SW.Title>
+            )}
           </>
         )}
       </SW.Wrapper>

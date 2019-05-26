@@ -27,7 +27,12 @@ export default function ProjectTaskDue({ taskId }) {
             {initialDate && (
               <Button title="Clear due date" onClick={handleSelect} />
             )}
-            <Calendar value={initialDate} onChange={handleSelect} />
+            <Calendar
+              value={initialDate}
+              onChange={handleSelect}
+              prev2Label={null}
+              next2Label={null}
+            />
           </SW.ModalWrapper>
         );
       },
@@ -43,9 +48,23 @@ export default function ProjectTaskDue({ taskId }) {
     );
   };
 
+  const buttonProps = {
+    small: true,
+    onClick: handleDue,
+    icon: 'Calendar'
+  };
+  if (dueDate) {
+    delete buttonProps.icon;
+    const dueMoment = moment(dueDate);
+    buttonProps.title = dueMoment.format('MMM D');
+    if (dueMoment.isSameOrBefore(moment(), 'days')) {
+      buttonProps.dueSoon = true;
+    }
+  }
+
   return (
     <SW.Wrapper hide={!dueDate}>
-      <Button small onClick={handleDue} icon="Calendar" />
+      <Button {...buttonProps} />
     </SW.Wrapper>
   );
 }

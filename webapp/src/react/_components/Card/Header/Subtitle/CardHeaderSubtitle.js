@@ -45,7 +45,7 @@ function CardHeaderSubtitle({ subtitle, children, dispatch }) {
 
   return (
     <SW.Wrapper>
-      <SW.TeamName>{teamGetBelonging(ownedBy)}</SW.TeamName>
+      {!members && <SW.TeamName>{teamGetBelonging(ownedBy)}</SW.TeamName>}
       {members && (
         <SW.MemberLabel
           onMouseEnter={onMouseEnter}

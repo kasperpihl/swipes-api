@@ -30,7 +30,7 @@ export default styleSheet('Button', {
       marginLeft: 'auto'
     },
     selected: {
-      backgroundColor: '$green1',
+      backgroundColor: '$green1'
     },
     disabled: {
       pointerEvents: 'none',
@@ -61,6 +61,9 @@ export default styleSheet('Button', {
     'status=Error': {
       color: '$red'
     },
+    dueSoon: {
+      color: '$red'
+    },
     green: {
       color: '$base',
 
@@ -69,7 +72,7 @@ export default styleSheet('Button', {
       }
     },
     selected: {
-      color: '$base',
+      color: '$base'
     }
   }
 });

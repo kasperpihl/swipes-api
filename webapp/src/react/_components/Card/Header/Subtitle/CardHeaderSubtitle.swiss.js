@@ -12,7 +12,6 @@ export default styleSheet('CardHeaderSubtitle', {
     _flex: ['row', 'flex-start', 'center'],
     _textStyle: 'body',
     lineHeight: '24px',
-    marginLeft: '6px',
     color: '$sw2',
 
     '&:hover': {
@@ -28,7 +27,8 @@ export default styleSheet('CardHeaderSubtitle', {
   TeamName: {
     _textStyle: 'body',
     lineHeight: '24px',
-    color: '$sw2'
+    color: '$sw2',
+    marginRight: '6px'
   },
 
   Actions: {

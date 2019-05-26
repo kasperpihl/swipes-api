@@ -82,8 +82,8 @@ function ProjectTask({ taskId, selected, onSelect, onComplete }) {
         />
       )}
       <ProjectTaskInput taskId={taskId} isCompleted={isCompleted} />
-      <ProjectTaskDue taskId={taskId} />
       <ProjectTaskAttach taskId={taskId} />
+      <ProjectTaskDue taskId={taskId} />
       <ProjectTaskAssignees taskId={taskId} />
     </SW.Wrapper>
   );
