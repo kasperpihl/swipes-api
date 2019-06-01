@@ -8,29 +8,13 @@ import UserImage from 'src/react/_components/UserImage/UserImage';
 const kNavItems = [
   { screenId: 'ProjectList', svg: 'Project', title: 'Projects' },
   { screenId: 'Planning', svg: 'Plan' },
-  { screenId: 'Chat', svg: 'Chat' },
   { screenId: 'Profile' }
 ];
 
-@connect(
-  state => {
-    let unreadCounter = 0;
-    if (state.connection.get('unreadByTeam')) {
-      state.connection
-        .get('unreadByTeam')
-        .forEach(team => (unreadCounter += team.size));
-    }
-
-    return {
-      sidebarExpanded: state.main.get('sidebarExpanded'),
-      sideMenuId: state.navigation.get('sideMenuId'),
-      unreadCounter
-    };
-  },
-  {
-    navSet: navigationActions.set
-  }
-)
+@connect(state => ({
+  sidebarExpanded: state.main.get('sidebarExpanded'),
+  sideMenuId: state.navigation.get('sideMenuId')
+}))
 export default class Sidebar extends PureComponent {
   handleMouseDownCached = cachedCallback((i, e) => {
     if (e.button === 1) {
@@ -45,11 +29,13 @@ export default class Sidebar extends PureComponent {
     this.openScreen('left', kNavItems[i])
   );
   openScreen(side, { screenId, title }) {
-    const { navSet } = this.props;
-    navSet(side, {
-      screenId,
-      crumbTitle: title || screenId
-    });
+    const { dispatch } = this.props;
+    dispatch(
+      navigationActions.set(side, {
+        screenId,
+        crumbTitle: title || screenId
+      })
+    );
   }
   renderNotificationCounter(item) {
     let { unreadCounter } = this.props;
@@ -112,10 +98,9 @@ export default class Sidebar extends PureComponent {
                 <SW.Section>
                   {this.renderItem(0)}
                   {this.renderItem(1)}
-                  {this.renderItem(2)}
                 </SW.Section>
               </SW.MiddleSection>
-              <SW.BottomSection>{this.renderItem(3)}</SW.BottomSection>
+              <SW.BottomSection>{this.renderItem(2)}</SW.BottomSection>
             </>
           )}
         </SW.Wrapper>

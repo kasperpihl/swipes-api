@@ -1,9 +1,6 @@
 export { default as Billing } from './Billing/Billing';
 export { default as Browser } from './Browser/Browser';
-export { default as Chat } from './Discuss/Discuss';
-export {
-  default as DiscussionOverview
-} from './Discussion/Overview/DiscussionOverview';
+
 export { default as File } from './File/File';
 export { default as NotFound } from './NotFound/NotFound';
 export { default as Team } from './Team/Team';

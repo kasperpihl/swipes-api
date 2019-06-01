@@ -113,11 +113,11 @@ function ProjectOverview({ projectId, state }) {
       excludeMe: true,
       title: 'Add people',
       hideRowOnSelect: true,
-      selectedIds: Object.keys(discussion.members),
-      teamId: discussion.owned_by,
+      selectedIds: Object.keys(members),
+      teamId: owned_by,
       onSelect: memberId => {
-        request('discussion.addMember', {
-          discussion_id: discussion.discussion_id,
+        request('project.addMember', {
+          project_id: projectId,
           target_user_id: memberId
         });
       }

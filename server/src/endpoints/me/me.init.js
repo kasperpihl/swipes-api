@@ -1,6 +1,5 @@
 import { object, array } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
-import sqlCheckPermissions from 'src/utils/sql/sqlCheckPermissions';
 import { query } from 'src/utils/db/db';
 
 const expectedInput = {};
@@ -61,36 +60,10 @@ export default endpointCreate(
       [user_id]
     );
 
-    const unreadRes = await query(
-      `
-        SELECT d.discussion_id, d.last_comment_at, d.owned_by
-        FROM permissions as per
-        INNER JOIN discussions as d
-        ON d.discussion_id = per.permission_from
-        WHERE ${sqlCheckPermissions('per.granted_to', user_id)}
-        AND d.members->>$1 IS NOT NULL
-        AND d.deleted=FALSE
-        AND d.members->>$1 = 'n'
-        OR d.members->>$1 < to_char(d.last_comment_at::timestamp at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"')
-      `,
-      [user_id]
-    );
-    const unread = {};
-    const unreadByTeam = {};
-    unreadRes.rows.forEach(r => {
-      if (!unreadByTeam[r.owned_by]) {
-        unreadByTeam[r.owned_by] = {};
-      }
-      unreadByTeam[r.owned_by][r.discussion_id] = r.last_comment_at;
-      unread[r.discussion_id] = r.last_comment_at;
-    });
-
     // Create response data.
     res.locals.output = {
       me: meRes.rows[0],
       teams: teamRes.rows,
-      unread,
-      unread_by_team: unreadByTeam,
       timestamp: now,
       users: usersRes.rows
     };

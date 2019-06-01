@@ -48,11 +48,8 @@ export default class ModalCreate extends PureComponent {
   };
 
   handleCreate = async () => {
-    const { hideModal, loader, myId, type, onSuccess } = this.props;
+    const { hideModal, loader, onSuccess } = this.props;
     const { members, titleVal, privacy, ownedBy } = this.state;
-
-    let endpoint = 'discussion.add';
-    let analyticsEvent = 'Chat created';
 
     const options = {
       title: titleVal,
@@ -63,18 +60,13 @@ export default class ModalCreate extends PureComponent {
 
     loader.set('creating', 'Creating');
 
-    if (type === 'project') {
-      endpoint = 'project.add';
-      analyticsEvent = 'Project created';
-    }
-
-    request(endpoint, options).then(res => {
+    request('project.add', options).then(res => {
       if (res.ok) {
         if (typeof onSuccess === 'function') {
           onSuccess(res);
         }
         hideModal();
-        window.analytics.sendEvent(analyticsEvent, ownedBy, {
+        window.analytics.sendEvent('Project created', ownedBy, {
           Privacy: privacy,
           'Tagged people': members.size
         });
@@ -131,19 +123,11 @@ export default class ModalCreate extends PureComponent {
     const { titleVal, ownedBy, members, privacy } = this.state;
     const { myId, loader, type } = this.props;
 
-    let title = 'New Chat';
-    const titlePlaceholder = 'Title';
-    let createLabel = 'Create chat';
-    if (type === 'project') {
-      title = 'New Project';
-      createLabel = 'Create project';
-    }
-
     return (
       <SW.Wrapper>
         <FMSW.Wrapper create>
           <FMSW.Header>
-            <FMSW.Title>{title}</FMSW.Title>
+            <FMSW.Title>New Project</FMSW.Title>
           </FMSW.Header>
           <FMSW.InputContainer>
             <FMSW.InputWrapper>
@@ -151,7 +135,7 @@ export default class ModalCreate extends PureComponent {
                 value={titleVal}
                 onChange={this.handleTitleChange}
                 onKeyDown={this.handleKeyDown}
-                placeholder={titlePlaceholder}
+                placeholder="Title"
                 type="text"
                 style={{ paddingLeft: '6px' }}
                 autoFocus
@@ -160,21 +144,9 @@ export default class ModalCreate extends PureComponent {
             <FMSW.InputWrapper>
               <FMSW.Label>Team</FMSW.Label>
               <Spacing height={9} />
-              <TeamPicker
-                value={ownedBy}
-                onChange={this.handleTeamChange}
-                disablePersonal={type === 'discussion'}
-              />
+              <TeamPicker value={ownedBy} onChange={this.handleTeamChange} />
             </FMSW.InputWrapper>
             <>
-              {type === 'project' && (
-                <FMSW.InputWrapper>
-                  <FMSW.Label>Access</FMSW.Label>
-                  <Spacing height={9} />
-                  {this.renderPrivacyCheckbox('public')}
-                  {this.renderPrivacyCheckbox('private')}
-                </FMSW.InputWrapper>
-              )}
               <FMSW.InputWrapper>
                 <FMSW.Label>Members</FMSW.Label>
                 <Spacing height={9} />
@@ -199,23 +171,22 @@ export default class ModalCreate extends PureComponent {
             </>
           </FMSW.InputContainer>
           <FMSW.ButtonWrapper>
-            {type === 'discussion' && (
-              <SW.ToggleWrapper>
-                <FMSW.Label>Secret Chat</FMSW.Label>
-                <SW.InputWrapper>
-                  <InputToggle
-                    value={privacy === 'private' ? true : false}
-                    onChange={
-                      privacy === 'private'
-                        ? this.handlePrivacyCached('public')
-                        : this.handlePrivacyCached('private')
-                    }
-                  />
-                </SW.InputWrapper>
-              </SW.ToggleWrapper>
-            )}
+            <SW.ToggleWrapper>
+              <FMSW.Label>Secret Project</FMSW.Label>
+              <SW.InputWrapper>
+                <InputToggle
+                  value={privacy === 'private' ? true : false}
+                  onChange={
+                    privacy === 'private'
+                      ? this.handlePrivacyCached('public')
+                      : this.handlePrivacyCached('private')
+                  }
+                />
+              </SW.InputWrapper>
+            </SW.ToggleWrapper>
+
             <FMSW.Button
-              title={createLabel}
+              title="Create project"
               onClick={this.handleCreate}
               status={loader.get('creating')}
               border

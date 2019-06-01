@@ -1,7 +1,5 @@
 import * as mainActions from 'src/redux/main/mainActions';
 
-import userGetFirstName from 'core/utils/user/userGetFirstName';
-
 /* global nodeRequire*/
 const isElectron = window.process && window.process.versions.electron;
 let ipcRenderer;
@@ -21,15 +19,8 @@ if (isElectron) {
 
 export default class IpcListener {
   constructor(store) {
-    this.store = store;
-    store.subscribe(this.storeChange.bind(this));
     if (isElectron) {
       remote.getCurrentWindow().removeAllListeners();
-      ipcRenderer.on('oauth-success', (event, arg) => {
-        // store.dispatch(
-        //   ca.me.handleOAuthSuccess(arg.serviceName, arg.queryString)
-        // );
-      });
 
       // Deal with windows maximize stuff
       const remWin = remote.getCurrentWindow();
@@ -55,79 +46,6 @@ export default class IpcListener {
         store.dispatch(mainActions.setMaximized(remWin.isMaximized()));
         store.dispatch(mainActions.setFullscreen(remWin.isFullScreen()));
       });
-    }
-  }
-  handleDesktopNotifications(payload) {
-    return;
-    const myId = this.store.getState().me.get('user_id');
-    let discussion;
-    let comment;
-    payload.rows.forEach(({ type, data }) => {
-      if (
-        type === 'comment' &&
-        data.sent_by !== myId &&
-        data.sent_by !== 'USOFI' &&
-        data.sent_at === data.updated_at
-      ) {
-        comment = data;
-      } else if (type === 'discussion') {
-        discussion = data;
-      }
-    });
-    // Make sure discussion and comment belong together
-    if (
-      discussion &&
-      comment &&
-      discussion.discussion_id === comment.discussion_id
-    ) {
-      // Ensure I'm following the discussion.
-      if (
-        !discussion.members.filter(({ user_id }) => user_id === myId).length
-      ) {
-        return;
-      }
-
-      const strippedMessage = comment.message.replace(
-        /<![A-Z0-9]*\|(.*?)>/gi,
-        (full, name) => name
-      );
-      this.sendNotification({
-        id: comment.id,
-        target: {
-          id: comment.discussion_id
-        },
-        title: discussion.title,
-        message: `${userGetFirstName(comment.sent_by)}: ${strippedMessage}`
-      });
-    }
-  }
-  sendNotification(notification) {
-    if (!isElectron) {
-      return;
-    }
-
-    const desktopNotification = new Notification(notification.title, {
-      body: notification.message,
-      icon: path.join(app.getAppPath(), 'icons/logo.png')
-    });
-
-    // desktopNotification.onclick = () => {
-    //   this.store.dispatch(
-    //     navigationActions.openSecondary(
-    //       'primary',
-    //       navForContext(fromJS(notification.target))
-    //     )
-    //   );
-    //   const remWin = remote.getCurrentWindow();
-    //   remWin.focus();
-    // };
-  }
-  storeChange() {
-    const state = this.store.getState();
-    const counter = state.connection.get('unread').size;
-    if (typeof this.badgeCount === 'undefined' || counter !== this.badgeCount) {
-      this.badgeCount = counter;
-      this.setBadgeCount(`${counter || ''}`);
     }
   }
   preloadUrl(script) {
