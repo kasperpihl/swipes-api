@@ -1,1 +1,0 @@
-export default m => m.replace(/<![A-Z0-9]*\|(.*?)>/gi, (full, name) => name);

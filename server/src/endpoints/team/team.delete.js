@@ -57,13 +57,6 @@ export default endpointCreate(
       },
       {
         text: `
-          DELETE FROM discussions
-          WHERE owned_by = $1
-        `,
-        values: [team_id]
-      },
-      {
-        text: `
           DELETE FROM permissions
           WHERE owned_by = $1
         `,

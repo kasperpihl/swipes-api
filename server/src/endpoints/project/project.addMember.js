@@ -5,7 +5,7 @@ import userTeamCheck from 'src/utils/userTeamCheck';
 import sqlPermissionInsertQuery from 'src/utils/sql/sqlPermissionInsertQuery';
 import { query, transaction } from 'src/utils/db/db';
 import update from 'src/utils/update';
-import channelAddSystemMessage from 'src/utils/channel/channelAddSystemMessage';
+// import channelAddSystemMessage from 'src/utils/channel/channelAddSystemMessage';
 
 const expectedInput = {
   project_id: string.require(),
@@ -81,9 +81,9 @@ export default endpointCreate(
   if (project.owned_by.startsWith('U')) {
     return;
   }
-  channelAddSystemMessage(
-    project.owned_by,
-    target_user_id,
-    `You have been added by ${user.first_name} to the project ${project.title}`
-  );
+  // channelAddSystemMessage(
+  //   project.owned_by,
+  //   target_user_id,
+  //   `You have been added by ${user.first_name} to the project ${project.title}`
+  // );
 });

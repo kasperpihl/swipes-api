@@ -1,7 +1,7 @@
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import { transaction, query } from 'src/utils/db/db';
 import { string, object, array, number, bool } from 'valjs';
-import channelAddSystemMessage from 'src/utils/channel/channelAddSystemMessage';
+// import channelAddSystemMessage from 'src/utils/channel/channelAddSystemMessage';
 import sqlInsertQuery from 'src/utils/sql/sqlInsertQuery';
 import update from 'src/utils/update';
 import randomstring from 'randomstring';
@@ -200,11 +200,11 @@ export default endpointCreate(
         (!item.old_assignees ||
           item.old_assignees.indexOf(newAssigneeId) === -1)
       ) {
-        await channelAddSystemMessage(
-          project.owned_by,
-          newAssigneeId,
-          `${assignor.first_name} assigned you to a task in ${project.title}`
-        );
+        // await channelAddSystemMessage(
+        //   project.owned_by,
+        //   newAssigneeId,
+        //   `${assignor.first_name} assigned you to a task in ${project.title}`
+        // );
       }
     }
   }
