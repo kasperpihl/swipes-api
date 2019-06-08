@@ -1,22 +1,22 @@
-import { string } from 'valjs';
+import { string, number } from 'valjs';
 import endpointCreate from 'src/utils/endpoint/endpointCreate';
 import sqlCheckPermissions from 'src/utils/sql/sqlCheckPermissions';
 import { query } from 'src/utils/db/db';
 
 const expectedInput = {
-  owned_by: string
+  owned_by: string.require(),
+  skip: number,
+  limit: number
 };
 
 export default endpointCreate(
   {
-    expectedInput
+    expectedInput,
+    permissionCreateKey: 'owned_by'
   },
   async (req, res) => {
     const { user_id, input } = res.locals;
-    const { owned_by } = input;
-
-    const skip = input.skip || 0;
-    const limit = input.limit || 20;
+    const { owned_by, skip = 0, limit = 20 } = input;
 
     const values = [user_id, limit + 1, skip];
 
