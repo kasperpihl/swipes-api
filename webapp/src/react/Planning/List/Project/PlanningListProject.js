@@ -10,8 +10,6 @@ import SectionHeader from '_shared/SectionHeader/SectionHeader';
 import usePlanningState from 'src/react/Planning/usePlanningState';
 import useNav from 'src/react/_hooks/useNav';
 
-import request from 'core/utils/request';
-
 import ProjectTaskList from 'src/react/Project/Task/List/ProjectTaskList';
 
 import SW from './PlanningListProject.swiss';
