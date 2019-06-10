@@ -5,7 +5,6 @@ import { render } from 'react-dom';
 import { fromJS } from 'immutable';
 import { Provider } from 'react-redux';
 import { SwissProvider } from 'swiss-react';
-import { OptimistProvider } from 'react-optimist';
 import { PersistGate } from 'redux-persist/es/integration/react';
 
 import { BrowserRouter } from 'react-router-dom';
@@ -61,13 +60,11 @@ render(
     <PersistGate persistor={persistor}>
       <SwissProvider>
         <BrowserRouter>
-          <OptimistProvider>
-            <StripeProvider apiKey={stripeToken}>
-              <CoreProvider>
-                <Root />
-              </CoreProvider>
-            </StripeProvider>
-          </OptimistProvider>
+          <StripeProvider apiKey={stripeToken}>
+            <CoreProvider>
+              <Root />
+            </CoreProvider>
+          </StripeProvider>
         </BrowserRouter>
       </SwissProvider>
     </PersistGate>

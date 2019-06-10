@@ -6,8 +6,7 @@ const expectedInput = {};
 const expectedOutput = {
   me: object.require(),
   users: array.require(),
-  teams: array.require(),
-  unread: object.require()
+  teams: array.require()
 };
 
 export default endpointCreate(
